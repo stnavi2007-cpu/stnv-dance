@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ストナビダンススクール｜金沢で最も長いストリートダンススタジオ</title>
+<meta name="description" content="2007年創立、金沢で最も長く続くヒップホップ／ストリートダンススクール。石川・富山に全5校。初心者から全国大会優勝者まで。無料体験受付中。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#181a14;
+    --ink-soft:#5f6356;
+    --paper:#f4f3ee;
+    --paper-2:#f6f9ef;
+    --card:#ffffff;
+    --accent:#5e9c08;        /* 落ち着いたライム（白文字が乗る用） */
+    --accent-deep:#4a7d00;
+    --accent-bright:#a3e635;  /* 効かせ用の明るいライム */
+    --lime-band:linear-gradient(135deg,#aee246,#8cc81f); /* 広い面用・目に優しい中間トーン */
+    --accent-soft:#f0f8dd;
+    --line:rgba(24,26,20,.10);
+    --font-jp:"Zen Kaku Gothic New",sans-serif;
+    --font-en:"Archivo",sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-jp);background:var(--paper);color:var(--ink);line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative}
+  body::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+    radial-gradient(55vw 40vh at 82% 6%,rgba(94,156,8,.05),transparent 70%),
+    radial-gradient(50vw 38vh at 12% 22%,rgba(24,26,20,.045),transparent 70%),
+    radial-gradient(52vw 40vh at 88% 44%,rgba(94,156,8,.045),transparent 70%),
+    radial-gradient(50vw 40vh at 16% 62%,rgba(24,26,20,.05),transparent 70%),
+    radial-gradient(54vw 40vh at 84% 82%,rgba(94,156,8,.045),transparent 70%)}
+  body::before{content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.6'/%3E%3C/svg%3E")}
+  a{color:inherit;text-decoration:none}
+
+  /* HEADER */
+  header{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(20px,5vw,56px);transition:.4s ease;background:transparent}
+  header.scrolled{padding:10px clamp(20px,5vw,56px);background:rgba(255,255,255,.92);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+  header .logo{display:flex;align-items:center;gap:11px}
+  header .logo .lmark{height:50px;width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
+  header .logo .lword{height:24px;width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
+  header.scrolled .logo .lmark,header.scrolled .logo .lword{filter:none}
+  @media(max-width:560px){header .logo .lmark{height:38px}header .logo .lword{height:18px}header .logo{gap:8px}}
+  header .logo span{color:var(--accent)}
+  nav{display:flex;gap:30px;align-items:center}
+  nav a{font-size:13px;font-weight:700;color:#fff;letter-spacing:.03em;position:relative;transition:color .3s}
+  header.scrolled nav a{color:var(--ink)}
+  nav a::after{content:"";position:absolute;left:0;bottom:-5px;width:0;height:2px;background:var(--accent);transition:.3s}
+  nav a:hover::after{width:100%}
+  .cta-mini{background:var(--accent);color:#fff!important;padding:9px 18px;border-radius:100px;font-size:13px;font-weight:800;box-shadow:0 6px 18px rgba(94,156,8,.35)}
+  .cta-mini::after{display:none}
+  .burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+  .burger span{width:26px;height:2px;background:#fff;display:block;transition:background .3s}
+  header.scrolled .burger span{background:var(--ink)}
+  @media(max-width:860px){nav{display:none}.burger{display:flex}}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:130px clamp(20px,5vw,56px) 80px;position:relative;overflow:hidden;background:#0c0c0e}
+  .hero .slides{position:absolute;inset:0;z-index:0}
+  .hero .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.06);transition:opacity 1.6s ease}
+  .hero .slide.active{opacity:1;transform:scale(1.16);transition:opacity 1.6s ease,transform 7.5s ease}
+  .hero .slide.kb{opacity:1;animation:kenburns 24s ease-in-out infinite alternate}
+  @keyframes kenburns{from{transform:scale(1.06)}to{transform:scale(1.2)}}
+  .hero .hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(105deg,rgba(8,8,10,.88) 0%,rgba(8,8,10,.6) 48%,rgba(8,8,10,.32) 100%)}
+  .hero .hero-inner{position:relative;z-index:2}
+  .hero .kicker{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);padding:9px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:30px;width:fit-content;opacity:0;animation:up .8s .1s forwards;transform:translateY(16px)}
+  .hero .kicker em{font-style:normal;color:var(--accent-bright);font-weight:800}
+  .hero .kicker b{font-family:var(--font-en);font-weight:800;letter-spacing:.1em}
+  .hero h1{font-weight:900;font-size:clamp(2.6rem,8.8vw,7rem);line-height:1.03;letter-spacing:-.015em;margin-bottom:30px;color:#fff}
+  .hero h1 .l{display:block;overflow:hidden}
+  .hero h1 .l span{display:block;transform:translateY(110%);animation:reveal .9s cubic-bezier(.16,1,.3,1) forwards}
+  .hero h1 .l:nth-child(2) span{animation-delay:.12s}
+  .hero h1 em{font-style:normal;color:var(--accent-bright)}
+  .hero .sub{max-width:680px;font-size:clamp(.98rem,2.2vw,1.15rem);color:rgba(255,255,255,.82);line-height:2;opacity:0;animation:up .8s .5s forwards;transform:translateY(16px)}
+  .hero .actions{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;opacity:0;animation:up .8s .65s forwards;transform:translateY(16px)}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 30px;border-radius:100px;font-weight:800;font-size:15px;transition:.3s}
+  .btn-fill{background:var(--accent);color:#fff;box-shadow:0 12px 28px rgba(94,156,8,.4)}
+  .btn-fill:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(94,156,8,.5)}
+  .btn-ghost{border:1.5px solid var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent-deep)}
+  .hero .btn-ghost{border-color:rgba(255,255,255,.45);color:#fff}
+  .hero .btn-ghost:hover{border-color:var(--accent-bright);color:var(--accent-bright)}
+
+  /* MARQUEE */
+  .marquee{overflow:hidden;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--paper-2)}
+  .marquee .track{display:flex;gap:40px;white-space:nowrap;animation:scroll 30s linear infinite;width:max-content}
+  .marquee .track span{font-family:var(--font-en);font-weight:800;font-size:15px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase}
+  .marquee .track span i{font-style:normal;margin:0 24px;color:var(--accent);vertical-align:middle;font-size:.8em}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);max-width:1100px;margin:0 auto;padding:clamp(56px,8vw,90px) clamp(20px,5vw,56px)}
+  .stats .cell{padding:0 20px;text-align:center;border-right:1px solid var(--line)}
+  .stats .cell:last-child{border-right:none}
+  .stats .num{font-family:var(--font-en);font-weight:900;font-size:clamp(1.7rem,3.6vw,2.6rem);color:var(--ink);line-height:1.1}
+  .stats .num em{font-style:normal;color:var(--accent-deep)}
+  .stats .lab{font-size:12.5px;color:var(--ink-soft);margin-top:12px;letter-spacing:.03em}
+  @media(max-width:680px){.stats{grid-template-columns:repeat(2,1fr);gap:40px 0}.stats .cell{border:none}.stats .cell:nth-child(odd){border-right:1px solid var(--line)}}
+
+  /* SECTION */
+  section.block{padding:clamp(64px,10vw,130px) clamp(20px,5vw,56px);max-width:1200px;margin:0 auto}
+  .eyebrow{font-family:var(--font-en);font-weight:800;font-size:12px;letter-spacing:.28em;color:var(--accent-deep);margin-bottom:18px}
+  .h2{font-weight:900;font-size:clamp(1.9rem,5vw,3.3rem);line-height:1.2;letter-spacing:-.01em;margin-bottom:24px}
+  .lead{max-width:620px;color:var(--ink-soft);font-size:clamp(1rem,2.2vw,1.08rem);line-height:2.1}
+
+  /* LONGEST HIGHLIGHT */
+  .longest{background:var(--lime-band);color:var(--ink);text-align:center;padding:clamp(56px,9vw,110px) 24px;position:relative;overflow:hidden}
+  .longest::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.35),transparent 55%)}
+  .longest>*{position:relative;z-index:1}
+  .longest .since{font-family:var(--font-en);font-weight:800;font-size:13px;letter-spacing:.3em;color:rgba(24,26,20,.55);margin-bottom:22px}
+  .longest h2{font-weight:900;font-size:clamp(1.8rem,6vw,4rem);line-height:1.3;letter-spacing:-.01em}
+  .longest h2 em{font-style:normal;position:relative;display:inline-block}
+  .longest h2 em::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:5px;border-radius:3px;background:linear-gradient(to right,transparent,rgba(24,26,20,.5) 20%,rgba(24,26,20,.5) 80%,transparent)}
+  .longest p{color:rgba(24,26,20,.72);margin-top:24px;font-size:clamp(.95rem,2.2vw,1.05rem);max-width:560px;margin-left:auto;margin-right:auto}
+
+  /* FEATURES */
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px}
+  .feat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:38px 30px;transition:.35s}
+  .feat:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(94,156,8,.14);border-color:rgba(94,156,8,.3)}
+  .feat .ic{width:54px;height:54px;border-radius:16px;background:var(--accent-soft);color:var(--accent-deep);display:flex;align-items:center;justify-content:center;font-family:var(--font-en);font-weight:900;font-size:20px;margin-bottom:22px}
+  .feat h3{font-size:1.25rem;font-weight:700;margin-bottom:12px}
+  .feat p{color:var(--ink-soft);font-size:.95rem;line-height:1.95}
+  @media(max-width:820px){.features{grid-template-columns:1fr}}
+
+  /* SCHOOLS */
+  .schools-wrap{background:var(--paper-2)}
+  .schools-head{max-width:1200px;margin:0 auto;padding:clamp(64px,9vw,120px) clamp(20px,5vw,56px) 6px}
+  .sched-note{max-width:1200px;margin:0 auto;padding:0 clamp(20px,5vw,56px);font-size:.86rem;color:var(--ink-soft)}
+  .schools{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto;padding:30px clamp(20px,5vw,56px) 40px}
+  .school{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:.4s}
+  .school:hover{transform:translateY(-6px);box-shadow:0 22px 48px rgba(94,156,8,.18)}
+  .school .ph{height:184px;position:relative;overflow:hidden;background:var(--paper-2)}
+  .school .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+  .school:hover .ph img{transform:scale(1.05)}
+  .school .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),rgba(0,0,0,0) 55%)}
+  .school .ph .pin{position:absolute;bottom:12px;left:20px;z-index:1;font-family:var(--font-en);font-size:11px;letter-spacing:.18em;color:#fff;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .school .body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+  .school h3{font-size:1.45rem;font-weight:900;margin-bottom:14px}
+  .school .info .row{display:flex;gap:8px;font-size:.88rem;color:var(--ink-soft);line-height:1.65;margin-bottom:8px}
+  .school .info .row .ilbl{flex-shrink:0;font-size:.7rem;font-weight:800;color:var(--accent-deep);background:var(--accent-soft);border-radius:6px;padding:2px 8px;height:fit-content;letter-spacing:.02em}
+  .school .insts{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px}
+  .school .insts span{background:var(--accent-soft);color:var(--accent-deep);font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:100px;font-family:var(--font-en);letter-spacing:.03em}
+  .school .links{display:flex;gap:18px;border-top:1px solid var(--line);padding-top:15px;margin-top:auto}
+  .school .links a{font-size:.84rem;font-weight:800;color:var(--accent-deep);display:inline-flex;align-items:center;gap:5px}
+  .school .links a:hover{color:var(--accent)}
+  .sched-btn{width:100%;margin:2px 0 18px;padding:13px;border:1px solid var(--accent);background:var(--accent-soft);color:var(--accent-deep);border-radius:12px;font-weight:800;font-size:.9rem;cursor:pointer;font-family:var(--font-jp);transition:.25s}
+  .sched-btn:hover{background:var(--accent);color:#fff}
+  /* WEEKLY MODAL */
+  .modal{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:18px}
+  .modal.open{display:flex}
+  .modal .backdrop{position:absolute;inset:0;background:rgba(22,21,31,.55);backdrop-filter:blur(4px)}
+  .modal .panel{position:relative;background:#fff;border-radius:24px;max-width:920px;width:100%;max-height:88vh;overflow:auto;padding:30px clamp(20px,4vw,38px) 36px;box-shadow:0 30px 80px rgba(0,0,0,.3)}
+  .modal .mhead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:4px}
+  .modal .mhead .pin{font-family:var(--font-en);font-weight:800;font-size:11px;letter-spacing:.2em;color:var(--accent-deep)}
+  .modal .mhead h3{font-size:clamp(1.5rem,4vw,2rem);font-weight:900;margin-top:4px}
+  .modal .close{flex-shrink:0;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:1.3rem;cursor:pointer;color:var(--ink);line-height:1;transition:.25s}
+  .modal .close:hover{background:var(--ink);color:#fff}
+  .modal .msub{color:var(--ink-soft);font-size:.84rem;margin-bottom:20px}
+  .week .drow{display:grid;grid-template-columns:56px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+  .week .drow:last-child{border-bottom:none}
+  .week .dl{font-weight:900;font-size:1.1rem;color:#fff;background:var(--accent);border-radius:12px;display:flex;align-items:center;justify-content:center}
+  .week .cs{display:flex;flex-wrap:wrap;gap:10px}
+  .week .cls2{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:11px 15px;min-width:148px}
+  .week .cls2 .tm{font-family:var(--font-en);font-weight:800;font-size:.78rem;color:var(--accent-deep)}
+  .week .cls2 .lv{font-weight:800;font-size:.95rem;margin-top:3px}
+  .week .cls2 .mt{display:flex;align-items:center;gap:6px;font-size:.76rem;color:var(--ink-soft);margin-top:4px;min-height:48px}
+  .week .cls2 .cls-av{width:30px;height:30px;object-fit:contain;flex-shrink:0}
+  .week .cls2 .cls-av.big{width:48px;height:48px}
+  @media(max-width:560px){.week .cls2{flex:1;min-width:130px}}
+  .levels{max-width:1200px;margin:0 auto;padding:20px clamp(20px,5vw,56px) clamp(64px,9vw,120px)}
+  .levels h3{font-size:1.1rem;font-weight:700;margin-bottom:18px}
+  .levels-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .level{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 20px}
+  .level h5{font-size:1rem;font-weight:800;margin-bottom:8px;color:var(--accent-deep)}
+  .level p{font-size:.85rem;color:var(--ink-soft);line-height:1.8}
+  @media(max-width:980px){.schools{grid-template-columns:1fr 1fr}.levels-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.schools{grid-template-columns:1fr}.levels-grid{grid-template-columns:1fr}}
+
+  /* INSTRUCTOR */
+  .rep{display:grid;grid-template-columns:1fr 1.1fr;gap:60px;align-items:center}
+  .rep .photo{aspect-ratio:1/1;border-radius:24px;background:linear-gradient(150deg,#dcf2a8,#f3f9e3);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .rep .photo .tag{font-family:var(--font-en);font-weight:900;font-size:clamp(3rem,9vw,6.5rem);color:rgba(24,26,20,.13);letter-spacing:-.03em}
+  .rep .badge{position:absolute;top:22px;left:22px;background:#fff;color:var(--accent-deep);font-family:var(--font-en);font-weight:800;font-size:11px;letter-spacing:.13em;padding:8px 14px;border-radius:100px;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+  .rep .quote{font-size:clamp(1.4rem,3.4vw,2.1rem);font-weight:700;line-height:1.55;letter-spacing:-.01em;margin:22px 0}
+  .rep .quote em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent-bright) 62%)}
+  .rep .name{font-family:var(--font-en);font-weight:900;font-size:1.5rem}
+  .rep .role{color:var(--ink-soft);font-size:.95rem;margin-top:4px}
+  @media(max-width:820px){.rep{grid-template-columns:1fr;gap:34px}}
+
+  /* DARK SECTION（明暗リズム） */
+  section.block.dark{position:relative;color:#fff}
+  section.block.dark::before{content:"";position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:100vw;background:#121410;z-index:-1}
+  .block.dark .eyebrow{color:var(--accent-bright)}
+  .block.dark .h2{color:#fff}
+  .block.dark .lead{color:rgba(255,255,255,.62)}
+  .block.dark .rep .quote{color:#fff}
+  .block.dark .rep .quote em{background:linear-gradient(transparent 62%,rgba(163,230,53,.5) 62%)}
+  .block.dark .rep .name{color:#fff}
+  .block.dark .rep .role{color:rgba(255,255,255,.6)}
+  .block.dark .rep .photo{background:linear-gradient(150deg,#2a2d22,#16180f)}
+  .block.dark .tcard{background:#1c1e16;border-color:rgba(255,255,255,.1)}
+  .block.dark .tcard:hover{box-shadow:0 18px 40px rgba(0,0,0,.45);border-color:rgba(163,230,53,.4)}
+  .block.dark .tcard h4{color:#fff}
+  .block.dark .tcard .role{color:rgba(255,255,255,.55)}
+  .block.dark .tcard .more{color:var(--accent-bright)}
+  .block.dark .tcard .av{background:linear-gradient(150deg,#2a2d22,#16180f);color:var(--accent-bright)}
+
+  /* CTA */
+  .cta{background:var(--lime-band);color:var(--ink);text-align:center;padding:clamp(64px,10vw,120px) 24px;position:relative;overflow:hidden}
+  .cta::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 30%,rgba(255,255,255,.35),transparent 55%)}
+  .cta>*{position:relative;z-index:1}
+  .cta h2{font-weight:900;font-size:clamp(2rem,6vw,4rem);line-height:1.15;letter-spacing:-.01em;margin-bottom:18px}
+  .cta p{font-size:1.05rem;max-width:520px;margin:0 auto 36px;color:rgba(24,26,20,.78)}
+  .cta .btn-fill{background:var(--ink);color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+  .cta .btn-fill:hover{box-shadow:0 18px 40px rgba(0,0,0,.3)}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#b9bcae;padding:70px clamp(20px,5vw,56px) 40px}
+  .foot-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px}
+  footer .logo{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+  footer .logo img{filter:brightness(0) invert(1);display:block;width:auto}
+  footer .logo .lmark{height:48px}
+  footer .logo .lword{height:23px}
+  footer p{font-size:.9rem;line-height:1.95;color:#90937f}
+  footer h4{color:#fff;font-size:13px;letter-spacing:.08em;margin-bottom:16px;font-weight:700}
+  footer ul{list-style:none}
+  footer ul li{margin-bottom:10px}
+  footer ul li a{font-size:.92rem;color:#a6a899;transition:.2s}
+  footer ul li a:hover{color:var(--accent-bright)}
+  .socials{display:flex;gap:12px;margin-top:14px}
+  .socials a{width:42px;height:42px;border:1px solid rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-en);font-weight:800;font-size:12px;color:#fff;transition:.3s}
+  .socials a:hover{background:var(--accent-bright);color:var(--ink);border-color:var(--accent-bright)}
+  .socials a svg{width:19px;height:19px}
+  .copy{max-width:1200px;margin:48px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);font-size:.8rem;color:#7a7c6e;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  @media(max-width:760px){.foot-grid{grid-template-columns:1fr 1fr}footer .brand{grid-column:1/-1}}
+
+  /* PRICING */
+  .pill-row{display:flex;flex-wrap:wrap;gap:12px;margin:6px 0 44px}
+  .pill{background:var(--accent-soft);color:var(--accent-deep);border:1px solid rgba(94,156,8,.22);border-radius:100px;padding:11px 20px;font-weight:700;font-size:.92rem}
+  .pill b{font-family:var(--font-en);font-weight:900}
+  .price-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .price-card{border:1px solid var(--line);border-radius:22px;padding:36px 32px;background:var(--card);position:relative;transition:.35s}
+  .price-card.hot{border-color:var(--accent);box-shadow:0 20px 48px rgba(94,156,8,.14)}
+  .price-card .tagtop{position:absolute;top:-13px;left:32px;background:var(--accent);color:#fff;font-size:12px;font-weight:800;padding:6px 16px;border-radius:100px}
+  .price-card h3{font-size:1.4rem;font-weight:900;margin-bottom:14px}
+  .price-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:15px 0;border-bottom:1px dashed var(--line)}
+  .price-row:last-of-type{border-bottom:none}
+  .price-row .nm{font-weight:600}
+  .price-row .pr{font-family:var(--font-en);font-weight:900;font-size:1.5rem;color:var(--ink);white-space:nowrap}
+  .price-row .pr small{font-size:.72rem;color:var(--ink-soft);font-weight:600;margin-left:4px}
+  .price-note{font-size:.8rem;color:var(--ink-soft);margin-top:18px;line-height:1.75}
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:58px}
+  .flow .step{background:var(--paper-2);border-radius:18px;padding:30px 26px}
+  .flow .step .no{font-family:var(--font-en);font-weight:900;font-size:1.05rem;color:var(--accent-deep);background:#fff;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);margin-bottom:16px}
+  .flow .step h4{font-size:1.08rem;font-weight:700;margin-bottom:8px}
+  .flow .step p{font-size:.88rem;color:var(--ink-soft);line-height:1.85}
+  .acc{margin-top:50px;border-top:1px solid var(--line)}
+  .acc details{border-bottom:1px solid var(--line)}
+  .acc summary{cursor:pointer;list-style:none;padding:20px 4px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary::after{content:"+";font-family:var(--font-en);font-size:1.4rem;color:var(--accent-deep);transition:.3s;line-height:1}
+  .acc details[open] summary::after{transform:rotate(45deg)}
+  .acc .body{padding:0 4px 24px;color:var(--ink-soft);font-size:.92rem;line-height:1.95}
+  @media(max-width:760px){.price-grid{grid-template-columns:1fr}.flow{grid-template-columns:1fr}}
+
+  /* CONTACT */
+  .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;margin-top:50px}
+  .cinfo .phone{font-family:var(--font-en);font-weight:900;font-size:2rem;color:var(--ink);display:inline-block;margin:4px 0 2px}
+  .cinfo .plabel{font-size:.8rem;color:var(--ink-soft);font-weight:700;letter-spacing:.05em}
+  .cinfo .note{background:var(--accent-soft);border:1px solid rgba(94,156,8,.2);border-radius:14px;padding:16px 18px;font-size:.84rem;color:var(--ink-soft);line-height:1.8;margin-top:20px}
+  .cinfo .sns{margin-top:22px}
+  .cinfo .sns a{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;color:var(--accent-deep)}
+  .form .field{margin-bottom:16px}
+  .form label{font-size:.82rem;font-weight:700;display:block;margin-bottom:6px}
+  .form label .req{color:var(--accent-deep);margin-left:3px}
+  .form input,.form select,.form textarea{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;font-family:inherit;font-size:.95rem;background:#fff;color:var(--ink);transition:.2s}
+  .form input:focus,.form select:focus,.form textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .form .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form textarea{min-height:120px;resize:vertical}
+  .form .submit{background:var(--accent);color:#fff;border:none;padding:16px;border-radius:100px;font-weight:800;font-size:1rem;cursor:pointer;width:100%;margin-top:6px;box-shadow:0 12px 28px rgba(94,156,8,.35);transition:.3s}
+  .form .submit:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(94,156,8,.45)}
+  .form .submit:disabled{opacity:.6;cursor:default;transform:none}
+  .form .formmsg{margin-top:14px;font-size:.9rem;font-weight:700;line-height:1.7}
+  .cwarn{font-size:.78rem;color:var(--ink-soft);margin-top:18px;line-height:1.75}
+  @media(max-width:820px){.contact-grid{grid-template-columns:1fr;gap:32px}}
+
+  /* TEAM */
+  .team-head{margin-top:64px}
+  .team{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:40px}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 20px;text-align:center;cursor:pointer;transition:.3s}
+  .tcard:hover{transform:translateY(-5px);box-shadow:0 18px 40px rgba(94,156,8,.13);border-color:rgba(94,156,8,.3)}
+  .tcard .av{width:84px;height:84px;border-radius:50%;margin:0 auto 14px;overflow:hidden;background:linear-gradient(150deg,#dcf2a8,#f3f9e3);display:flex;align-items:center;justify-content:center;font-family:var(--font-en);font-weight:900;font-size:1.7rem;color:var(--accent-deep)}
+  .tcard .av img{width:100%;height:100%;object-fit:cover}
+  .rep .photo .repimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%;z-index:0}
+  .tcard h4{font-family:var(--font-en);font-weight:900;font-size:1.15rem;letter-spacing:.01em}
+  .tcard .role{font-size:.74rem;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+  .tcard .ttags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:12px}
+  .tcard .ttags span{font-size:.66rem;background:var(--accent-soft);color:var(--accent-deep);border-radius:100px;padding:3px 9px;font-weight:700}
+  .tcard .more{font-size:.74rem;color:var(--accent-deep);font-weight:800;margin-top:13px}
+  .bio-tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px}
+  .bio-tags span{font-size:.72rem;background:var(--accent-soft);color:var(--accent-deep);border-radius:100px;padding:5px 12px;font-weight:700}
+  .bio-body{color:var(--ink-soft);font-size:.95rem;line-height:2}
+  .bio-photo{display:block;max-width:340px;width:100%;max-height:440px;object-fit:contain;border-radius:16px;margin:0 auto 20px;background:var(--paper-2)}
+  .bio-ach{margin-top:20px;background:var(--paper-2);border-radius:14px;padding:18px 22px}
+  .bio-ach h5{font-size:.82rem;font-weight:800;color:var(--ink);margin-bottom:10px;letter-spacing:.05em}
+  .bio-ach ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .bio-ach li{font-size:.84rem;color:var(--ink-soft);padding-left:18px;position:relative;line-height:1.6}
+  .bio-ach li::before{content:"▸";position:absolute;left:0;color:var(--accent-deep)}
+  @media(max-width:980px){.team{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:620px){.team{grid-template-columns:1fr 1fr}}
+
+  /* IMAGE BANDS / GALLERY */
+  .imgband{max-width:1264px;margin:0 auto;padding:clamp(36px,6vw,72px) clamp(20px,5vw,56px)}
+  .imgband .imgreveal{height:clamp(240px,40vw,440px)}
+  .gallery{max-width:1264px;margin:0 auto;padding:clamp(36px,6vw,72px) clamp(20px,5vw,56px);display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .gallery .imgreveal{height:clamp(220px,24vw,300px)}
+  .imgreveal{position:relative;overflow:hidden;border-radius:20px;background:var(--paper-2)}
+  .imgreveal .pbox{position:absolute;inset:0}
+  .imgreveal .pbox img{display:block;width:100%;height:100%;object-fit:cover;transform:scale(1.08);opacity:1;transition:transform 1.8s cubic-bezier(.16,1,.3,1),opacity 1.1s ease}
+  .imgreveal.in .pbox img{transform:scale(1)}
+  .imgreveal.zoomin .pbox img{transform:scale(1.4);opacity:0}
+  .imgreveal.zoomin.in .pbox img{transform:scale(1);opacity:1}
+  .imgreveal.fade .pbox img{transform:scale(1.14);opacity:0}
+  .imgreveal.fade.in .pbox img{transform:scale(1);opacity:1}
+  .imgreveal .wipe{position:absolute;inset:0;z-index:2;background:var(--accent)}
+  .imgreveal.wipe-r.in .wipe{transform:translateX(101%);transition:transform 1.05s cubic-bezier(.76,0,.24,1)}
+  .imgreveal.wipe-l.in .wipe{transform:translateX(-101%);transition:transform 1.05s cubic-bezier(.76,0,.24,1)}
+  .imgreveal.wipe-u.in .wipe{transform:translateY(-101%);transition:transform 1.05s cubic-bezier(.76,0,.24,1)}
+  .imgreveal .scan{position:absolute;top:0;bottom:0;width:3px;background:var(--accent-bright);box-shadow:0 0 18px 3px rgba(163,230,53,.7);z-index:3;left:0;pointer-events:none}
+  @media(max-width:760px){.gallery{grid-template-columns:1fr 1fr;gap:12px}}
+  @media(max-width:460px){.gallery{grid-template-columns:1fr}}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:.8s cubic-bezier(.16,1,.3,1)}
+  .reveal.in{opacity:1;transform:none}
+  @keyframes reveal{to{transform:translateY(0)}}
+  @keyframes up{to{opacity:1;transform:translateY(0)}}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <a href="#" class="logo"><img class="lmark" src="https://i.ibb.co/v6xh5xJm/image.png" alt="" referrerpolicy="no-referrer"><img class="lword" src="https://i.ibb.co/9JJ0G5L/image.png" alt="ストナビダンススクール" referrerpolicy="no-referrer"></a>
+  <nav>
+    <a href="#about">スクールについて</a>
+    <a href="#schools">教室紹介</a>
+    <a href="#rep">講師紹介</a>
+    <a href="#price">料金</a>
+    <a href="#contact">お問い合わせ</a>
+    <a href="#contact" class="cta-mini">無料体験</a>
+  </nav>
+  <div class="burger"><span></span><span></span><span></span></div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="slides"><div class="slide kb" style="background-image:url('https://i.ibb.co/zVDXWrjZ/image.png')"></div></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="kicker">金沢で<em>最も長い</em>ストリートダンススタジオ</div>
+    <h1>
+      <span class="l"><span>踊ることが、</span></span>
+      <span class="l"><span>もっと<em>すきになる</em>。</span></span>
+    </h1>
+    <p class="sub">2007年から金沢の街で踊り続けてきた、ストリートダンススクール。<br>石川・富山に全5校。キッズから大人まで、初心者から全国大会の舞台まで。<br>あなたのペースで、一歩ずつ。</p>
+    <div class="actions">
+      <a href="#contact" class="btn btn-fill">無料体験を申し込む →</a>
+      <a href="#schools" class="btn btn-ghost">教室をさがす</a>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="track">
+    <span>FREESTYLE<i>✦</i>SINCE 2007<i>✦</i>HIP HOP<i>✦</i>STREETDANCE<i>✦</i>KIDS<i>✦</i>BEGINNER WELCOME<i>✦</i>STNV<i>✦</i></span>
+    <span>FREESTYLE<i>✦</i>SINCE 2007<i>✦</i>HIP HOP<i>✦</i>STREETDANCE<i>✦</i>KIDS<i>✦</i>BEGINNER WELCOME<i>✦</i>STNV<i>✦</i></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="cell"><div class="num">2007</div><div class="lab">創立</div></div>
+  <div class="cell"><div class="num">金沢<em>最長</em></div><div class="lab">のストリートダンススタジオ</div></div>
+  <div class="cell"><div class="num">5</div><div class="lab">校舎（石川・富山）</div></div>
+  <div class="cell"><div class="num"><em>初</em>心者〜</div><div class="lab">全国大会クラスまで</div></div>
+</div>
+
+<!-- LONGEST -->
+<section class="longest">
+  <div class="since">SINCE 2007 — KANAZAWA</div>
+  <h2>金沢で、<em>いちばん長く</em><br>踊り続けてきました。</h2>
+  <p>流行りで終わらない。開校から今日まで、変わらず本気で<br>ストリートダンスと向き合ってきた金沢最長のダンススタジオです。</p>
+</section>
+
+<!-- ABOUT -->
+<section class="block" id="about">
+  <div class="reveal">
+    <div class="eyebrow">ABOUT US</div>
+    <h2 class="h2">園児から大人まで、<br>毎日楽しく踊ってます。</h2>
+    <p class="lead" style="max-width:880px">ストナビダンススクールは、金沢市2校・野々市市・七尾市・高岡市の全5校で、<br>ストリートダンスの中でもヒップホップを中心にレッスンしています。<br>初心者の方から全国大会に出場するレベルの生徒さんや、園児から大人まで幅広く在籍。<br>みんな毎日、楽しく踊っています。</p>
+  </div>
+  <div class="features">
+    <div class="feat reveal"><h3>初心者、大歓迎。</h3><p>「リズム感ゼロ」「運動が苦手」でも大丈夫。基礎の基礎から、一人ひとりのペースに合わせて丁寧に。最初の一歩を全力でサポートします。</p></div>
+    <div class="feat reveal"><h3>舞台に立てる。</h3><p>イベント出演やコンテスト出場のチャンスがたくさん。発表の場があるから、楽しみながら自然と上達していけます。</p></div>
+    <div class="feat reveal"><h3>通いやすい5校舎。</h3><p>金沢・野々市・七尾、そして富山・高岡。地域に根ざした全5校。お住まいの近くで、本格的なレッスンが受けられます。</p></div>
+  </div>
+</section>
+
+<!-- IMG BAND 1 -->
+<div class="imgband"><div class="imgreveal wipe-r" data-par="10"><div class="pbox"><img src="https://i.ibb.co/Mx4rF4CL/A7301189.png" alt="" referrerpolicy="no-referrer" style="object-position:center 50%"></div><div class="wipe"></div></div></div>
+
+<!-- SCHOOLS -->
+<div class="schools-wrap" id="schools">
+  <div class="schools-head reveal">
+    <div class="eyebrow">OUR SCHOOLS</div>
+    <h2 class="h2">全5校。近くのスタジオへ。</h2>
+  </div>
+  <p class="sched-note reveal">※ 時間割は変更になる場合があります。最新情報・無料体験のお申し込みはお問い合わせください。</p>
+  <div class="schools">
+
+    <div class="school reveal">
+      <div class="ph"><img src="https://i.ibb.co/9KDznYq/kanazawa.png" alt="金沢校 外観" referrerpolicy="no-referrer"><span class="pin">KANAZAWA</span></div>
+      <div class="body">
+        <h3>金沢校</h3>
+        <div class="info">
+          <div class="row"><span class="ilbl">住所</span><span>〒920-0841 金沢市浅野本町ホ233-2</span></div>
+          <div class="row"><span class="ilbl">駐車場</span><span>あり（スタジオ反対側の駐車場）</span></div>
+        </div>
+        <button class="sched-btn" data-school="kanazawa">週間スケジュールを見る</button>
+        <div class="links">
+          <a href="https://goo.gl/maps/xexYTfoVWZJ2" target="_blank" rel="noopener">地図で見る ↗</a>
+          <a href="#contact">体験する →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="school reveal">
+      <div class="ph"><img src="https://i.ibb.co/VpqqhTcn/fushimidai.png" alt="伏見台校 外観" referrerpolicy="no-referrer"><span class="pin">FUSHIMIDAI</span></div>
+      <div class="body">
+        <h3>伏見台校</h3>
+        <div class="info">
+          <div class="row"><span class="ilbl">住所</span><span>金沢市窪5丁目626</span></div>
+          <div class="row"><span class="ilbl">駐車場</span><span>6台</span></div>
+        </div>
+        <button class="sched-btn" data-school="fushimidai">週間スケジュールを見る</button>
+        <div class="links">
+          <a href="https://goo.gl/maps/KhQyCNPvTpkfcYC68" target="_blank" rel="noopener">地図で見る ↗</a>
+          <a href="#contact">体験する →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="school reveal">
+      <div class="ph"><img src="https://i.ibb.co/5WT22L1G/nonoichi.png" alt="野々市校 外観" referrerpolicy="no-referrer"><span class="pin">NONOICHI</span></div>
+      <div class="body">
+        <h3>野々市校</h3>
+        <div class="info">
+          <div class="row"><span class="ilbl">住所</span><span>野々市市二日市4丁目23<br>「α floor」スタジオ</span></div>
+          <div class="row"><span class="ilbl">駐車場</span><span>あり</span></div>
+        </div>
+        <button class="sched-btn" data-school="nonoichi">週間スケジュールを見る</button>
+        <div class="links">
+          <a href="https://maps.app.goo.gl/Cff7S1WcdipKz22d9" target="_blank" rel="noopener">地図で見る ↗</a>
+          <a href="#contact">体験する →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="school reveal">
+      <div class="ph"><img src="https://i.ibb.co/3mwRJ1kv/nanao.png" alt="七尾校 外観" referrerpolicy="no-referrer"><span class="pin">NANAO</span></div>
+      <div class="body">
+        <h3>七尾校</h3>
+        <div class="info">
+          <div class="row"><span class="ilbl">住所</span><span>七尾市飯川町くー62</span></div>
+          <div class="row"><span class="ilbl">駐車場</span><span>あり</span></div>
+        </div>
+        <button class="sched-btn" data-school="nanao">週間スケジュールを見る</button>
+        <div class="links">
+          <a href="https://goo.gl/maps/nVGzjiktmkk" target="_blank" rel="noopener">地図で見る ↗</a>
+          <a href="#contact">体験する →</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="school reveal">
+      <div class="ph"><img src="https://i.ibb.co/v41JHsht/takaoka.png" alt="高岡校 外観" referrerpolicy="no-referrer"><span class="pin">TAKAOKA</span></div>
+      <div class="body">
+        <h3>高岡校</h3>
+        <div class="info">
+          <div class="row"><span class="ilbl">住所</span><span>富山県高岡市下関町6-1<br>curun TAKAOKA B1</span></div>
+          <div class="row"><span class="ilbl">駐車場</span><span>なし</span></div>
+        </div>
+        <button class="sched-btn" data-school="takaoka">週間スケジュールを見る</button>
+        <div class="links">
+          <a href="https://maps.app.goo.gl/5kL57jYCCDZzEK4K9" target="_blank" rel="noopener">地図で見る ↗</a>
+          <a href="#contact">体験する →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="levels reveal">
+    <h3>クラスについて</h3>
+    <div class="levels-grid">
+      <div class="level"><h5>基礎クラス</h5><p>体の使い方・リズム・ステップなど、踊るうえで大切な基礎を中心に学べるクラス。</p></div>
+      <div class="level"><h5>入門クラス</h5><p>基礎と簡単な振付けを丁寧に。はじめての方やダンス歴の短い方におすすめ。</p></div>
+      <div class="level"><h5>初級クラス</h5><p>ある程度基礎とダンスに慣れてきた方に。このクラスから始める方もいます。</p></div>
+      <div class="level"><h5>中級クラス</h5><p>ダンス歴も長く、さらに上を目指したい方に。レベルが高く刺激の強いクラス。</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- IMG BAND 2 -->
+<div class="imgband"><div class="imgreveal zoomin" data-par="12"><div class="pbox"><img src="https://i.ibb.co/RTR48fPz/IMG-8639.jpg" alt="" referrerpolicy="no-referrer" style="object-position:center top"></div></div></div>
+
+<!-- INSTRUCTOR -->
+<section class="block" id="rep">
+  <div class="rep">
+    <div class="photo reveal"><div class="badge">REPRESENTATIVE</div><img class="repimg" src="https://i.ibb.co/YBqXQ080/take.jpg" alt="TAKE" referrerpolicy="no-referrer" onerror="this.style.display='none'"></div>
+    <div class="reveal">
+      <div class="eyebrow">代表メッセージ</div>
+      <div class="quote">ダンスは、<em>かけがえのない</em><br>人生の宝物。</div>
+      <p class="lead" style="margin-bottom:20px">私がダンスと出会ったのは20歳の時。最初は興味本位で始めましたが、続けるうちに多くのことを学び、たくさんの人と出会い、いつしかダンスに生かされていました。一つの表現方法を持つことで視野が広がり、世界へ目を向け、意欲的に行動できるように。そんな宝箱のようなダンスを、これからもっと多くの方と分かち合えたら幸いです。みなさんが素敵なダンスライフを過ごせますように。</p>
+      <div class="name">TAKE</div>
+      <div class="role">ストナビダンススクール 主宰</div>
+    </div>
+  </div>
+
+  <div class="team-head reveal">
+    <div class="eyebrow">DANCERS</div>
+    <h2 class="h2" style="font-size:clamp(1.6rem,4vw,2.4rem)">講師紹介</h2>
+    <p class="lead">経験豊富なインストラクター陣。タップでプロフィールと実績をチェック。</p>
+  </div>
+  <div class="team" id="teamGrid"></div>
+</section>
+
+<!-- IMG BAND 3 -->
+<div class="imgband"><div class="imgreveal wipe-l" data-par="10"><div class="pbox"><img src="https://i.ibb.co/jvQgvZF8/IMG-5362.jpg" alt="" referrerpolicy="no-referrer" style="object-position:center 80%"></div><div class="wipe"></div></div></div>
+
+<!-- PRICING -->
+<section class="block" id="price">
+  <div class="reveal">
+    <div class="eyebrow">PRICE & ADMISSION</div>
+    <h2 class="h2">料金・ご入会案内</h2>
+    <div class="pill-row">
+      <span class="pill">入会金 <b>¥5,000</b></span>
+      <span class="pill">体験レッスン <b>1回無料</b></span>
+      <span class="pill">年会費 <b>なし</b></span>
+      <span class="pill">兄弟姉妹 <b>無料</b></span>
+    </div>
+  </div>
+  <div class="price-grid">
+    <div class="price-card hot reveal">
+      <span class="tagtop">月謝制</span>
+      <div class="price-row"><span class="nm">各クラス</span><span class="pr">¥6,000<small>/月4回</small></span></div>
+      <div class="price-row"><span class="nm">園児クラス</span><span class="pr">¥4,000<small>/月4回</small></span></div>
+      <div class="price-row"><span class="nm">追加レッスン</span><span class="pr">¥1,000<small>/回</small></span></div>
+      <p class="price-note">※ 休講でレッスンが3回の月は¥4,500、2回の月は¥3,000に変更します。<br>お休みされても月謝は変わりません。</p>
+    </div>
+    <div class="price-card reveal">
+      <span class="tagtop" style="background:var(--ink)">単発制</span>
+      <div class="price-row"><span class="nm">各クラス</span><span class="pr">¥2,000<small>/1レッスン</small></span></div>
+      <div class="price-row"><span class="nm">追加レッスン</span><span class="pr">¥2,000<small>/回</small></span></div>
+      <p class="price-note">※ 単発制でもご入会が必要です。<br>参加の都度、講師に直接お支払いいただきます。</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="step reveal"><h4>見学・無料体験</h4><p>スタジオに直接お越しください。各クラス1回まで無料で体験できます。お申し込みはコンタクトから。</p></div>
+    <div class="step reveal"><h4>入会申込書を記入</h4><p>スタジオで入会申込書に必要事項をご記入いただきます。手続きはこれだけ。</p></div>
+    <div class="step reveal"><h4>レッスンスタート</h4><p>入会のタイミングはいつでもOK。月の途中の場合は、その月の残り回数分のお月謝になります。</p></div>
+  </div>
+
+  <div class="acc reveal">
+    <details><summary>お月謝について</summary><div class="body">月4回のレッスンで¥6,000（園児クラスは¥4,000）。休講などで3回の月は¥4,500、2回の月は¥3,000に変更します。いかなる理由でお休みされても、お月謝の金額は変わりません。天災や講師都合で休講になる場合もあります。月謝で通われない場合は、単発制（1レッスン¥2,000）でのご参加も可能です。</div></details>
+    <details><summary>休会について</summary><div class="body">休会をご希望の場合は、前もってご連絡ください。月の途中での休会はできません。</div></details>
+    <details><summary>レッスンの振替について</summary><div class="body">用事や体調不良でお休みした場合、「同じ講師」であれば、通っているクラスと別のクラスを受けて振替できます。振替期限は1ヶ月以内です。</div></details>
+    <details><summary>追加レッスンについて</summary><div class="body">お月謝クラス以外で追加受講したい場合は、レッスン時に講師へ¥1,000を直接お支払いください（お申し込み不要）。単発制の方は¥2,000です。</div></details>
+    <details><summary>休講・代講について</summary><div class="body">クラスが休講になった場合、別の講師が代講することがあります。</div></details>
+    <details><summary>保護者さまの見学について</summary><div class="body">園児クラス以外は、各クラス月1回までご見学いただけます。駐車場が埋まっている場合はご見学できませんのでご注意ください。</div></details>
+    <details><summary>イベント・キャンプについて</summary><div class="body">毎年ユニットを結成してコンテストに出場したり、イベント出演メンバーを募集したり。年2回の自主イベント、小学3年生以上が参加できるダンスキャンプなど、企画は盛りだくさん。仲間が増えてスキルアップできる環境が整っています。</div></details>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="gallery">
+  <div class="imgreveal wipe-u" data-par="12"><div class="pbox"><img src="https://i.ibb.co/svff3bdX/IMG-7037.jpg" alt="" referrerpolicy="no-referrer"></div><div class="wipe"></div></div>
+  <div class="imgreveal fade" data-par="12"><div class="pbox"><img src="https://i.ibb.co/SXBsJhXL/E35535-FE-9012-4-C29-8-B40-568224-F7-AAED.jpg" alt="" referrerpolicy="no-referrer"></div></div>
+  <div class="imgreveal zoomin" data-par="12"><div class="pbox"><img src="https://i.ibb.co/JwqrdLkf/IMG-0782.jpg" alt="" referrerpolicy="no-referrer"></div></div>
+  <div class="imgreveal wipe-r" data-par="12"><div class="pbox"><img src="https://i.ibb.co/LDTQYf70/JAMMIN2024winter.png" alt="" referrerpolicy="no-referrer"></div><div class="wipe"></div></div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>まずは、踊ってみよう。</h2>
+  <p>無料体験・見学はいつでも受付中。手ぶらでOK。<br>まずは気軽に、スタジオの空気を感じてみてください。</p>
+  <a href="#contact" class="btn btn-fill">無料体験を申し込む →</a>
+</section>
+
+<!-- BIO MODAL -->
+<div class="modal" id="bioModal">
+  <div class="backdrop" data-bioclose></div>
+  <div class="panel">
+    <div class="mhead">
+      <div><div class="pin" id="bPin">DANCER</div><h3 id="bName"></h3><div class="role" id="bRole" style="color:var(--ink-soft);font-size:.85rem;margin-top:4px"></div></div>
+      <button class="close" data-bioclose aria-label="閉じる">×</button>
+    </div>
+    <div id="bBody"></div>
+  </div>
+</div>
+
+<!-- WEEKLY SCHEDULE MODAL -->
+<div class="modal" id="schedModal">
+  <div class="backdrop" data-close></div>
+  <div class="panel">
+    <div class="mhead">
+      <div><div class="pin" id="mPin"></div><h3 id="mName"></h3></div>
+      <button class="close" data-close aria-label="閉じる">×</button>
+    </div>
+    <div class="msub">※ 時間割は変更になる場合があります。最新情報はお問い合わせください。</div>
+    <div class="week" id="mWeek"></div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="block" id="contact">
+  <div class="reveal">
+    <div class="eyebrow">CONTACT</div>
+    <h2 class="h2">見学・無料体験のお申し込み</h2>
+    <p class="lead">クラスの「ご見学」や「無料体験」のお申し込みはこちらから。<br>ご希望のクラスをご連絡ください。質問・相談だけでもお気軽にどうぞ。</p>
+  </div>
+  <div class="contact-grid">
+    <div class="cinfo reveal">
+      <div class="plabel">お電話でのお問い合わせ</div>
+      <a class="phone" href="tel:0762829917">076-282-9917</a>
+      <div class="note">レッスン中などお電話に出られない時間が多いです。応答がない場合は、下のフォームかメールでお問い合わせください。折り返しご連絡します。</div>
+      <div class="sns">
+        <a href="https://www.instagram.com/stnv_dance_school/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-4px;margin-right:6px"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>InstagramのDMでもOK ↗</a>
+      </div>
+    </div>
+    <form class="form reveal" id="contactForm">
+      <div class="row2">
+        <div class="field"><label>お名前<span class="req">*</span></label><input type="text" name="お名前" required></div>
+        <div class="field"><label>年齢</label><input type="text" name="年齢" placeholder="例：8歳 / 大人"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>メールアドレス<span class="req">*</span></label><input type="email" name="メール" required></div>
+        <div class="field"><label>電話番号</label><input type="tel" name="電話番号"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>希望校</label>
+          <select name="希望校">
+            <option value="">選択してください</option>
+            <option>金沢校</option><option>伏見台校</option><option>野々市校</option><option>七尾校</option><option>高岡校</option><option>まだ決めていない</option>
+          </select>
+        </div>
+        <div class="field"><label>希望クラス</label><input type="text" name="希望クラス" placeholder="例：園児 / 初級 HIPHOP など"></div>
+      </div>
+      <div class="field"><label>メッセージ</label><textarea name="メッセージ" placeholder="ご質問・ご相談など、お気軽にどうぞ"></textarea></div>
+      <button type="submit" class="submit">この内容で送信する</button>
+      <div class="formmsg" id="formMsg"></div>
+      <p class="cwarn">こちらからの返信が迷惑メールフォルダに入る場合があります。届かないときはフォルダをご確認ください。メールアドレスの入力間違いにもご注意ください。</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="brand">
+      <div class="logo"><img class="lmark" src="https://i.ibb.co/v6xh5xJm/image.png" alt="" referrerpolicy="no-referrer"><img class="lword" src="https://i.ibb.co/9JJ0G5L/image.png" alt="ストナビダンススクール" referrerpolicy="no-referrer"></div>
+      <p>ストナビダンススクール<br>金沢で最も長いストリートダンススタジオ<br>石川県金沢市・野々市市・七尾市／富山県高岡市 全5校。</p>
+      <div class="socials">
+        <a href="https://www.instagram.com/stnv_dance_school/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.youtube.com/channel/UCXOuiDuYgD0hDznvbI1Nayg" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 7.2c-.25-1-1-1.7-2-2C18.7 4.8 12 4.8 12 4.8s-6.7 0-8.5.4c-1 .3-1.75 1-2 2C1 9 1 12 1 12s0 3 .5 4.8c.25 1 1 1.7 2 2 1.8.4 8.5.4 8.5.4s6.7 0 8.5-.4c1-.3 1.75-1 2-2C23 15 23 12 23 12s0-3-.5-4.8zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <h4>SCHOOLS</h4>
+      <ul>
+        <li><a href="#">金沢校</a></li><li><a href="#">伏見台校</a></li><li><a href="#">野々市校</a></li><li><a href="#">七尾校</a></li><li><a href="#">高岡校</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>MENU</h4>
+      <ul>
+        <li><a href="#about">スクールについて</a></li>
+        <li><a href="#rep">講師紹介</a></li>
+        <li><a href="#price">料金・ご入会案内</a></li>
+        <li><a href="#contact">無料体験・お問い合わせ</a></li>
+        <li><a href="https://www.stnv-ent.com/" target="_blank" rel="noopener">ストナビ・エンターテインメント ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="copy">
+    <span>© 2007 ストナビダンススクール</span>
+    <span>All rights reserved.</span>
+  </div>
+</footer>
+
+<script>
+  const hdr=document.getElementById('hdr');
+  addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>40)});
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  document.querySelectorAll('.imgreveal').forEach(el=>io.observe(el));
+
+  // ===== 週間スケジュール =====
+  const SCHED={
+    kanazawa:{
+      "月":[["18:00–19:15","初級","HIPHOP","HAKO"],["19:30–20:45","中級","HIPHOP","HAKO"]],
+      "火":[["18:30–19:45","初級","HIPHOP","TAIGO"],["20:00–21:15","中級","HIPHOP","FU-TA"]],
+      "水":[["16:45–17:45","園児クラス","","FU-TA"],["18:15–19:15","基礎クラス","","TAKE"],["21:00–22:15","大人","HIPHOP","TAKE"]],
+      "木":[["17:00–18:15","入門","HIPHOP","TAKE"],["18:30–19:45","初級","HIPHOP","TAKE"],["20:00–21:15","中級","HIPHOP","TAKE"]],
+      "金":[["18:30–19:45","入門・初級","HIPHOP","NANA"],["20:00–21:15","中級","HIPHOP","NANA"]],
+      "土":[["16:30–17:30","園児クラス","","TAKE"]]
+    },
+    fushimidai:{
+      "月":[["17:00–18:15","初級","HIPHOP","FU-TA"],["18:30–19:45","初級","HIPHOP","NANA"],["20:00–21:15","中級","HIPHOP","NANA"]],
+      "火":[["17:00–18:15","入門","HIPHOP","TAKE"],["18:30–19:45","初級","HIPHOP","TAKE"],["20:00–21:15","中級","HIPHOP","TAKE"]],
+      "水":[["16:30–17:30","園児クラス","","Hinaco"],["17:45–18:45","入門クラス","","Hinaco"],["20:30–21:45","中級","HIPHOP","Hinaco"]],
+      "金":[["17:00–17:50","バトル・セッション","","momon"],["18:00–18:50","初級","HIPHOP","momon"],["19:00–20:00","基礎クラス","","KAI"],["20:15–21:30","中級","HIPHOP","KAI"]],
+      "土":[["16:15–17:30","初級","HIPHOP","TAIGO"]]
+    },
+    nonoichi:{
+      "金":[["13:00–14:15","大人","HIPHOP","TAKE"],["18:15–19:30","初級","HIPHOP","TAKE"],["19:45–21:00","中級","HIPHOP","TAKE"]]
+    },
+    nanao:{
+      "月":[["17:00–18:00","基礎クラス","","TAKE"],["18:15–19:30","初級","HIPHOP","TAKE"],["19:45–21:00","中級","HIPHOP","TAKE"]],
+      "金":[["18:30–19:45","初級","HIPHOP","HAKO"],["20:00–21:15","中級","HIPHOP","HAKO"]]
+    },
+    takaoka:{
+      "月":[["18:00–19:15","初級","HIPHOP","Hinaco"],["19:30–20:45","中級","HIPHOP","Hinaco"]],
+      "火":[["18:45–20:00","初級","HIPHOP","KAI"],["20:15–21:30","中級","HIPHOP","KAI"]],
+      "水":[["17:15–18:15","園児クラス","","NANA"],["18:30–19:45","初級","HIPHOP","NANA"]],
+      "木":[["18:15–19:30","初級","HIPHOP","YUCHI"],["19:45–21:00","中級","HIPHOP","YUCHI"]],
+      "金":[["18:00–19:15","初級","HIPHOP","YUZUA"],["19:30–20:45","中級","HIPHOP","MINAMI"]],
+      "土":[["11:00–12:00","基礎クラス","","TAKE"],["12:15–13:30","初級","HIPHOP","TAKE"],["13:45–15:00","中級","HIPHOP","TAKE"]]
+    }
+  };
+  const DAY_ORDER=["月","火","水","木","金","土"];
+  const SCHOOL_NAMES={kanazawa:["KANAZAWA","金沢校"],fushimidai:["FUSHIMIDAI","伏見台校"],nonoichi:["NONOICHI","野々市校"],nanao:["NANAO","七尾校"],takaoka:["TAKAOKA","高岡校"]};
+  const modal=document.getElementById('schedModal');
+  function photoOf(name){var k=Object.keys(CHARS).find(function(k){return k.toLowerCase()===String(name).toLowerCase();});return k?CHARS[k]:'';}
+  function openSched(school){
+    const [pin,name]=SCHOOL_NAMES[school];
+    document.getElementById('mPin').textContent=pin;
+    document.getElementById('mName').textContent=name;
+    const days=DAY_ORDER.filter(d=>SCHED[school][d]);
+    document.getElementById('mWeek').innerHTML=days.map(d=>
+      `<div class="drow"><div class="dl">${d}</div><div class="cs">`+
+      SCHED[school][d].map(function(c){
+        var p=photoOf(c[3]);var nm=String(c[3]).toLowerCase();
+        var big=p&&nm!=='taigo'&&nm!=='fu-ta'&&nm!=='yuchi'&&nm!=='momon';
+        var av=p?`<img class="cls-av${big?' big':''}" src="${p}" alt="" referrerpolicy="no-referrer">`:'';
+        return `<div class="cls2"><div class="tm">${c[0]}</div><div class="lv">${c[1]}${c[2]?' '+c[2]:''}</div><div class="mt">${av}${c[3]}</div></div>`;
+      }).join('')+
+      `</div></div>`
+    ).join('');
+    modal.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeSched(){modal.classList.remove('open');document.body.style.overflow='';}
+  document.querySelectorAll('.sched-btn').forEach(b=>b.addEventListener('click',()=>openSched(b.dataset.school)));
+  modal.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',closeSched));
+  addEventListener('keydown',e=>{if(e.key==='Escape')closeSched()});
+
+  // ===== お問い合わせフォーム =====
+  // ↓↓↓ GASウェブアプリをデプロイして、その /exec URL をここに貼る ↓↓↓
+  const GAS_ENDPOINT="https://script.google.com/macros/s/AKfycbyAoxaB9vFQht4j-BFoVFFRJFhjx4p9HlmLm2CmJXiTXQ9SEtL7vukKTT-rvwI2fc1GwA/exec";
+  const cForm=document.getElementById('contactForm');
+  const cMsg=document.getElementById('formMsg');
+  cForm.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=cForm.querySelector('.submit');
+    if(!GAS_ENDPOINT){cMsg.style.color='#c0392b';cMsg.textContent='（送信先が未設定です。GASウェブアプリのURLを設定してください）';return;}
+    btn.disabled=true;cMsg.style.color='var(--ink-soft)';cMsg.textContent='送信中...';
+    try{
+      await fetch(GAS_ENDPOINT,{method:'POST',mode:'no-cors',body:new FormData(cForm)});
+      cForm.reset();
+      cMsg.style.color='var(--accent-deep)';
+      cMsg.textContent='送信しました！ありがとうございます 折り返しご連絡します（返信が迷惑メールに入る場合があるのでご確認ください）。';
+    }catch(err){
+      cMsg.style.color='#c0392b';
+      cMsg.textContent='送信に失敗しました。お手数ですがお電話（076-282-9917）でお問い合わせください。';
+    }finally{btn.disabled=false;}
+  });
+
+  // ===== 講師紹介 =====
+  const TEACHERS=[
+    {n:"TAKE",r:"主宰",t:["OVER40 日本一","社交ダンス元プロ","講師歴27年"],
+     b:"HIPHOPの傍ら、社交ダンスの元プロダンサーとしても活動。ストナビ開校以前からイベント出演・企画・司会などマルチな才能を発揮してきた。HIPHOPの歴史を掘り、ジャンルを超えて踊ることの楽しさを数多くの生徒に伝えてきた、石川県HIPHOPダンスの礎を築いたパイオニア。挑戦し続ける姿を自ら体現する。2021年 OVER40 日本一。",
+     a:["キッズダンスユニット コンテスト受賞歴 北陸No.1","農林水産省「Change My Life Change Your Life」振付","石川テレビ40周年「石川サンバ」/ MRO「海ごみゼロ体操」振付","HAB「ミーゴチャン音頭」ほか企業振付多数（北陸銀行・8番らーめん 他）","SMAP「JOY」MV出演 / a-nation'08 金沢公演 アクトダンサー","2013 AKB48 篠田麻里子卒業コンサート出演","KCT 北陸初のレギュラーダンス番組「King TAKEのダンスクレイジー」(2011〜2016)","2023 国民文化祭にて天皇皇后両陛下の御前で披露"]},
+    {n:"Hinaco",r:"講師",t:["フィメールダンサー"],
+     b:"ストナビ産まれHIPHOP育ちのフィメールダンサー。小学生時代から数えきれないほどコンテストで入賞・優勝を経験し、ストナビの講師に。明るく親しみやすい性格で後輩からも慕われる。ソロで踊っても結果を出せるほど自分のダンスを理解し、ダンスと音楽を愛する心は人一倍強い。着実に人気と実績を残す、若きリーダーの一人。",a:[]},
+    {n:"Kai",r:"講師",t:["最新HIPHOP〜R&B","LA挑戦"],
+     b:"小学生の頃からストナビユニットで活躍。国内アーティストのバックダンサーから、LAの世界的コンテストまで活動の幅を広げた。ゴリゴリの最新HIPHOPからスタイリッシュなR&Bまで、選曲から振付まで自由自在。テクニカルでありながら親しみやすい世界観が魅力。夢は世界の舞台。",
+     a:["AI《MORIAGARO》ツアー 名古屋 オープニングアクト","KID INK 1st JAPANツアー 名古屋 オープニングアクト","ANARCHY LIVE 大阪 / 湘南乃風 名古屋 バックダンサー","BodyRock competition 2018 USA Izumi Company 4位","BodyRock competition 2019 USA Izumi Company 準優勝"]},
+    {n:"Nana",r:"講師",t:["パワースタイル","全国準優勝"],
+     b:"小学生時代からストナビユニットで活躍。MONSTER BRASHでスーパーキッズダンスコンテスト全国7位を2年連続。ボディーコントロールとパワー全開のスタイルは唯一無二。ソロでも全国大会準優勝の結果を残す。持ち前の明るさとテンションの高さで子供たちに大人気。",a:[]},
+    {n:"HAKO",r:"講師",t:["グルーヴ","モデル"],
+     b:"アメリカのブラックな踊りを好み、グルーヴを最も大切にするダンサー。そこに力強さと色気のテイストを見事に表現する。パフォーマンスへの度胸と信念は誰よりも強く、迷いなくステージに立つ。スタイルを活かしモデルなどもこなし、自分の魅せ方を理解。チームFLY GirlZとして実績を残し、仲間と共に成長してきた。",a:[]},
+    {n:"YUCHI",r:"講師",t:["富山","キレ＆パワー"],
+     b:"子供の頃から明るく陽気な愛されキャラクター。天然っぽさを持ちつつ、ダンスとなると豹変するパフォーマンスはかっこいいの一言。小さな体からは想像できないキレとパワーを見せる。幼少期からコンテストで数々の受賞、全国で戦ってきた実績は本物。ストナビ初の富山県出身講師として、富山のヒップホップシーンを牽引する。",a:[]},
+    {n:"momon",r:"講師",t:["バトラー","世界的人気"],
+     b:"キッズの頃からダンスを愛し続け、県内外問わず大きなコンテストで結果を出してきた。その後ソロ・バトルのフィールドに挑戦し続け、今や世界にファンがいるほどの人気と実力を備える。今なお進化し、挑戦し続けるダンサー。バトル界のトップイベント「@LIVE」ファイナルにも出場。",
+     a:["マイナビDANCE ALIVE KIDS 北陸 ×JAPAN 準優勝","マイナビDANCE ALIVE HERO'S 2022 FINALIST","GRAND RISING ONLINE BATTLE 2023 USA 準優勝","UDO SOLO UNDER 18 準優勝 / UDO 2024 HIPHOP BATTLE TOP4"]},
+    {n:"TAIGO",r:"講師",t:["熱い男"],
+     b:"小さい時に始めたダンスを大学生になり復活。個性的な愛されキャラクターでたちまち人気者に。チーム活動を始めて実力を伸ばし、有名コンテストの決勝大会に出場するなど、徐々に認知度と結果を残してきた。成長に貪欲な、これからが楽しみなダンサー。",a:[]},
+    {n:"FU-TA",r:"講師",t:["HIPHOP〜R&B"],
+     b:"小さい頃からユニット活動を続け、たくさんの経験を積んできた。見た目は真面目そうだが、踊ると自分のキャラクターを発揮。そのギャップが子供たちに人気。実力は折り紙付きで、ストナビ主催イベントでは殿堂入り級の結果を残してきた。ゴリゴリのHIPHOPから雰囲気あるR&Bまで何でも踊りこなす。",a:[]},
+    {n:"YUZUA",r:"講師",t:[],b:"プロフィールは準備中です。",a:[]},
+    {n:"MINAMI",r:"講師",t:[],b:"プロフィールは準備中です。",a:[]}
+  ];
+  const PHOTOS={
+    "TAKE":"https://i.ibb.co/YBqXQ080/take.jpg",
+    "Hinaco":"https://i.ibb.co/MD2ktmpK/Hinaco.jpg",
+    "Kai":"https://i.ibb.co/CKRRGsKD/kai.jpg",
+    "Nana":"https://i.ibb.co/6JmN55DV/nana.jpg",
+    "HAKO":"https://i.ibb.co/Xxy9WP94/hako.jpg",
+    "YUCHI":"https://i.ibb.co/DPhxbgyk/yuchi.jpg",
+    "momon":"https://i.ibb.co/W4Sp4MDx/momon.jpg",
+    "TAIGO":"https://i.ibb.co/DmgV8m1/taigo.jpg",
+    "FU-TA":"https://i.ibb.co/6RGGQzNg/futa.jpg",
+    "YUZUA":"https://i.ibb.co/QvNkNtXm/yuzua.avif",
+    "MINAMI":"https://i.ibb.co/NgXgkRB6/minami.avif"
+  };
+  // スケジュール用キャラクター（milo）アイコン
+  const CHARS={
+    "TAKE":"https://i.ibb.co/zV9PdR5R/TAKE-hat-milo.png",
+    "Hinaco":"https://i.ibb.co/XkWYwtKN/Hinaco-milo.png",
+    "Kai":"https://i.ibb.co/HTj7G7zx/KAI-milo.png",
+    "Nana":"https://i.ibb.co/20pWS2Rh/Nana-milo.png",
+    "HAKO":"https://i.ibb.co/Ng8sKST7/hako-milo.png",
+    "YUCHI":"https://i.ibb.co/prLK7gMT/Yuchi.png",
+    "momon":"https://i.ibb.co/XkWbvyTH/momon.png",
+    "TAIGO":"https://i.ibb.co/QjC1TDmn/taigo.png",
+    "FU-TA":"https://i.ibb.co/BVzFvY1Z/FU-TA.png"
+  };
+  const POS={
+    "TAKE":["center top",2.0],
+    "Hinaco":["center 22%",1],
+    "Kai":["center 16%",1.15],
+    "Nana":["center 42%",1.25],
+    "HAKO":["center 20%",1],
+    "YUCHI":["center 16%",1.05],
+    "momon":["center top",2.1],
+    "TAIGO":["center 18%",1],
+    "FU-TA":["68% 30%",1.7],
+    "YUZUA":["center 20%",1.45],
+    "MINAMI":["center top",1.8]
+  };
+  const teamGrid=document.getElementById('teamGrid');
+  teamGrid.innerHTML=TEACHERS.map((t,i)=>{
+    let av=t.n[0];
+    if(PHOTOS[t.n]){
+      const p=POS[t.n]||["center 22%",1];
+      av=`<img src="${PHOTOS[t.n]}" alt="${t.n}" referrerpolicy="no-referrer" style="object-position:${p[0]};transform:scale(${p[1]});transform-origin:${p[0]}" onerror="this.parentElement.textContent='${t.n[0]}'">`;
+    }
+    return `<div class="tcard" data-i="${i}"><div class="av">${av}</div><h4>${t.n}</h4><div class="role">${t.r}</div><div class="more">プロフィール →</div></div>`;
+  }).join('');
+  const bioModal=document.getElementById('bioModal');
+  function openBio(i){
+    const t=TEACHERS[i];
+    document.getElementById('bName').textContent=t.n;
+    document.getElementById('bRole').textContent=t.r;
+    document.getElementById('bBody').innerHTML=
+      (PHOTOS[t.n]?`<img class="bio-photo" src="${PHOTOS[t.n]}" alt="${t.n}" referrerpolicy="no-referrer" onerror="this.style.display='none'">`:'')+
+      `<div class="bio-body">${t.b}</div>`+
+      (t.a&&t.a.length?`<div class="bio-ach"><h5>主な実績</h5><ul>${t.a.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'');
+    bioModal.classList.add('open');document.body.style.overflow='hidden';
+  }
+  function closeBio(){bioModal.classList.remove('open');document.body.style.overflow='';}
+  teamGrid.querySelectorAll('.tcard').forEach(c=>c.addEventListener('click',()=>openBio(+c.dataset.i)));
+  bioModal.querySelectorAll('[data-bioclose]').forEach(el=>el.addEventListener('click',closeBio));
+  addEventListener('keydown',e=>{if(e.key==='Escape')closeBio()});
+</script>
+</body>
+</html>
