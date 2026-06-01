@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ストナビダンススクール｜金沢で最も長いストリートダンススタジオ</title>
+<title>ストナビダンススクール｜金沢で最も長いストリートダンススクール</title>
 <meta name="description" content="2007年創立、金沢で最も長く続くヒップホップ／ストリートダンススクール。石川・富山に全5校。初心者から全国大会優勝者まで。無料体験受付中。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,11 +39,10 @@
   /* HEADER */
   header{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(20px,5vw,56px);transition:.4s ease;background:transparent}
   header.scrolled{padding:10px clamp(20px,5vw,56px);background:rgba(255,255,255,.92);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,.06)}
-  header .logo{display:flex;align-items:center;gap:11px}
-  header .logo .lmark{height:50px;width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
-  header .logo .lword{height:24px;width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
+  header .logo{display:flex;align-items:center;gap:clamp(6px,2vw,11px)}
+  header .logo .lmark{height:clamp(24px,8vw,50px);width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
+  header .logo .lword{height:clamp(12px,4vw,24px);width:auto;display:block;filter:brightness(0) invert(1);transition:filter .3s}
   header.scrolled .logo .lmark,header.scrolled .logo .lword{filter:none}
-  @media(max-width:560px){header .logo .lmark{height:38px}header .logo .lword{height:18px}header .logo{gap:8px}}
   header .logo span{color:var(--accent)}
   nav{display:flex;gap:30px;align-items:center}
   nav a{font-size:13px;font-weight:700;color:#fff;letter-spacing:.03em;position:relative;transition:color .3s}
@@ -53,9 +52,19 @@
   .cta-mini{background:var(--accent);color:#fff!important;padding:9px 18px;border-radius:100px;font-size:13px;font-weight:800;box-shadow:0 6px 18px rgba(94,156,8,.35)}
   .cta-mini::after{display:none}
   .burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
-  .burger span{width:26px;height:2px;background:#fff;display:block;transition:background .3s}
+  .burger span{width:26px;height:2px;background:#fff;display:block;transition:.3s}
   header.scrolled .burger span{background:var(--ink)}
-  @media(max-width:860px){nav{display:none}.burger{display:flex}}
+  @media(max-width:860px){
+    .burger{display:flex;z-index:1001}
+    nav{position:fixed;inset:0;background:rgba(247,246,242,.98);backdrop-filter:blur(10px);flex-direction:column;justify-content:center;align-items:center;gap:30px;transform:translateX(100%);transition:transform .38s cubic-bezier(.16,1,.3,1);z-index:999}
+    nav.open{transform:translateX(0)}
+    nav a{color:var(--ink)!important;font-size:21px;font-weight:800}
+    nav .cta-mini{font-size:16px;padding:14px 30px}
+    .burger.x span{background:var(--ink)}
+    .burger.x span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .burger.x span:nth-child(2){opacity:0}
+    .burger.x span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  }
 
   /* HERO */
   .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:130px clamp(20px,5vw,56px) 80px;position:relative;overflow:hidden;background:#0c0c0e}
@@ -69,7 +78,7 @@
   .hero .kicker{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);padding:9px 18px;border-radius:100px;font-size:13px;font-weight:700;margin-bottom:30px;width:fit-content;opacity:0;animation:up .8s .1s forwards;transform:translateY(16px)}
   .hero .kicker em{font-style:normal;color:var(--accent-bright);font-weight:800}
   .hero .kicker b{font-family:var(--font-en);font-weight:800;letter-spacing:.1em}
-  .hero h1{font-weight:900;font-size:clamp(2.6rem,8.8vw,7rem);line-height:1.03;letter-spacing:-.015em;margin-bottom:30px;color:#fff}
+  .hero h1{font-weight:900;font-size:clamp(1.9rem,8.5vw,7rem);line-height:1.05;letter-spacing:-.015em;margin-bottom:30px;color:#fff}
   .hero h1 .l{display:block;overflow:hidden}
   .hero h1 .l span{display:block;transform:translateY(110%);animation:reveal .9s cubic-bezier(.16,1,.3,1) forwards}
   .hero h1 .l:nth-child(2) span{animation-delay:.12s}
@@ -219,10 +228,10 @@
   /* FOOTER */
   footer{background:var(--ink);color:#b9bcae;padding:70px clamp(20px,5vw,56px) 40px}
   .foot-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px}
-  footer .logo{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+  footer .logo{display:flex;align-items:center;gap:clamp(6px,2vw,11px);margin-bottom:18px}
   footer .logo img{filter:brightness(0) invert(1);display:block;width:auto}
-  footer .logo .lmark{height:48px}
-  footer .logo .lword{height:23px}
+  footer .logo .lmark{height:clamp(26px,9vw,48px)}
+  footer .logo .lword{height:clamp(13px,4.3vw,23px)}
   footer p{font-size:.9rem;line-height:1.95;color:#90937f}
   footer h4{color:#fff;font-size:13px;letter-spacing:.08em;margin-bottom:16px;font-weight:700}
   footer ul{list-style:none}
@@ -359,7 +368,7 @@
   <div class="slides"><div class="slide kb" style="background-image:url('https://i.ibb.co/zVDXWrjZ/image.png')"></div></div>
   <div class="hero-overlay"></div>
   <div class="hero-inner">
-    <div class="kicker">金沢で<em>最も長い</em>ストリートダンススタジオ</div>
+    <div class="kicker">金沢で<em>最も長い</em>ストリートダンススクール</div>
     <h1>
       <span class="l"><span>踊ることが、</span></span>
       <span class="l"><span>もっと<em>すきになる</em>。</span></span>
@@ -383,7 +392,7 @@
 <!-- STATS -->
 <div class="stats">
   <div class="cell"><div class="num">2007</div><div class="lab">創立</div></div>
-  <div class="cell"><div class="num">金沢<em>最長</em></div><div class="lab">のストリートダンススタジオ</div></div>
+  <div class="cell"><div class="num">金沢<em>最長</em></div><div class="lab">のストリートダンススクール</div></div>
   <div class="cell"><div class="num">5</div><div class="lab">校舎（石川・富山）</div></div>
   <div class="cell"><div class="num"><em>初</em>心者〜</div><div class="lab">全国大会クラスまで</div></div>
 </div>
@@ -392,7 +401,7 @@
 <section class="longest">
   <div class="since">SINCE 2007 — KANAZAWA</div>
   <h2>金沢で、<em>いちばん長く</em><br>踊り続けてきました。</h2>
-  <p>流行りで終わらない。開校から今日まで、変わらず本気で<br>ストリートダンスと向き合ってきた金沢最長のダンススタジオです。</p>
+  <p>流行りで終わらない。開校から今日まで、変わらず本気で<br>ストリートダンスと向き合ってきた金沢最長のダンススクールです。</p>
 </section>
 
 <!-- ABOUT -->
@@ -597,7 +606,7 @@
 <!-- CTA -->
 <section class="cta">
   <h2>まずは、踊ってみよう。</h2>
-  <p>無料体験・見学はいつでも受付中。手ぶらでOK。<br>まずは気軽に、スタジオの空気を感じてみてください。</p>
+  <p>無料体験・見学はいつでも受付中。手ぶらでOK。<br>まずは気軽に、スクールの空気を感じてみてください。</p>
   <a href="#contact" class="btn btn-fill">無料体験を申し込む →</a>
 </section>
 
@@ -673,7 +682,7 @@
   <div class="foot-grid">
     <div class="brand">
       <div class="logo"><img class="lmark" src="https://i.ibb.co/v6xh5xJm/image.png" alt="" referrerpolicy="no-referrer"><img class="lword" src="https://i.ibb.co/9JJ0G5L/image.png" alt="ストナビダンススクール" referrerpolicy="no-referrer"></div>
-      <p>ストナビダンススクール<br>金沢で最も長いストリートダンススタジオ<br>石川県金沢市・野々市市・七尾市／富山県高岡市 全5校。</p>
+      <p>ストナビダンススクール<br>金沢で最も長いストリートダンススクール<br>石川県金沢市・野々市市・七尾市／富山県高岡市 全5校。</p>
       <div class="socials">
         <a href="https://www.instagram.com/stnv_dance_school/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg></a>
         <a href="https://www.youtube.com/channel/UCXOuiDuYgD0hDznvbI1Nayg" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.5 7.2c-.25-1-1-1.7-2-2C18.7 4.8 12 4.8 12 4.8s-6.7 0-8.5.4c-1 .3-1.75 1-2 2C1 9 1 12 1 12s0 3 .5 4.8c.25 1 1 1.7 2 2 1.8.4 8.5.4 8.5.4s6.7 0 8.5-.4c1-.3 1.75-1 2-2C23 15 23 12 23 12s0-3-.5-4.8zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg></a>
@@ -705,6 +714,22 @@
 <script>
   const hdr=document.getElementById('hdr');
   addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>40)});
+
+  // スマホメニュー開閉
+  const burger=document.querySelector('.burger');
+  const navEl=document.querySelector('header nav');
+  if(burger&&navEl){
+    burger.addEventListener('click',function(){
+      const open=navEl.classList.toggle('open');
+      burger.classList.toggle('x',open);
+      document.body.style.overflow=open?'hidden':'';
+    });
+    navEl.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click',function(){
+        navEl.classList.remove('open');burger.classList.remove('x');document.body.style.overflow='';
+      });
+    });
+  }
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.15});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   document.querySelectorAll('.imgreveal').forEach(el=>io.observe(el));
