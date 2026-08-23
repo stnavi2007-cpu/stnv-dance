@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>夏ジャミン2026 予選結果集計</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,"Hiragino Sans","Noto Sans CJK JP",sans-serif;background:#f0f1f5;color:#1a1a2e;padding:16px}
+  h1{font-size:20px;margin-bottom:4px}
+  .sub{font-size:12px;color:#666;margin-bottom:14px}
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .tab{padding:8px 14px;border-radius:8px 8px 0 0;background:#dcdee6;font-weight:700;font-size:13px;cursor:pointer;border:none}
+  .tab.active{background:#1f3b70;color:#fff}
+  .panel{display:none;background:#fff;border-radius:0 8px 8px 8px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+  .panel.active{display:block}
+  table{border-collapse:collapse;width:100%;font-size:13px}
+  th,td{border:1px solid #ccc;padding:4px 6px;text-align:center}
+  th{background:#1f3b70;color:#fff;font-size:11px;white-space:nowrap}
+  .grp td{background:#e6e6e6;font-weight:700;text-align:left}
+  td.nm{text-align:left;white-space:nowrap;font-weight:500}
+  input{width:38px;text-align:center;font-size:14px;border:1px solid #bbb;border-radius:4px;padding:3px 0}
+  input.furi{background:#eaf2fb}
+  th select{border:none;border-radius:4px;padding:2px;background:#fff;color:#1a1a2e;font-weight:700}
+  input.err{background:#ffd4d4;border-color:#c00}
+  td.total{background:#f0f0f0;font-weight:700}
+  td.rank{background:#fce4d6;font-weight:800;color:#c0392b;font-size:15px}
+  .chkrow td{font-size:11px;font-weight:700;padding:5px 3px}
+  .ok{color:#0a0;background:#e0f5e0}
+  .ng{color:#c00;background:#ffe0e0}
+  .un{color:#999}
+  .legend{font-size:11px;color:#555;margin:10px 0;line-height:1.7;background:#f7f7fa;border-left:3px solid #1f3b70;padding:8px 12px}
+  .toolbar{margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap}
+  button.act{padding:7px 14px;border:none;border-radius:6px;background:#1f3b70;color:#fff;font-weight:700;cursor:pointer;font-size:12px}
+  button.warn{background:#c0392b}
+  @media print{.tabs,.toolbar{display:none}.panel{display:block!important;page-break-after:always;box-shadow:none}input{border:1px solid #999}}
+</style></head><body>
+<h1>夏ジャミン2026　振付ソロバトル　予選結果集計</h1>
+<div class="sub">各講師がつけた順位(1〜6)を入力 → 合計・最終順位まで自動計算。同点は 振付師→審査員どうしの直接対決→人数 で判定。入力は自動保存。</div>
+<div class="legend">
+  <b>換算</b>：1位=6点／2位=5点／3位=4点／4位=3点／5位=2点／6位=1点（空欄=0点）　
+  <b>入力欄</b>：<span style="background:#eaf2fb;padding:0 4px">振付師</span>＝一番左　<b>チェック</b>：各講師が1〜6位を1回ずつ入れると「OK」、ミスがあると「⚠」
+</div>
+<div class="tabs" id="tabs"></div>
+<div class="toolbar">
+  <button class="act" onclick="window.print()">🖨 印刷</button>
+  <button class="act" onclick="undo()" id="undoBtn">↩ 1つ戻る（取り消し）</button>
+</div>
+<div id="panels"></div>
+<script>
+const DATA={"キッズ": {"A": ["堂山笑瑚", "飴谷橙矢", "川端紬希"], "B": ["引地望愛", "長末絆愛", "村上紫羽亜"], "C": ["田中心葉", "金森きい", "五十嵐稟夏"], "D": ["山本杏", "橋本菜子"]}, "ビギナー 小3": {"A": ["大塚莉心", "安津見伊織", "平田ゆのん"], "B": ["岡田エマ", "石過蒼和", "南出晴琉"], "C": ["山原優乃", "釡谷潤", "金城優希那"], "D": ["山下圓乃", "寺西ハレ", "飴谷乙葉"], "E": ["安田琴華", "五十嵐愛菜", "田中悠愛"], "F": ["吉田光里", "藤森菫", "大木蒼"], "G": ["瀬戸嘉凛", "喜多りず", "髙嶋紗雪"], "H": ["福光正太郎", "笠森めぐり", "田中結陽"], "I": ["南波奈", "髙田和果", "清水結菜"], "J": ["田口鈴羽", "小林千華"], "K": ["岡本梛", "井上陽葵"]}, "オープン 小3": {"A": ["村田朱優", "鶴見依茉", "金森あお"], "B": ["池田茉莉", "田中陽彩", "安原芽生"], "C": ["酒井陽真梨", "島ひまり", "障子りいと"]}, "ビギナー 小4〜": {"A": ["丸山登士", "川嶌優斗", "林楓果"], "B": ["谷莉愛", "後橙弥", "進藤珀"], "C": ["橋本和実", "山崎鈴花", "布野希依"], "D": ["浅永陽菜", "濵田帆夏", "平下結愛"], "E": ["金城美依那", "澤間葵美", "加茂野鈴華"], "F": ["吉野風花", "橋本杏莉", "鈴木ゆあ"], "G": ["岡崎莉恋", "東間結愛", "寺田佳叶"], "H": ["西野汐香", "神原瑛奈", "平尾うの"], "I": ["平野杏", "法岡結夢", "谷坊明音"], "J": ["高見日麻吏", "長森冬真", "村井稜空"], "K": ["池田莉才", "林かのん", "細川実瑚"], "L": ["松本結葵", "林香里奈"]}, "オープン 小4〜6": {"A": ["小島虹恋", "渡邉南絆", "鹿野瑠生"], "B": ["中村杏朱", "由上凛華", "岡谷颯大"], "C": ["金作陽菜乃", "二木唯花", "吉田小春"], "D": ["中川比己一", "西山寧々", "平野花"], "E": ["谷保りと", "南咲綾", "中家りな"], "F": ["平野凪海", "長出仁菜子", "川坂愛実"], "G": ["清水萌々奈", "三輪寧々葉"], "H": ["岡本柚", "佐土原香乃"]}, "オープン 中高大": {"A": ["北村若菜", "宮川優花", "宮腰梛"], "B": ["濱村莉々", "北條結香", "能崎はな"], "C": ["上野恋緒", "中山美月", "若松絆亜奈"], "D": ["林いろな", "室谷莉湖", "金山仁光梨"], "E": ["加茂野舜", "林ひまり", "二木知夏"], "F": ["杉浦凛花", "野坂莉乃", "三上璃子"], "G": ["加藤夢莱", "尾谷羅來", "笠島瑛太"], "H": ["細川芽唯", "森田とうま"], "I": ["森田ゆうま", "佐土原那望"]}};
+const order=["キッズ", "ビギナー 小3", "オープン 小3", "ビギナー 小4〜", "オープン 小4〜6", "オープン 中高大"];
+const NCOL=6;
+const FURI={"キッズ":"Nana","ビギナー 小3":"HAKO","オープン 小3":"HAKO","ビギナー 小4〜":"momon","オープン 小4〜6":"TAKE","オープン 中高大":"TAKE"};
+const TEACHERS=["Hinaco","HAKO","Nana","YUCHI","momon","FU-TA","YUZUA","MINAMI"];
+function selKey(dept,c){return 'sel_'+dept+'_'+c;}
+function getSel(dept,c){return store[selKey(dept,c)]||'';}
+function setSel(dept,c,v){store[selKey(dept,c)]=v;save();} // 振付師+講師②〜⑥
+
+// ---- ロジック ----
+function total(e){return e.reduce((s,r)=>s+(r?7-r:0),0);}
+function h2h(a,b){let au=0,bu=0;for(let i=0;i<NCOL;i++){if(a[i]&&b[i]){if(a[i]<b[i])au++;else if(b[i]<a[i])bu++;}}return au>bu?1:(bu>au?-1:0);}
+function nvoted(e){return e.filter(r=>r).length;}
+function better(a,b){ // aがbより上ならtrue, 同ならnull
+  if(total(a)!==total(b))return total(a)>total(b);
+  const fa=a[0],fb=b[0];
+  if((fa==null)!==(fb==null))return fb==null; // 記入>未記入
+  if(fa&&fb&&fa!==fb)return fa<fb;            // 両記入は順位
+  const h=h2h(a,b); if(h!==0)return h>0;      // 直接対決
+  if(nvoted(a)!==nvoted(b))return nvoted(a)>nvoted(b); // 人数
+  return null;                                // 完全一致
+}
+function computeRanks(entries){
+  const idx=entries.map((e,i)=>i).filter(i=>total(entries[i])>0);
+  const rk={};
+  idx.forEach(i=>{let above=0;idx.forEach(j=>{if(i!==j&&better(entries[j],entries[i])===true)above++;});rk[i]=above+1;});
+  return rk;
+}
+// 講師列の入力チェック(1〜6各1回)
+function colStatus(vals){ // vals: この講師列の全生徒の値(null or 1-6)
+  const nums=vals.filter(v=>v!=null);
+  if(nums.length===0)return 'un';
+  for(let k=1;k<=6;k++){if(vals.filter(v=>v===k).length!==1)return 'ng';}
+  return nums.length===6?'ok':'ng';
+}
+
+const KEY='jammin2026_yosen';
+let store=JSON.parse(localStorage.getItem(KEY)||'{}');
+function save(){localStorage.setItem(KEY,JSON.stringify(store));}
+let HIST=[];  // 入力履歴(1つ戻る用)
+function undo(){
+  if(!HIST.length){ alert('戻せる操作がありません'); return; }
+  const last=HIST.pop();
+  const k=last.dept+'#'+last.i;
+  if(!store[k])store[k]=[null,null,null,null,null,null];
+  store[k][last.c]=last.prev; save();
+  // 戻した部門のタブを開いて再描画(その場所が見えるように)
+  const idx=order.indexOf(last.dept);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const tabs=document.querySelectorAll('.tab');
+  if(tabs[idx]) tabs[idx].classList.add('active');
+  const pan=document.getElementById('panel-'+idx); if(pan) pan.classList.add('active');
+  renderPanel(last.dept);
+}
+
+// フラットな生徒リスト(部門ごと)
+function students(dept){
+  const out=[];
+  for(const [g,ms] of Object.entries(DATA[dept]))for(const m of ms)out.push({g,m});
+  return out;
+}
+function getEntry(dept,i){
+  const k=dept+'#'+i; const a=store[k]||[null,null,null,null,null,null];
+  return a.map(v=>v?+v:null);
+}
+function setVal(dept,i,c,v){
+  const k=dept+'#'+i; if(!store[k])store[k]=[null,null,null,null,null,null];
+  store[k][c]=(v===''||v==null)?null:+v; save();
+}
+
+function idOf(dept){return 'panel-'+order.indexOf(dept);}
+
+function renderPanel(dept){
+  const sts=students(dept);
+  const labels=['講師②','講師③','講師④','講師⑤','講師⑥'];
+  let h='<table><thead><tr><th>組</th><th>名前</th>';
+  h+=`<th>振付師<br><span style="font-size:10px;color:#cdd">${FURI[dept]||''}</span></th>`;
+  labels.forEach((l,k)=>{
+    const c=k+1; const cur=getSel(dept,c);
+    let opts='<option value="">―</option>'+TEACHERS.map(t=>`<option value="${t}"${t===cur?' selected':''}>${t}</option>`).join('');
+    h+=`<th>${l}<br><select data-d="${dept}" data-c="${c}" style="font-size:11px;margin-top:2px">${opts}</select></th>`;
+  });
+  h+='<th>合計</th><th>最終順位</th></tr></thead><tbody>';
+  let lastg=null;
+  sts.forEach((s,i)=>{
+    if(s.g!==lastg){h+=`<tr class="grp"><td>${s.g}組</td><td colspan="${NCOL+3}"></td></tr>`;lastg=s.g;}
+    const e=getEntry(dept,i);
+    h+=`<tr><td></td><td class="nm">${s.m}</td>`;
+    for(let c=0;c<NCOL;c++){const v=e[c]==null?'':e[c];
+      h+=`<td><input inputmode="numeric" class="${c===0?'furi':''}" value="${v}" data-d="${dept}" data-i="${i}" data-c="${c}" maxlength="1"></td>`;}
+    h+=`<td class="total" id="tot-${idOf(dept)}-${i}"></td><td class="rank" id="rk-${idOf(dept)}-${i}"></td></tr>`;
+  });
+  h+='<tr class="chkrow"><td></td><td style="text-align:right;font-weight:700">入力チェック▶</td>';
+  for(let c=0;c<NCOL;c++)h+=`<td id="chk-${idOf(dept)}-${c}"></td>`;
+  h+='<td colspan="2" style="font-size:10px;color:#888">←各講師1〜6位を1回ずつ</td></tr></tbody></table>';
+  document.getElementById(idOf(dept)).innerHTML=h;
+  document.querySelectorAll('#'+idOf(dept)+' input').forEach(inp=>{
+    inp.addEventListener('input',ev=>{
+      let val=ev.target.value.replace(/[^0-9]/g,'');ev.target.value=val;
+      // ★履歴に「変更前の値」を記録(1つ戻る用)
+      const kk=ev.target.dataset.d+'#'+ev.target.dataset.i;
+      const pc=+ev.target.dataset.c;
+      const prev=(store[kk]?store[kk][pc]:null);
+      HIST.push({dept:ev.target.dataset.d,i:+ev.target.dataset.i,c:pc,prev:prev});
+      if(HIST.length>500) HIST.shift();
+      setVal(ev.target.dataset.d,+ev.target.dataset.i,+ev.target.dataset.c,val);
+      updateResults(ev.target.dataset.d);
+    });
+  });
+  document.querySelectorAll('#'+idOf(dept)+' select').forEach(sel=>{
+    sel.addEventListener('change',ev=>{setSel(ev.target.dataset.d,+ev.target.dataset.c,ev.target.value);});
+  });
+  updateResults(dept);
+}
+
+function updateResults(dept){
+  const sts=students(dept);
+  const entries=sts.map((_,i)=>getEntry(dept,i));
+  const ranks=computeRanks(entries);
+  const pid=idOf(dept);
+  entries.forEach((e,i)=>{
+    const tot=total(e);
+    document.getElementById('tot-'+pid+'-'+i).textContent=tot>0?tot:'';
+    document.getElementById('rk-'+pid+'-'+i).textContent=ranks[i]||'';
+  });
+  // 範囲外セルを赤く
+  document.querySelectorAll('#'+pid+' input').forEach(inp=>{
+    const v=inp.value===''?null:+inp.value;
+    inp.classList.toggle('err', v!=null&&(v<1||v>6));
+  });
+  // 列チェック
+  const colvals=[[],[],[],[],[],[]];
+  entries.forEach(e=>e.forEach((v,c)=>colvals[c].push(v)));
+  colvals.forEach((cv,c)=>{
+    const st=colStatus(cv);const cell=document.getElementById('chk-'+pid+'-'+c);
+    cell.textContent=st==='ok'?'OK':(st==='ng'?'⚠要確認':'未入力');
+    cell.className=st==='ok'?'ok':(st==='ng'?'ng':'un');
+  });
+}
+
+// タブ・パネル生成
+const tabsEl=document.getElementById('tabs'),panelsEl=document.getElementById('panels');
+order.forEach((dept,k)=>{
+  const b=document.createElement('button');b.className='tab'+(k===0?' active':'');b.textContent=dept;
+  b.onclick=()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    b.classList.add('active');document.getElementById('panel-'+k).classList.add('active');};
+  tabsEl.appendChild(b);
+  const p=document.createElement('div');p.className='panel'+(k===0?' active':'');p.id='panel-'+k;panelsEl.appendChild(p);
+});
+order.forEach(renderPanel);
+</script></body></html>
