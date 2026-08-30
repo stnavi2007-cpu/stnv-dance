@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>会場空きチェッカー v2｜石川・富山西部 32会場</title>
+<style>
+  :root{
+    --ink:#12161c; --ink2:#3a4452; --line:#e3e6ea; --bg:#f6f7f9; --card:#fff;
+    --go:#0f9d6b;  --go-bg:#e7f7f0;   /* その日の空きへ直行 */
+    --ext:#2f6df0; --ext-bg:#e8f0ff;  /* 空きカレンダーを開く */
+    --call:#e07b00;--call-bg:#fff2e0; /* 電話で確認 */
+    --web:#5b6472; --web-bg:#eef0f3;  /* 予約サイト直行(自動不可) */
+    --warn:#b23b3b; --pad:16px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    line-height:1.5;padding-bottom:44px}
+  header{background:var(--ink);color:#fff;padding:18px var(--pad) 14px}
+  header h1{margin:0;font-size:19px;letter-spacing:.02em}
+  header p{margin:5px 0 0;font-size:12.5px;color:#aeb7c2}
+  .prog{margin-top:9px;font-size:12px;color:#ffd9a8;background:#232a33;border-radius:8px;padding:7px 10px}
+  .wrap{max-width:640px;margin:0 auto;padding:0 var(--pad)}
+  .datebar{position:sticky;top:0;z-index:5;background:var(--ink);
+    padding:10px var(--pad) 14px;box-shadow:0 6px 14px -10px #000}
+  .datebar .row{max-width:640px;margin:0 auto;display:flex;gap:10px;align-items:center}
+  .datebar label{color:#cfd6de;font-size:13px;white-space:nowrap}
+  .datebar input[type=date]{flex:1;font-size:16px;padding:11px 12px;border:0;border-radius:10px;
+    background:#fff;color:var(--ink);min-width:0}
+  .chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 4px}
+  .chip{border:1px solid var(--line);background:var(--card);color:var(--ink2);
+    padding:7px 12px;border-radius:999px;font-size:13px;cursor:pointer;user-select:none}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 2px;font-size:11.5px;color:var(--ink2)}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+  .cnt{font-size:12px;color:var(--ink2);margin:8px 2px 2px}
+  .list{margin-top:8px;display:flex;flex-direction:column;gap:11px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 14px 13px}
+  .card .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .card h2{margin:0;font-size:15.5px;line-height:1.35}
+  .cap{font-size:13px;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .cap b{font-size:16px;color:var(--ink)}
+  .cap.req{color:var(--warn);font-size:12px;white-space:normal;text-align:right}
+  .meta{margin:3px 0 10px;font-size:12px;color:var(--ink2)}
+  .area{display:inline-block;font-size:11px;color:#fff;background:var(--ink2);
+    border-radius:5px;padding:1px 7px;margin-right:7px;vertical-align:1px}
+  .acts{display:flex;flex-direction:column;gap:7px}
+  .btn{display:flex;align-items:center;gap:9px;text-decoration:none;
+    padding:11px 13px;border-radius:11px;font-size:14.5px;font-weight:600;border:1px solid transparent}
+  .btn .ic{font-size:15px;width:18px;text-align:center}
+  .btn .sub{font-weight:400;font-size:12px;opacity:.8;margin-left:auto}
+  .btn.go{background:var(--go-bg);color:var(--go);border-color:#bfe8d7}
+  .btn.ext{background:var(--ext-bg);color:var(--ext);border-color:#c7dbff}
+  .btn.call{background:var(--call-bg);color:var(--call);border-color:#f6d9ab}
+  .btn.web{background:var(--web-bg);color:var(--web);border-color:#dcdfe4}
+  .note{margin-top:8px;font-size:12px;color:var(--ink2);line-height:1.45}
+  .auto{margin:0 0 9px;padding:10px 12px;border-radius:10px;background:#f2fbf7;
+    border:1px solid #cdeadd;font-size:13.5px;line-height:1.7}
+  .auto .t{font-size:11.5px;color:var(--ink2);display:block;margin-bottom:2px}
+  .auto b.h{font-weight:600;color:var(--ink);display:inline-block;min-width:4.6em}
+  .auto .ok{color:var(--go);font-weight:700}
+  .auto .ng{color:var(--warn);font-weight:700}
+  .auto.err{background:#fff6f0;border-color:#f0d9c8}
+  .note .w{color:var(--warn)}
+  footer{max-width:640px;margin:20px auto 0;padding:0 var(--pad);font-size:12px;color:#8a93a0}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>会場空きチェッカー <span style="font-weight:400;color:#aeb7c2;font-size:14px">v2</span></h1>
+    <p>石川全域＋富山西部・400名以上 <b style="color:#fff">32会場</b>。日付を選ぶと会場ごとに最短の確認ルートを出します。</p>
+  </div>
+</header>
+
+<div class="datebar">
+  <div class="row">
+    <label for="d">使う日</label>
+    <input type="date" id="d">
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="chips" id="chips"></div>
+  <div class="legend">
+    <span><i class="dot" style="background:var(--go)"></i>その日の空きへ直行</span>
+    <span><i class="dot" style="background:var(--ext)"></i>空きカレンダー</span>
+    <span><i class="dot" style="background:var(--call)"></i>電話で確認</span>
+    <span><i class="dot" style="background:var(--web)"></i>予約サイト直行（自動◯×は不可）</span>
+  </div>
+  <div class="cnt" id="cnt"></div>
+  <div class="list" id="list"></div>
+</div>
+
+<footer>
+  <p>全34会場のシステム性質・席数・電話番号を裏取り済み。🟢自動◯×=13会場、🔵予約サイト直行=8会場（JS必須/別ベンダー/PDF）、📞電話=13会場（ネットに空きデータ無し）。予約確定は必ず電話で。</p>
+</footer>
+
+<script>
+/* ===== 会場データ =====
+   type: 'yoyacool' 日付直行(yid=施設ID) / 'ext' 空きカレンダー直行(url)
+         'call' 電話のみ(オンライン空きなし) / 'web' 公式のみ(空き方式は未調査)
+   cap:数値 or null(=capNote表示) */
+const VEN = [
+ /* ---- 金沢 ---- */
+ { name:'金沢歌劇座', area:'金沢', cap:1919, type:'web', gas:'kagekiza',
+   url:'https://p-kashikan.jp/kanazawa-arts/', tel:'076-220-2501',
+   note:'◯×は金沢市芸術文化ホール予約システムから自動取得。予約確定は必ず電話で。' },
+ { name:'本多の森 北電ホール', area:'金沢', cap:1706, type:'call', tel:'076-222-0011',
+   note:'サイトに予約状況なし（実機確認済）。空きは電話で。' },
+ { name:'石川県立音楽堂 コンサートホール', area:'金沢', cap:1560, type:'web',
+   url:'https://sst1.ka-ruku.com/ishi-music-r/list', tel:'076-232-8111',
+   note:'空き状況はボタンから公式ページで確認（ネット空きデータ非公開のため自動◯×不可）。予約は電話で。' },
+ { name:'金沢市文化ホール', area:'金沢', cap:899, type:'web', gas:'bunka-h',
+   url:'https://p-kashikan.jp/kanazawa-arts/', tel:'076-223-1221',
+   note:'◯×は金沢市芸術文化ホール予約システムから自動取得。予約確定は必ず電話で。' },
+ { name:'北國新聞赤羽ホール', area:'金沢', cap:504,
+   type:'call', tel:'076-260-3555', url:'http://www.akabane-hall.jp/',
+   note:'貸館の空き公開ページなし（公式は自主事業スケジュールのみ）。空き確認は電話で。' },
+ { name:'石川県地場産業振興センター 大ホール', area:'金沢', cap:800, type:'web', gas:'jibasan',
+   url:'https://www.isico.biz/reserve/calendar.php', tel:'076-268-2010',
+   note:'◯×は地場産の空室情報から自動取得（◯=予約可 △=要問合せ）。予約は電話で。' },
+ { name:'石川県立音楽堂 邦楽ホール', area:'金沢', cap:720, type:'web',
+   url:'https://sst1.ka-ruku.com/ishi-music-r/list', tel:'076-232-8111',
+   note:'空き状況はボタンから公式ページで確認（ネット空きデータ非公開のため自動◯×不可）。予約は電話で。' },
+ { name:'石川県文教会館', area:'金沢', cap:590, type:'web', gas:'bunkyo',
+   url:'http://www.bunkyo.or.jp', note:'◯×は、いしかわ施設予約サービスから自動取得。予約確定は必ず電話で。' },
+ { name:'石川県立音楽堂 交流ホール', area:'金沢', cap:null, capNote:'平土間系',
+   type:'web', url:'https://sst1.ka-ruku.com/ishi-music-r/list', tel:'076-232-8111',
+   note:'空き状況はボタンから公式ページで確認（ネット空きデータ非公開のため自動◯×不可）。予約は電話で。' },
+
+ /* ---- 加賀方面 ---- */
+ { name:'加賀市文化会館', area:'加賀方面', cap:1400, type:'call', tel:'0761-77-2811',
+   url:'https://kagabun.kagashi-ss.com/', note:'カモナホール。独自サイトに空き照会なし＝電話で仮予約（使用日1年前から）。' },
+ { name:'白山市松任文化会館ピーノ', area:'加賀方面', cap:1200, type:'web',
+   url:'https://culture.city-hakusan.com/matto_culture_hall/', tel:'076-276-5611',
+   note:'白山市松任文化会館の公式ページから貸館状況PDF（大ホール・×＝予約あり）を確認。PDF公開のため自動◯×は不可。予約は電話で。' },
+ { name:'小松市公会堂', area:'加賀方面', cap:1078, type:'call', tel:'0761-22-4111',
+   url:'https://www.city.komatsu.lg.jp', note:'小松市直営（市代表）。いしかわ施設予約サービス対象外。専用窓口は市代表から確認を。' },
+ { name:'小松市民センター 大ホール', area:'加賀方面', cap:686, capNote:'約686席', type:'web', gas:'komatsu-c',
+   url:'https://yoyacool.e-harp.jp/ishikawa', tel:'0761-24-8380',
+   note:'◯×は、いしかわ施設予約サービスから自動取得。予約確定は必ず電話で。' },
+ { name:'團十郎芸術劇場うらら 大ホール', area:'加賀方面', cap:851, type:'yoyacool', yid:'2017',
+   gas:'urara', url:'https://komatsu-urara.com', tel:'0761-20-5500',
+   note:'大ホール・小ホールの◯×を、いしかわ施設予約サービスから自動取得（延長枠・楽屋など詳細は公式ページで）。予約確定は必ず電話で。' },
+ { name:'野々市市文化会館フォルテ', area:'加賀方面', cap:832, type:'ext', gas:'forte',
+   url:'https://forte.nono1.jp/%E4%BA%88%E7%B4%84%E7%8A%B6%E6%B3%81', tel:'076-248-8000',
+   note:'◯×は公式の予約データから自動取得（借り主情報は使いません）。予約確定は必ず電話で。' },
+ { name:'根上総合文化会館タント（能美）', area:'加賀方面', cap:503, type:'web',
+   url:'https://shisetsu.citynomi.jp/', tel:'0761-55-8550',
+   note:'能美市公共施設予約システムで空き状況を確認できます（ボタンから）。JS必須で自動◯×は不可。予約は電話で。' },
+ { name:'鶴来総合文化会館クレイン（白山）', area:'加賀方面', cap:800, capNote:'800席（500席にも縮小可）',
+   type:'web', url:'https://culture.city-hakusan.com/crane/', tel:'076-273-8700',
+   note:'白山市地域振興公社の公式ページから予約状況PDFを確認。<span class="w">⚠️2027年2月〜12月末は大規模改修で臨時休館。</span>予約は電話で。' },
+
+ /* ---- 能登方面 ---- */
+ { name:'七尾サンライフプラザ 大ホール', area:'能登方面', cap:990, type:'call', tel:'0767-53-1160',
+   url:'https://shisetsu.sports-nanao.or.jp/', note:'七尾市文化ホール（七尾市スポーツ協会運営）。ネット空き照会なし＝電話予約（1年前の1日から）。' },
+ { name:'津幡町文化会館シグナス', area:'能登方面', cap:802, type:'call', tel:'076-288-8526',
+   url:'https://www.town.tsubata.lg.jp/soshiki/10/',
+   note:'津幡町運営。いしかわ施設予約サービスは森林公園のみ対象＝シグナスは電話で。' },
+ { name:'能登演劇堂（七尾・中島）', area:'能登方面', cap:651, type:'call', tel:'0767-66-2323',
+   url:'https://engekido.com/',
+   note:'演劇専用ホール。ネット空き公開なし＝電話（演劇のまち振興事業団）で確認。' },
+ { name:'ラポルトすず', area:'能登方面', cap:538, type:'web', gas:'laporto',
+   url:'https://yoyacool.e-harp.jp/ishikawa',
+   note:'◯×は、いしかわ施設予約サービスから自動取得。予約確定は必ず電話で。' },
+ { name:'七尾サンライフプラザ 中ホール', area:'能登方面', cap:450, type:'call', tel:'0767-53-1160',
+   url:'https://shisetsu.sports-nanao.or.jp/', note:'七尾市文化ホール（七尾市スポーツ協会運営）。ネット空き照会なし＝電話予約。' },
+ { name:'コスモアイル羽咋', area:'能登方面', cap:900, type:'call', tel:'0767-22-9888',
+   url:'https://www.hakui.ne.jp/ufo/', note:'羽咋市の科学館併設ホール（ユーフォニーホール）。オンライン空き照会なし＝電話で。' },
+
+ /* ---- 富山西部 ---- */
+ { name:'砺波市文化会館', area:'富山西部', cap:1207, type:'ext',
+   url:'https://sst1.ka-ruku.com/tonamibunka/list', tel:'0763-33-5515',
+   note:'空き状況はボタンから公式ページで確認（JS必須で自動◯×は不可）。予約は電話で。' },
+ { name:'クロスランドおやべ メインホール', area:'富山西部', cap:932, type:'call', tel:'0766-68-0932',
+   note:'回転式可動席。セレナホール365席。オンライン空きなし＝電話またはフォーム・申請書で。' },
+ { name:'高岡文化ホール 大ホール', area:'富山西部', cap:703, type:'ext', gas:'takabun',
+   url:'https://k4.p-kashikan.jp/toyama-pref/', tel:'0766-25-4141',
+   note:'◯×は富山県公共施設予約システムから自動取得（大小ホール）。予約専用☎0120-629-630。予約確定は必ず電話で。' },
+ { name:'新川文化ホール（魚津）', area:'富山西部', cap:1186, type:'ext', gas:'niikawa',
+   url:'https://k4.p-kashikan.jp/toyama-pref/', tel:'0765-23-1123',
+   note:'◯×は富山県公共施設予約システムから自動取得（大小ホール）。予約確定は必ず電話で。' },
+ { name:'井波総合文化センター（南砺）', area:'富山西部', cap:670, type:'call', tel:'0763-82-5885',
+   url:'https://www.city.nanto.toyama.jp', note:'南砺市メモリアホール。オンライン空き照会なし＝電話で。' },
+ { name:'なんとエナジー文化創造センター ヘリオス', area:'富山西部', cap:613, type:'call', tel:'0763-22-1125',
+   note:'南砺市福野・円形劇場。オンライン空きなし＝電話・メール（FAX 0763-22-1127）。' },
+ { name:'高周波文化ホール（射水）', area:'富山西部', cap:1220,
+   type:'web', url:'https://www.imizubunka.or.jp/chubun/reservation/', tel:'0766-82-8400',
+   note:'射水市公共施設予約システムで空き情報を確認できます（ボタンから）。予約は電話で。' },
+ { name:'氷見市芸術文化館', area:'富山西部', cap:800, type:'call', tel:'0766-30-3430',
+   url:'https://www.himi-bunka.or.jp/', note:'氷見文化振興財団運営。独自サイトにオンライン空き照会なし＝電話で。' },
+ { name:'ウイング・ウイング高岡', area:'富山西部', cap:403, type:'ext', gas:'wing',
+   url:'https://k4.p-kashikan.jp/toyama-pref/', tel:'0766-20-1801',
+   note:'◯×は富山県公共施設予約システムから自動取得（高岡市生涯学習センター ホール）。予約確定は必ず電話で。' }
+];
+
+const AREAS = ['金沢','加賀方面','能登方面','富山西部'];
+let activeAreas = new Set(AREAS);
+
+const dEl = document.getElementById('d');
+const now = new Date(Date.now() + 9*3600*1000);
+dEl.value = now.toISOString().slice(0,10);
+dEl.addEventListener('change', render);
+
+const chipWrap = document.getElementById('chips');
+AREAS.forEach(a=>{
+  const c=document.createElement('div');
+  c.className='chip on'; c.textContent=a;
+  c.onclick=()=>{ c.classList.toggle('on');
+    c.classList.contains('on')?activeAreas.add(a):activeAreas.delete(a); render(); };
+  chipWrap.appendChild(c);
+});
+
+function yoyacoolUrl(yid, date, rc){
+  const rcp = rc ? `&rc=${rc}` : '';
+  return `https://yoyacool.e-harp.jp/ishikawa/FacilityAvailability/Index/170003/${yid}?ptn=2&d=${date}${rcp}`;
+}
+function telHref(t){ return 'tel:'+t.replace(/[^0-9]/g,''); }
+
+function render(){
+  const date = dEl.value;
+  const nice = date ? date.replace(/-/g,'/').replace(/^\d+\//,'') : '';
+  const rows = VEN
+    .filter(v=>activeAreas.has(v.area))
+    .sort((a,b)=>(b.cap||0)-(a.cap||0));
+
+  document.getElementById('cnt').textContent = `${rows.length} / ${VEN.length}会場（席数の多い順）`;
+  document.getElementById('list').innerHTML = rows.map(v=>{
+    const cap = v.cap!=null
+      ? `<span class="cap"><b>${v.cap.toLocaleString()}</b>席</span>`
+      : `<span class="cap req">${v.capNote||'席数 要確認'}</span>`;
+    let act='';
+    if(v.type==='yoyacool'){
+      act = `<a class="btn go" href="${yoyacoolUrl(v.yid,date,v.rc)}" target="_blank" rel="noopener"><span class="ic">▶</span>${nice}の空きを見る<span class="sub">直行</span></a>`;
+    } else if(v.type==='ext'){
+      act = `<a class="btn ext" href="${v.url}" target="_blank" rel="noopener"><span class="ic">▶</span>空きカレンダー<span class="sub">${nice}を探す</span></a>`;
+    } else if(v.type==='web'){
+      // gas付き(自動◯×稼働)は予約システムへ、それ以外は予約サイトへ案内
+      const sub = v.gas ? '予約システムへ' : '予約サイトへ';
+      const ic = v.gas ? '🔗' : '🌐';
+      act = `<a class="btn web" href="${v.url}" target="_blank" rel="noopener"><span class="ic">${ic}</span>${v.gas?'予約サイト':'公式サイト'}<span class="sub">${sub}</span></a>`;
+    }
+    if(v.type==='call'){
+      act += v.tel
+        ? `<a class="btn call" href="${telHref(v.tel)}"><span class="ic">📞</span>電話で確認<span class="sub">${v.tel}</span></a>`
+        : `<span class="btn call" style="opacity:.6"><span class="ic">📞</span>${v.telNote||'電話番号 要確認'}</span>`;
+    } else if(v.tel){
+      act += `<a class="btn call" href="${telHref(v.tel)}"><span class="ic">📞</span>${v.tel}</a>`;
+    }
+    return `<div class="card">
+      <div class="top"><h2>${v.name}</h2>${cap}</div>
+      <div class="meta"><span class="area">${v.area}</span></div>
+      ${v.gas?`<div class="auto" id="auto-${v.gas}">📡 ${nice}の空きを取得中…</div>`:''}
+      <div class="acts">${act}</div>
+      ${v.note?`<div class="note">${v.note}</div>`:''}
+    </div>`;
+  }).join('');
+  loadGas(date);
+}
+
+/* ===== フォルテ◯×自動取得(GAS) ===== */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyracASNUJLOOESDfHk0S2Sa7jpXCk8-HDaG9Z0iZpmugX2CXXhImzDn_C0U1cLY-1CIw/exec';
+const GAS_KEY = 'take2026kaijou';
+const gasCache = {};   // 日付→結果(同じ日を何度も叩かん節度)
+
+function mk(v){ const c = v==='◯' ? 'ok' : (v==='×' ? 'ng' : '');
+  return `<span class="${c}">${v}</span>`; }
+
+function fmtForte(d){
+  return `<span class="t">📡 ${d.date}(${d.youbi}) の空き ｜ 午前9-12・午後13-17・夜間18-22</span>` +
+    `<b class="h">大ホール</b> 午前${mk(d.large.am)}　午後${mk(d.large.pm)}　夜間${mk(d.large.night)}<br>` +
+    `<b class="h">小ホール</b> 午前${mk(d.small.am)}　午後${mk(d.small.pm)}　夜間${mk(d.small.night)}`;
+}
+function fmtYoy(d, re){
+  if(!d.rooms || !d.rooms.length)
+    return '📵 この施設は空き状況をネット公開してへん——電話かボタンで確認してや';
+  const pat = re || /ホール|劇場|アリーナ/;
+  const rooms = (d.rooms||[]).filter(r=>pat.test(r.room||''));
+  const list = rooms.length ? rooms : (d.rooms||[]).slice(0,1);
+  const lines = list.map(r=>{
+    const sl = r.slots||[];
+    if(!sl.length) return `<b class="h">${r.room}</b> <span style="opacity:.6">枠情報なし</span>`;
+    // slotsをそのまま全部表示(午前/午後/夜間 でも 09-12 でも対応)
+    const line = sl.map(s=> s.name + mk(s.mark)).join('　');
+    return `<b class="h">${r.room}</b> ${line}`;
+  }).join('<br>');
+  return `<span class="t">📡 ${d.date}(${d.youbi}) の空き ｜ ◯=空き ×=予約あり −=対象外</span>` + lines;
+}
+
+function fmtJiba(d){
+  if(!d.rooms || !d.rooms.length)
+    return '📵 空き状況を取得できひんかった——電話で確認してや';
+  const want = ['午前','午後','夜間'];
+  const lines = (d.rooms||[]).map(r=>{
+    const line = want.map(w=>{
+      const s=(r.slots||[]).find(x=>x.name===w);
+      const v = s?s.mark:'?';
+      const c = v==='◯'?'ok':(v==='×'?'ng':'');
+      return w+`<span class="${c}">${v}</span>`;
+    }).join('　');
+    return `<b class="h">${r.room}</b> ${line}`;
+  }).join('<br>');
+  return `<span class="t">📡 ${d.date.slice(0,4)}-${d.date.slice(4,6)}-${d.date.slice(6,8)}(${d.youbi}) の空き ｜ ◯=予約可 △=要問合せ</span>` + lines;
+}
+function fmtToy(d, re){
+  if(!d.rooms || !d.rooms.length)
+    return '📵 空き状況を取得できひんかった——電話かボタンで確認してや';
+  const pat = re || /ホール/;
+  const rooms = (d.rooms||[]).filter(r=>pat.test(r.room||''));
+  const list = rooms.length ? rooms : d.rooms;
+  const want = ['午前','午後','夜間'];
+  const lines = list.map(r=>{
+    const line = want.map(w=>{
+      const s = (r.slots||[]).find(x=>x.name===w);
+      return w + mk(s ? s.mark : '?');
+    }).join('　');
+    return `<b class="h">${r.room.replace(/\s*\(.*/,'')}</b> ${line}`;
+  }).join('<br>');
+  return `<span class="t">📡 ${d.date.slice(0,4)}-${d.date.slice(4,6)}-${d.date.slice(6,8)}(${d.youbi}) の空き ｜ 午前・午後・夜間</span>` + lines;
+}
+
+/* ◯×自動の台帳——会場を足すときはここに1行追加(reで表示する室場を絞る) */
+const yq = fid => (d => `?k=${GAS_KEY}&mode=yoyacool&fid=${fid}&date=${d}`);
+const yqr = (fid,rc) => (d => `?k=${GAS_KEY}&mode=yoyacool&fid=${fid}&rc=${rc}&date=${d}`);
+const tq = (sc, site) => (d => `?k=${GAS_KEY}&mode=toyama&sc=${sc}&date=${d.replace(/-/g,'')}` + (site?`&site=${site}`:''));
+/* === 会場を足すとき: ここに1行 { id:HTML側のgas名, q:呼出, fmt:表示形式 } === */
+const AUTO = [
+  { id:'forte',   q: d => `?k=${GAS_KEY}&date=${d}`, fmt: fmtForte },
+  { id:'urara',   q: yq(2017), fmt: fmtYoy },
+  { id:'bunkyo',  q: yq(1016), fmt: fmtYoy },
+  { id:'laporto', q: yq(2272), fmt: fmtYoy },
+  { id:'takabun', q: tq('003'), fmt: fmtToy },
+  { id:'niikawa', q: tq('152'), fmt: fmtToy },
+  // 金沢・市芸術文化ホール予約(site=kanazawa)
+  { id:'kagekiza', q: tq('002','kanazawa'), fmt: fmtToy, re: /^ホール/ },
+  { id:'bunka-h',  q: tq('001','kanazawa'), fmt: fmtToy, re: /^ホール/ },
+  // 石川・地場産(独自)
+  { id:'jibasan', q: d => `?k=${GAS_KEY}&mode=jibasan&date=${d.replace(/-/g,'')}`, fmt: fmtJiba },
+  // 小松市民センター(いしかわ施設予約・室場指定)
+  { id:'komatsu-c',q: yqr(2009,101), fmt: fmtYoy },
+  // ウイング高岡(高岡市生涯学習センター・富山P-kashikan sc=162)
+  { id:'wing',    q: tq('162'), fmt: fmtToy, re: /^ホール/ }
+];
+
+async function loadGas(date){
+  // Gemini監査対応: 直列awaitを並列(Promise.all)化。13会場を同時取得して待ち時間短縮。
+  const tasks = AUTO
+    .filter(a => document.getElementById('auto-'+a.id))  // 表示中のみ
+    .map(async a => {
+      try{
+        const ck = a.q(date);   // 同じ施設(URL)は1リクエスト共有
+        let d = gasCache[ck];
+        if(!d){
+          const res = await fetch(GAS_URL + ck);
+          d = await res.json();
+          if(!d.ok) throw new Error(d.error||'ng');
+          gasCache[ck] = d;
+        }
+        const cur = document.getElementById('auto-'+a.id);
+        if(!cur) return;
+        cur.classList.remove('err');
+        cur.innerHTML = a.fmt(d, a.re);
+      }catch(e){
+        const cur = document.getElementById('auto-'+a.id);
+        if(cur){ cur.classList.add('err');
+          cur.innerHTML = '📡 自動取得に失敗——下のボタンか電話で確認してや'; }
+      }
+    });
+  await Promise.all(tasks);
+}
+render();
+</script>
+</body>
+</html>
