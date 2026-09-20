@@ -27,17 +27,17 @@ h2{font-size:20px;margin:0 0 6px}
 .row{display:flex;gap:10px}.row .btn{flex:1}
 .stat{font-size:14px;color:var(--ink-soft);margin:18px 0 0;padding-top:14px;border-top:1px solid var(--line)}
 .top{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;color:var(--ink-soft);margin-bottom:6px}
-.bar{height:8px;background:var(--line);margin-bottom:22px;position:relative}
+.bar{height:6px;background:var(--line);margin-bottom:10px;position:relative}
 .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ai)}.bar b{position:absolute;top:0;bottom:0;background:var(--enji);opacity:.85}
 .src{font-size:12px;color:var(--ink-soft);margin:0 0 8px}
 .tag{display:inline-block;font-size:11px;padding:1px 8px;border:1px solid var(--line);border-radius:10px;margin-right:6px;color:var(--ink-soft)}
-.q{font-size:18px;font-weight:500;margin:0 0 18px}
-.opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);padding:12px 14px;margin:0 0 10px;font:inherit;color:var(--ink);cursor:pointer;border-radius:4px;line-height:1.6}
+.q{font-size:16px;font-weight:500;line-height:1.55;margin:0 0 10px;max-height:30vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);padding:8px 10px;margin:0 0 6px;font-size:15px;line-height:1.4;font:inherit;color:var(--ink);cursor:pointer;border-radius:4px;line-height:1.6}
 .opt .k{display:inline-block;width:1.6em;color:var(--ink-soft);font-family:"Shippori Mincho",serif;font-weight:700}
 .opt:hover:not(:disabled),.opt:focus-visible{border-color:var(--ai);outline:none}
 .opt:disabled{cursor:default}.opt.sel{border-color:var(--ai);border-width:2px;background:#EEF1F7}
 .opt.right{border-color:var(--kusa);background:#EEF4EC;border-width:2px}.opt.wrong{border-color:var(--enji);background:#F8ECEC;border-width:2px}
-.verdict{margin:16px 0 8px;font-size:20px;font-weight:700}.verdict.ok{color:var(--kusa)}.verdict.ng{color:var(--enji)}
+.verdict{margin:0 0 6px;font-size:16px;font-weight:700;line-height:1.35}.verdict.ok{color:var(--kusa)}.verdict.ng{color:var(--enji)}
 .next{margin-top:10px}.exp{background:var(--card);border-top:3px solid var(--odo);padding:10px 14px;font-size:15px;margin:12px 0 16px;border-radius:4px}.exp summary{cursor:pointer;list-style:none;font-weight:700;color:var(--odo);font-size:13px}.exp summary::-webkit-details-marker{display:none}.exp summary::after{content:"　▼ 解説をひらく";font-weight:400;color:var(--ink-soft)}.exp[open] summary::after{content:"　▲ とじる"}.exp[open] summary{margin-bottom:8px}.exp .lab{display:inline;margin:0}
 .exp .lab{font-size:12px;color:var(--odo);font-weight:700;margin-bottom:4px}
 .next{display:block;width:100%;background:var(--ai);color:#fff;border:0;padding:14px;font:inherit;font-size:17px;font-weight:700;cursor:pointer;border-radius:4px;margin-bottom:12px}
@@ -71,7 +71,15 @@ table.h{width:100%;border-collapse:collapse;font-size:13px}table.h td{padding:6p
 table.hm td{width:2.6em;height:1.9em;text-align:center;border:1px solid var(--paper);color:#fff;font-weight:700}table.hm td.low{background:var(--enji)}table.hm td.mid{background:var(--odo)}table.hm td.hi{background:var(--kusa)}table.hm td.na{background:transparent}table.hm td:not(.low):not(.mid):not(.hi){background:var(--line)}
 .kb ul.jj{margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.7}.kb .jp{margin-top:8px;padding:8px 10px;background:var(--paper);border-radius:6px;font-size:13px}.kb .jp ul{margin:4px 0 0;padding-left:18px}.kb summary small{margin-left:6px;color:var(--ink-soft)}
 .flagb{display:block;width:100%;background:transparent;border:1px dashed var(--odo);color:var(--odo);padding:8px;font:inherit;font-size:13px;border-radius:4px;margin:-4px 0 10px;cursor:pointer}.flagb.on{background:var(--odo);color:#fff;border-style:solid}
-.rk{width:100%;box-sizing:border-box;padding:10px;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:4px;margin:0 0 10px;background:var(--card);color:var(--ink)}.rf summary small{margin-left:6px;color:var(--ink-soft)}.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px}.tw table{border-collapse:collapse;font-size:13px;min-width:100%}.tw th,.tw td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;line-height:1.5;min-width:6em}.tw th{background:var(--paper);white-space:nowrap;position:sticky;top:0}.tw td:first-child{white-space:nowrap;font-weight:700}.tw tr:nth-child(even) td{background:rgba(0,0,0,.025)}
+.rbar{position:sticky;top:0;z-index:5;background:var(--paper);padding:6px 0 8px;display:flex;gap:8px;align-items:center}.rk{flex:1;min-width:0;box-sizing:border-box;padding:10px;font:inherit;font-size:15px;border:1px solid var(--line);border-radius:4px;background:var(--card);color:var(--ink)}.rtg{font-size:13px;white-space:nowrap;color:var(--ink-soft)}.rf summary small{margin-left:6px;color:var(--ink-soft)}.rl-h{font-size:12px;color:var(--ink-soft);margin:8px 0 4px}.rr{border-top:1px solid var(--line);padding:9px 0}.rr:last-child{border-bottom:1px solid var(--line)}.rh{font-weight:700;font-size:15.5px;line-height:1.5;margin-bottom:3px}.rl{display:flex;gap:6px;font-size:14px;line-height:1.55;margin-top:2px}.rt{flex:0 0 5.5em;color:var(--ink-soft);font-size:12px;padding-top:2px}.rd{flex:1;min-width:0;word-break:break-word}.rk1{font-weight:700;font-size:14px;color:var(--odo);line-height:1.4}.rv1{font-size:14.5px;line-height:1.55;word-break:break-word}
+.abar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper);border-top:2px solid var(--line);padding:8px 14px calc(8px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 12px rgba(0,0,0,.08)}
+.abar .abtn{display:flex;gap:8px;align-items:stretch}
+.abar .next{margin:0;flex:1;padding:12px;font-size:17px}
+.abar .flagb{margin:0;width:auto;flex:0 0 3.4em;font-size:15px;padding:0;border-style:solid;border-width:1.5px}
+body.hasbar .wrap{padding-bottom:150px}
+.src{margin:0 0 4px;font-size:12px}
+.top{margin-bottom:4px;font-size:13px}
+.quit{margin-top:8px}
 </style>
 </head>
 <body>
@@ -140,6 +148,7 @@ function weighted(base,n){
 
 // ---- メニュー ----
 function menu(){
+  document.body.classList.remove("hasbar");
   const weakL=ALL.filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});
   const seen=ALL.filter(q=>rec(q.key).seen>0).length;
   const tot=ALL.reduce((s,q)=>s+rec(q.key).seen,0),ok=ALL.reduce((s,q)=>s+rec(q.key).ok,0);
@@ -203,6 +212,7 @@ function start(mode,genre){
 }
 function tick(){const el=document.getElementById("tm");if(!el)return;const s=Math.max(0,5400-Math.floor((Date.now()-M.t0)/1000));el.textContent=`残り ${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;if(s===0){clearInterval(M.timer);finish();}}
 function ask(){
+  document.body.classList.remove("hasbar");
   const q=M.pool[M.idx],order=shuffle([0,1,2,3]),tot=M.pool.length;
   const ok=M.ans.filter(a=>a.ok).length,ng=M.ans.length-ok;
   $app.innerHTML=`
@@ -227,12 +237,11 @@ function answer(q,chosen,btn){
   if(M.mode==="exam"){btn.classList.add("sel");setTimeout(()=>{M.idx++;M.idx<M.pool.length?ask():finish();},250);return;}
   $app.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.o===q.a-1)b.classList.add("right");else if(b===btn)b.classList.add("wrong");});
   document.getElementById("fb").innerHTML=`
-    <p class="verdict ${ok?"ok":"ng"}">${ok?"正解":"不正解　正解は「"+q.o[q.a-1]+"」"}</p>
-    <button class="next" id="nx">${M.idx+1<M.pool.length?"次の問題へ":"結果を見る"}</button>
-    <button class="flagb ${S.flag[q.key]?"on":""}" id="fg">${S.flag[q.key]?"🔖 要注意に入っとる（はずす）":"🔖 要注意に入れる"}</button>
+    <div class="abar" id="abar"><p class="verdict ${ok?"ok":"ng"}">${ok?"○ 正解":"× 不正解　正解「"+q.o[q.a-1]+"」"}</p><div class="abtn"><button class="next" id="nx">${M.idx+1<M.pool.length?"次の問題へ":"結果を見る"}</button><button class="flagb ${S.flag[q.key]?"on":""}" id="fg" title="要注意">${S.flag[q.key]?"🔖済":"🔖"}</button></div></div>
     <details class="exp"><summary><span class="lab">ポイント</span></summary>${q.e||'<span style="opacity:.6">この回は問題用紙のみ公開（公式解説なし）</span>'}${crossRef(q)}${kbRef(q)}<p class="qh">${qhist(q)}</p></details>`;
-  const nx=document.getElementById("nx");nx.focus();nx.onclick=()=>{M.idx++;M.idx<M.pool.length?ask():finish();};
-  const fg=document.getElementById("fg");fg.onclick=()=>{if(S.flag[q.key])delete S.flag[q.key];else S.flag[q.key]=1;store.save(S);fg.className="flagb "+(S.flag[q.key]?"on":"");fg.textContent=S.flag[q.key]?"🔖 要注意に入っとる（はずす）":"🔖 要注意に入れる";};
+  document.body.classList.add("hasbar");
+  const nx=document.getElementById("nx");nx.focus({preventScroll:true});nx.onclick=()=>{document.body.classList.remove("hasbar");M.idx++;M.idx<M.pool.length?ask():finish();};
+  const fg=document.getElementById("fg");fg.onclick=()=>{if(S.flag[q.key])delete S.flag[q.key];else S.flag[q.key]=1;store.save(S);fg.className="flagb "+(S.flag[q.key]?"on":"");fg.textContent=S.flag[q.key]?"🔖済":"🔖";};
 }
 
 // ---- 結果 ----
@@ -267,20 +276,29 @@ function finish(){
 }
 function refPage(){
   const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  let showRuby=false;
+  const cell=(t,ri,ci)=>esc((showRuby?t.fr:t.r)[ri][ci]);
   const render=(kw)=>{
     const k=(kw||"").trim();
-    return REF.map((t,ti)=>{
-      const rows=(RUBY?t.fr:t.r).map((row,ri)=>({row,raw:t.r[ri]})).filter(x=>!k||x.raw.join(" ").includes(k));
-      if(k&&!rows.length)return "";
-      return `<details class="kb rf" ${k?"open":""}><summary><b>${esc(t.t)}</b><small>${rows.length}件</small></summary><div class="tw"><table><thead><tr>${t.h.map(c=>`<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map(x=>`<tr>${x.row.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>`;
-    }).join("")||"<p class='hint'>見つからん</p>";
+    const html=REF.map(t=>{
+      const idx=t.r.map((row,ri)=>ri).filter(ri=>!k||t.r[ri].join(" ").includes(k));
+      if(k&&!idx.length)return "";
+      const two=t.h.length===2;
+      const body=idx.map(ri=>{
+        if(two)return `<div class="rr"><div class="rk1">${cell(t,ri,0)}</div><div class="rv1">${cell(t,ri,1)}</div></div>`;
+        return `<div class="rr"><div class="rh">${cell(t,ri,0)}</div>${t.h.slice(1).map((hd,ci)=>t.r[ri][ci+1]?`<div class="rl"><span class="rt">${esc(hd)}</span><span class="rd">${cell(t,ri,ci+1)}</span></div>`:"").join("")}</div>`;
+      }).join("");
+      return `<details class="kb rf" ${k?"open":""}><summary><b>${esc(t.t)}</b><small>${idx.length}件</small></summary><div class="rl-h">${two?"":t.h[0]+"　→　"+t.h.slice(1).join("／")}</div>${body}</details>`;
+    }).join("");
+    return html||"<p class='hint'>見つからん</p>";
   };
-  $app.innerHTML=`<h2>📋 まとめ表</h2><p class="hint">全部このアプリに入っとる問題・📖基礎知識カードの記述から抜き出した一覧。数字や名前を並べて覚える用。表は横にスクロールできる。語で絞り込みもできる。</p>
-   <input id="rk" class="rk" placeholder="絞り込み（例：綱紀、条例、1898、鏡花）">
+  $app.innerHTML=`<h2>📋 まとめ表</h2><p class="hint">全部このアプリの問題・📖基礎知識カードから抜き出した一覧。1行＝1件。見出しをタップで開く。</p>
+   <div class="rbar"><input id="rk" class="rk" placeholder="絞り込み（例：綱紀、条例、1898、鏡花）"><label class="rtg"><input type="checkbox" id="rrb"> ふりがな</label></div>
    <div id="rt">${render("")}</div>
    <button class="next ghost" id="bk">メニューへ戻る</button>`;
   const rk=document.getElementById("rk"),rt=document.getElementById("rt");
   rk.oninput=()=>{rt.innerHTML=render(rk.value);};
+  document.getElementById("rrb").onchange=e=>{showRuby=e.target.checked;rt.innerHTML=render(rk.value);};
   document.getElementById("bk").onclick=menu;window.scrollTo(0,0);
 }
 function jijiPage(){
