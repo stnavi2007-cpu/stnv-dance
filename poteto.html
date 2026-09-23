@@ -53,6 +53,10 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .bubble.left::after{left:-11px;top:26px;transform:rotate(45deg)}
 
 
+/* なぞり */
+.tr{position:absolute;inset:0;touch-action:none}
+.tr canvas{position:absolute;inset:0;width:100%;height:100%}
+.trTip{position:absolute;left:0;right:0;top:6px;text-align:center;font-family:var(--ui);font-size:14px;opacity:.85;pointer-events:none}
 /* ポテ */
 .pote{display:inline-block;position:relative;height:100%;transform-origin:50% 100%}
 .pote .pimg{display:block;height:100%;width:auto;filter:drop-shadow(0 5px 3px rgba(60,35,10,.28))}
@@ -75,7 +79,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 #home h1{margin:0;font-size:20px;font-weight:900;letter-spacing:.04em}
 #home .days{font-size:12px;color:var(--ink2);flex:1;text-align:center}
 #home .carrot{font-size:15px;font-weight:900;background:var(--paper);border:2px solid var(--ink);border-radius:12px;padding:2px 9px}
-.acts{display:flex;gap:8px;padding:8px 12px 0;background:var(--floor)}
+.acts{display:flex;gap:8px;padding:6px 12px 0;background:var(--floor)}
 .acts button{flex:1;background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:8px 2px;font-size:14px;font-weight:900;box-shadow:var(--shadow)}
 .acts button:active{transform:translateY(3px);box-shadow:none}
 .acts #btnPlay.on{background:var(--carrot);color:#fff;border-color:var(--carrot-d);animation:hop .6s ease-out 2}
@@ -121,8 +125,9 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .field{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:6px;padding:8px 4px 4px}
 #game.fld{background:linear-gradient(#DDF3FF 0 28%,#BFE7A8 28% 100%)}
 .carrotB{border:0;background:none;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
-.carrotB svg{width:min(26vw,100px);height:auto}
-.carrotB .lb{position:absolute;top:46%;font:600 clamp(20px,6.5vw,30px) var(--kyo);color:#4A2E14;background:rgba(255,253,246,.94);border:2px solid #C96A0C;border-radius:10px;padding:0 6px;line-height:1.25;max-width:96%;white-space:nowrap;overflow:hidden}
+.carrotB .cw{position:relative;display:inline-block}
+.carrotB svg{width:min(26vw,100px);height:auto;display:block}
+.carrotB .lb{position:absolute;top:46%;left:50%;transform:translateX(-50%);font:600 clamp(20px,6.5vw,30px) var(--kyo);color:#4A2E14;background:rgba(255,253,246,.94);border:2px solid #C96A0C;border-radius:10px;padding:0 5px;line-height:1.3;max-width:110%;white-space:nowrap}
 .carrotB.pull{animation:pull .5s ease-out forwards}
 .carrotB.no{animation:shake .4s ease-in-out}
 @keyframes pull{0%{transform:translateY(0)}60%{transform:translateY(-40px) rotate(-8deg)}100%{transform:translateY(-30px) rotate(-6deg)}}
@@ -131,23 +136,23 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .room{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   background:linear-gradient(var(--wall) 0 78%,var(--floor) 78% 100%);padding:8px 16px 0}
 .room::before{content:"";position:absolute;left:0;right:0;top:78%;height:6px;background:var(--floor2)}
-.room .bubble{width:100%;max-width:340px;margin-bottom:14px;z-index:2}
-.room .poteBox{height:min(34vh,230px);z-index:1;margin-bottom:3vh;position:relative}
+.room .bubble{width:100%;max-width:340px;margin-bottom:10px;z-index:2;font-size:15px;padding:8px 12px}
+.room .poteBox{height:min(27vh,200px);z-index:1;margin-bottom:2vh;position:relative}
 .shelf{position:absolute;left:12px;right:12px;top:6px;display:flex;flex-wrap:wrap;gap:2px;font-size:22px;line-height:1.2;
   min-height:32px;padding:2px 6px;border-bottom:7px solid var(--frame);border-radius:0 0 3px 3px;opacity:.95}
 .shelf:empty{display:none}
 .zzz{position:absolute;right:24%;top:30%;font-size:30px;animation:zzz 2.6s ease-in-out infinite;display:none}
 .asleep .zzz{display:block}
 @keyframes zzz{0%{opacity:0;transform:translate(0,10px) scale(.7)}50%{opacity:1}100%{opacity:0;transform:translate(16px,-26px) scale(1.15)}}
-.subjects{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;padding:10px 10px 6px;background:var(--floor)}
-.subjects .subj{width:calc(25% - 6px)}
+.subjects{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:8px 10px 4px;background:var(--floor)}
+.subjects .subj{width:calc(25% - 5px)}
 .subj{position:relative;background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:8px 4px 6px;
-  box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:1px;min-height:84px}
+  box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:64px;padding:4px 2px 3px}
 .subj:active{transform:translateY(3px);box-shadow:none}
-.subj .ic{font-size:26px;line-height:1.1}
+.subj .ic{font-size:20px;line-height:1.05}
 .subj .tx,.card h3 .tx{font-family:var(--kyo);color:var(--carrot-d);font-weight:600}
-.subj .nm{font-size:13px;font-weight:900;letter-spacing:-.02em}
-.subj .st{font-size:10px;color:var(--ink2);letter-spacing:0}
+.subj .nm{font-size:12px;font-weight:900;letter-spacing:-.03em;white-space:pre-line;line-height:1.15;text-align:center}
+.subj .st{font-size:9px;color:var(--ink2);letter-spacing:0}
 .subj .wish{position:absolute;top:-10px;right:-4px;background:var(--carrot);color:#fff;font-size:10px;border-radius:10px;
   padding:2px 7px;border:2px solid var(--ink)}
 .asleep .subj{opacity:.45;pointer-events:none}
@@ -196,6 +201,9 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .stage .bubble{flex:1;align-self:center;font-size:16px}
 .ctrl{padding:6px 12px 12px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}
 .ctrl.num{min-height:246px}.ctrl.slim{min-height:0}
+.hpad{height:150px;background:#FFFDF6;border:3px solid var(--ink);border-radius:14px;overflow:hidden;touch-action:none;position:relative;
+  background-image:linear-gradient(90deg,transparent 0 calc(50% - 1px),#E6D3A8 calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px)),linear-gradient(transparent 0 calc(50% - 1px),#E6D3A8 calc(50% - 1px) calc(50% + 1px),transparent calc(50% + 1px))}
+.hpad canvas{position:absolute;inset:0;width:100%;height:100%}
 .memo{display:flex;align-items:center;gap:8px;background:var(--paper);border:2px dashed var(--ink2);border-radius:12px;padding:4px 12px;font-size:14px}
 .memo b{font-family:var(--kyo);font-size:28px;min-width:2em;text-align:center;color:var(--maru)}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -208,6 +216,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .pad .ok:disabled{opacity:.4}
 .choice{display:flex;flex-direction:column;gap:8px}
 .choice button{font-family:var(--kyo);font-size:28px;min-height:56px}
+.choice button.long{font-size:20px;line-height:1.35;padding:6px 8px}
 .choice.kj{flex-direction:row}.choice.kj button{flex:1;font-size:44px;min-height:84px}
 .judge{display:flex;gap:10px}
 .judge button{flex:1;min-height:120px;border-radius:20px;border:4px solid;background:var(--paper);box-shadow:var(--shadow);
@@ -227,6 +236,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .letter{background:var(--paper);border:3px solid var(--ink);border-radius:8px;padding:18px 16px;font-family:var(--kyo);font-size:20px;line-height:2.1;
   background-image:repeating-linear-gradient(transparent 0 40px,var(--line) 40px 41.6px);box-shadow:var(--shadow);margin-bottom:12px}
 .letter p{margin:0}.letter .from{text-align:right}
+.letter ruby{ruby-position:over}.letter rt{font-size:.5em;color:var(--ink2);font-family:var(--ui)}
 .gift{text-align:center;font-size:17px;margin:4px 0 14px}
 .gift b{display:block;font-size:64px;line-height:1.2;animation:hop .6s ease-out 2}
 .card{background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
@@ -310,11 +320,11 @@ const sayTxt=t=>t.replace(/\{([^|}]*)\|([^}]*)\}/g,"$1").replace(/[ 　]/g,"").r
 
 /* ---------- ほぞん ---------- */
 const LS_KEY="pote-gakkou-v1";
-const SKILL_IDS=["count","add","sub","clock","kotoba","kata","kanji"];
+const SKILL_IDS=["count","add","sub","bun","katachi","clock","kotoba","bunzukuri","kata","kanji","kaku"];
 function freshState(){
   const s={v:1,updatedAt:0,items:{},skills:{},lessons:0,days:{},room:[],letters:[],fixed:0,wish:null,log:[],met:false,
     carrot:0,owned:[],inv:{},wearing:{},fed:{},play:{},gameBest:{},belly:50,bellyDate:"",
-    settings:{sfx:true,limit:3,call:"むっちゃん"}};
+    settings:{sfx:true,limit:3,call:"むっちゃん",autoUrl:"",autoMode:"day"}};
   SKILL_IDS.forEach(id=>s.skills[id]={lv:0,hist:[],n:0});
   return s;
 }
@@ -437,6 +447,76 @@ function mkKazuNext(n,dir,lv){const ans=n+dir;
   return {key:`next:${n}${dir>0?"+":"-"}`,lv,type:"num",ans:String(ans),label:`${n}の ${dir>0?"つぎ":"まえ"}`,wrongs:uniq([n,ans+dir,ans-dir].filter(x=>x>=0&&x!==ans).map(String)),
     q:{main:dir>0?`${n} → □`:`□ ← ${n}`,sub:dir>0?`${n}の つぎの かずは？`:`${n}の ひとつ まえの かずは？`,slotBelow:true,sm:true},
     explain:()=>`<div class="cap">${dir>0?`${n}より 1 おおきい かずは <b>${ans}</b>。`:`${n}より 1 ちいさい かずは <b>${ans}</b>。`}</div>`}}
+const BUN_THINGS=[["🍎","りんご","こ"],["🍬","あめ","こ"],["🌸","はな","ほん"],["🐟","さかな","ひき"],["🥕","にんじん","ほん"],["🎈","ふうせん","こ"],["📕","ほん","さつ"],["🍙","おにぎり","こ"],["🐣","ひよこ","わ"],["🍓","いちご","こ"]];
+function emoRow(e,n,mark){let h="";for(let i=0;i<n;i++)h+=(mark&&i>=n-mark)?`<span style="opacity:.35">${e}</span>`:e;return `<div style="font-size:26px;line-height:1.3;letter-spacing:2px">${h}</div>`}
+function mkBunAdd(a,b,lv){const t=pick(BUN_THINGS);const ans=a+b;
+  return {key:`bun:add:${a}+${b}`,lv,type:"num",ans:String(ans),label:`${t[1]}を あわせる(${a}と${b})`,wrongs:uniq([ans-1,ans+1,Math.abs(a-b)].filter(x=>x>=0&&x!==ans).map(String)),
+    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]} あります。${b}${t[2]} もらいました。`,main:"ぜんぶで なん"+t[2]+"？",sm:true,slotBelow:true},
+    explain:()=>`${emoRow(t[0],a)}<div class="cap" style="font-size:16px">と</div>${emoRow(t[0],b)}<div class="cap">「ぜんぶで」は たしざん。<br>${a}＋${b}＝<b>${ans}</b>。</div>`}}
+function mkBunSub(a,b,lv){const t=pick(BUN_THINGS);const ans=a-b;
+  return {key:`bun:sub:${a}-${b}`,lv,type:"num",ans:String(ans),label:`${t[1]}の のこり(${a}から${b})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
+    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]} あります。${b}${t[2]} たべました。`,main:"のこりは なん"+t[2]+"？",sm:true,slotBelow:true},
+    explain:()=>`${emoRow(t[0],a,b)}<div class="cap">「のこりは」は ひきざん。<br>${b}${t[2]} なくなったから、<br>${a}−${b}＝<b>${ans}</b>。</div>`}}
+function mkBunDiff(a,b,lv){const t=pick(BUN_THINGS);const ans=Math.abs(a-b),big=a>b?"ポテ":"むっちゃん";
+  return {key:`bun:diff:${a}v${b}`,lv,type:"num",ans:String(ans),label:`ちがい(${a}と${b})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
+    q:{emoji:t[0],sub:`ポテは ${t[1]}を ${a}${t[2]}、むっちゃんは ${b}${t[2]} もっています。`,main:"ちがいは なん"+t[2]+"？",sm:true,slotBelow:true},
+    explain:()=>`<div class="cap" style="font-size:15px">ポテ</div>${emoRow(t[0],a)}<div class="cap" style="font-size:15px">むっちゃん</div>${emoRow(t[0],b)}<div class="cap">ならべて くらべると、<br>${big}が <b>${ans}</b>${t[2]} おおい。<br>${Math.max(a,b)}−${Math.min(a,b)}＝${ans}。</div>`}}
+const ANIMALS=["🐹","🐶","🐱","🐰","🐻","🐼","🐸","🐥"];
+function mkBunOrder(n,k,fromFront,lv){const row=shuffle(ANIMALS).slice(0,n);const idx=fromFront?k-1:n-k;const ans=row[idx];
+  return {key:`bun:ord:${n}-${k}-${fromFront?"f":"b"}`,lv,type:"choice",ans,wrongs:shuffle(row.filter(x=>x!==ans)).slice(0,2),label:`${fromFront?"まえ":"うしろ"}から ${k}ばんめ`,kj:true,
+    q:{emojiHTML:`<div style="font-size:12px;opacity:.8">まえ ←　　　　　→ うしろ</div><div style="font-size:30px;letter-spacing:4px">${row.join("")}</div>`,sub:`${fromFront?"まえ":"うしろ"}から ${k}ばんめは どれ？`,slotBelow:true},
+    explain:()=>`<div style="font-size:30px;letter-spacing:4px">${row.map((x,i)=>i===idx?`<span style="border-bottom:4px solid #FFE27A">${x}</span>`:x).join("")}</div><div class="cap">${fromFront?"まえ":"うしろ"}から 1、2、3と かぞえて<br><b>${ans}</b> が ${k}ばんめ。</div>`}}
+function mkBunTwo(a,b,c,lv){const t=pick(BUN_THINGS);const ans=a+b-c;
+  return {key:`bun:two:${a}+${b}-${c}`,lv,type:"num",ans:String(ans),label:`ふえて へって(${a}+${b}-${c})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
+    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]}。${b}${t[2]} ふえて、${c}${t[2]} へりました。`,main:"いま なん"+t[2]+"？",sm:true,slotBelow:true},
+    explain:()=>`<div class="cap">じゅんばんに。<br>${a}＋${b}＝${a+b}。<br>${a+b}−${c}＝<b>${ans}</b>。</div>`}}
+const HIRA="あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
+const KAKU_KANJI="一二三四五六七八九十日月火水木金土山川人口目手";
+function mkTrace(ch,lv,kind){return {key:`trace:${ch}`,lv,type:"trace",ans:ch,wrongs:[],label:`「${ch}」を かく`,
+  q:{main:ch},explain:()=>`<div class="big" style="font-size:80px">${ch}</div><div class="cap">ゆっくり、おおきく なぞってね。</div>`}}
+const SHAPES={
+  maru:{name:"まる",svg:c=>`<circle cx="50" cy="50" r="40" fill="${c}"/>`},
+  sankaku:{name:"さんかく",svg:c=>`<polygon points="50,10 92,88 8,88" fill="${c}"/>`},
+  shikaku:{name:"しかく",svg:c=>`<rect x="12" y="12" width="76" height="76" fill="${c}"/>`},
+  nagashikaku:{name:"ながしかく",svg:c=>`<rect x="5" y="28" width="90" height="44" fill="${c}"/>`}};
+const SHAPE_COLS=["#E4483B","#2C6FBB","#F0A020","#5DAA4A","#9B59B6","#F48FB1"];
+const shapeSVG=(k,c,sz)=>`<svg viewBox="0 0 100 100" style="width:${sz||110}px;height:${sz||110}px;vertical-align:middle">${SHAPES[k].svg(c)}</svg>`;
+function mkShapeName(k,lv){const c=pick(SHAPE_COLS);const others=Object.keys(SHAPES).filter(x=>x!==k);
+  return {key:`shape:${k}`,lv,type:"choice",ans:SHAPES[k].name,wrongs:shuffle(others).slice(0,2).map(x=>SHAPES[x].name),label:SHAPES[k].name,
+    q:{emojiHTML:shapeSVG(k,c,120),sub:"この かたちの なまえは？",slotBelow:true,sm:true},
+    explain:()=>`${shapeSVG(k,c,90)}<div class="cap">これは <b>${SHAPES[k].name}</b>。<br>${{maru:"かどが なくて まんまる。",sankaku:"かどが 3つ。",shikaku:"かどが 4つで、へんの ながさが みんな おなじ。",nagashikaku:"かどが 4つで、ながい へんと みじかい へんが ある。"}[k]}</div>`}}
+function mkShapeCount(id,lv){const kinds=Object.keys(SHAPES).slice(0,3);const target=pick(kinds);let list=[];const n=2+rnd(4);
+  for(let i=0;i<n;i++)list.push(target);const others=kinds.filter(k=>k!==target);for(let i=0;i<2+rnd(3);i++)list.push(pick(others));list=shuffle(list);
+  const pic=`<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:260px;margin:0 auto">${list.map((k,i)=>shapeSVG(k,SHAPE_COLS[i%SHAPE_COLS.length],44)).join("")}</div>`;
+  return {key:`shapecount:${id}`,lv,type:"num",ans:String(n),label:`${SHAPES[target].name}を かぞえる`,wrongs:uniq([n-1,n+1,list.length].filter(x=>x>=0&&x!==n).map(String)),
+    q:{emojiHTML:pic,sub:`${SHAPES[target].name}は いくつ？`,slotBelow:true},
+    explain:()=>`<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:260px;margin:0 auto">${list.map((k,i)=>`<span style="${k===target?"outline:3px solid #FFE27A;border-radius:6px":"opacity:.35"}">${shapeSVG(k,SHAPE_COLS[i%SHAPE_COLS.length],44)}</span>`).join("")}</div><div class="cap">${SHAPES[target].name}だけ かぞえると <b>${n}</b>こ。</div>`}}
+function barSVG(rows,W){return `<svg viewBox="0 0 ${W} ${rows.length*34}" style="width:min(70vw,280px);height:auto">${rows.map((r,i)=>`<text x="0" y="${i*34+22}" font-size="16" fill="#F7F3E8" style="font-family:var(--ui)">${r.n}</text><rect x="38" y="${i*34+6}" width="${r.len}" height="22" rx="6" fill="${r.c}"/>`).join("")}</svg>`}
+function mkLenCmp(a,b,lv,which){const rows=[{n:"あか",c:"#E4483B",len:a},{n:"あお",c:"#2C6FBB",len:b}];const long=a>b?"あか":"あお",short=a>b?"あお":"あか";const ans=which==="long"?long:short;
+  return {key:`len:${a}-${b}-${which}`,lv,type:"choice",ans,wrongs:[ans==="あか"?"あお":"あか"],label:`${which==="long"?"ながい":"みじかい"}のは(${a}と${b})`,
+    q:{emojiHTML:barSVG(rows,260),sub:`${which==="long"?"ながい":"みじかい"}のは どっち？`,slotBelow:true,sm:true},
+    explain:()=>barSVG(rows,260)+`<div class="cap">ひだりを そろえて くらべるよ。<br>${which==="long"?"ながい":"みじかい"}のは <b>${ans}</b>。</div>`}}
+function mkUnits(n,lv){const c=pick(SHAPE_COLS);const svg=`<svg viewBox="0 0 ${n*26+4} 60" style="width:min(80vw,${n*26+4}px);height:auto"><rect x="2" y="4" width="${n*26}" height="20" rx="5" fill="${c}"/>${Array.from({length:n},(_,i)=>`<rect x="${2+i*26}" y="32" width="24" height="24" rx="4" fill="none" stroke="#F7F3E8" stroke-width="2"/>`).join("")}</svg>`;
+  return {key:`units:${n}`,lv,type:"num",ans:String(n),label:`ながさ ${n}こぶん`,wrongs:uniq([n-1,n+1,n+2].filter(x=>x>=0&&x!==n).map(String)),
+    q:{emojiHTML:svg,sub:"ますめ なんこぶんの ながさ？",slotBelow:true},
+    explain:()=>svg+`<div class="cap">ますめを 1、2、3と かぞえると<br><b>${n}</b>こぶん。</div>`}}
+/* ---- ぶんづくり ---- */
+const GROUPS=[["くだもの",["🍎","🍌","🍇","🍓","🍑"]],["やさい",["🥕","🥬","🍅","🌽","🥒"]],["どうぶつ",["🐶","🐱","🐰","🐘","🐻"]],["のりもの",["🚗","🚌","🚃","✈️","🚲"]],["たべもの",["🍙","🍞","🍜","🍰","🍚"]],["むし",["🐝","🦋","🐞","🐜","🐛"]],["さかな・うみの いきもの",["🐟","🐙","🦀","🐬","🐢"]]];
+const OPPOSITES=[["おおきい","ちいさい"],["ながい","みじかい"],["たかい","ひくい"],["おもい","かるい"],["あつい","つめたい"],["はやい","おそい"],["あかるい","くらい"],["ひろい","せまい"],["ふとい","ほそい"],["おおい","すくない"],["あたらしい","ふるい"],["つよい","よわい"],["うえ","した"],["まえ","うしろ"],["みぎ","ひだり"],["あさ","よる"]];
+const SENTS=[["ねこが","さかなを","たべる。"],["むっちゃんが","ほんを","よむ。"],["ポテが","にんじんを","かじる。"],["おとうさんが","くるまを","あらう。"],["いぬが","ボールを","おいかける。"],["せんせいが","こくばんに","かく。"],["わたしが","えを","かく。"],["ことりが","そらを","とぶ。"],["あかちゃんが","ミルクを","のむ。"],["おかあさんが","ごはんを","つくる。"],["ポテが","むっちゃんと","あそぶ。"],["かえるが","いけで","およぐ。"]];
+const GRP_OK={0:[2,3,5,6],1:[2,3,5,6],2:[0,1,3,4],3:[0,1,2,4,5,6],4:[2,3,5,6],5:[0,1,3,4],6:[0,1,3,4]}; // まぎらわしくない くみあわせだけ
+function mkGroup(gi,lv){const g=GROUPS[gi],ans=pick(g[1]);const others=shuffle(GRP_OK[gi]).slice(0,2).map(i=>pick(GROUPS[i][1]));
+  return {key:`grp:${gi}:${ans}`,lv,type:"choice",kj:true,ans,wrongs:others,label:`${g[0]}は どれ`,
+    q:{sub:`「${g[0]}」は どれ？`,slotBelow:true},
+    explain:()=>`<div class="q-emoji">${ans}</div><div class="cap">これは <b>${g[0]}</b>の なかま。<br>${g[1].join(" ")} も ${g[0]}だよ。</div>`}}
+function mkOpp(i,dir,lv){const pr=OPPOSITES[i],w=pr[dir],ans=pr[1-dir];const others=shuffle(OPPOSITES.filter((_,j)=>j!==i)).slice(0,2).map(o=>o[rnd(2)]);
+  return {key:`opp:${w}`,lv,type:"choice",ans,wrongs:others,label:`${w}の はんたい`,
+    q:{main:w,sub:"はんたいの ことばは？",slotBelow:true,sm:true},
+    explain:()=>`<div class="big" style="font-size:30px">${w} ⇔ ${ans}</div><div class="cap">「${w}」の はんたいは「<b>${ans}</b>」。</div>`}}
+function mkSent(i,lv){const [a,b,c]=SENTS[i];const ans=`${a} ${b} ${c}`;const w1=`${b} ${a} ${c}`,w2=`${c.replace("。","")} ${a} ${b}。`;
+  return {key:`sent:${i}`,lv,type:"choice",ans,wrongs:[w1,w2],label:ans,
+    q:{emoji:"💬",sub:"ただしい ならびは どれ？",slotBelow:true,sm:true},
+    explain:()=>`<div class="big" style="font-size:26px">${ans}</div><div class="cap">「だれが」→「なにを」→「どうした」<br>の じゅんばんに ならべるよ。</div>`}}
 const funpun=m=>[2,5,7,9].includes(m%10)?"ふん":"ぷん";
 function clockSVG(h,m){
   const ha=((h%12)+m/60)*30,ma=m*6;let t="";
@@ -526,7 +606,11 @@ const SK={
  clock:{name:"とけい",icon:"🕒",levels:["なんじ","なんじはん","なんじ なんぷん"],items:[]},
  kotoba:{name:"ことば",icon:"✏️",levels:["は・を・へ","ちいさい じ","のばす おと","にている ひらがな"],items:[]},
  kata:{name:"カタカナ",icon:'<span class="tx">ア</span>',levels:["カタカナの ことば","のばす カタカナ"],items:[]},
- kanji:{name:"かんじ",icon:'<span class="tx">山</span>',levels:["かんじ はじめの いっぽ","にている かんじ","にている かんじ 2","かんじの よみかた"],items:[]}
+ kanji:{name:"かんじ",icon:'<span class="tx">山</span>',levels:["かんじ はじめの いっぽ","にている かんじ","にている かんじ 2","かんじの よみかた"],items:[]},
+ bun:{name:"ぶんしょう\nだい",icon:"📖",levels:["あわせて・のこり","ちがい・なんばんめ","ふえたり へったり"],items:[]},
+ kaku:{name:"かく",icon:"✍️",levels:["すうじを なぞる","ひらがなを なぞる","かんじを なぞる"],items:[]},
+ katachi:{name:"かたち・\nながさ",icon:"🔺",levels:["かたちの なまえ","ながさくらべ","かたちを かぞえる・なんこぶん"],items:[]},
+ bunzukuri:{name:"ぶんづくり",icon:"💬",levels:["なかまわけ","はんたい ことば","ぶんを つくる"],items:[]}
 };
 (function build(){
   for(let a=1;a<=9;a++)for(let b=1;b<=9;b++){const s=a+b;
@@ -572,6 +656,23 @@ const SK={
   KANJI.forEach(p=>SK.kanji.items.push({key:"kanji:"+p[2]+(p[7]||""),lv:p[0],type:"choice",kj:true,ans:p[3],wrongs:[p[4],p[5]],label:p[3],
     q:{emoji:p[1],sub:`「${p[2]}」の かんじは どれ？`,slotBelow:true},say:`「${p[2].replace(/\(.*?\)/g,"")}」の {漢字|かんじ}は どれ？`,sayAns:p[3],
     explain:()=>`<div class="big" style="font-size:64px">${p[3]}</div><div class="cap">${p[6]||("「"+p[2]+"」は この かんじ。")}</div>`}));
+  for(let a=1;a<=9;a++)for(let b=1;b<=9;b++){if(a+b<=10)SK.bun.items.push(mkBunAdd(a,b,0));}
+  for(let a=2;a<=10;a++)for(let b=1;b<a;b++)SK.bun.items.push(mkBunSub(a,b,0));
+  [[5,3],[7,4],[6,2],[9,5],[8,3],[4,7],[3,8],[10,6],[2,9],[6,9],[5,8],[10,3]].forEach(([a,b])=>SK.bun.items.push(mkBunDiff(a,b,1)));
+  [[5,2,1],[5,4,1],[6,3,1],[6,2,0],[7,5,1],[7,3,0],[6,5,0],[8,4,1],[8,2,0],[5,1,1],[7,7,1],[6,6,0]].forEach(([n,k,f])=>SK.bun.items.push(mkBunOrder(n,k,!!f,1)));
+  [[3,4,2],[5,3,4],[6,2,5],[4,5,3],[7,2,6],[2,6,3],[8,1,4],[5,5,7],[3,6,4],[9,1,5],[4,4,6],[6,3,2]].forEach(v=>SK.bun.items.push(mkBunTwo(...v,2)));
+  Object.keys(SHAPES).forEach(k=>{SK.katachi.items.push(mkShapeName(k,0));SK.katachi.items.push(mkShapeName(k,0))});
+  SK.katachi.items=SK.katachi.items.filter((it,i,arr)=>arr.findIndex(x=>x.key===it.key)===i);
+  [[120,60],[80,140],[100,90],[150,70],[60,120],[130,110],[90,150],[110,50],[140,130],[70,100]].forEach(([a,b])=>{SK.katachi.items.push(mkLenCmp(a,b,1,"long"));SK.katachi.items.push(mkLenCmp(a,b,1,"short"))});
+  for(let i=0;i<10;i++)SK.katachi.items.push(mkShapeCount(i,2));
+  for(let n=2;n<=10;n++)SK.katachi.items.push(mkUnits(n,2));
+  GROUPS.forEach((g,gi)=>{for(let k=0;k<3;k++)SK.bunzukuri.items.push(mkGroup(gi,0))});
+  SK.bunzukuri.items=SK.bunzukuri.items.filter((it,i,arr)=>arr.findIndex(x=>x.key===it.key)===i);
+  OPPOSITES.forEach((pr,i)=>{SK.bunzukuri.items.push(mkOpp(i,0,1));SK.bunzukuri.items.push(mkOpp(i,1,1))});
+  SENTS.forEach((_,i)=>SK.bunzukuri.items.push(mkSent(i,2)));
+  for(const ch of "0123456789")SK.kaku.items.push(mkTrace(ch,0));
+  for(const ch of HIRA)SK.kaku.items.push(mkTrace(ch,1));
+  for(const ch of KAKU_KANJI)SK.kaku.items.push(mkTrace(ch,2));
   SKILL_IDS.forEach(id=>{SK[id].map={};SK[id].items.forEach(it=>{it.skill=id;SK[id].map[it.key]=it})});
 })();
 const BOX_DAYS=[0,1,3,7,14,30];
@@ -674,9 +775,10 @@ let GM=null;
 function balloonSVG(c){return `<svg viewBox="0 0 76 96"><path d="M38 76 Q34 86 30 94" stroke="#666" stroke-width="2" fill="none"/><ellipse cx="38" cy="38" rx="33" ry="38" fill="${c}"/><ellipse cx="26" cy="22" rx="8" ry="12" fill="rgba(255,255,255,.35)"/><path d="M33 74 L38 80 L43 74Z" fill="${c}"/><text x="38" y="50" text-anchor="middle"></text></svg>`}
 function carrotSVG(){return `<svg viewBox="0 0 100 130"><path d="M50 128 Q22 90 30 48 L70 48 Q78 90 50 128Z" fill="#F08A24" stroke="#C96A0C" stroke-width="4"/><path d="M36 60 L60 64 M34 76 L58 80 M40 94 L52 96" stroke="#C96A0C" stroke-width="3" stroke-linecap="round"/><path d="M50 50 L30 12 M50 50 L50 6 M50 50 L72 14" stroke="#4E9A3A" stroke-width="12" stroke-linecap="round"/><path d="M50 50 L30 12 M50 50 L50 6 M50 50 L72 14" stroke="#5DAA4A" stroke-width="7" stroke-linecap="round"/></svg>`}
 function gamePool(g){
-  const ids=g==="balloon"?["count","add","sub"]:["kanji","kata","kotoba"];let pool=[];
-  ids.forEach(id=>SK[id].items.forEach(it=>{const st=S.items[it.key];if(st&&st.seen&&(g==="balloon"?it.type==="num":true))pool.push(it)}));
-  if(pool.length<6)ids.forEach(id=>SK[id].items.forEach(it=>{if(it.lv===0&&(g==="balloon"?it.type==="num":true))pool.push(it)}));
+  const ids=g==="balloon"?["count","add","sub","bun","katachi"]:["kanji","kata","kotoba","bunzukuri"];let pool=[];
+  const okIt=it=>g==="balloon"?it.type==="num":(it.type==="choice"&&it.ans.length<=4);
+  ids.forEach(id=>SK[id].items.forEach(it=>{const st=S.items[it.key];if(st&&st.seen&&okIt(it))pool.push(it)}));
+  if(pool.length<6)ids.forEach(id=>SK[id].items.forEach(it=>{if(it.lv===0&&okIt(it))pool.push(it)}));
   return shuffle(pool);
 }
 function startGame(g){
@@ -686,10 +788,12 @@ function startGame(g){
   gameRound();
 }
 function gPrompt(it){
-  if(it.type==="num"){const m=it.q.main?it.q.main.replace(/[＝=]\s*$/,"").trim():"";return m?`${esc(m)}<small>${esc(it.q.sub||"こたえは？")}</small>`:`${it.q.emojiHTML||""}<small>いくつ あるかな？</small>`}
+  if(it.key.startsWith("bun:"))return `<span style="font-size:16px">${it.q.emoji||""} ${esc(it.q.sub||"")}</span><small>${esc(it.q.main||"")}</small>`;
+  if(it.type==="num"){const m=it.q.main?it.q.main.replace(/[＝=]\s*$/,"").trim():"";return m?`${esc(m)}<small>${esc(it.q.sub||"こたえは？")}</small>`:`${it.q.emojiHTML||""}<small>${esc(it.q.sub||"いくつ あるかな？")}</small>`}
   if(it.key.startsWith("kanji:r:"))return `${esc(it.q.main)}<small>この かんじの よみかたは？</small>`;
   if(it.q.fill)return `${it.q.emoji||""} ${esc(it.q.fill)}<small>□に はいるのは？</small>`;
-  return `${it.q.emoji||""}<small>${esc(it.q.sub||"")}</small>`;
+  if(it.q.main&&!it.q.emojiHTML)return `${esc(it.q.main)}<small>${esc(it.q.sub||"")}</small>`;
+  return `${it.q.emojiHTML||it.q.emoji||""}<small>${esc(it.q.sub||"")}</small>`;
 }
 function gameRound(){
   const gm=GM;if(!gm)return;gm.busy=false;
@@ -699,7 +803,7 @@ function gameRound(){
   $("#gprompt").innerHTML=gPrompt(it);
   let opts=[it.ans].concat(it.wrongs);
   if(it.type==="num"){const a=Number(it.ans);const extra=shuffle([a-2,a-1,a+1,a+2,a+3,a+10].filter(x=>x>=0&&x!==a)).map(String);for(const x of extra){if(opts.length>=5)break;if(!opts.includes(x))opts.push(x)}}
-  else{const others=shuffle(gm.pool.filter(x=>x!==it)).map(x=>x.ans);for(const x of others){if(opts.length>=(gm.g==="field"?6:5))break;if(!opts.includes(x))opts.push(x)}}
+  else{const others=shuffle(gm.pool.filter(x=>x!==it&&x.ans.length<=4)).map(x=>x.ans);for(const x of others){if(opts.length>=(gm.g==="field"?6:5))break;if(!opts.includes(x))opts.push(x)}}
   opts=shuffle(opts);
   const area=$("#garea");
   if(gm.g==="balloon"){const cols=["#E4483B","#2C6FBB","#F0A020","#5DAA4A","#9B59B6","#F48FB1"];
@@ -707,7 +811,7 @@ function gameRound(){
     area.innerHTML=opts.map((o,i)=>{const c=cells[i%cells.length];return `<button class="balloon" data-v="${esc(o)}" style="left:${c[0]}%;top:${c[1]}%;animation-delay:${-i*.4}s">${balloonSVG(cols[i%cols.length]).replace("</text>",esc(o)+"</text>")}</button>`}).join("");
   }else{
     opts=opts.slice(0,6);
-    area.innerHTML=`<div class="field">${opts.map(o=>o?`<button class="carrotB" data-v="${esc(o)}">${carrotSVG()}<span class="lb">${esc(o)}</span></button>`:`<div></div>`).join("")}</div>`;
+    area.innerHTML=`<div class="field">${opts.map(o=>o?`<button class="carrotB" data-v="${esc(o)}"><span class="cw">${carrotSVG()}<span class="lb" style="font-size:${Array.from(o).length>=4?"clamp(13px,4.2vw,18px)":Array.from(o).length===3?"clamp(17px,5.4vw,24px)":"clamp(20px,6.5vw,30px)"}">${esc(o)}</span></span></button>`:`<div></div>`).join("")}</div>`;
   }
   area.onclick=async e=>{const b=e.target.closest("[data-v]");if(!b||gm.busy)return;ac();
     if(b.dataset.v===it.ans){gm.busy=true;gm.got++;gm.i++;b.classList.add(gm.g==="balloon"?"pop":"pull");SFX.ok();chu("happy");poteSet($("#gamePote"),"front","hop");
@@ -735,69 +839,195 @@ async function choosePlay(){
   d.onclick=e=>{const b=e.target.closest("[data-g]");if(!b)return;d.remove();if(b.dataset.g)startGame(b.dataset.g)};$("#app").appendChild(d);
 }
 
-/* ---------- ポテの セリフ(どれも「。」で おわる・10とおり) ---------- */
+/* ---------- 傾向分析(タグ) ---------- */
+const TAGS={
+  "add:0":["0の たしざん","add"],"add:5":["5までの たしざん","add"],"add:10":["10までの たしざん","add"],"add:big":["10より おおきい たしざん","add"],"add:carry":["くりあがり","add"],"miss":["□の ある しき","add"],"add3":["3つの かずの たしざん","add"],
+  "sub:0":["0の ひきざん","sub"],"sub:5":["5までの ひきざん","sub"],"sub:10":["10までの ひきざん","sub"],"sub:big":["10より おおきい かずの ひきざん","sub"],"sub:borrow":["くりさがり","sub"],"sub3":["3つの かずの ひきざん","sub"],
+  "count":["かぞえる","count"],"next":["つぎの かず・まえの かず","count"],"to10":["10の ともだち","count"],"tens":["10の まとまり","count"],"cmp":["おおきさくらべ","count"],
+  "clock:0":["なんじ","clock"],"clock:30":["なんじはん","clock"],"clock:m":["なんじ なんぷん","clock"],
+  "kotoba:p":["は・を・へ","kotoba"],"kotoba:s":["ちいさい じ","kotoba"],"kotoba:l":["のばす おと","kotoba"],"kotoba:h":["にている ひらがな","kotoba"],
+  "kata:0":["カタカナ","kata"],"kata:1":["のばす カタカナ","kata"],"kanji:shape":["かんじの かたち","kanji"],"kanji:r":["かんじの よみ","kanji"],
+  "bun:add":["ぶんしょうだい(あわせて)","bun"],"bun:sub":["ぶんしょうだい(のこり)","bun"],"bun:diff":["ぶんしょうだい(ちがい)","bun"],"bun:ord":["なんばんめ","bun"],"bun:two":["ぶんしょうだい(ふえて へって)","bun"],
+  "shape":["かたちの なまえ","katachi"],"len":["ながさくらべ","katachi"],"shapecount":["かたちを かぞえる","katachi"],"units":["なんこぶんの ながさ","katachi"],
+  "grp":["なかまわけ","bunzukuri"],"opp":["はんたい ことば","bunzukuri"],"sent":["ぶんを つくる","bunzukuri"],
+  "trace:0":["すうじを かく","kaku"],"trace:1":["ひらがなを かく","kaku"],"trace:2":["かんじを かく","kaku"]};
+function tagOf(it){const k=it.key;
+  if(k.startsWith("add:")){const [a,b]=k.slice(4).split("+").map(Number);if(a===0||b===0)return "add:0";if(a<10&&b<10&&a+b>10)return "add:carry";if(a+b<=5)return "add:5";if(a+b<=10)return "add:10";return "add:big"}
+  if(k.startsWith("sub:")){const [a,b]=k.slice(4).split("-").map(Number);if(b===0||a===b)return "sub:0";if(a>10&&b>a-10)return "sub:borrow";if(a<=5)return "sub:5";if(a<=10)return "sub:10";return "sub:big"}
+  if(k.startsWith("miss:"))return "miss";if(k.startsWith("add3:"))return "add3";if(k.startsWith("sub3:"))return "sub3";
+  if(k.startsWith("count:"))return "count";if(k.startsWith("next:"))return "next";if(k.startsWith("to10:"))return "to10";if(k.startsWith("tens:"))return "tens";if(k.startsWith("cmp:"))return "cmp";
+  if(k.startsWith("clock:")){const m=Number(k.split(":")[2]);return m===0?"clock:0":m===30?"clock:30":"clock:m"}
+  if(k.startsWith("kotoba:"))return "kotoba:"+k.split(":")[1];
+  if(k.startsWith("kata:"))return "kata:"+it.lv;
+  if(k.startsWith("kanji:r:"))return "kanji:r";if(k.startsWith("kanji:"))return "kanji:shape";
+  if(k.startsWith("bun:"))return "bun:"+k.split(":")[1];
+  if(k.startsWith("shape:"))return "shape";if(k.startsWith("len:"))return "len";if(k.startsWith("shapecount:"))return "shapecount";if(k.startsWith("units:"))return "units";
+  if(k.startsWith("grp:"))return "grp";if(k.startsWith("opp:"))return "opp";if(k.startsWith("sent:"))return "sent";
+  if(k.startsWith("trace:"))return "trace:"+it.lv;
+  return "other"}
+function itemByKey(k){for(const id of SKILL_IDS){const it=SK[id].map[k];if(it)return it}return null}
+const ADVICE={
+  "add:5":"5までは指で。「3と2で5」を両手で見せる。数の分解(5は 1と4、2と3)を毎日1回。",
+  "add:10":"10までは「5のかたまり」を使う。6＋3は「5と1、それに3で、5と4で9」。おはじきを5個ずつ並べる。",
+  "add:big":"「10と いくつ」で考える。12＋3は「10と2、それに3で、10と5で15」。10のまとまりを箱で見せる。",
+  "sub:5":"実物を減らして見せる。「5から2とると、のこりは？」を指で。",
+  "sub:10":"10からひくのは10の補数と同じ。「10は 3と7」が言えれば10−3もできる。",
+  "sub:big":"「10と いくつ」に分けてから、いくつの方だけひく。14−3は「4−3＝1、10と1で11」。",
+  "kata:0":"シ/ツ、ソ/ン、ナ/メ の3組で決まる。点の向き(シは横から、ツは上から)を手で空書き。",
+  "add:carry":"「あと いくつで 10」を先に言わせる。8＋5なら「8は あと2で10、5を2と3に分ける」。おはじきや指で10のかたまりを作ると入りやすい。",
+  "sub:borrow":"「10から ひく」を先に。13−5なら「13を10と3に分けて、10−5＝5、5と3で8」。紙に○を13個かいて5個消すのが一番早い。",
+  "miss":"「3＋□＝8」は「3から8まで いくつ？」と言い換えると解ける。指で3から数え上げる。",
+  "add:0":"0は「なにも ない」。おはじき5個に、空の手を足す遊びで体感させる。",
+  "sub:0":"「ぜんぶ とると 0」「なにも とらないと そのまま」。実物で1回やれば入る。",
+  "to10":"10の補数は暗記に近い。「1と9、2と8、3と7、4と6、5と5」を歌のように毎日1回。くりあがりの土台になる。",
+  "tens":"10円玉と1円玉で「10が3つと1が4つ」を実物で。",
+  "cmp":"20より大きい数は「10のまとまりが いくつ」で比べる。数の表(1〜100)を壁に貼ると効く。",
+  "count":"5個ずつ、10個ずつのかたまりで数える癖を。指さしながら声に出す。",
+  "next":"数の表を見ながら「つぎ」「まえ」を指でたどる。19の次が20、29の次が30がつまずきやすい。",
+  "clock:0":"短い針(赤)だけ見る練習から。家の時計で「いま なんじ？」を1日3回。",
+  "clock:30":"長い針が6なら「はん」。短い針が数字と数字の間にあるときは「小さいほう」と教える。",
+  "clock:m":"長い針は「5とび」で数える。時計の外側に5,10,15…と書いた紙を貼る。",
+  "kotoba:p":"「は・を・へ」は理屈より数。短い文をたけが言って、むっちゃんが書く、を1日2文。「わ と書きたくなるけど、くっつきの は」と唱える。",
+  "kotoba:s":"小さい「っ・ゃ・ゅ・ょ」は手をたたきながら音読(き・っ・て で3拍)。拍で覚える。",
+  "kotoba:l":"のばす音は「おとうさん」「おねえさん」「とけい」など例外を丸暗記するしかない。間違えた語だけ書いて壁に貼る。",
+  "kotoba:h":"似た字(ぬ/め、わ/ね/れ)は、違う部分を赤で書いて見せる。",
+  "kata:1":"のばし棒「ー」の位置。書くときに声で「のばす」と言わせる。",
+  "kanji:shape":"似た漢字(犬/大、右/左、日/目)は違いを1点に絞って教える(「犬は点がある」)。指なぞりを増やす。",
+  "kanji:r":"読みは絵と一緒に。「山」は山の絵、で結びつける。",
+  "bun:add":"「ぜんぶで」「あわせて」→たしざん、のキーワードを丸で囲む練習。",
+  "bun:sub":"「のこりは」「たべました」→ひきざん。実物(あめ玉)でやると一発。",
+  "bun:diff":"「ちがい」は並べて比べる。2列に並べて、はみ出た分を数える。",
+  "bun:ord":"「まえから3ばんめ」と「まえから3つ」は違う。並んだ人形で遊ぶと入る。",
+  "bun:two":"順番に計算する。式を「5＋3＝8」「8−2＝6」と2つに分けて書かせる。",
+  "shape":"家の中で「まる さがし」「さんかく さがし」。",
+  "len":"端をそろえて比べる、が基本。えんぴつ2本で実演。",
+  "units":"ますめを指で「1、2、3」と押さえながら数える。",
+  "grp":"「くだもの・やさい・どうぶつ」のなかま集め。スーパーで実物を見ながら。",
+  "opp":"日常会話で「おおきい、の はんたいは？」クイズ。",
+  "sent":"「だれが・なにを・どうした」の3枚カードを並べ替える遊び。",
+  "trace:0":"数字の書き順(5と8がつまずきやすい)。大きく書く。",
+  "trace:1":"ひらがなは「はらい・とめ」より、まず形。大きく、ゆっくり。",
+  "trace:2":"漢字は画数の少ないものから。指なぞりの後に鉛筆で1回。"};
+function analyze(days){const since=addDays(-(days||30));const by={};let judged=0,jok=0,hand=0,handOk=0,tap=0,tapOk=0,msSum=0,msN=0;
+  S.log.forEach(e=>{if(e.d<since)return;const it=itemByKey(e.k);if(!it)return;const t=tagOf(it);const b=by[t]||(by[t]={n:0,ok:0,ms:0});b.n++;b.ok+=e.ok;b.ms+=e.ms||0;
+    if(e.j!=null){judged++;jok+=e.j}if(e.h!=null){if(e.h){hand++;handOk+=e.ok}else{tap++;tapOk+=e.ok}}if(e.ms){msSum+=e.ms;msN++}});
+  const rows=Object.entries(by).map(([t,b])=>({t,name:(TAGS[t]||[t])[0],skill:(TAGS[t]||["",""])[1],n:b.n,rate:b.ok/b.n,ms:b.ms/b.n}));
+  const weak=rows.filter(r=>r.n>=3&&r.rate<0.7).sort((a,b)=>a.rate-b.rate);
+  const strong=rows.filter(r=>r.n>=3&&r.rate>=0.9).sort((a,b)=>b.n-a.n);
+  return {rows,weak,strong,judged,jok,hand,handOk,tap,tapOk,avgMs:msN?msSum/msN:0}}
+function weakTags(){return analyze(30).weak.map(r=>r.t)}
+
+/* ---------- ポテの セリフ(どれも「。」で おわる・各30とおり) ---------- */
 const call=()=>Math.random()<.25?"むーちゃん":(S.settings.call||"むっちゃん");
 const L={
   first:()=>`むっちゃん！ポテだよ。ポテね、がっこうで べんきょう して みたいの。むっちゃん、ポテの {先生|せんせい}に なって くれる？`,
   yes:()=>`やったー！ありがとう、むっちゃん。ボタンを おして、ポテに {教|おし}えて くれる ことを ひとつ えらんでね。`,
   hello:()=>{const h=new Date().getHours();const g=h<11?"おはよう":h<18?"こんにちは":"こんばんは";const c=call();
-    return pick([`${g}、${c} {先生|せんせい}。{今日|きょう}は {何|なに}を {教|おし}えて くれる？`,`${g}、${c}。ポテ、{今日|きょう}も がっこう がんばるよ。`,
-     `${g}。ポテ、${c}が くるのを まってたんだ。`,`${g}、${c} {先生|せんせい}。ポテ、はなまる いっぱい ほしいな。`,`${g}。きょうの {先生|せんせい}も ${c}だね。うれしいな。`,
-     `${g}、${c}。ポテの あたま、{今日|きょう}も げんきだよ。`,`${g}。ポテ、ノートと えんぴつ、じゅんび できてるよ。`,`${g}、${c} {先生|せんせい}。じゅぎょう、はじめよう。`,
-     `${g}。${c}に あえて、ポテ うれしいよ。`,`${g}、${c}。きのうの こと、ポテ おぼえてるかな。`])},
-  wish:n=>{const c=call();return pick([`${c} {先生|せんせい}、{今日|きょう}は「${n}」を {教|おし}えて ほしいな。ほかのでも いいよ。`,`ねえ ${c}、「${n}」が きに なってるの。きょうは それに しない？`,
-     `${c}。ポテ、「${n}」を もっと できるように なりたいな。`,`きょうの おねがいは「${n}」。でも ${c}が えらんで いいよ。`,`「${n}」、ポテ また やって みたい。${c}、いい？`,
-     `${c} {先生|せんせい}。「${n}」の れんしゅう、つきあって くれる？`,`ポテ、ゆうべ「${n}」の ゆめを みたよ。きょうは それが いいな。`,`${c}。「${n}」、まだ ちょっと じしんが ないの。`,
-     `きょうは「${n}」に しよっか。${c}が きめてね。`,`${c} {先生|せんせい}、「${n}」を おねがい します。`])},
-  sleepy:()=>pick([`ポテ、{今日|きょう}は いっぱい {勉強|べんきょう} して ねむく なっちゃった。また {明日|あした} あそぼうね。`,`ふわぁ。ポテ、もう おめめが とじちゃう。つづきは {明日|あした}ね。`,
-     `{今日|きょう}は ここまで。ポテ、おふとんに はいるね。おやすみ。`,`ポテ、あたまが いっぱいに なっちゃった。{明日|あした}、また {教|おし}えてね。`]),
-  pat:()=>{const c=call();return pick(["チュー。","チュッチュ。",`えへへ、くすぐったい。`,`${c}、だいすき。`,"にんじん たべたいな。","ポテ、べんきょう たのしいよ。",`${c}の {手|て}、あったかいね。`,
-     "チュ？ なあに？","ポテの おなか、ふわふわでしょ。",`${c}、きょうも いっしょに あそぼう。`,"チューチュー。",`ポテね、${c}の こえが すきなの。`,"なでなで、うれしいな。"])},
-  memo:()=>{const c=call();return pick([`${c} {先生|せんせい}、さきに こたえメモを つくってね。`,`ポテに {見|み}えないように、こたえを メモ してね。`,`{先生|せんせい}の こたえメモ、おねがい します。`,
-     `まずは ${c}の こたえを メモ。ポテは {見|み}ないよ。`,`${c}、メモが できたら ポテの ばんね。`,`ポテ、まってるね。${c}の メモ、できたかな。`,`さいしょは {先生|せんせい}の メモから。ポテは めを つぶってるよ。`,
-     `${c} {先生|せんせい}、こたえメモを こっそり つくってね。`,`メモが できたら、ポテが かくね。`,`${c}の メモ、たのしみ。ポテは あとで かくよ。`])},
-  go:()=>pick(["よーし、ポテも かくね。","{今度|こんど}は ポテの ばん。","うーんと、わかった。かくね。","ポテ、がんばって かいて みる。","えんぴつ もったよ。かくね。","ポテの あたまで かんがえるね。",
-     "できるかな。やって みるね。","ちょっと まってね。いま かくよ。","ポテも こたえて みるね。","うーん、これは、こうかな。"]),
-  done:a=>{const c=call();return pick([`できた。「${a}」だと {思|おも}う。どうかな？`,`ポテの こたえは「${a}」。あってる？`,`「${a}」って かいたよ。{先生|せんせい}、みて。`,`じゃーん。「${a}」。どう？`,
-     `ポテは「${a}」に したよ。${c}、あってるかな？`,`「${a}」。これで いいと {思|おも}うんだけど。`,`かけたよ。「${a}」。まるを つけて。`,`うーん、「${a}」かな。${c}、みて。`,
-     `ポテ、「${a}」って かいて みた。どうかな？`,`できたー。「${a}」。${c} {先生|せんせい}、おねがい します。`])},
-  hana:()=>pick(["やったー。はなまる もらった。","わーい。はなまるだ。","えへへ、あってた。うれしい。","はなまる、ポテの たからものに するね。","ポテ、できたよ。はなまる うれしい。",
-     "チューチュー。はなまるだ。","やった。ポテ、ちゃんと できてた。","はなまる。ポテ、おどりたく なっちゃう。","うれしいな。もっと はなまる ほしい。","はなまる、おおきくて きれいだね。"]),
-  praise:()=>{const c=call();return pick(["ていねいに たしかめて くれて ありがとう。",`メモを つくってから みる、さすが ${c} {先生|せんせい}。`,"よく {見|み}て くれたね。","さいごまで かんがえて くれたね。",
-     `${c}が ちゃんと たしかめて くれるから、ポテ あんしん。`,"じっくり みて くれて ありがとう。",`${c} {先生|せんせい}は、まるを つけるのが じょうずだね。`,"たしかめるの、だいじだよね。",
-     `${c}が {見|み}てくれると、ポテ うれしい。`,"ポテの こたえ、ちゃんと よんで くれたんだね。"])},
-  eh:()=>{const c=call();return pick([`えっ、ちがうの？ {教|おし}えて、${c} {先生|せんせい}。`,"あれれ？ どこが ちがうのかな。{教|おし}えて。","ポテ、まちがえちゃった？ {教|おし}えて ほしいな。",
-     `そうなの？ ${c}、ただしいのを {教|おし}えて。`,"えー、ちがうんだ。どうしてか しりたいな。","むむ。ポテ、なにか まちがえたみたい。","ほんと？ ポテ、ちゃんと しりたい。",
-     `${c} {先生|せんせい}、ポテに ヒントを ちょうだい。`,"ちがうのか。ポテ、もういちど かんがえるね。",`${c}、ポテが わかるように {教|おし}えて。`])},
-  got:a=>{const c=call();return pick([`そっか。「${a}」だね。ポテ、わかった。`,`なるほど。「${a}」か。もう まちがえないよ。`,`「${a}」。{教|おし}えて くれて ありがとう。`,`「${a}」だったんだ。ポテ、おぼえたよ。`,
-     `わかった。「${a}」だね。${c}、ありがとう。`,`ふむふむ、「${a}」。ポテ、かしこく なった。`,`「${a}」か。ポテ、つぎは だいじょうぶ。`,`ありがとう、${c}。「${a}」って おぼえるね。`,
-     `「${a}」。ポテの あたまに しまって おくね。`,`そういう ことか。「${a}」だね。`])},
-  same:a=>pick([`あれ？ むっちゃんの メモも「${a}」だよ。ポテと おなじだね。`,`ん？ メモを みてみて。むっちゃんも「${a}」って かいてるよ。`,`むっちゃんの メモと ポテの こたえ、どっちも「${a}」だよ。`]),
-  really:a=>pick([`ほんと？ でも むっちゃんの メモは「${a}」だよ。いっしょに たしかめよう。`,`まるを もらえて うれしいけど、メモは「${a}」って かいてあるよ。みてみよう。`,`あれ？ むっちゃんの メモは「${a}」。どっちが ただしいか、いっしょに みよう。`]),
-  check:()=>pick(["あれ？ メモと ちがうね。いっしょに たしかめて みよう。","うーん、どっちかな。いっしょに たしかめよう。","ポテと むっちゃんの こたえが ちがうよ。みて みよう。","どっちが あってるかな。ふたりで かくにんね。","メモと ちがうね。こくばんを みて みよう。"]),
-  poteRight:()=>pick(["{今回|こんかい}は ポテが あってた みたい。たしかめるって だいじだね。","こんどは ポテが あってたよ。むっちゃんも もう だいじょうぶだね。","ポテの こたえで あってたね。いっしょに みて よかった。"]),
-  bothWrong:()=>pick(["ふたりとも ちがってた。あはは。これで もう おぼえたね。","おそろいで まちがえちゃった。でも、もう わかったね。","ふたりとも はずれ。つぎは ふたりとも あたりだね。"]),
-  again:()=>pick(["さっきの もんだい、もういちど やって みよう。","もういっかい、さっきの やつ。こんどは できるかな。","さっきの もんだいが また きたよ。"]),
-  review:()=>pick(["そうだ。まえに {教|おし}えて もらった こと、ポテ おぼえてるか みてて。","まえの もんだい、ポテ まだ おぼえてるかな。ためして みるね。","ちょっと むかしの もんだいだよ。ポテ、できるかな。"]),
-  levelUp:n=>{const c=call();return pick([`${c} {先生|せんせい}の おかげで、ポテ できるように なったよ。{次|つぎ}は「${n}」に ちょうせん したい。`,`やったー。ポテ、つぎの だんかいに すすんだよ。こんどは「${n}」だね。`,`${c}、みてみて。ポテ、「${n}」が できる くらい かしこく なったよ。`])},
-  letterWait:()=>{const c=call();return pick([`${c}、おてがみ かいたよ。こえに だして よんで みてね。`,`ポテから ${c}へ、おてがみです。よんでね。`,`${c}、おてがみを かいたの。こえに だして よんで くれる？`,`${c}へ、ポテの きもちを かいたよ。`])},
-  newLetter:()=>{const c=call();return pick([`${c}、ポテから おてがみが とどいてるよ。「おてがみ」を おして よんでみて。`,`あのね、${c}に おてがみを かいたの。「おてがみ」の ボタンを おしてね。`,`${c}、あたらしい おてがみが あるよ。よんで ほしいな。`])}
+    return pick([`${g}、${c} {先生|せんせい}。{今日|きょう}は {何|なに}を {教|おし}えて くれる？`,`${g}、${c}。ポテ、{今日|きょう}も がっこう がんばるよ。`,`${g}。ポテ、${c}が くるのを まってたんだ。`,`${g}、${c} {先生|せんせい}。ポテ、はなまる いっぱい ほしいな。`,
+     `${g}。きょうの {先生|せんせい}も ${c}だね。うれしいな。`,`${g}、${c}。ポテの あたま、{今日|きょう}も げんきだよ。`,`${g}。ポテ、ノートと えんぴつ、じゅんび できてるよ。`,`${g}、${c} {先生|せんせい}。じゅぎょう、はじめよう。`,
+     `${g}。${c}に あえて、ポテ うれしいよ。`,`${g}、${c}。きのうの こと、ポテ おぼえてるかな。`,`${g}。ポテ、ずっと まってたよ。`,`${g}、${c}。ポテの おめめ、ぱっちり あいてるよ。`,
+     `${g}。きょうは なにを おそわれるかな。`,`${g}、${c} {先生|せんせい}。ポテ、せすじを ぴんと したよ。`,`${g}。ポテ、きょうは はりきってるの。`,`${g}、${c}。ポテの しっぽが ぴくぴく してる。うれしい しるし。`,
+     `${g}。${c}の かおを みると、ポテ げんきに なる。`,`${g}、${c}。きょうも よろしく おねがい します。`,`${g}。ポテ、まえより かしこく なった きが するよ。`,`${g}、${c} {先生|せんせい}。ポテ、いい こに して まってたよ。`,
+     `${g}。おそと、どんな てんきかな。`,`${g}、${c}。ポテ、きのう ゆめの なかでも べんきょう したよ。`,`${g}。きょうは どの きょうかに する？`,`${g}、${c}。ポテの あたまの なか、からっぽに して きたよ。いっぱい いれてね。`,
+     `${g}。${c}が いると、こくばんも うれしそう。`,`${g}、${c} {先生|せんせい}。ポテ、ちゃんと すわってるよ。`,`${g}。ポテ、はやく はじめたくて うずうず。`,`${g}、${c}。ポテの チューチュー、きこえた？`,
+     `${g}。${c}、きょうも いっしょに がんばろうね。`,`${g}、${c} {先生|せんせい}。ポテは じゅんび ばんたん。`])},
+  wish:n=>{const c=call();return pick([`${c} {先生|せんせい}、{今日|きょう}は「${n}」を {教|おし}えて ほしいな。ほかのでも いいよ。`,`ねえ ${c}、「${n}」が きに なってるの。きょうは それに しない？`,`${c}。ポテ、「${n}」を もっと できるように なりたいな。`,
+     `きょうの おねがいは「${n}」。でも ${c}が えらんで いいよ。`,`「${n}」、ポテ また やって みたい。${c}、いい？`,`${c} {先生|せんせい}。「${n}」の れんしゅう、つきあって くれる？`,`ポテ、ゆうべ「${n}」の ゆめを みたよ。きょうは それが いいな。`,
+     `${c}。「${n}」、まだ ちょっと じしんが ないの。`,`きょうは「${n}」に しよっか。${c}が きめてね。`,`${c} {先生|せんせい}、「${n}」を おねがい します。`,`「${n}」の ことが あたまから はなれないの。きょう やろう。`,`${c}、「${n}」で ポテを びっくり させて。`,
+     `ポテの きぼうは「${n}」。ちがうのでも うれしいよ。`,`「${n}」、もういちど やったら もっと できそうな きが する。`,`${c} {先生|せんせい}、「${n}」を いっしょに たしかめたい。`,`きょうは「${n}」の ひに したいな。`,`「${n}」、ポテ すきに なってきたの。`,
+     `${c}、「${n}」を ポテに おしえて くれる？`,`ポテ、「${n}」で はなまる とりたい。`,`「${n}」の じゅぎょう、ポテ たのしみに してたの。`,`${c} {先生|せんせい}。「${n}」、いま やりたい きぶん。`,`きょうの ポテの おねがい、「${n}」。`,
+     `「${n}」、まえに やって たのしかったから、また やりたい。`,`${c}。「${n}」を いっぱい やって、ポテを かしこく して。`,`「${n}」に ちょうせん したい きもち、いっぱい。`,`${c} {先生|せんせい}、「${n}」を えらんで くれたら うれしいな。`,
+     `ポテ、「${n}」を おもいだしたいの。`,`「${n}」、${c}と やるのが いちばん たのしい。`,`${c}。きょうの いちもんめは「${n}」が いいな。`,`「${n}」、ポテ ちょっと わすれかけてる。てつだって。`])},
+  sleepy:()=>pick([`ポテ、{今日|きょう}は いっぱい {勉強|べんきょう} して ねむく なっちゃった。また {明日|あした} あそぼうね。`,`ふわぁ。ポテ、もう おめめが とじちゃう。つづきは {明日|あした}ね。`,`{今日|きょう}は ここまで。ポテ、おふとんに はいるね。おやすみ。`,`ポテ、あたまが いっぱいに なっちゃった。{明日|あした}、また {教|おし}えてね。`,
+     `くぅ。ポテ、いっぱい べんきょう したから ねむいの。おやすみなさい。`,`ポテの あたま、きょうは まんぷく。あしたも きてね。`,`むにゃむにゃ。あしたの じゅぎょうも たのしみ。`,`ポテ、ゆめの なかで ふくしゅう するね。おやすみ。`,`きょうも ありがとう。ポテ、そろそろ おやすみの じかん。`,`ポテの おめめ、とろんと してきた。また あした。`]),
+  pat:()=>{const c=call();return pick(["チュー。","チュッチュ。",`えへへ、くすぐったい。`,`${c}、だいすき。`,"にんじん たべたいな。","ポテ、べんきょう たのしいよ。",`${c}の {手|て}、あったかいね。`,"チュ？ なあに？","ポテの おなか、ふわふわでしょ。",`${c}、きょうも いっしょに あそぼう。`,
+     "チューチュー。",`ポテね、${c}の こえが すきなの。`,"なでなで、うれしいな。","ポテの みみ、ぴくって うごいた？","えへへ。もっと なでて。",`${c}、なにか おはなし しよう。`,"ポテ、いま とっても しあわせ。","チュー、チュー。ポテの うた だよ。",`${c}が わらうと、ポテも わらっちゃう。`,"ポテの せなか、ふわふわ してるでしょ。",
+     "ねえ、ポテの おはなし きいて。","チュッ。ポテの あいさつ。",`${c}、きょうは なにして あそんだの？`,"ポテ、ちょっと ねむく なってきた。","えへへ、こそばゆい。",`${c}の となりが いちばん あんしん する。`,"ポテの ほっぺ、ぷにぷに。","チュー。おなか なってない？","ポテ、なでられるの だいすき。",`${c}、また あそぼうね。`])},
+  memo:()=>{const c=call();return pick([`${c} {先生|せんせい}、さきに こたえメモを つくってね。`,`ポテに {見|み}えないように、こたえを メモ してね。`,`{先生|せんせい}の こたえメモ、おねがい します。`,`まずは ${c}の こたえを メモ。ポテは {見|み}ないよ。`,`${c}、メモが できたら ポテの ばんね。`,
+     `ポテ、まってるね。${c}の メモ、できたかな。`,`さいしょは {先生|せんせい}の メモから。ポテは めを つぶってるよ。`,`${c} {先生|せんせい}、こたえメモを こっそり つくってね。`,`メモが できたら、ポテが かくね。`,`${c}の メモ、たのしみ。ポテは あとで かくよ。`,
+     `ポテ、うしろ むいてる。メモ かいてね。`,`${c}、こたえを メモに かいたら おしえて。`,`{先生|せんせい}の メモ、ひみつだよ。ポテは みない。`,`${c} {先生|せんせい}、じっくり かんがえて メモ してね。`,`ポテの ばんは、${c}の メモの あとだよ。`,`メモは {先生|せんせい}の たからもの。ポテは のぞかない。`,
+     `${c}、まずは じぶんの こたえを きめてね。`,`メモ できたら、ポテが がんばって かくよ。`,`${c} {先生|せんせい}。ポテ、めを つぶって かぞえてるね。`,`ポテ、いい こで まってる。メモ おねがい。`,`${c}の こたえメモ、できたら あいずしてね。`,`{先生|せんせい}が さきに こたえを きめるの。ポテは そのあと。`,
+     `${c}、メモを かくとき、ポテは そっぽ むいてるからね。`,`こたえメモ、おねがい。ポテ どきどき してる。`,`${c} {先生|せんせい}、メモが ポテの ヒントに ならないように ひみつね。`,`ポテ、メモが できるまで しっぽを ふって まってる。`,`${c}、ゆっくりで いいよ。メモ してね。`,`{先生|せんせい}の メモ、まだかな。ポテ わくわく。`,
+     `${c}。メモが できたら、ポテの ばん。`,`まずは ${c}の こたえ。それから ポテ。`])},
+  go:()=>pick(["よーし、ポテも かくね。","{今度|こんど}は ポテの ばん。","うーんと、わかった。かくね。","ポテ、がんばって かいて みる。","えんぴつ もったよ。かくね。","ポテの あたまで かんがえるね。","できるかな。やって みるね。","ちょっと まってね。いま かくよ。","ポテも こたえて みるね。","うーん、これは、こうかな。",
+     "ポテの ばんだ。どきどき。","こくばんに かくね。みててね。","ポテ、いっしょうけんめい かんがえる。","チョークを もったよ。","えっと、えっと。かくね。","ポテの こたえ、いくよ。","むずかしいけど、やって みる。","ポテ、あたまを ぐるぐる させてる。","ふむふむ。ポテは こう おもう。","ポテも かいてみるね。まちがえても わらわないでね。",
+     "いまから かくよ。じゃーん、の じゅんび。","ポテ、まえに ならった ことを おもいだしてる。","こたえ、きめた。かくね。","ポテの てが、うずうず してる。","ポテ、まじめな かおに なってる。","かきかき。ちょっと まってね。","ポテ、ぜんりょくで かんがえる。","えいっ。ポテの こたえ。","ポテの あたまの なかから、こたえを とりだすね。","ポテ、いま こくばんに むかってるよ。"]),
+  done:a=>{const c=call();return pick([`できた。「${a}」だと {思|おも}う。どうかな？`,`ポテの こたえは「${a}」。あってる？`,`「${a}」って かいたよ。{先生|せんせい}、みて。`,`じゃーん。「${a}」。どう？`,`ポテは「${a}」に したよ。${c}、あってるかな？`,
+     `「${a}」。これで いいと {思|おも}うんだけど。`,`かけたよ。「${a}」。まるを つけて。`,`うーん、「${a}」かな。${c}、みて。`,`ポテ、「${a}」って かいて みた。どうかな？`,`できたー。「${a}」。${c} {先生|せんせい}、おねがい します。`,
+     `「${a}」。ポテ、じしん あるよ。`,`ポテの こたえ、「${a}」。どきどき。`,`「${a}」に なったよ。あってるか みて。`,`${c}、「${a}」で いい？`,`ポテは「${a}」だと おもうな。`,`「${a}」。はなまる くれる？`,`できた。「${a}」。${c}の メモと おなじかな。`,
+     `「${a}」って かいたけど、ちょっと ふあん。`,`ポテ、「${a}」に きめた。`,`「${a}」。これが ポテの こたえ。`,`${c} {先生|せんせい}、「${a}」を みてください。`,`「${a}」。あってたら うれしいな。`,`ポテ、がんばって「${a}」って かいたよ。`,
+     `こたえは「${a}」。まるか ばつか、おしえて。`,`「${a}」。ポテの ぜんりょく。`,`「${a}」だよね？ ${c}、どう？`,`ポテの こたえは「${a}」に なったよ。`,`かけた。「${a}」。${c}、チェック して。`,`「${a}」で どうだ。`,`「${a}」。ポテ、これで あってると いいな。`])},
+  hana:()=>pick(["やったー。はなまる もらった。","わーい。はなまるだ。","えへへ、あってた。うれしい。","はなまる、ポテの たからものに するね。","ポテ、できたよ。はなまる うれしい。","チューチュー。はなまるだ。","やった。ポテ、ちゃんと できてた。","はなまる。ポテ、おどりたく なっちゃう。","うれしいな。もっと はなまる ほしい。","はなまる、おおきくて きれいだね。",
+     "ポテ、あってた。しっぽが ぴょんぴょん。","はなまる もらえて、ポテ ほっとした。","えへへ。ポテ、かしこいでしょ。","はなまるの あか、だいすき。","やったね。ポテ、じぶんを ほめてあげる。","はなまる、これで なんこめかな。","ポテ、いま とっても ほこらしい。","あってた。ポテの あたま、ちゃんと はたらいてる。","はなまる、ノートに はっとくね。","チュー。よろこびの チュー。",
+     "ポテ、できた。むっちゃんに みせたかったんだ。","はなまる もらうと、げんきが わいてくる。","えへへ。ポテ、てれちゃう。","やった。きょうも はなまる。","ポテ、あってて よかった。どきどき してたの。","はなまる、ポテの むねに つけておくね。","ポテ、うれしくて チューチュー とまらない。","あってた。ポテ、がんばった かいが あったよ。","はなまる。ポテ、ちょっと じしんが ついた。","やったー。ポテ、はなまる コレクション。"]),
+  praise:()=>{const c=call();return pick(["ていねいに たしかめて くれて ありがとう。",`メモを つくってから みる、さすが ${c} {先生|せんせい}。`,"よく {見|み}て くれたね。","さいごまで かんがえて くれたね。",`${c}が ちゃんと たしかめて くれるから、ポテ あんしん。`,"じっくり みて くれて ありがとう。",
+     `${c} {先生|せんせい}は、まるを つけるのが じょうずだね。`,"たしかめるの、だいじだよね。",`${c}が {見|み}てくれると、ポテ うれしい。`,"ポテの こたえ、ちゃんと よんで くれたんだね。",`${c} {先生|せんせい}、いつも ありがとう。`,"メモと くらべて くれたね。えらい。",
+     `${c}の おかげで、ポテ まちがえずに すんだ。`,"ゆっくり たしかめて くれて、ポテ うれしい。",`${c}は ほんとうの {先生|せんせい}みたい。`,"ポテの こたえを だいじに みて くれて ありがとう。",`${c}が まるを くれると、ポテ とんじゃう。`,"あきらめずに さいごまで みて くれたね。",
+     `${c} {先生|せんせい}の チェック、しんらい してるよ。`,"ちゃんと かくにん するの、かっこいい。",`${c}の めは、ごまかせないね。`,"ていねいな {先生|せんせい}で、ポテ しあわせ。",`${c}、メモを かくの じょうずに なったね。`,"まちがいが ないか みて くれる、やさしい {先生|せんせい}。",
+     `${c}が がんばるから、ポテも がんばれる。`,"じぶんで こたえを だしてから みるの、すごいよ。",`${c} {先生|せんせい}、ありがとう。ポテ、うれしい。`,"よく きづいたね。",`${c}の おかげで、ポテ どんどん かしこく なる。`,"たしかめる ちからが ついてきたね。"])},
+  eh:()=>{const c=call();return pick([`えっ、ちがうの？ {教|おし}えて、${c} {先生|せんせい}。`,"あれれ？ どこが ちがうのかな。{教|おし}えて。","ポテ、まちがえちゃった？ {教|おし}えて ほしいな。",`そうなの？ ${c}、ただしいのを {教|おし}えて。`,"えー、ちがうんだ。どうしてか しりたいな。","むむ。ポテ、なにか まちがえたみたい。",
+     "ほんと？ ポテ、ちゃんと しりたい。",`${c} {先生|せんせい}、ポテに ヒントを ちょうだい。`,"ちがうのか。ポテ、もういちど かんがえるね。",`${c}、ポテが わかるように {教|おし}えて。`,"あら。ポテ、どこで つまずいたのかな。",`${c}、ポテの まちがい、なおして。`,
+     "うーん。ポテ、なにを わすれたんだろう。",`まちがえちゃった。${c} {先生|せんせい}、たすけて。`,"えっ。ポテ、はずかしい。でも しりたい。",`${c}、ポテに ただしい こたえを みせて。`,"ちがった。ポテ、もっと べんきょう する。",`ポテ、どこが へんだったのか、${c}に きいてみる。`,
+     "むむむ。ポテの あたま、ちょっと こんがらがった。",`${c} {先生|せんせい}、ゆっくり {教|おし}えて くれる？`,"ばつ、かあ。でも ポテ、へこまない。おしえて。",`${c}、ポテの まちがいを いっしょに なおそう。`,"えー。ポテ、じしん あったのに。どこが ちがうの？",`ポテ、まちがえた。${c}の でばんだね。`,
+     "ちがうんだ。ポテ、しっかり きくね。",`${c} {先生|せんせい}、ポテが なっとく できるように {教|おし}えて。`,"あれ？ ポテ、なんか かんちがい してたかも。",`${c}、こたえを おしえて。ポテ、おぼえるから。`,"ばつ。ポテ、なおして もう いちど かくね。",`ポテ、まちがえちゃった。${c}、よろしく。`])},
+  got:a=>{const c=call();return pick([`そっか。「${a}」だね。ポテ、わかった。`,`なるほど。「${a}」か。もう まちがえないよ。`,`「${a}」。{教|おし}えて くれて ありがとう。`,`「${a}」だったんだ。ポテ、おぼえたよ。`,`わかった。「${a}」だね。${c}、ありがとう。`,
+     `ふむふむ、「${a}」。ポテ、かしこく なった。`,`「${a}」か。ポテ、つぎは だいじょうぶ。`,`ありがとう、${c}。「${a}」って おぼえるね。`,`「${a}」。ポテの あたまに しまって おくね。`,`そういう ことか。「${a}」だね。`,
+     `「${a}」。なるほど、すっきり した。`,`${c}の せつめい、わかりやすい。「${a}」だね。`,`「${a}」。ポテ、もう だいじょうぶ。`,`「${a}」か。ポテの まちがい、なおったよ。`,`ありがとう。「${a}」って、ポテ ノートに かいたよ。`,
+     `「${a}」だね。${c}、{先生|せんせい} みたい。`,`「${a}」。ポテ、なっとく。`,`そっかそっか。「${a}」ね。おぼえた。`,`「${a}」。${c}が いてくれて よかった。`,`「${a}」か。ポテ、ひとつ かしこく なった。`,
+     `「${a}」だ。ポテの あたまが すっきり した。`,`${c}、ありがとう。「${a}」、もう わすれない。`,`「${a}」。つぎに でたら、ポテ ぜったい あてる。`,`ふーん、「${a}」なんだ。おもしろい。`,`「${a}」。${c}の おかげだよ。`,
+     `「${a}」って いうのか。ポテ、はじめて しった。`,`「${a}」。ポテ、これで ひとつ できるように なった。`,`なるほどね。「${a}」。${c}、すごい。`,`「${a}」。ポテ、おぼえたよ。ありがとう。`,`「${a}」だね。ポテ、うれしい。おそわるって たのしい。`])},
+  same:a=>pick([`あれ？ むっちゃんの メモも「${a}」だよ。ポテと おなじだね。`,`ん？ メモを みてみて。むっちゃんも「${a}」って かいてるよ。`,`むっちゃんの メモと ポテの こたえ、どっちも「${a}」だよ。`,`あれれ。メモは「${a}」で、ポテも「${a}」。いっしょだよ。`,`ばつ？ でも むっちゃんの メモも「${a}」だよ。おなじだね。`,`むっちゃん、メモを もういちど みて。「${a}」だよ。ポテと いっしょ。`]),
+  really:a=>pick([`ほんと？ でも むっちゃんの メモは「${a}」だよ。いっしょに たしかめよう。`,`まるを もらえて うれしいけど、メモは「${a}」って かいてあるよ。みてみよう。`,`あれ？ むっちゃんの メモは「${a}」。どっちが ただしいか、いっしょに みよう。`,`まる、ありがとう。でも メモは「${a}」だよね。たしかめて みよう。`,`ん？ むっちゃんの メモ「${a}」と ポテの こたえ、ちがうよ。いっしょに みよう。`]),
+  check:()=>pick(["あれ？ メモと ちがうね。いっしょに たしかめて みよう。","うーん、どっちかな。いっしょに たしかめよう。","ポテと むっちゃんの こたえが ちがうよ。みて みよう。","どっちが あってるかな。ふたりで かくにんね。","メモと ちがうね。こくばんを みて みよう。","ちがってる。どっちが ただしいか、しらべよう。","ふたりの こたえが ちがうね。おもしろい。たしかめよう。","むっちゃんの メモと ポテ、ちがう。いっしょに かんがえよう。","どっちだろう。せつめいを みて みよう。","ちがうね。まちがえても だいじょうぶ。いっしょに みよう。"]),
+  poteRight:()=>pick(["{今回|こんかい}は ポテが あってた みたい。たしかめるって だいじだね。","こんどは ポテが あってたよ。むっちゃんも もう だいじょうぶだね。","ポテの こたえで あってたね。いっしょに みて よかった。","ポテが あってたけど、むっちゃんも つぎは できるよ。","たまには ポテも あたるんだよ。えへへ。","ポテの ほうが あってた。でも いっしょに たしかめたから、ふたりとも おぼえたね。","ポテ、あってた。むっちゃん、つぎは いっしょに あてようね。","こんかいは ポテの かち。でも むっちゃんも すぐ おいつくよ。"]),
+  bothWrong:()=>pick(["ふたりとも ちがってた。あはは。これで もう おぼえたね。","おそろいで まちがえちゃった。でも、もう わかったね。","ふたりとも はずれ。つぎは ふたりとも あたりだね。","あらら、ふたりとも。でも いっしょに なおしたから だいじょうぶ。","ふたりとも まちがい。なかよしだね。つぎは あてよう。","ふたりで まちがえて、ふたりで おぼえた。いいね。","おなじ まちがい。でも いま、ふたりとも わかった。","まちがえた ふたり。でも もう わすれないよ。"]),
+  again:()=>pick(["さっきの もんだい、もういちど やって みよう。","もういっかい、さっきの やつ。こんどは できるかな。","さっきの もんだいが また きたよ。","おなじ もんだい。こんどは ばっちりだね。","もう いちど、さっきの。ポテも おぼえてるよ。","さっきの、もう いっかい。だいじょうぶ。"]),
+  review:()=>pick(["そうだ。まえに {教|おし}えて もらった こと、ポテ おぼえてるか みてて。","まえの もんだい、ポテ まだ おぼえてるかな。ためして みるね。","ちょっと むかしの もんだいだよ。ポテ、できるかな。","ふくしゅうの じかん。ポテ、おぼえてるか みてて。","まえに ならったの、でて きたよ。","おさらい。ポテ、わすれてないかな。"]),
+  levelUp:n=>{const c=call();return pick([`${c} {先生|せんせい}の おかげで、ポテ できるように なったよ。{次|つぎ}は「${n}」に ちょうせん したい。`,`やったー。ポテ、つぎの だんかいに すすんだよ。こんどは「${n}」だね。`,`${c}、みてみて。ポテ、「${n}」が できる くらい かしこく なったよ。`,`ポテ、レベルアップ。つぎは「${n}」。${c}、ついてきてね。`,`すごい。ポテ、つぎの「${n}」に いけるんだって。${c}の おかげ。`])},
+  letterWait:()=>{const c=call();return pick([`${c}、おてがみ かいたよ。こえに だして よんで みてね。`,`ポテから ${c}へ、おてがみです。よんでね。`,`${c}、おてがみを かいたの。こえに だして よんで くれる？`,`${c}へ、ポテの きもちを かいたよ。`,`おてがみ、できたよ。${c}に とどけ。`,`${c}、ポテの おてがみ、よんで くれる？`,`ポテ、${c}に てがみを かいたの。てれる。`,`${c}へ。きょうの おてがみ、よんでね。`])},
+  newLetter:()=>{const c=call();return pick([`${c}、ポテから おてがみが とどいてるよ。「おてがみ」を おして よんでみて。`,`あのね、${c}に おてがみを かいたの。「おてがみ」の ボタンを おしてね。`,`${c}、あたらしい おてがみが あるよ。よんで ほしいな。`,`${c}。ポテから おてがみ。「おてがみ」を おして みて。`])}
 };
-/* おてがみの ぶんしょう(それぞれ 10とおり) */
+/* おてがみの ぶんしょう(それぞれ 30とおり) */
 const LT={
-  head:c=>pick([`${c}へ`,`だいすきな ${c}へ`,`${c} {先生|せんせい}へ`,`${c}へ、ポテより`,`${c}へ。ポテです。`,`こんにちは、${c}。`,`${c}、おてがみ かくね。`,`${c} {先生|せんせい}へ、ポテから`,`やあ、${c}。`,`${c}へ、きょうの おてがみです。`]),
+  head:c=>pick([`${c}へ`,`だいすきな ${c}へ`,`${c} {先生|せんせい}へ`,`${c}へ、ポテより`,`${c}へ。ポテです。`,`こんにちは、${c}。`,`${c}、おてがみ かくね。`,`${c} {先生|せんせい}へ、ポテから`,`やあ、${c}。`,`${c}へ、きょうの おてがみです。`,
+    `${c}へ、ポテの きもち。`,`${c}。きょうも ありがとう。`,`せかいで いちばん すきな ${c}へ`,`${c}へ。ポテ、てがみ かいたよ。`,`${c} {先生|せんせい}。ポテです。`,`${c}へ。よんで くれて ありがとう。`,`ポテから ${c}へ`,`${c}。ちょっと きいて。`,`${c}へ、こっそり おてがみ。`,`${c}へ。きょうの ことを かくね。`,
+    `${c}、こんばんは。ポテだよ。`,`${c}へ。ポテの ほんきの てがみ。`,`${c} {先生|せんせい}へ。ポテより。`,`${c}へ。きょうも たのしかった。`,`いつも やさしい ${c}へ`,`${c}。おてがみ、とどいたかな。`,`${c}へ、ポテから ちいさな てがみ。`,`${c}。ポテだよ。げんき？`,`${c}へ。かんしゃを こめて。`,`${c} {先生|せんせい}へ。きょうの ほうこく。`]),
   thanks:(c,nm)=>pick([`{今日|きょう}は「${nm}」を {教|おし}えて くれて ありがとう。`,`「${nm}」の じゅぎょう、たのしかったよ。`,`きょうの「${nm}」、ポテ がんばったでしょ。`,`${c}の「${nm}」の じゅぎょう、わかりやすかった。`,`「${nm}」、きょうも いっしょに できて うれしかった。`,
-    `きょうは「${nm}」だったね。ポテ、あたまを いっぱい つかったよ。`,`「${nm}」を ${c}と やると、ポテ どんどん できるように なる。`,`きょうの「${nm}」、ポテの あたまに のこってるよ。`,`「${nm}」の じゅぎょう、ありがとう。`,`${c}と「${nm}」を べんきょう できて、ポテは しあわせ。`]),
+    `きょうは「${nm}」だったね。ポテ、あたまを いっぱい つかったよ。`,`「${nm}」を ${c}と やると、ポテ どんどん できるように なる。`,`きょうの「${nm}」、ポテの あたまに のこってるよ。`,`「${nm}」の じゅぎょう、ありがとう。`,`${c}と「${nm}」を べんきょう できて、ポテは しあわせ。`,
+    `「${nm}」、ちょっと むずかしかったけど、たのしかった。`,`きょうは「${nm}」。${c}の せつめいが じょうずで、すぐ わかった。`,`「${nm}」を もっと やりたく なったよ。`,`${c}、「${nm}」を {教|おし}えて くれて ありがとう。ポテ、かしこく なった。`,`「${nm}」の ことを、ポテ ノートに かいたよ。`,
+    `きょうの「${nm}」、あしたも おぼえてるように するね。`,`「${nm}」、${c}の おかげで すきに なった。`,`「${nm}」で はなまるを もらえたの、うれしかった。`,`きょうは「${nm}」の ひだったね。`,`「${nm}」を おそわって、ポテの せかいが ひろがった。`,
+    `${c}が「${nm}」を えらんで くれて うれしかった。`,`「${nm}」、ポテ まえより できるように なったよ。`,`きょうの「${nm}」、ぜんぶ おぼえたい。`,`「${nm}」の じゅぎょうの あいだ、ポテ ずっと わくわく してた。`,`${c}の「${nm}」、また やりたい。`,
+    `「${nm}」、こくばんに かくの たのしかった。`,`きょうの「${nm}」の こと、ポテ ゆめに みそう。`,`「${nm}」を ${c}に {教|おし}えて もらえて、ポテは うんが いい。`,`「${nm}」、ありがとう。ポテの あたま、いっぱい うごいたよ。`,`きょうも「${nm}」、ありがとう。${c}は さいこうの {先生|せんせい}。`]),
   fixed:(c,q)=>pick([`ポテ、「${q}」を まちがえちゃった けど、${c}が {教|おし}えて くれたから、もう だいじょうぶ。`,`「${q}」、ポテ まちがえたね。でも ${c}が なおして くれた。`,`「${q}」で ポテが こまってたら、${c}が たすけて くれたね。`,`「${q}」、つぎは ぜったい あてるよ。`,
-    `${c}が「${q}」を {教|おし}えて くれて、ポテ わかったよ。`,`「${q}」は もう おぼえた。${c}の おかげ。`,`「${q}」を まちがえた ポテに、${c}は やさしかったね。`,`「${q}」、あしたも ポテに きいてみて。こたえられるよ。`,`「${q}」の こと、ポテ ノートに かいて おいたよ。`,`「${q}」、${c}が いなかったら わからなかった。ありがとう。`]),
+    `${c}が「${q}」を {教|おし}えて くれて、ポテ わかったよ。`,`「${q}」は もう おぼえた。${c}の おかげ。`,`「${q}」を まちがえた ポテに、${c}は やさしかったね。`,`「${q}」、あしたも ポテに きいてみて。こたえられるよ。`,`「${q}」の こと、ポテ ノートに かいて おいたよ。`,`「${q}」、${c}が いなかったら わからなかった。ありがとう。`,
+    `「${q}」で ばつを もらったけど、なおして もらって うれしかった。`,`「${q}」、ポテの まちがい。${c}が みつけて くれたね。`,`「${q}」、もう ポテの とくいに なりそう。`,`「${q}」を まちがえて、ちょっと はずかしかった。でも ${c}が いたから へいき。`,`「${q}」、なおして くれた ${c}に、ポテから はなまる。`,
+    `「${q}」、つぎ でたら ポテ いちばんに こたえる。`,`「${q}」を おそわって、ポテ ひとつ かしこく なった。`,`「${q}」、まちがえた ことも いい おもいで。`,`${c}が「${q}」を ていねいに {教|おし}えて くれたのを、ポテ わすれない。`,`「${q}」、ポテ また かんがえてみたよ。もう わかる。`,
+    `「${q}」の まちがい、${c}が やさしく なおして くれたね。`,`「${q}」、あしたは ポテが ${c}に せつめい できるかも。`,`「${q}」で つまずいたけど、たちなおったよ。`,`「${q}」、ポテの にがてが とくいに かわった。`,`「${q}」、${c}の せつめいで すっきり した。`,
+    `「${q}」を まちがえた ポテを、${c}は わらわなかった。ありがとう。`,`「${q}」、ポテの あたまに しっかり はいったよ。`,`「${q}」、なおして もらったから、ポテ あんしん して ねむれる。`,`「${q}」、もう まちがえないよ。やくそく。`,`「${q}」、${c}が いてくれて ほんとうに よかった。`]),
   perfect:c=>pick([`{今日|きょう}は はなまるを たくさん もらえて うれしかったよ。`,`きょうの ポテ、ぜんぶ できちゃった。すごいでしょ。`,`はなまるが いっぱいで、ポテ おどりたく なった。`,`${c}が まるを つけて くれる たびに、ポテ うれしくなるの。`,`きょうは まちがえなかったよ。${c}、みてた？`,
-    `はなまる、だいじに とっておくね。`,`ポテ、きょうは じしんが ついたよ。`,`まるが いっぱい。${c}の おかげだよ。`,`きょうは ポテ、ちょうしが よかったの。`,`はなまるの おと、ポテ だいすき。`]),
+    `はなまる、だいじに とっておくね。`,`ポテ、きょうは じしんが ついたよ。`,`まるが いっぱい。${c}の おかげだよ。`,`きょうは ポテ、ちょうしが よかったの。`,`はなまるの おと、ポテ だいすき。`,
+    `きょうの ポテ、ぜんぶ せいかい。じぶんでも びっくり。`,`はなまるを かぞえたら、りょうてで たりなかったよ。`,`${c}が「あってる」って いって くれるの、さいこう。`,`きょうは まちがえなしの ひ。ポテの きねんび。`,`はなまるが おおくて、こくばんが はなばたけに なった。`,
+    `ポテ、きょうは ちょうしに のって いいよね。`,`ぜんぶ できて、ポテ ほっぺが あつい。`,`${c}の おかげで、ポテ かんぺきだった。`,`はなまる、いっぱい。ポテ、じぶんに はくしゅ。`,`きょうは ばつが ひとつも なかったよ。`,
+    `ポテ、きょうは かしこい ポテだった。`,`はなまるの あかいろで、ポテの こころが ぽかぽか。`,`ぜんぶ せいかいって、こんなに うれしいんだね。`,`${c}、きょうの ポテ、みなおした？`,`はなまるを いっぱい もらって、ポテ ねむれないかも。`,
+    `きょうは ポテの ひ。ぜんぶ あってた。`,`はなまる、しっぽに つけて あるきたい きぶん。`,`まちがえなかったよ。${c}に じまん したかったの。`,`ポテ、きょうは とくべつに かしこかった。`,`ぜんぶ まる。${c}、ポテを ほめて。`]),
   both:(c,q)=>pick([`いっしょに たしかめた「${q}」、{明日|あした}も おぼえて いるかな。`,`「${q}」は ふたりで たしかめたね。あしたも きいてみるよ。`,`「${q}」、${c}と いっしょに わかったね。`,`「${q}」、ふたりで まちがえて、ふたりで なおしたね。`,`「${q}」の こと、${c}も おぼえていてね。`,
-    `「${q}」は、いっしょに たしかめた たいせつな もんだい。`,`「${q}」、あしたは ふたりとも あたるよ、きっと。`,`「${q}」を ふたりで かんがえたの、たのしかった。`,`「${q}」、${c}は もう だいじょうぶ？`,`「${q}」、ポテは もう おぼえたよ。${c}は？`]),
+    `「${q}」は、いっしょに たしかめた たいせつな もんだい。`,`「${q}」、あしたは ふたりとも あたるよ、きっと。`,`「${q}」を ふたりで かんがえたの、たのしかった。`,`「${q}」、${c}は もう だいじょうぶ？`,`「${q}」、ポテは もう おぼえたよ。${c}は？`,
+    `「${q}」、ふたりで こくばんを みたの、わすれないよ。`,`「${q}」は なかよし もんだい。ふたりで なおしたから。`,`「${q}」、あした ${c}に きいてみるね。`,`「${q}」、いっしょに かんがえると わかるって しったよ。`,`「${q}」、ふたりとも できるように なったね。`,
+    `「${q}」の ときの ${c}の かお、まじめで かっこよかった。`,`「${q}」、ポテだけじゃ むりだった。${c}が いて よかった。`,`「${q}」を たしかめた じかん、ポテ すきだった。`,`「${q}」、ふたりの おもいでの もんだい。`,`「${q}」、あしたも いっしょに おぼえていようね。`,
+    `「${q}」、ふたりで まちがえたから、ふたりで つよく なった。`,`「${q}」、${c}と ポテの ひみつの べんきょう。`,`「${q}」、たしかめて よかったね。`,`「${q}」、ポテ ${c}に せつめい できるくらい わかったよ。`,`「${q}」、ふたりで なおした こたえ、だいじに するね。`,
+    `「${q}」の ふくしゅう、あした いっしょに しよう。`,`「${q}」、まちがえたけど、たのしい まちがいだった。`,`「${q}」、ふたりで たしかめると こわくないね。`,`「${q}」、${c}も ポテも、もう ばっちり。`,`「${q}」、いっしょに かんがえて くれて ありがとう。`]),
   close:c=>pick([`${c}が {先生|せんせい}で、ポテは しあわせです。`,`${c}、いつも ありがとう。`,`ポテは ${c}が だいすきです。`,`${c} {先生|せんせい}、あしたも よろしくね。`,`${c}と いっしょだと、べんきょうが たのしいよ。`,
-    `ポテ、${c}の ことを かんがえながら ねるね。`,`${c}、ゆっくり やすんでね。`,`${c}が いてくれて、ポテは うれしい。`,`きょうも たのしい いちにちを ありがとう。`,`${c}、おやすみなさい。また あしたね。`]),
+    `ポテ、${c}の ことを かんがえながら ねるね。`,`${c}、ゆっくり やすんでね。`,`${c}が いてくれて、ポテは うれしい。`,`きょうも たのしい いちにちを ありがとう。`,`${c}、おやすみなさい。また あしたね。`,
+    `${c}、あしたも ポテに あいに きてね。`,`${c}の {先生|せんせい}ぶり、ポテ ほこらしい。`,`ポテの こころは、${c}で いっぱい。`,`${c}、きょうも ポテを かしこく して くれて ありがとう。`,`${c}が わらうと、ポテも わらう。`,
+    `${c}、ポテは いつでも ここに いるよ。`,`${c}と べんきょう する まいにちが、ポテの たからもの。`,`${c}、ぎゅって したい きぶん。`,`${c}が {先生|せんせい}で よかった。ほんとうに。`,`${c}、あした あえるのを たのしみに してるね。`,
+    `ポテは ${c}を おうえん してるよ。`,`${c}、ポテの だいじな だいじな {先生|せんせい}。`,`${c}、きょうも すてきな いちにちを ありがとう。`,`${c}の やさしさ、ポテ ちゃんと わかってるよ。`,`${c}、ゆめの なかでも あそぼうね。`,
+    `${c}、ポテの チューは「だいすき」の いみだよ。`,`${c}が げんきだと、ポテも げんき。`,`${c}、あしたも いっしょに わらおうね。`,`${c}、ポテから おおきな ありがとう。`,`${c}。ポテは ずっと ${c}の せいと。`]),
   wish:(c,n)=>pick([`{明日|あした}は「${n}」を {教|おし}えて ほしいな。`,`あしたは「${n}」が いいな。`,`つぎは「${n}」に しよっか。`,`「${n}」、あした いっしょに やろうね。`,`あしたの おねがいは「${n}」です。`,
-    `「${n}」、ポテ また やりたいな。`,`あした、「${n}」を ${c}に {教|おし}えて もらうのが たのしみ。`,`「${n}」で あそぼうね、あした。`,`つぎの じゅぎょうは「${n}」が いいな。`,`${c} {先生|せんせい}、あしたは「${n}」を おねがい します。`])
+    `「${n}」、ポテ また やりたいな。`,`あした、「${n}」を ${c}に {教|おし}えて もらうのが たのしみ。`,`「${n}」で あそぼうね、あした。`,`つぎの じゅぎょうは「${n}」が いいな。`,`${c} {先生|せんせい}、あしたは「${n}」を おねがい します。`,
+    `あしたは「${n}」の ひに したい。`,`「${n}」、ポテ まちきれない。`,`${c}、あしたは「${n}」を いっしょに やろう。`,`「${n}」の ことを かんがえながら ねるね。`,`あした、「${n}」で はなまる とりたいな。`,
+    `「${n}」、ポテ きっと できるように なる。あした ためして。`,`つぎは「${n}」に ちょうせん。${c}、みててね。`,`「${n}」、あした ${c}と やるのが たのしみ。`,`あしたの「${n}」、ポテ よしゅう しとこうかな。`,`「${n}」、ポテの あしたの もくひょう。`,
+    `${c}、あしたも「${n}」で あそんでね。`,`「${n}」、あした いちばんに やりたい。`,`つぎは「${n}」。ポテ、わくわく してる。`,`「${n}」を ${c}から おそわる あした、たのしみ。`,`あした、「${n}」の じゅぎょうを まってるね。`,
+    `「${n}」、あしたは ポテ もっと できるかも。`,`${c} {先生|せんせい}、あしたの じゅぎょうは「${n}」で。`,`「${n}」で、あした ポテを びっくり させて。`,`あしたは「${n}」。ポテ、いま から どきどき。`,`「${n}」、あした いっしょに がんばろうね。`])
 };
 
 /* ---------- がめん きりかえ ---------- */
@@ -850,6 +1080,8 @@ function buildSession(skill){
   const cur=shuffle(sk.items.filter(it=>it.lv===lv));
   const fresh=cur.filter(it=>!S.items[it.key]||!S.items[it.key].seen);
   const out=[];const add=it=>{if(it&&out.length<5&&!out.includes(it))out.push(it)};
+  const wk=weakTags();const weakItems=shuffle(sk.items.filter(it=>it.lv<=lv&&wk.includes(tagOf(it))));
+  weakItems.slice(0,2).forEach(add);
   due.slice(0,3).forEach(add);fresh.forEach(add);cur.forEach(add);
   if(lv>0)shuffle(sk.items.filter(it=>it.lv<lv)).forEach(add);
   let list=shuffle(out);
@@ -859,19 +1091,20 @@ function buildSession(skill){
   const avg=list.reduce((s,it)=>s+((S.items[it.key]||{}).box||0),0)/Math.max(1,list.length);
   const nWrong=avg<1.5?3:2;
   const plan=shuffle(list.map((_,i)=>i<nWrong));
-  return {skill,lv,list,plan,bonus,i:0,total:list.length+(bonus?1:0),results:[],requeued:{},fixedLabels:[],bothLabels:[],leveled:null};
+  const handPlan=shuffle(list.map((_,i)=>i<2));
+  return {skill,lv,list,plan,handPlan,bonus,i:0,total:list.length+(bonus?1:0),results:[],requeued:{},fixedLabels:[],bothLabels:[],leveled:null};
 }
 function startLesson(skill){
   LES=buildSession(skill);show("lesson");
   $("#prog").innerHTML=Array.from({length:LES.total},()=>"<span>🥕</span>").join("");
   nextQ();
 }
-function renderBoard(it,slotHTML){
+function renderBoard(it,slotHTML,subOv){
   const q=it.q,slot=`<span class="slot" id="slot">${slotHTML||"&nbsp;"}</span>`;let h='';
   if(q.emoji)h+=`<div class="q-emoji">${q.emoji}</div>`;
   if(q.emojiHTML)h+=`<div class="q-emoji" style="font-size:30px;line-height:1.35">${q.emojiHTML}</div>`;
   if(q.html)h+=q.html;
-  if(q.sub)h+=`<div class="q-sub">${esc(q.sub)}</div>`;
+  if(subOv||q.sub)h+=`<div class="q-sub">${esc(subOv||q.sub)}</div>`;
   if(q.main)h+=`<div class="q-main">${esc(q.main)}${slot}</div>`;
   else if(q.fill)h+=`<div class="q-main sm">${esc(q.fill).replace("□",slot)}</div>`;
   else if(q.slotBelow)h+=`<div class="q-main${q.sm?" sm":""}">${slot}</div>`;
@@ -889,15 +1122,99 @@ async function nextQ(){
   const my=++TOKEN,les=LES;if(!les)return;
   if(les.i>=les.list.length+(les.bonus?1:0))return finishLesson();
   const isBonus=les.i>=les.list.length;const it=isBonus?les.bonus:les.list[les.i];
-  les.cur={it,isBonus,memo:null,pAns:null,t0:Date.now()};
+  les.cur={it,isBonus,memo:null,pAns:null,t0:Date.now(),tries:0};
+  if(it.type==="trace")return renderTrace(it);
   renderBoard(it);poteSet($("#lesPote"),"front","idle");
   if(isBonus){setBubble($("#lesBubble"),L.review());$("#ctrl").innerHTML="";await sleep(2600);if(my!==TOKEN)return}
   else if(les.requeued[it.key]===2){setBubble($("#lesBubble"),L.again());$("#ctrl").innerHTML="";await sleep(1800);if(my!==TOKEN)return}
   setBubble($("#lesBubble"),L.memo());
   renderMemoInput(it);
 }
-function renderMemoInput(it){
+/* ---- 手書きパッド(共通) ---- */
+function makePad(cv,W,H,color){
+  const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext("2d");x.scale(dpr,dpr);
+  x.lineCap="round";x.lineJoin="round";x.lineWidth=Math.max(9,Math.min(W,H)*.06);x.strokeStyle=color||"#4A2E14";
+  let drawing=false,pts=0;const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};
+  cv.onpointerdown=e=>{drawing=true;cv.setPointerCapture(e.pointerId);const [px,py]=pos(e);x.beginPath();x.moveTo(px,py);x.lineTo(px+.1,py);x.stroke();pts++;SFX.chalk()};
+  cv.onpointermove=e=>{if(!drawing)return;const [px,py]=pos(e);x.lineTo(px,py);x.stroke();pts++;if(pts%6===0)SFX.chalk()};
+  cv.onpointerup=cv.onpointercancel=()=>{drawing=false};
+  return {get pts(){return pts},clear(){x.clearRect(0,0,W,H);pts=0},url(){return cv.toDataURL("image/png")}};
+}
+function handEligible(it){
+  if(it.type==="num")return true;
+  if(it.type==="choice"&&!it.kj&&/^[ぁ-んァ-ヶー一-龥0-9]{1,3}$/.test(it.ans))return true;
+  if(it.kj&&/^[一-龥]$/.test(it.ans))return true;
+  return false;
+}
+/* ---- なぞって かく ---- */
+function renderTrace(it){
+  const board=$("#board"),ctrl=$("#ctrl");poteSet($("#lesPote"),"front","idle");
+  setBubble($("#lesBubble"),pick([`むっちゃん {先生|せんせい}、「${it.ans}」の おてほんを かいて みせて。`,`「${it.ans}」って どう かくの？ こくばんに なぞって おしえて。`,`ポテ、「${it.ans}」を おぼえたい。むっちゃん、かいて みせて。`,`「${it.ans}」の かきかた、まだ しらないの。おてほん おねがい。`]));
+  board.innerHTML=`<div class="tr"><canvas id="cvG"></canvas><canvas id="cvS"></canvas><div class="trTip">うすい じを ゆびで なぞってね</div></div><svg class="hana" id="hana" viewBox="-60 -60 120 120" aria-hidden="true"><path pathLength="1" d="${HANA_D}"/></svg>`;
+  ctrl.classList.add("slim");ctrl.classList.remove("num");
+  ctrl.innerHTML=`<div class="judge" style="gap:8px"><button class="big-btn" id="trClear" style="flex:1;min-height:56px">けす</button><button class="big-btn go" id="trDone" style="flex:2;min-height:56px">かけた</button></div>`;
+  const g=$("#cvG"),c=$("#cvS");const W=board.clientWidth-18,H=board.clientHeight-18;const dpr=Math.min(2,window.devicePixelRatio||1);
+  [g,c].forEach(cv=>{cv.width=W*dpr;cv.height=H*dpr;cv.getContext("2d").scale(dpr,dpr)});
+  const gx=g.getContext("2d");gx.fillStyle="rgba(247,243,232,.28)";gx.textAlign="center";gx.textBaseline="middle";gx.font=`600 ${Math.floor(Math.min(W,H)*.72)}px "Klee One","YuKyokasho","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif`;gx.fillText(it.ans,W/2,H/2+4);
+  const sx=c.getContext("2d");sx.lineCap="round";sx.lineJoin="round";sx.lineWidth=Math.max(12,Math.min(W,H)*.06);sx.strokeStyle="#FFE27A";
+  let drawing=false,pts=0;
+  const pos=e=>{const r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};
+  c.onpointerdown=e=>{drawing=true;c.setPointerCapture(e.pointerId);const [x,y]=pos(e);sx.beginPath();sx.moveTo(x,y);sx.lineTo(x+.1,y);sx.stroke();pts++;SFX.chalk()};
+  c.onpointermove=e=>{if(!drawing)return;const [x,y]=pos(e);sx.lineTo(x,y);sx.stroke();pts++;if(pts%6===0)SFX.chalk()};
+  c.onpointerup=c.onpointercancel=()=>{drawing=false};
+  $("#trClear").onclick=()=>{ac();SFX.tap();sx.clearRect(0,0,W,H);pts=0};
+  $("#trDone").onclick=()=>{ac();SFX.tap();traceJudge(it,g,c,W,H,dpr,pts)};
+}
+function traceScore(g,c,W,H,dpr){
+  const gd=g.getContext("2d").getImageData(0,0,g.width,g.height).data,sd=c.getContext("2d").getImageData(0,0,c.width,c.height).data;
+  const w=g.width,h=g.height,step=4,R=Math.round(8*dpr);let gN=0,hit=0,sN=0,stray=0;
+  const gAt=(x,y)=>x>=0&&y>=0&&x<w&&y<h&&gd[(y*w+x)*4+3]>40;
+  for(let y=0;y<h;y+=step)for(let x=0;x<w;x+=step){const gi=gAt(x,y),si=sd[(y*w+x)*4+3]>40;
+    if(gi){gN++;let ok=si;if(!ok){for(let dy=-R;dy<=R&&!ok;dy+=step)for(let dx=-R;dx<=R&&!ok;dx+=step){const xx=x+dx,yy=y+dy;if(xx>=0&&yy>=0&&xx<w&&yy<h&&sd[(yy*w+xx)*4+3]>40)ok=true}}if(ok)hit++}
+    if(si){sN++;let near=gi;if(!near){for(let dy=-R;dy<=R&&!near;dy+=step)for(let dx=-R;dx<=R&&!near;dx+=step)if(gAt(x+dx,y+dy))near=true}if(!near)stray++}}
+  return {cover:gN?hit/gN:0,stray:sN?stray/sN:1,sN};
+}
+async function traceJudge(it,g,c,W,H,dpr,pts){
+  const my=++TOKEN,les=LES,cur=les.cur;if(pts<10){setBubble($("#lesBubble"),"まだ なにも かいてないよ。ゆびで なぞってね。");return}
+  const sc=traceScore(g,c,W,H,dpr);cur.tries++;
+  const good=sc.cover>=0.5&&sc.stray<=0.45;
+  $("#ctrl").innerHTML="";
+  if(good||cur.tries>=2){
+    const st=itemState(it.key);st.seen++;st.ok++;st.box=Math.min(5,st.box+1);st.due=addDays(BOX_DAYS[st.box]);
+    S.log.push({d:ymd(),k:it.key,ok:1,ms:Date.now()-cur.t0});if(S.log.length>300)S.log=S.log.slice(-300);
+    const sk=S.skills[it.skill];if(!cur.isBonus&&it.lv===les.lv){sk.hist.push(1);if(sk.hist.length>8)sk.hist.shift()}
+    hanamaru();setBubble($("#lesBubble"),good?pick([`きれいな「${it.ans}」。ポテも おぼえたよ。`,`すごい。「${it.ans}」は こう かくんだね。`,`おてほん ありがとう。ポテも まねして かくね。`,`「${it.ans}」、しっかり なぞれてる。はなまる。`]):pick([`「${it.ans}」、がんばって かいたね。ポテ うれしい。`,`ありがとう。「${it.ans}」の かたち、ポテも わかったよ。`]));
+    les.results.push({it,mOK:true});const pips=$("#prog").children;if(pips[les.i])pips[les.i].classList.add("done");les.i++;save(false);
+    nextBtn("つぎへ",()=>nextQ());
+  }else{
+    SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideR","tilt");
+    setBubble($("#lesBubble"),sc.cover<0.5?pick(["うすい じから はみでちゃったかな。もういちど ゆっくり なぞってみて。","もうすこし おおきく なぞってみて。"]):pick(["うすい じの うえを なぞって みてね。","ゆびを うすい じに あわせて、もういちど。"]));
+    $("#ctrl").innerHTML=`<div class="judge" style="gap:8px"><button class="big-btn" id="trClear" style="flex:1;min-height:56px">けす</button><button class="big-btn go" id="trDone" style="flex:2;min-height:56px">かけた</button></div>`;
+    const sx=c.getContext("2d");sx.clearRect(0,0,W,H);let pts2=0;
+    // 再描画のためのハンドラ再設定
+    const pos=e=>{const r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};let drawing=false;
+    c.onpointerdown=e=>{drawing=true;c.setPointerCapture(e.pointerId);const [x,y]=pos(e);sx.beginPath();sx.moveTo(x,y);sx.lineTo(x+.1,y);sx.stroke();pts2++};
+    c.onpointermove=e=>{if(!drawing)return;const [x,y]=pos(e);sx.lineTo(x,y);sx.stroke();pts2++};
+    c.onpointerup=c.onpointercancel=()=>{drawing=false};
+    $("#trClear").onclick=()=>{ac();SFX.tap();sx.clearRect(0,0,W,H);pts2=0};
+    $("#trDone").onclick=()=>{ac();SFX.tap();traceJudge(it,g,c,W,H,dpr,pts2)};
+  }
+}
+function renderMemoInput(it,forceTap){
   const c=$("#ctrl");c.classList.remove("slim");c.classList.toggle("num",it.type==="num");
+  const les=LES,hand=!forceTap&&!window.__NOHAND&&!les.cur.isBonus&&handEligible(it)&&les.handPlan[les.i%les.handPlan.length];
+  if(hand){
+    c.classList.remove("num");
+    const sub=it.q.fill?"□に はいる じを かいてね。":it.q.main&&it.type==="num"?"こたえを かいてね。":(it.q.sub||"").replace(/は どっち？$|は どれ？$/,"を かいてね。").replace(/どっち？|どれ？/,"かいてね。");
+    renderBoard(it,null,sub);
+    c.innerHTML=`<div class="memo">✍️ こたえを ゆびで かいてね</div><div class="hpad"><canvas id="cvM"></canvas></div><div class="judge" style="gap:8px"><button class="big-btn" id="hmClear" style="flex:1;min-height:50px">けす</button><button class="big-btn go" id="hmDone" style="flex:2;min-height:50px">かけた</button></div>`;
+    const wrap=c.querySelector(".hpad"),cv=$("#cvM");const W=wrap.clientWidth,H=wrap.clientHeight;const pad=makePad(cv,W,H);
+    $("#hmClear").onclick=()=>{ac();SFX.tap();pad.clear()};
+    $("#hmDone").onclick=()=>{ac();SFX.tap();if(pad.pts<8){setBubble($("#lesBubble"),"まだ かいてないよ。ゆびで かいてね。");return}
+      les.cur.memoImg=pad.url();S.hand=(S.hand||0)+1;setBubble($("#lesBubble"),pick(["かけたね。かいたのは どれ？ おしてね。","いま かいた こたえを、したから えらんでね。","メモ できたね。かいたのを ひとつ おして。"]));renderMemoInput(it,true);
+      const m=c.querySelector(".memo");if(m)m.innerHTML=`<img src="${les.cur.memoImg}" style="height:34px;background:#fff;border-radius:6px;border:1px solid var(--line)"> かいたのは どれ？ <b id="memoV">&nbsp;</b>`};
+    return;
+  }
   if(it.type==="num"){
     c.innerHTML=`<div class="memo">📝 せんせいの こたえメモ <b id="memoV">&nbsp;</b></div><div class="pad" id="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-n="${n}">${n}</button>`).join("")}<button class="del" data-n="del">けす</button><button data-n="0">0</button><button class="ok" data-n="ok" disabled>メモ できた</button></div>`;
     let v="";const upd=()=>{$("#memoV").textContent=v||"\u00a0";c.querySelector(".ok").disabled=!v};
@@ -905,7 +1222,7 @@ function renderMemoInput(it){
       if(n==="del"){v=v.slice(0,-1);SFX.tap()}else if(n==="ok"){if(v)memoDone(String(Number(v)));return}else{if(v.length<2)v+=n;SFX.tap()}upd()};
   }else{
     const opts=shuffle([it.ans].concat(it.wrongs));
-    c.innerHTML=`<div class="memo">📝 せんせいの こたえメモ。ただしいのを えらんでね。</div><div class="choice${it.kj?" kj":""}" id="choice">${opts.map(o=>`<button data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div>`;
+    c.innerHTML=`<div class="memo">📝 せんせいの こたえメモ。ただしいのを えらんでね。</div><div class="choice${it.kj?" kj":""}" id="choice">${opts.map(o=>`<button data-v="${esc(o)}" class="${o.length>6?"long":""}">${esc(o)}</button>`).join("")}</div>`;
     $("#choice").onclick=e=>{const b=e.target.closest("button");if(!b)return;ac();SFX.tap();memoDone(b.dataset.v)};
   }
 }
@@ -920,7 +1237,7 @@ async function memoDone(v){
   const cand=it.wrongs.filter(w=>w!==v);
   if(pWrong&&!cand.length)pWrong=false;
   cur.pAns=pWrong?cand[0]:it.ans;
-  $("#ctrl").innerHTML=`<div class="memo">📝 メモは ひみつ。<b>🤫</b></div>`;
+  $("#ctrl").innerHTML=cur.memoImg?`<div class="memo">📝 むっちゃんの メモ <img src="${cur.memoImg}" style="height:40px;background:#fff;border-radius:6px;border:1px solid var(--line)"></div>`:`<div class="memo">📝 メモは ひみつ。<b>🤫</b></div>`;
   setBubble($("#lesBubble"),L.go());
   await sleep(1300);if(my!==TOKEN)return;
   poteSet($("#lesPote"),"back","write");
@@ -929,7 +1246,7 @@ async function memoDone(v){
   await sleep(450);if(my!==TOKEN)return;
   poteSet($("#lesPote"),"front","hop");chu();
   setBubble($("#lesBubble"),L.done(cur.pAns));
-  $("#ctrl").innerHTML=`<div class="judge"><button class="maru" id="jO" aria-label="あってる"><b>◯</b>あってる！</button><button class="batsu" id="jX" aria-label="ちがうよ"><b>✕</b>ちがうよ</button></div>`;
+  $("#ctrl").innerHTML=`<div class="judge"><button class="maru" id="jO" aria-label="あってる"><b>◯</b>あってる</button><button class="batsu" id="jX" aria-label="ちがうよ"><b>✕</b>ちがうよ</button></div>`;
   $("#jO").onclick=()=>judge(true);$("#jX").onclick=()=>judge(false);
 }
 async function hanamaru(){const h=$("#hana");if(h){h.classList.add("go")}SFX.hana();setTimeout(()=>chu("happy"),700);poteSet($("#lesPote"),"front","hop")}
@@ -939,7 +1256,7 @@ function showExplain(it,memoWrong){
 }
 async function judge(saysOK){
   const my=++TOKEN,les=LES,cur=les.cur,it=cur.it;ac();SFX.tap();
-  const mOK=cur.memo===it.ans,pOK=cur.pAns===it.ans;
+  const mOK=cur.memo===it.ans,pOK=cur.pAns===it.ans;cur.judgeOK=(saysOK===pOK);
   $("#ctrl").innerHTML="";
   const fixAndHana=async()=>{ // こたえを なおして はなまる
     renderBoard(it,`<s>${esc(cur.pAns)}</s>${esc(it.ans)}`);$("#slot").classList.add("fixd");
@@ -973,7 +1290,7 @@ function record(mOK){
   else{st.box=0;st.due=addDays(1)}
   const sk=S.skills[it.skill];
   if(!cur.isBonus&&it.lv===les.lv&&!les.requeued[it.key]){sk.hist.push(mOK?1:0);if(sk.hist.length>8)sk.hist.shift()}
-  S.log.push({d:today,k:it.key,ok:mOK?1:0,ms:Date.now()-cur.t0});if(S.log.length>300)S.log=S.log.slice(-300);
+  S.log.push({d:today,k:it.key,ok:mOK?1:0,ms:Date.now()-cur.t0,j:cur.judgeOK==null?null:(cur.judgeOK?1:0),h:cur.memoImg?1:0});if(S.log.length>400)S.log=S.log.slice(-400);
   les.results.push({it,mOK});
   if(!mOK&&!cur.isBonus&&!les.requeued[it.key]){les.requeued[it.key]=2;les.list.push(it);les.total++;$("#prog").insertAdjacentHTML("beforeend","<span>🥕</span>")}
   const pips=$("#prog").children;if(pips[les.i])pips[les.i].classList.add("done");
@@ -986,6 +1303,7 @@ $("#btnQuit").onclick=async()=>{ac();shush();if(await ask("きょうの じゅ�
 
 /* ---------- じゅぎょうの おわり ---------- */
 function nextWish(skill){
+  const w=analyze(30).weak.find(r=>r.skill&&r.skill!==skill&&SK[r.skill]);if(w)return w.skill;
   const tm=addDays(1);let best=null,bestN=-1;
   SKILL_IDS.forEach(id=>{if(id===skill)return;const n=SK[id].items.filter(it=>S.items[it.key]&&S.items[it.key].due&&S.items[it.key].due<=tm).length;if(n>bestN){bestN=n;best=id}});
   if(bestN<=0){const c=SKILL_IDS.filter(id=>id!==skill).sort((a,b)=>S.skills[a].n-S.skills[b].n);best=c[0]}
@@ -1005,10 +1323,11 @@ function finishLesson(){
   if(les.bothLabels.length)lines.push(LT.both(c,les.bothLabels[0]));
   if(les.leveled!=null&&les.leveled<def.levels.length)lines.push(`{次|つぎ}は「${def.levels[les.leveled]}」に ちょうせん するね。`);
   else if(les.leveled!=null)lines.push(`ポテ、「${def.name}」は ぜんぶ できるように なったよ。`);
+  lines.push(pick(KANJI_LINES));
   lines.push(LT.close(c),LT.wish(c,SK[S.wish].name));
   S.letters.push({d:today,lines,skill:les.skill});if(S.letters.length>20)S.letters=S.letters.slice(-20);
   save(true);
-  const z=asleep();show("finish");SFX.gift();
+  const z=asleep();show("finish");SFX.gift();autoSend("授業のあと");
   $("#finishBody").innerHTML=`<div class="gift">きょうの じゅぎょう、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">${les.fixedLabels.length?"ポテに おしえた ぶんも はいってるよ。":"おみせで つかってね。"}</span></div>
    <div class="stage" style="padding:0 0 10px"><div class="poteBox">${poteHTML("finPote","front","hop")}</div><div class="bubble left" id="finBubble"></div></div>
    ${letterHTML(S.letters[S.letters.length-1])}
@@ -1023,7 +1342,18 @@ function finishLesson(){
   $("#finEnd").onclick=()=>{ac();showHome()};
   LES=null;
 }
-function letterHTML(l){return `<div class="letter">${l.lines.map(x=>`<p>${esc(disp(x))}</p>`).join("")}<p class="from">ポテより</p></div>`}
+function learnedKanji(){const set=new Set();
+  Object.entries(S.items).forEach(([k,st])=>{if(!st||st.box<1)return;
+    if(k.startsWith("kanji:r:"))set.add(k.slice(8));
+    else if(k.startsWith("kanji:")){const it=SK.kanji.map[k];if(it&&/^[一-龥]$/.test(it.ans))set.add(it.ans)}
+    else if(k.startsWith("trace:")){const ch=k.slice(6);if(/^[一-龥]$/.test(ch))set.add(ch)}});
+  return set}
+function dispRuby(t,set){let used=false;const html=esc(t).replace(/\{([^|}]*)\|([^}]*)\}/g,(m,k,r)=>{
+  if(k&&Array.from(k).every(ch=>set.has(ch))){used=true;return `<ruby>${k}<rt>${r}</rt></ruby>`}return r});return {html,used}}
+const KANJI_LINES=["きょう、まどから {山|やま}が きれいに みえたよ。","{犬|いぬ}が さんぽ してるのを みたよ。","{空|そら}が あおくて、いい きもちだった。","{雨|あめ}の おとって、ポテ すきなの。","{花|はな}に {水|みず}を あげたよ。","{月|つき}が まるかったね。","{虫|むし}の こえが きこえるよ。","{木|き}の はっぱが ゆれてた。","{手|て}を あらってから ごはんに したよ。","{川|かわ}の おとが きこえた。","{人|ひと}が いっぱい あるいてたよ。","{目|め}を とじると、むっちゃんの かおが うかぶの。","{口|くち}を おおきく あけて、にんじんを たべたよ。","{耳|みみ}を すますと、とりの こえ。","{大|おお}きな くもが ながれてたよ。","{金|きん}いろの はっぱを みつけたよ。","{土|つち}の なかで、みみずが うごいてた。","{火|ひ}は あぶないから、ポテは さわらないよ。","{石|いし}を ひろって、たからものに したよ。","{草|くさ}の うえで ごろんと したよ。","{早|はや}おき して、むっちゃんを まってたの。","{白|しろ}い ねこが とおったよ。","{赤|あか}い はなが さいてたよ。","{青|あお}い そらに とりが とんでた。"];
+function letterHTML(l){const set=learnedKanji();let any=false;
+  const body=l.lines.map(x=>{const r=l.parent?{html:esc(x),used:false}:dispRuby(x,set);if(r.used)any=true;return `<p>${r.html}</p>`}).join("");
+  return `<div class="letter">${body}${any?`<p style="font-size:14px;color:var(--ink2)">（むっちゃんに おそわった かんじで かいてみたよ。）</p>`:""}<p class="from">ポテより</p></div>`}
 
 /* ---------- てちょう・てがみ ---------- */
 function openPage(title,html){TOKEN++;shush();show("page");$("#pageTitle").textContent=title;$("#pageBody").innerHTML=html;$("#pageBody").scrollTop=0}
@@ -1041,6 +1371,47 @@ $("#btnLetters").onclick=()=>{ac();SFX.tap();
 $("#btnAdult").onclick=()=>{ac();SFX.tap();
   openPage("🔑 おうちのひと",`<div class="card adult"><h3>大人の方の確認</h3><p style="margin:4px 0 8px">7 × 8 の答えを入力してください。</p><input id="gate" type="tel" inputmode="numeric" maxlength="3" aria-label="7かける8の答え"> <button class="s" id="gateOK">ひらく</button><div id="gateMsg"></div></div>`);
   $("#gateOK").onclick=()=>{if($("#gate").value.trim()==="56")adultPage();else $("#gateMsg").textContent="答えがちがいます。"}};
+function reportHTML(){const a=analyze(30);const total=a.rows.reduce((s,r)=>s+r.n,0);
+  if(total<10)return `<div class="card adult"><h3>📈 傾向レポート(直近30日)</h3><p style="margin:4px 0">まだ${total}問。10問以上たまると、つまずきの傾向と対策が出ます。</p></div>`;
+  const pct=x=>Math.round(x*100)+"%";
+  let h=`<div class="card adult"><h3>📈 傾向レポート(直近30日・${total}問)</h3>`;
+  h+=`<div class="row"><span>全体の正答率</span><b>${pct(a.rows.reduce((s,r)=>s+r.rate*r.n,0)/total)}</b></div>`;
+  h+=`<div class="row"><span>1問にかかる時間(平均)</span><b>${a.avgMs?Math.round(a.avgMs/1000)+"秒":"—"}</b></div>`;
+  if(a.judged>=5)h+=`<div class="row"><span>ポテの答えを正しく◯✕できた率</span><b>${pct(a.jok/a.judged)}</b></div>`;
+  if(a.hand>=3&&a.tap>=3)h+=`<div class="row"><span>手書き／ボタンの正答率</span><b>${pct(a.handOk/a.hand)}／${pct(a.tapOk/a.tap)}</b></div>`;
+  if(a.judged>=5&&a.jok/a.judged<0.75)h+=`<p style="margin:8px 0 0"><b>⚠ 見落としが多め。</b>ポテの答えが合ってるか確かめずに◯を押している可能性。「メモと同じ？」と声をかけると直ります。</p>`;
+  if(a.avgMs>25000)h+=`<p style="margin:8px 0 0"><b>⚠ 1問に時間がかかっている。</b>疲れている時間帯か、難しすぎる可能性。段階を1つ戻すのも手(設定の下)。</p>`;
+  h+=`</div>`;
+  if(a.weak.length){h+=`<div class="card adult"><h3>🔎 つまずき(正答率70%未満)と対策</h3>`;
+    a.weak.slice(0,5).forEach(r=>{h+=`<div style="padding:6px 0;border-top:1px dashed var(--line)"><b>${esc(r.name)}</b>　${pct(r.rate)}(${r.n}問)<br><span style="font-size:13px">${esc(ADVICE[r.t]||"同じ種類の問題を、次の授業で多めに出します。")}</span></div>`});
+    h+=`<p style="margin:8px 0 0;font-size:13px">→ 次の授業から、5問のうち2問はこの種類が優先して出ます。ポテの「きょうの おねがい」もここに寄せます。</p></div>`}
+  else h+=`<div class="card adult"><h3>🔎 つまずき</h3><p style="margin:4px 0">正答率70%未満の種類はありません。</p></div>`;
+  if(a.strong.length)h+=`<div class="card adult"><h3>💪 得意(正答率90%以上)</h3><p style="margin:4px 0;font-size:14px">${a.strong.slice(0,6).map(r=>esc(r.name)+"("+pct(r.rate)+")").join("、")}</p><p style="margin:6px 0 0;font-size:13px">得意は間隔を広げて復習に回し、新しい段階へ進めます。</p></div>`;
+  return h}
+function reportText(){const a=analyze(30),today=ymd(),total=a.rows.reduce((s,r)=>s+r.n,0);const pct=x=>Math.round(x*100)+"%";
+  const L=[`🐹 ポテのがっこう レポート(${today.replace(/-/g,"/")})`,`直近30日：${total}問`];
+  if(total){L.push(`全体の正答率：${pct(a.rows.reduce((s,r)=>s+r.rate*r.n,0)/total)}`);if(a.avgMs)L.push(`1問の平均時間：${Math.round(a.avgMs/1000)}秒`);
+    if(a.judged>=5)L.push(`ポテの答えを正しく◯✕できた率：${pct(a.jok/a.judged)}`);if(a.hand>=3&&a.tap>=3)L.push(`手書き／ボタンの正答率：${pct(a.handOk/a.hand)}／${pct(a.tapOk/a.tap)}`)}
+  L.push("",`授業の合計：${S.lessons}回　来た日数：${Object.keys(S.days).length}日　🥕${S.carrot}本`);
+  L.push("","【いまの段階】");SKILL_IDS.forEach(id=>{const sk=S.skills[id],def=SK[id];L.push(`・${def.name.replace("\n","")}：${sk.lv>=def.levels.length?"全段階クリア":def.levels[sk.lv]+`(${sk.lv+1}/${def.levels.length})`}`)});
+  if(a.weak.length){L.push("","【つまずき(70%未満)と対策】");a.weak.slice(0,5).forEach(r=>{L.push(`▼ ${r.name}　${pct(r.rate)}(${r.n}問)`);L.push(`　→ ${ADVICE[r.t]||"同じ種類を次の授業で多めに出します。"}`)})}
+  else if(total>=10)L.push("","【つまずき】70%未満の種類なし");
+  if(a.strong.length)L.push("","【得意(90%以上)】"+a.strong.slice(0,6).map(r=>`${r.name}(${pct(r.rate)})`).join("、"));
+  const weakItems=[];SKILL_IDS.forEach(id=>SK[id].items.forEach(it=>{const st=S.items[it.key];if(st&&st.seen>=1&&st.box===0)weakItems.push(it.label)}));
+  if(weakItems.length)L.push("","【いま間違えている問題】"+weakItems.slice(0,15).join("、")+(weakItems.length>15?` ほか${weakItems.length-15}問`:""));
+  return L.join("\n")}
+async function shareReport(){ac();const text=reportText();
+  try{if(navigator.share){await navigator.share({title:"ポテのがっこう レポート",text});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(text);await ask("レポートをコピーしました。LINEなどに貼り付けてください。","OK","OK");return}catch(e){}
+  openPage("📤 レポート",`<div class="card adult"><p style="margin:0 0 8px">下の文を長押しで全部えらんでコピーし、LINEなどに貼り付けてください。</p><textarea readonly style="width:100%;height:60vh;font:13px/1.6 var(--ui);padding:8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink)">${esc(text)}</textarea></div>`)}
+/* ---- 自動送信(おうちのひとが 設定した URLへ) ---- */
+let autoSent={};
+function autoSend(reason){
+  const url=(S.settings.autoUrl||"").trim();if(!/^https:\/\//.test(url))return;
+  const t=ymd();if(S.settings.autoMode==="day"&&S.autoLast===t)return;
+  const body=reportText()+"\n\n（ポテのがっこうから自動送信・"+reason+"）";
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body});S.autoLast=t;S.autoCount=(S.autoCount||0)+1;save(false)}catch(e){}
+}
 function adultPage(){
   const today=ymd();
   const cards=SKILL_IDS.map(id=>{const sk=S.skills[id],def=SK[id];
@@ -1056,26 +1427,35 @@ function adultPage(){
    <div class="card adult"><h3>これまで</h3>
      <div class="row"><span>授業の合計</span><b>${S.lessons}回</b></div><div class="row"><span>学校に来た日数</span><b>${Object.keys(S.days).length}日</b></div>
      <div class="row"><span>今日の授業</span><b>${S.days[today]||0} / ${s.limit}回</b></div><div class="row"><span>ポテの間違いを直した回数</span><b>${S.fixed}回</b></div>
-     <div class="row"><span>🥕にんじん</span><b>${S.carrot}本</b></div><div class="row"><span>今日あそんだ回数</span><b>${S.play[today]||0}回</b></div><div class="row"><span>ポテのおなか</span><b>${bellyHTML()}</b></div>
+     <div class="row"><span>🥕にんじん</span><b>${S.carrot}本</b></div><div class="row"><span>手で書いて答えた回数</span><b>${S.hand||0}回</b></div><div class="row"><span>今日あそんだ回数</span><b>${S.play[today]||0}回</b></div><div class="row"><span>ポテのおなか</span><b>${bellyHTML()}</b></div>
      <div class="row"><span>記録の保存</span><b>${esc(dbState)}</b></div></div>
    <div class="card adult"><h3>💌 ポテからの手紙を書く</h3>
      <p style="margin:4px 0 6px">ここに書いた文は「ポテからの おてがみ」として届きます。むつきさんが読めるように、ひらがなと分かち書き(ことばの間にスペース)がおすすめです。1行が1文になります。</p>
      <textarea id="pmsg" rows="4" style="width:100%;font:inherit;font-size:16px;padding:8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink)" placeholder="むっちゃんへ&#10;きょうの おてつだい、ポテ みてたよ。&#10;ありがとう。"></textarea>
      <button class="s" id="pmsgSend">ポテからの手紙として届ける</button><div id="pmsgDone" style="font-size:13px"></div>
      ${S.letters.filter(l=>l.parent).length?`<p style="margin:8px 0 0;font-size:13px">届けた手紙：${S.letters.filter(l=>l.parent).length}通(未読 ${S.letters.filter(l=>l.parent&&!l.read).length}通)。「おてがみ」を開くと既読になります。ホーム画面でポテが「おてがみが とどいてるよ」と知らせます。</p>`:""}</div>
+   ${reportHTML()}
+   <div class="card adult"><h3>📤 レポートをおうちの人に送る</h3><p style="margin:4px 0 8px">上の傾向・対策・段階・いま間違えている問題を文章にして、LINEなどで送れます。</p><button class="s" id="btnShare" style="font-size:15px">📤 レポートを送る(LINEなど)</button></div>
    ${cards}
    <div class="card adult"><h3>設定</h3>
      <p style="margin:6px 0 2px">音(ポテの鳴き声と効果音)</p><button class="s ${s.sfx?"sel":""}" data-set="sfx:1">あり</button><button class="s ${!s.sfx?"sel":""}" data-set="sfx:0">なし</button>
      <p style="margin:10px 0 2px">1日の授業の上限(超えるとポテが寝ます)</p>${[2,3,5].map(n=>`<button class="s ${s.limit===n?"sel":""}" data-set="limit:${n}">${n}回</button>`).join("")}
      <p style="margin:10px 0 2px">今日だけ特別に</p><button class="s" data-set="wake">ポテを起こす(今日の回数を0に戻す)</button>
+     <p style="margin:10px 0 2px">📨 レポートの自動送信</p>
+     <p style="margin:0 0 6px;font-size:13px">授業が終わるたびに、このレポートを自動で家族のメールに送ります。設定にはGoogleアカウントが要ります(手順はチャットで渡した「自動送信のつくりかた」を参照)。</p>
+     <input id="autoUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(s.autoUrl||"")}" style="width:100%;font-size:13px;text-align:left;padding:8px">
+     <div style="margin:6px 0"><button class="s ${s.autoMode==="day"?"sel":""}" data-set="auto:day">1日1回</button><button class="s ${s.autoMode==="each"?"sel":""}" data-set="auto:each">授業のたび</button><button class="s" data-set="auto:save">URLを保存</button><button class="s" data-set="auto:test">いま送る(テスト)</button></div>
+     <div style="font-size:13px">${s.autoUrl?`設定済み。送信回数：${S.autoCount||0}回${S.autoLast?"(最後："+S.autoLast.replace(/-/g,"/")+")":""}`:"未設定"}</div>
      <p style="margin:10px 0 2px">やり直し</p><button class="s" data-set="reset">記録をすべて消す</button></div>
    <div class="card adult"><h3>このアプリのしくみ</h3>
      <p style="margin:4px 0">お子さんが「先生」、ポテが「生徒」です。お子さんは先に自分の答えをメモし(思い出す練習)、そのあとポテの答えに ◯ か ✕ をつけます。ポテは小学1年生がつまずきやすい形でわざと間違えます。</p>
      <p style="margin:4px 0">お子さんの答えが違っていたときは、バツ音や減点は出さず「いっしょに たしかめよう」に進み、同じ問題が授業の最後と翌日にもう一度出ます。正解した問題は 1日→3日→7日→14日→30日 と間をあけて復習に出ます。</p>
      <p style="margin:4px 0">今の段階で直近8問中7問を正解すると、次の段階に進みます。点数やランキング、連続ログインの仕掛けはありません。</p>
+     <p style="margin:4px 0">「せんせいの こたえメモ」は、5問のうち2問が「手で書く」形になります(数字・ひらがな・カタカナ・漢字)。書いたあとに「かいたのは どれ？」で自分の答えを選ぶので、書く練習と選ぶ練習の両方になります。「ぶんしょうだい」は場面を絵で見せて、たし算・ひき算・ちがい・順番を扱います。「かく」は黒板のうすい字を指でなぞります(はみ出しが大きいときは1回だけやり直し、2回目は必ず合格にします)。</p>
      <p style="margin:4px 0">🥕にんじんは、授業1回で3本(ポテの間違いを直すと最大＋2本)。正解の数では増えません。おみせで、ごはん・ふく・へやのかざり・あそびの道具と交換します。</p>
      <p style="margin:4px 0">ポテの「おなか」は0〜100%。1日たつごとに40%減り、ごはんで回復します(レタス＋15%、にんじん＋25%、りんご＋35%、とうもろこし＋45%、いちご＋60%)。0%だと「あそびの じかん」で遊べません。80%以上で遊ぶと🥕が1本多くもらえます。</p>
      <p style="margin:4px 0">「あそびの じかん」は、授業を1回するごとに1回だけ。ゲームの問題は、お子さんがすでに授業でやった問題から出るので、遊びがそのまま復習になります。ゲームで間違えた問題は翌日の授業に出ます。</p></div>`);
+  $("#btnShare").onclick=shareReport;
   $("#pmsgSend").onclick=()=>{const t=$("#pmsg").value;const lines=t.split(/\n/).map(x=>x.trim()).filter(Boolean);
     if(!lines.length){$("#pmsgDone").textContent="文が空です。";return}
     S.letters.push({d:ymd(),lines,parent:true,read:false});if(S.letters.length>20)S.letters=S.letters.slice(-20);save(true);
@@ -1083,6 +1463,11 @@ function adultPage(){
   $("#pageBody").onclick=e=>{const b=e.target.closest("[data-set]");if(!b)return;const v=b.dataset.set;
     if(v.startsWith("sfx:")){S.settings.sfx=v.endsWith("1")}
     else if(v.startsWith("limit:"))S.settings.limit=Number(v.split(":")[1]);
+    else if(v.startsWith("auto:")){const m=v.slice(5);
+      if(m==="day"||m==="each")S.settings.autoMode=m;
+      else if(m==="save"){S.settings.autoUrl=($("#autoUrl").value||"").trim()}
+      else if(m==="test"){S.settings.autoUrl=($("#autoUrl").value||"").trim();save(true);const keep=S.autoLast;S.autoLast="";autoSend("テスト送信");if(!S.settings.autoUrl){S.autoLast=keep}
+        ask(S.settings.autoUrl?"送りました。1〜2分で届かなければ、URLか手順を確認してください。":"URLが空です。","OK","OK");adultPage();return}}
     else if(v==="wake"){S.days[ymd()]=0}
     else if(v==="reset"){ask("記録をすべて消します。元に戻せません。","消さない","すべて消す").then(keepIt=>{if(keepIt)return;const keep=S.settings;S=freshState();S.settings=keep;save(true);adultPage()});return}
     save(true);adultPage()};
