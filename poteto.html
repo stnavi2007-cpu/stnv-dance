@@ -62,17 +62,29 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .pote .pimg{display:block;height:100%;width:auto;filter:drop-shadow(0 5px 3px rgba(60,35,10,.28))}
 .pote .wear{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .poteBox{display:flex;justify-content:center}
-.pote.idle{animation:breathe 3.2s ease-in-out infinite}
-.pote.hop{animation:hop .55s ease-out 2}
+.pote.idle{animation:breathe 3.4s ease-in-out infinite,sway 6s ease-in-out infinite}
+.pote.hop{animation:hop .5s cubic-bezier(.3,1.4,.5,1) 2}
 .pote.tilt{animation:tilt 1.4s ease-in-out infinite}
 .pote.write{animation:write .22s linear infinite}
-.pote.sleep{animation:breathe 4.5s ease-in-out infinite}.pote.sleep .pimg{filter:drop-shadow(0 5px 3px rgba(60,35,10,.28)) brightness(.8)}
-.pote.munch{animation:munch .35s ease-in-out 6}
-@keyframes munch{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96) rotate(-2deg)}}
-@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,.985)}}
-@keyframes hop{0%,100%{transform:translateY(0) scale(1,1)}30%{transform:translateY(-22px) scale(.97,1.04)}60%{transform:translateY(0) scale(1.05,.94)}}
-@keyframes tilt{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(5deg)}}
+.pote.sleep{animation:breathe 4.6s ease-in-out infinite}.pote.sleep .pimg{filter:drop-shadow(0 5px 3px rgba(60,35,10,.28)) brightness(.82)}
+.pote.munch{animation:munch .32s ease-in-out 6}
+.pote.wiggle{animation:wiggle .6s ease-in-out 2}
+.pote.spin{animation:spin3d 1.15s ease-in-out}
+.pote.happy{animation:happy .5s ease-in-out 3}
+.pote.peek{animation:peek 1.2s ease-in-out infinite}
+@keyframes munch{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,.95) rotate(-2deg)}}
+@keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.018,.982)}}
+@keyframes sway{0%,100%{rotate:-1.5deg}50%{rotate:1.5deg}}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1,1)}28%{transform:translateY(-26px) scale(.96,1.06)}55%{transform:translateY(0) scale(1.06,.92)}72%{transform:translateY(-6px) scale(.99,1.01)}}
+@keyframes tilt{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(6deg)}}
 @keyframes write{0%,100%{transform:translate(0,0)}25%{transform:translate(2px,-2px)}75%{transform:translate(-2px,1px)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}20%{transform:rotate(-7deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(4deg)}}
+@keyframes happy{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(-14px) rotate(-4deg)}75%{transform:translateY(-14px) rotate(4deg)}}
+@keyframes peek{0%,100%{transform:translateX(0) rotate(-2deg)}50%{transform:translateX(6px) rotate(3deg)}}
+/* 4枚を切り替える 疑似3D 1かいてん */
+.pote.spin .pimg{animation:spinImg 1.15s steps(1) 1}
+@keyframes spinImg{0%{content:""}}
+
 
 /* ホーム */
 #home .top{display:flex;justify-content:space-between;align-items:center;padding:10px 16px 0}
@@ -1057,15 +1069,34 @@ function showHome(){
       setBubble($("#homeBubble"),L.yes())}}
   let t;
   const unread=S.letters.some(l=>l.parent&&!l.read);
+  homeIdleLoop();
   const bl=BELLY_LINE();
   if(!S.met)t=L.first();else if(unread)t=L.newLetter();else if(z)t=L.sleepy();else if(bl&&Math.random()<.6)t=bl;else if(S.wish&&SK[S.wish])t=L.wish(SK[S.wish].name);else t=L.hello();
   setBubble($("#homeBubble"),t);
   $("#btnLetters").textContent=unread?"💌 おてがみ ●":"💌 おてがみ";
 }
 $("#subjects").addEventListener("click",e=>{const b=e.target.closest(".subj");if(!b||asleep())return;ac();SFX.tap();S.met=true;startLesson(b.dataset.skill)});
+let homeIdleTimer=null;
+function homeIdleLoop(){clearTimeout(homeIdleTimer);
+  homeIdleTimer=setTimeout(function tick(){
+    const el=$("#homePote");
+    if(el&&$("#home").classList.contains("on")&&!asleep()&&!el.className.includes("hop")&&!el.className.includes("spin")&&!el.className.includes("wiggle")&&!el.className.includes("happy")){
+      const a=pick(["wiggle","hop","happy","tilt1"]);
+      if(a==="tilt1"){el.className="pote tilt";setTimeout(()=>{if(el)el.className="pote idle"},1400)}
+      else{el.className="pote "+a;setTimeout(()=>{if(el)el.className="pote idle"},a==="hop"?1000:1300)}
+    }
+    homeIdleTimer=setTimeout(tick,6000+rnd(6000));
+  },5000+rnd(4000));
+}
+// ポテを 1かいてん(4まいを つかった ぎじ3D)
+async function poteSpin(el){if(!el||FAST())return;const seq=["sideR","back","sideL","front"];el.className="pote spin";
+  for(const v of seq){el.querySelector(".pimg").src=IMG[v];el.querySelector(".wear").innerHTML=v==="front"?wearSVG():"";await sleep(270)}
+  el.className="pote idle"}
 $("#homePote").addEventListener("click",()=>{ac();const img=$("#homePote");
   if(asleep()){setBubble($("#homeBubble"),"すー、すー。むにゃむにゃ。");return}
-  chu(Math.random()<.3?"long":"");img.className="pote hop";setTimeout(()=>{img.className="pote idle"},1200);
+  chu(Math.random()<.3?"long":"");
+  const r=Math.random();
+  if(r<.3){poteSpin(img)}else if(r<.55){img.className="pote wiggle";setTimeout(()=>{img.className="pote idle"},1300)}else if(r<.8){img.className="pote happy";setTimeout(()=>{img.className="pote idle"},1600)}else{img.className="pote hop";setTimeout(()=>{img.className="pote idle"},1100)}
   if(!S.met)return;
   setBubble($("#homeBubble"),L.pat())});
 $("#homeBubble").addEventListener("click",()=>{ac();chu()});
@@ -1249,7 +1280,7 @@ async function memoDone(v){
   $("#ctrl").innerHTML=`<div class="judge"><button class="maru" id="jO" aria-label="あってる"><b>◯</b>あってる</button><button class="batsu" id="jX" aria-label="ちがうよ"><b>✕</b>ちがうよ</button></div>`;
   $("#jO").onclick=()=>judge(true);$("#jX").onclick=()=>judge(false);
 }
-async function hanamaru(){const h=$("#hana");if(h){h.classList.add("go")}SFX.hana();setTimeout(()=>chu("happy"),700);poteSet($("#lesPote"),"front","hop")}
+async function hanamaru(){const h=$("#hana");if(h){h.classList.add("go")}SFX.hana();setTimeout(()=>chu("happy"),700);const el=$("#lesPote");el.querySelector(".pimg").src=IMG.front;el.querySelector(".wear").innerHTML=wearSVG();el.className="pote happy";setTimeout(()=>{if(el)el.className="pote idle"},1600)}
 function nextBtn(label,fn){$("#ctrl").classList.add("slim");$("#ctrl").innerHTML=`<button class="big-btn go" id="nx">${label}</button>`;$("#nx").onclick=()=>{ac();SFX.tap();fn()}}
 function showExplain(it,memoWrong){
   $("#board").innerHTML=`<div class="exp">${it.explain()}${memoWrong?`<div class="memoNote">むっちゃんの メモ「${esc(LES.cur.memo)}」→ ただしくは「${esc(it.ans)}」</div>`:""}</div>`;
