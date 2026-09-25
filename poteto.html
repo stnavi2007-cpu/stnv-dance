@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>ポテの がっこう</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,9 +32,9 @@
   --paper:#4A4032; --line:#6B5B3E; --shadow:0 3px 0 rgba(0,0,0,.45);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-body{height:100%;margin:0;background:var(--wall);color:var(--ink);font-family:var(--ui);font-weight:700;
-  -webkit-user-select:none;user-select:none;touch-action:manipulation;overflow:hidden}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);overscroll-behavior:none}
+body{position:fixed;inset:0;height:100%;width:100%;margin:0;background:var(--wall);color:var(--ink);font-family:var(--ui);font-weight:700;
+  -webkit-user-select:none;user-select:none;touch-action:manipulation;overflow:hidden;overscroll-behavior:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
 button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .app{position:relative;height:100%;max-width:480px;margin:0 auto;overflow:hidden;background:var(--wall)}
@@ -143,6 +143,44 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .carrotB.pull{animation:pull .5s ease-out forwards}
 .carrotB.no{animation:shake .4s ease-in-out}
 @keyframes pull{0%{transform:translateY(0)}60%{transform:translateY(-40px) rotate(-8deg)}100%{transform:translateY(-30px) rotate(-6deg)}}
+/* もぐら */
+.holes{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:6px;padding:10px 6px}
+.hole{position:relative;display:flex;align-items:center;justify-content:center}
+.hole::after{content:"";position:absolute;bottom:2%;left:12%;right:12%;height:20%;background:#6B4A2E;border-radius:50%;z-index:0}
+.moguraB{border:0;background:none;position:relative;width:72%;z-index:1;animation:pop-up 2.6s ease-in-out infinite}
+.moguraB svg{width:100%;height:auto;display:block;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.moguraB .lb3{position:absolute;top:40%;left:50%;transform:translateX(-50%);font:700 var(--kyo);color:#fff;text-shadow:0 2px 3px #5A3A22;white-space:nowrap}
+@keyframes pop-up{0%,100%{transform:translateY(6%)}50%{transform:translateY(-8%)}}
+.moguraB.bonk{animation:bonk .4s ease-out forwards}
+@keyframes bonk{0%{transform:translateY(0) scale(1)}40%{transform:translateY(20%) scale(1.15,.8)}100%{transform:translateY(90%) scale(.6);opacity:0}}
+/* さかな */
+.pond{position:absolute;inset:0;overflow:hidden}
+#game.fld .pond~*{}
+.fishB{position:absolute;border:0;background:none;width:38%;animation:swim 3s ease-in-out infinite}
+.fishB svg{width:100%;height:auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15))}
+.fishB .lbf{position:absolute;top:38%;left:38%;transform:translateX(-50%);font:600 var(--kyo);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);white-space:nowrap}
+@keyframes swim{0%,100%{transform:translateX(0) rotate(-2deg)}50%{transform:translateX(14px) rotate(3deg)}}
+.fishB.pop{animation:pop .35s ease-out forwards}
+/* りんご */
+.orchard{position:absolute;inset:0;overflow:hidden}
+.appleB{position:absolute;top:-20%;border:0;background:none;width:20%;animation:fall 4.5s linear infinite}
+.appleB svg{width:100%;height:auto}
+.appleB .lba{position:absolute;top:44%;left:50%;transform:translateX(-50%);font:600 clamp(18px,5.4vw,26px) var(--kyo);color:#fff;text-shadow:0 2px 0 #9E2E25;white-space:nowrap}
+@keyframes fall{0%{top:-22%}100%{top:100%}}
+.appleB.pop{animation:pop .35s ease-out forwards}
+/* ケーキ */
+.cake{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px}
+.cakeStack{flex:1;width:100%;display:flex;flex-direction:column-reverse;align-items:center;justify-content:flex-end;gap:3px;padding-bottom:6px}
+.clayer{height:26px;border-radius:8px;border:2px solid rgba(74,46,20,.25);max-width:88%}
+.cberry{font-size:26px;margin-bottom:-6px;order:99}
+.cakeOpts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.cakeB{background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:var(--shadow);font:900 26px var(--kyo);min-height:56px}
+.cakeB:active{transform:translateY(3px);box-shadow:none}
+.cakeB.pop{animation:pop .3s ease-out}
+.starB{border:0;background:none;position:relative;display:flex;align-items:center;justify-content:center}
+.starB svg{width:min(26vw,100px);height:auto}
+.starB .lb2{position:absolute;font:700 var(--kyo);color:#4A2E14;background:rgba(255,253,246,.9);border-radius:8px;padding:1px 6px;white-space:nowrap}
+.starB.pop{animation:pop .35s ease-out forwards}
 .gend{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--paper);border:3px solid var(--ink);color:var(--ink);border-radius:16px;font-size:20px;text-align:center;padding:16px}
 .gend b{font-size:44px}
 .room{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
@@ -335,7 +373,7 @@ const LS_KEY="pote-gakkou-v1";
 const SKILL_IDS=["count","add","sub","bun","katachi","clock","kotoba","bunzukuri","kata","kanji","kaku"];
 function freshState(){
   const s={v:1,updatedAt:0,items:{},skills:{},lessons:0,days:{},room:[],letters:[],fixed:0,wish:null,log:[],met:false,
-    carrot:0,owned:[],inv:{},wearing:{},fed:{},play:{},gameBest:{},belly:50,bellyDate:"",
+    carrot:0,owned:["g:balloon"],inv:{},wearing:{},fed:{},play:{},gameBest:{},belly:50,bellyDate:"",
     settings:{sfx:true,limit:3,call:"むっちゃん",autoUrl:"",autoMode:"day"}};
   SKILL_IDS.forEach(id=>s.skills[id]={lv:0,hist:[],n:0});
   return s;
@@ -347,6 +385,7 @@ function normalize(o){
   SKILL_IDS.forEach(id=>{s.skills[id]=Object.assign({lv:0,hist:[],n:0},(o.skills||{})[id]||{})});
   ["items","days"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});
   ["room","letters","log","owned"].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
+  if(!s.owned.includes("g:balloon"))s.owned.push("g:balloon"); // ふうせんは デフォルト
   ["inv","wearing","fed","play","gameBest"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});if(typeof s.carrot!=="number")s.carrot=0;if(typeof s.belly!=="number")s.belly=50;if(s.belly<=3&&!s.bellyPct){s.belly=Math.round(s.belly*33);s.bellyPct=1}if(typeof s.bellyDate!=="string")s.bellyDate="";
   return s;
 }
@@ -707,7 +746,14 @@ const BELLY_FULL=80; // まんぷく ボーナスの ライン
 const DECO={window:{name:"まどと カーテン",e:"🪟",price:12,pos:"left:10%;top:6%;font-size:56px"},pic:{name:"ポテの え",e:"🖼️",price:10,pos:"right:12%;top:12%;font-size:46px"},
   plant:{name:"おおきな はっぱ",e:"🪴",price:8,pos:"left:6%;bottom:6%;font-size:52px"},bear:{name:"くまの ぬいぐるみ",e:"🧸",price:10,pos:"right:8%;bottom:8%;font-size:44px"},
   lamp:{name:"あかりの ランプ",e:"🛋️",price:14,pos:"right:30%;bottom:4%;font-size:56px"},star:{name:"おほしさま",e:"🌟",price:6,pos:"left:38%;top:4%;font-size:36px"}};
-const GAMES={balloon:{name:"ふうせん タッチ",e:"🎈",price:6,desc:"かず・けいさんの ふくしゅう"},field:{name:"にんじん ばたけ",e:"🥕",price:8,desc:"ことば・かんじの ふくしゅう"}};
+const GAMES={
+  balloon:{name:"ふうせん タッチ",e:"🎈",price:6,desc:"かず・けいさんの ふくしゅう",kind:"num"},
+  field:{name:"にんじん ばたけ",e:"🥕",price:8,desc:"ことば・かんじの ふくしゅう",kind:"word"},
+  mogura:{name:"ポテたたき",e:"🔨",price:8,desc:"でてきた こたえを ポン(かず)",kind:"num"},
+  fishing:{name:"おさかな つり",e:"🎣",price:8,desc:"こたえの さかなを つる(ことば)",kind:"word"},
+  apple:{name:"りんご キャッチ",e:"🍎",price:10,desc:"おちてくる こたえを うける(かず)",kind:"num"},
+  hoshi:{name:"おほしさま",e:"⭐",price:8,desc:"こたえの ほしを えらぶ(ことば)",kind:"word"},
+  keeki:{name:"ケーキ づくり",e:"🎂",price:10,desc:"じゅんに こたえて ケーキを つくる(かず)",kind:"num"}};
 const ALLITEMS={...Object.fromEntries(Object.entries(WEAR).map(([k,v])=>["w:"+k,{...v,cat:"wear",e:"👒"}])),
   ...Object.fromEntries(Object.entries(FOOD).map(([k,v])=>["f:"+k,{...v,cat:"food"}])),
   ...Object.fromEntries(Object.entries(DECO).map(([k,v])=>["d:"+k,{...v,cat:"deco"}])),
@@ -716,7 +762,7 @@ function wearSVG(){return ["neck","face","head"].map(sl=>S.wearing[sl]&&WEAR[S.w
 function wearPreview(h){return `<div class="wearPrev" style="height:${h||160}px"><span class="pote idle"><img class="pimg" src="${IMG.front}" alt="ポテ"><svg class="wear" viewBox="0 0 416 560">${wearSVG()}</svg></span></div>`}
 function refreshWear(){document.querySelectorAll(".pote").forEach(el=>{const img=el.querySelector(".pimg");if(img&&img.src===IMG.front)el.querySelector(".wear").innerHTML=wearSVG()})}
 function carrotTxt(){const el=$("#carrotTxt");if(el)el.textContent="🥕 "+S.carrot}
-function playsLeft(){const t=ymd();return (S.days[t]||0)-((S.play[t])||0)}
+function playsLeft(){return canPlayNow()?1:0}
 function ownedGames(){return Object.keys(GAMES).filter(k=>S.owned.includes("g:"+k))}
 
 /* ---------- おみせ ---------- */
@@ -729,7 +775,7 @@ function renderShop(){
   if(SHOPTAB==="wear")h+=wearPreview(150);
   const lead={food:"かうと「ごはん」の ふくろに はいるよ。ポテに あげてね。",wear:"かうと ポテが きるよ。「きがえ」で とりかえられる。",deco:"かうと ポテの へやに おくよ。",game:"かうと「あそびの じかん」で あそべるよ。じゅぎょうを 1かい すると 1かい あそべる。"}[SHOPTAB];
   h+=`<p style="margin:0 12px 8px;font-size:13px;color:var(--ink2)">${lead}</p>`;
-  Object.entries(ALLITEMS).filter(([k,v])=>v.cat===SHOPTAB).forEach(([k,v])=>{
+  Object.entries(ALLITEMS).filter(([k,v])=>v.cat===SHOPTAB&&k!=="g:balloon").forEach(([k,v])=>{
     const owned=S.owned.includes(k),eq=v.cat==="wear"&&S.wearing[v.slot]===k.slice(2);
     let btn;
     if(v.cat==="food")btn=`<button class="buy" data-buy="${k}" ${S.carrot<v.price?"disabled":""}>🥕${v.price}<br><small>かう</small></button>`;
@@ -787,16 +833,26 @@ let GM=null;
 function balloonSVG(c){return `<svg viewBox="0 0 76 96"><path d="M38 76 Q34 86 30 94" stroke="#666" stroke-width="2" fill="none"/><ellipse cx="38" cy="38" rx="33" ry="38" fill="${c}"/><ellipse cx="26" cy="22" rx="8" ry="12" fill="rgba(255,255,255,.35)"/><path d="M33 74 L38 80 L43 74Z" fill="${c}"/><text x="38" y="50" text-anchor="middle"></text></svg>`}
 function carrotSVG(){return `<svg viewBox="0 0 100 130"><path d="M50 128 Q22 90 30 48 L70 48 Q78 90 50 128Z" fill="#F08A24" stroke="#C96A0C" stroke-width="4"/><path d="M36 60 L60 64 M34 76 L58 80 M40 94 L52 96" stroke="#C96A0C" stroke-width="3" stroke-linecap="round"/><path d="M50 50 L30 12 M50 50 L50 6 M50 50 L72 14" stroke="#4E9A3A" stroke-width="12" stroke-linecap="round"/><path d="M50 50 L30 12 M50 50 L50 6 M50 50 L72 14" stroke="#5DAA4A" stroke-width="7" stroke-linecap="round"/></svg>`}
 function gamePool(g){
-  const ids=g==="balloon"?["count","add","sub","bun","katachi"]:["kanji","kata","kotoba","bunzukuri"];let pool=[];
-  const okIt=it=>g==="balloon"?it.type==="num":(it.type==="choice"&&it.ans.length<=4);
+  const kind=GAMES[g].kind;
+  const ids=kind==="num"?["count","add","sub","bun","katachi"]:["kanji","kata","kotoba","bunzukuri"];let pool=[];
+  const shortQ=(g==="mogura"||g==="keeki"||g==="apple");
+  const okIt=it=>kind!=="num"?(it.type==="choice"&&it.ans.length<=4):(it.type==="num"&&(!shortQ||(it.q.main&&!it.q.emojiHTML)));
   ids.forEach(id=>SK[id].items.forEach(it=>{const st=S.items[it.key];if(st&&st.seen&&okIt(it))pool.push(it)}));
   if(pool.length<6)ids.forEach(id=>SK[id].items.forEach(it=>{if(it.lv===0&&okIt(it))pool.push(it)}));
   return shuffle(pool);
 }
+const GAME_INTRO={
+  balloon:["こたえの ふうせんを タッチ してね。","ただしい かずの ふうせんを えらんでね。","ふうせん、どれかな。"],
+  field:["ただしい にんじんを ひっぱってね。","どの にんじんかな。","ポテ、にんじん たのしみ。"],
+  mogura:["こたえが でてきたら ポンッ。","ただしい かずを たたいてね。","もぐらさんを よく みてね。"],
+  fishing:["こたえの さかなを つってね。","ただしい さかなは どれかな。","つりざお、ゆらゆら。"],
+  apple:["こたえの りんごを うけてね。","おちてくる かずを えらんで。","かごを うごかす きもちで タッチ。"],
+  hoshi:["こたえの おほしさまを えらんでね。","ひかってる ほし、どれかな。","そらを みあげてね。"],
+  keeki:["じゅんばんに こたえて ケーキを つくろう。","ただしい かずを えらんでね。","おいしい ケーキに なあれ。"]};
 function startGame(g){
   ac();SFX.tap();const pool=gamePool(g);GM={g,pool,i:0,got:0,n:8,busy:false};
-  show("game");$("#game").classList.toggle("fld",g==="field");$("#gameTitle").textContent=GAMES[g].e+" "+GAMES[g].name;poteSet($("#gamePote"),"front","idle");
-  setBubble($("#gameBubble"),g==="balloon"?pick(["こたえの ふうせんを タッチ してね。","ただしい かずの ふうせんを えらんでね。","ふうせん、どれかな。"]):pick(["ただしい にんじんを ひっぱってね。","どの にんじんかな。","ポテ、にんじん たのしみ。"]));
+  show("game");$("#game").className="screen on"+(GAMES[g].kind==="word"?" fld":"");$("#gameTitle").textContent=GAMES[g].e+" "+GAMES[g].name;poteSet($("#gamePote"),"front","idle");
+  setBubble($("#gameBubble"),pick(GAME_INTRO[g]||["がんばってね。"]));
   gameRound();
 }
 function gPrompt(it){
@@ -817,25 +873,43 @@ function gameRound(){
   if(it.type==="num"){const a=Number(it.ans);const extra=shuffle([a-2,a-1,a+1,a+2,a+3,a+10].filter(x=>x>=0&&x!==a)).map(String);for(const x of extra){if(opts.length>=5)break;if(!opts.includes(x))opts.push(x)}}
   else{const others=shuffle(gm.pool.filter(x=>x!==it&&x.ans.length<=4)).map(x=>x.ans);for(const x of others){if(opts.length>=(gm.g==="field"?6:5))break;if(!opts.includes(x))opts.push(x)}}
   opts=shuffle(opts);
-  const area=$("#garea");
-  if(gm.g==="balloon"){const cols=["#E4483B","#2C6FBB","#F0A020","#5DAA4A","#9B59B6","#F48FB1"];
-    const W=area.clientWidth||300,H=area.clientHeight||300,cells=[[8,6],[52,4],[30,34],[70,40],[10,64],[56,68]];
-    area.innerHTML=opts.map((o,i)=>{const c=cells[i%cells.length];return `<button class="balloon" data-v="${esc(o)}" style="left:${c[0]}%;top:${c[1]}%;animation-delay:${-i*.4}s">${balloonSVG(cols[i%cols.length]).replace("</text>",esc(o)+"</text>")}</button>`}).join("");
-  }else{
-    opts=opts.slice(0,6);
-    area.innerHTML=`<div class="field">${opts.map(o=>o?`<button class="carrotB" data-v="${esc(o)}"><span class="cw">${carrotSVG()}<span class="lb" style="font-size:${Array.from(o).length>=4?"clamp(13px,4.2vw,18px)":Array.from(o).length===3?"clamp(17px,5.4vw,24px)":"clamp(20px,6.5vw,30px)"}">${esc(o)}</span></span></button>`:`<div></div>`).join("")}</div>`;
-  }
+  const area=$("#garea"),g=gm.g;
+  const cols=["#E4483B","#2C6FBB","#F0A020","#5DAA4A","#9B59B6","#F48FB1"];
+  const lbSize=o=>Array.from(o).length>=4?"clamp(13px,4.2vw,18px)":Array.from(o).length===3?"clamp(17px,5.4vw,24px)":"clamp(20px,6.5vw,30px)";
+  if(g==="balloon"){const cells=[[8,6],[52,4],[30,34],[70,40],[10,64],[56,68]];
+    area.innerHTML=opts.map((o,i)=>{const c=cells[i%cells.length];return `<button class="balloon" data-v="${esc(o)}" style="left:${c[0]}%;top:${c[1]}%;animation-delay:${-i*.4}s">${balloonSVG(cols[i%cols.length]).replace("</text>",esc(o)+"</text>")}</button>`}).join("");}
+  else if(g==="field"||g==="hoshi"){opts=opts.slice(0,6);
+    if(g==="hoshi")area.innerHTML=`<div class="field">${opts.map((o,i)=>o?`<button class="starB" data-v="${esc(o)}">${starSVG(cols[i%cols.length])}<span class="lb2" style="font-size:${lbSize(o)}">${esc(o)}</span></button>`:`<div></div>`).join("")}</div>`;
+    else area.innerHTML=`<div class="field">${opts.map(o=>o?`<button class="carrotB" data-v="${esc(o)}"><span class="cw">${carrotSVG()}<span class="lb" style="font-size:${lbSize(o)}">${esc(o)}</span></span></button>`:`<div></div>`).join("")}</div>`;}
+  else if(g==="mogura"){opts=opts.slice(0,6);
+    area.innerHTML=`<div class="holes">${opts.map((o,i)=>`<div class="hole"><button class="moguraB" data-v="${esc(o)}" style="animation-delay:${(i*0.5).toFixed(1)}s">${moguraSVG()}<span class="lb3" style="font-size:${lbSize(o)}">${esc(o)}</span></button></div>`).join("")}</div>`;}
+  else if(g==="fishing"){opts=opts.slice(0,5);
+    area.innerHTML=`<div class="pond">${opts.map((o,i)=>`<button class="fishB" data-v="${esc(o)}" style="top:${18+i*15}%;left:${i%2?55:8}%;animation-delay:${(-i*0.6).toFixed(1)}s">${fishSVG(cols[i%cols.length])}<span class="lbf" style="font-size:${lbSize(o)}">${esc(o)}</span></button>`).join("")}</div>`;}
+  else if(g==="apple"){opts=opts.slice(0,5);
+    area.innerHTML=`<div class="orchard">${opts.map((o,i)=>`<button class="appleB" data-v="${esc(o)}" style="left:${6+i*19}%;animation-delay:${(-i*0.9).toFixed(1)}s">${appleSVG()}<span class="lba">${esc(o)}</span></button>`).join("")}</div>`;}
+  else if(g==="keeki"){opts=opts.slice(0,4);
+    const layers=Math.min(gm.got,7);
+    area.innerHTML=`<div class="cake"><div class="cakeStack">${cakeStack(layers)}</div><div class="cakeOpts">${opts.map((o,i)=>`<button class="cakeB" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div></div>`;}
+  const hitCls={balloon:"pop",field:"pull",hoshi:"pop",mogura:"bonk",fishing:"pop",apple:"pop",keeki:"pop"}[g]||"pop";
   area.onclick=async e=>{const b=e.target.closest("[data-v]");if(!b||gm.busy)return;ac();
-    if(b.dataset.v===it.ans){gm.busy=true;gm.got++;gm.i++;b.classList.add(gm.g==="balloon"?"pop":"pull");SFX.ok();chu("happy");poteSet($("#gamePote"),"front","hop");
+    if(b.dataset.v===it.ans){gm.busy=true;gm.got++;gm.i++;b.classList.add(hitCls);SFX.ok();chu("happy");poteSet($("#gamePote"),"front","hop");
       setBubble($("#gameBubble"),pick(["やった。","せいかい。","すごい。","チューチュー。","それそれ。","さすが。"]));await sleep(650);gameRound()}
     else{b.classList.remove("no");void b.offsetWidth;b.classList.add("no");SFX.hmm();
       setBubble($("#gameBubble"),pick([`ちがうよ。こたえは「${it.ans}」。`,`うーん。「${it.ans}」を さがしてね。`,`おしい。「${it.ans}」だよ。`]));
       const st=itemState(it.key);st.box=0;st.due=addDays(1)}};
 }
+function starSVG(c){return `<svg viewBox="0 0 100 100"><path d="M50 6 L61 38 L95 38 L67 58 L78 92 L50 71 L22 92 L33 58 L5 38 L39 38 Z" fill="${c}" stroke="#B48A16" stroke-width="3"/></svg>`}
+function moguraSVG(){return `<svg viewBox="0 0 100 100"><ellipse cx="50" cy="55" rx="34" ry="36" fill="#8A5A3A"/><ellipse cx="50" cy="66" rx="20" ry="18" fill="#E8C9A8"/><circle cx="40" cy="46" r="4" fill="#3B2A1A"/><circle cx="60" cy="46" r="4" fill="#3B2A1A"/><ellipse cx="50" cy="58" rx="5" ry="4" fill="#C25B6E"/></svg>`}
+function fishSVG(c){return `<svg viewBox="0 0 120 80"><ellipse cx="52" cy="40" rx="42" ry="26" fill="${c}"/><polygon points="88,40 118,18 118,62" fill="${c}"/><circle cx="30" cy="34" r="5" fill="#fff"/><circle cx="30" cy="34" r="2.5" fill="#000"/></svg>`}
+function appleSVG(){return `<svg viewBox="0 0 100 100"><path d="M50 30 C30 20 12 34 16 58 C19 80 40 92 50 92 C60 92 81 80 84 58 C88 34 70 20 50 30Z" fill="#E4483B"/><rect x="47" y="14" width="6" height="18" rx="3" fill="#7A4A22"/><ellipse cx="62" cy="20" rx="10" ry="6" fill="#5DAA4A" transform="rotate(20 62 20)"/></svg>`}
+function cakeStack(n){const cols=["#F6C6D0","#FDE9A0","#C8E6C9","#BBDEFB","#E1BEE7","#FFCCBC","#D7CCC8"];let h="";
+  for(let i=0;i<n;i++)h+=`<div class="clayer" style="background:${cols[i%cols.length]};width:${88-i*8}%"></div>`;
+  h+=`<div class="cberry">🍓</div>`;return h||`<div style="color:var(--ink2);font-size:14px">こたえると ケーキが つみあがるよ</div>`}
 function gameEnd(){
   const gm=GM,t=ymd();S.play[t]=(S.play[t]||0)+1;const bonus=S.belly>=BELLY_FULL?2:1;S.carrot+=bonus;S.gameBest[gm.g]=Math.max(S.gameBest[gm.g]||0,gm.got);save(true);
   $("#gprompt").innerHTML="";
-  $("#garea").innerHTML=`<div class="gend">${gm.g==="balloon"?"ふうせん":"にんじん"}、ぜんぶ とれたよ。<b>🥕 +${bonus}</b>${bonus>1?`<span style="font-size:14px">まんぷく ボーナス。</span>`:""}<span style="font-size:14px;color:var(--ink2)">${playsLeft()>0?"じゅぎょうの ぶん、もういちど あそべるよ。":"また じゅぎょうを したら あそべるよ。"}</span><button class="big-btn go" id="gEnd">ポテの へやへ</button></div>`;
+  const doneWord={balloon:"ふうせん、ぜんぶ とれた",field:"にんじん、ぜんぶ とれた",mogura:"ぜんぶ たたけた",fishing:"さかな、ぜんぶ つれた",apple:"りんご、ぜんぶ とれた",hoshi:"おほしさま、ぜんぶ とれた",keeki:"ケーキ、できあがり"}[gm.g]||"クリア";
+  $("#garea").innerHTML=`<div class="gend">${doneWord}よ。<b>🥕 +${bonus}</b>${bonus>1?`<span style="font-size:14px">まんぷく ボーナス。</span>`:""}<span style="font-size:14px;color:var(--ink2)">${playsLeft()>0?"じゅぎょうの ぶん、もういちど あそべるよ。":"また じゅぎょうを したら あそべるよ。"}</span><button class="big-btn go" id="gEnd">ポテの へやへ</button></div>`;
   setBubble($("#gameBubble"),pick(["たのしかった。ありがとう。","また あそぼうね。","ポテ、いい きぶん。","チュー。さいこうの あそびだった。"]));poteSet($("#gamePote"),"front","hop");chu("happy");
   $("#gEnd").onclick=()=>{GM=null;showHome()};
 }
@@ -844,7 +918,8 @@ async function choosePlay(){
   const gs=ownedGames();tickBelly();
   if(!gs.length){await ask("あそびの どうぐは まだ ないよ。おみせの「あそび」で かえるよ。","おみせへ","もどる")&&(SHOPTAB="game",openShop());return}
   if(S.belly===0){await ask("ポテは おなかが ぺこぺこ。ごはんを あげてから あそぼう。","ごはんへ","もどる")&&openFeed();return}
-  if(playsLeft()<=0){await ask("あそびの じかんは、じゅぎょうを 1かい するごとに 1かい だよ。","わかった","もどる");return}
+  if(S.play[ymd()]>0){await ask("きょうの あそびは おわり。また あした あそぼうね。","わかった","もどる");return}
+  if(playsLeft()<=0){const need=(S.settings.limit||3)-todayCount();await ask(`きょうの じゅぎょうを あと ${need}かい したら、あそべるよ。`,"べんきょうする","もどる")&&showHome();return}
   if(gs.length===1)return startGame(gs[0]);
   const d=document.createElement("div");d.className="modal";
   d.innerHTML=`<div class="box"><p>どれで あそぶ？</p>${gs.map(g=>`<button class="big-btn go" data-g="${g}">${GAMES[g].e} ${GAMES[g].name}</button>`).join("")}<button class="big-btn" data-g="">やめる</button></div>`;
@@ -1051,7 +1126,9 @@ function poteHTML(id,view,anim){return `<span class="pote ${anim||"idle"}" id="$
 
 /* ---------- ホーム ---------- */
 function todayCount(){return S.days[ymd()]||0}
-function asleep(){return todayCount()>=(S.settings.limit||3)}
+function canPlayNow(){const t=ymd();return todayCount()>=(S.settings.limit||3)&&!(S.play[t]>0)&&ownedGames().length>0&&S.belly>0}
+function reachedLimit(){return todayCount()>=(S.settings.limit||3)}
+function asleep(){const t=ymd();return reachedLimit()&&(S.play[t]>0||ownedGames().length===0||S.belly<=0)}
 function stars(id){const lv=S.skills[id].lv,max=SK[id].levels.length;return "★".repeat(Math.min(lv,max))+"☆".repeat(Math.max(0,max-lv))}
 function showHome(){
   TOKEN++;shush();show("home");
@@ -1061,7 +1138,7 @@ function showHome(){
   $("#deco").innerHTML=Object.entries(DECO).filter(([k])=>S.owned.includes("d:"+k)).map(([k,v])=>`<span style="${v.pos}">${v.e}</span>`).join("");
   carrotTxt();
   tickBelly();$("#belly").innerHTML="🍽️ "+bellyHTML(52);$("#btnFeed").classList.toggle("hungry",S.belly===0);
-  const canPlay=ownedGames().length>0&&playsLeft()>0&&S.belly>0;$("#btnPlay").className=canPlay?"on":"off";
+  const canPlay=canPlayNow();$("#btnPlay").className=canPlay?"on":"off";
   const nd=Object.keys(S.days).length;$("#daysTxt").textContent=nd?`がっこう ${nd}にちめ`:"";
   $("#subjects").innerHTML=SKILL_IDS.map(id=>`<button class="subj" data-skill="${id}"><span class="ic">${SK[id].icon}</span><span class="nm">${SK[id].name}</span><span class="st">${stars(id)}</span>${(!z&&S.wish===id)?'<span class="wish">ポテの おねがい</span>':""}</button>`).join("");
   if(!S.met){$("#subjects").innerHTML=`<button class="big-btn go" id="btnYes" style="grid-column:1/-1;min-height:72px">いいよ！ せんせいに なる</button>`;
@@ -1169,8 +1246,10 @@ function makePad(cv,W,H,color){
   const dpr=Math.min(2,window.devicePixelRatio||1);cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext("2d");x.scale(dpr,dpr);
   x.lineCap="round";x.lineJoin="round";x.lineWidth=Math.max(9,Math.min(W,H)*.06);x.strokeStyle=color||"#4A2E14";
   let drawing=false,pts=0;const pos=e=>{const r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};
-  cv.onpointerdown=e=>{drawing=true;cv.setPointerCapture(e.pointerId);const [px,py]=pos(e);x.beginPath();x.moveTo(px,py);x.lineTo(px+.1,py);x.stroke();pts++;SFX.chalk()};
-  cv.onpointermove=e=>{if(!drawing)return;const [px,py]=pos(e);x.lineTo(px,py);x.stroke();pts++;if(pts%6===0)SFX.chalk()};
+  const stop=e=>{e.preventDefault()};
+  cv.addEventListener("touchstart",stop,{passive:false});cv.addEventListener("touchmove",stop,{passive:false});
+  cv.onpointerdown=e=>{e.preventDefault();drawing=true;cv.setPointerCapture(e.pointerId);const [px,py]=pos(e);x.beginPath();x.moveTo(px,py);x.lineTo(px+.1,py);x.stroke();pts++;SFX.chalk()};
+  cv.onpointermove=e=>{if(!drawing)return;e.preventDefault();const [px,py]=pos(e);x.lineTo(px,py);x.stroke();pts++;if(pts%6===0)SFX.chalk()};
   cv.onpointerup=cv.onpointercancel=()=>{drawing=false};
   return {get pts(){return pts},clear(){x.clearRect(0,0,W,H);pts=0},url(){return cv.toDataURL("image/png")}};
 }
@@ -1193,8 +1272,9 @@ function renderTrace(it){
   const sx=c.getContext("2d");sx.lineCap="round";sx.lineJoin="round";sx.lineWidth=Math.max(12,Math.min(W,H)*.06);sx.strokeStyle="#FFE27A";
   let drawing=false,pts=0;
   const pos=e=>{const r=c.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top]};
-  c.onpointerdown=e=>{drawing=true;c.setPointerCapture(e.pointerId);const [x,y]=pos(e);sx.beginPath();sx.moveTo(x,y);sx.lineTo(x+.1,y);sx.stroke();pts++;SFX.chalk()};
-  c.onpointermove=e=>{if(!drawing)return;const [x,y]=pos(e);sx.lineTo(x,y);sx.stroke();pts++;if(pts%6===0)SFX.chalk()};
+  c.addEventListener("touchstart",e=>e.preventDefault(),{passive:false});c.addEventListener("touchmove",e=>e.preventDefault(),{passive:false});
+  c.onpointerdown=e=>{e.preventDefault();drawing=true;c.setPointerCapture(e.pointerId);const [x,y]=pos(e);sx.beginPath();sx.moveTo(x,y);sx.lineTo(x+.1,y);sx.stroke();pts++;SFX.chalk()};
+  c.onpointermove=e=>{if(!drawing)return;e.preventDefault();const [x,y]=pos(e);sx.lineTo(x,y);sx.stroke();pts++;if(pts%6===0)SFX.chalk()};
   c.onpointerup=c.onpointercancel=()=>{drawing=false};
   $("#trClear").onclick=()=>{ac();SFX.tap();sx.clearRect(0,0,W,H);pts=0};
   $("#trDone").onclick=()=>{ac();SFX.tap();traceJudge(it,g,c,W,H,dpr,pts)};
@@ -1365,7 +1445,7 @@ function finishLesson(){
   $("#finishBody").innerHTML=`<div class="gift">きょうの じゅぎょう、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">${les.fixedLabels.length?"ポテに おしえた ぶんも はいってるよ。":"おみせで つかってね。"}</span></div>
    <div class="stage" style="padding:0 0 10px"><div class="poteBox">${poteHTML("finPote","front","hop")}</div><div class="bubble left" id="finBubble"></div></div>
    ${letterHTML(S.letters[S.letters.length-1])}
-   ${ownedGames().length&&playsLeft()>0&&S.belly>0?`<button class="big-btn" id="finPlay" style="margin-bottom:10px">🎈 あそびの じかん</button>`:""}
+   ${z&&ownedGames().length&&playsLeft()>0&&S.belly>0?`<button class="big-btn" id="finPlay" style="margin-bottom:10px">🎈 あそびの じかん</button>`:""}
    ${z?"":`<button class="big-btn" id="finMore" style="margin-bottom:10px">もうひとつ おしえる</button>`}
    <button class="big-btn go" id="finEnd">きょうは おしまい。また あした。</button>`;
   const say=les.leveled!=null&&les.leveled<def.levels.length?L.levelUp(def.levels[les.leveled]):L.letterWait();
