@@ -1562,6 +1562,11 @@ function adultPage(){
      <input id="autoUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(s.autoUrl||"")}" style="width:100%;font-size:13px;text-align:left;padding:8px">
      <div style="margin:6px 0"><button class="s ${s.autoMode==="day"?"sel":""}" data-set="auto:day">1日1回</button><button class="s ${s.autoMode==="each"?"sel":""}" data-set="auto:each">授業のたび</button><button class="s" data-set="auto:save">URLを保存</button><button class="s" data-set="auto:test">いま送る(テスト)</button></div>
      <div style="font-size:13px">${s.autoUrl?`設定済み。送信回数：${S.autoCount||0}回${S.autoLast?"(最後："+S.autoLast.replace(/-/g,"/")+")":""}`:"未設定"}</div>
+     <p style="margin:10px 0 2px">📦 データの ひっこし</p>
+     <p style="margin:0 0 6px;font-size:13px">開き方(LINE／Safari／アイコン)を変えると記録が別々になります。今のデータをコードにして、別の開き方に貼り付ければ引き継げます。</p>
+     <button class="s" id="btnExport">① いまの データを コードにする</button>
+     <button class="s" id="btnImport">② コードから データを よみこむ</button>
+     <div id="migMsg" style="font-size:13px;margin-top:6px"></div>
      <p style="margin:10px 0 2px">やり直し</p><button class="s" data-set="reset">記録をすべて消す</button></div>
    <div class="card adult"><h3>このアプリのしくみ</h3>
      <p style="margin:4px 0">お子さんが「先生」、ポテが「生徒」です。お子さんは先に自分の答えをメモし(思い出す練習)、そのあとポテの答えに ◯ か ✕ をつけます。ポテは小学1年生がつまずきやすい形でわざと間違えます。</p>
@@ -1572,6 +1577,20 @@ function adultPage(){
      <p style="margin:4px 0">ポテの「おなか」は0〜100%。1日たつごとに40%減り、ごはんで回復します(レタス＋15%、にんじん＋25%、りんご＋35%、とうもろこし＋45%、いちご＋60%)。0%だと「あそびの じかん」で遊べません。80%以上で遊ぶと🥕が1本多くもらえます。</p>
      <p style="margin:4px 0">「あそびの じかん」は、授業を1回するごとに1回だけ。ゲームの問題は、お子さんがすでに授業でやった問題から出るので、遊びがそのまま復習になります。ゲームで間違えた問題は翌日の授業に出ます。</p></div>`);
   $("#btnShare").onclick=shareReport;
+  $("#btnExport").onclick=()=>{try{const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+    $("#pageBody").insertAdjacentHTML("afterbegin",`<div class="card adult"><h3>📦 ひっこしコード</h3><p style="margin:4px 0;font-size:13px">下の文字を ぜんぶ コピーして、あたらしい 開き方の「②コードから よみこむ」に はりつけてください。</p><textarea id="expBox" readonly style="width:100%;height:34vh;font:12px/1.5 monospace;padding:8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink)">${code}</textarea><button class="s" id="expCopy">コピーする</button><span id="expDone" style="font-size:13px"></span></div>`);
+    $("#pageBody").scrollTop=0;const box=$("#expBox");box.focus();box.select();
+    $("#expCopy").onclick=async()=>{try{await navigator.clipboard.writeText(code);$("#expDone").textContent="コピーしました。"}catch(e){box.select();document.execCommand&&document.execCommand("copy");$("#expDone").textContent="コピーしました(だめなら手で長押し選択)。"}};
+  }catch(e){$("#migMsg").textContent="コード作成に失敗しました。"}};
+  $("#btnImport").onclick=()=>{
+    $("#pageBody").insertAdjacentHTML("afterbegin",`<div class="card adult"><h3>📥 コードから よみこむ</h3><p style="margin:4px 0;font-size:13px">前の 開き方で つくった「ひっこしコード」を、ここに はりつけて「よみこむ」を おしてください。今のデータは 上書きされます。</p><textarea id="impBox" style="width:100%;height:34vh;font:12px/1.5 monospace;padding:8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink)" placeholder="ここに はりつけ"></textarea><button class="s" id="impGo">よみこむ</button><span id="impDone" style="font-size:13px"></span></div>`);
+    $("#pageBody").scrollTop=0;
+    $("#impGo").onclick=async()=>{const raw=($("#impBox").value||"").trim();if(!raw){$("#impDone").textContent="コードが空です。";return}
+      let obj;try{obj=JSON.parse(decodeURIComponent(escape(atob(raw))))}catch(e){$("#impDone").textContent="コードが正しくありません。全部コピーできているか確認してください。";return}
+      if(!obj||typeof obj!=="object"||!("skills" in obj)){$("#impDone").textContent="このコードは ポテのがっこうの データではないようです。";return}
+      if(!await ask("いまのデータを、コードの内容で 上書きします。よろしいですか？","上書きする","やめる"))return;
+      S=normalize(obj);save(true);$("#impDone").textContent="よみこみました。";showHome();};
+  };
   $("#pmsgSend").onclick=()=>{const t=$("#pmsg").value;const lines=t.split(/\n/).map(x=>x.trim()).filter(Boolean);
     if(!lines.length){$("#pmsgDone").textContent="文が空です。";return}
     S.letters.push({d:ymd(),lines,parent:true,read:false});if(S.letters.length>20)S.letters=S.letters.slice(-20);save(true);
