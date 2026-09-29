@@ -6,8 +6,6 @@
 <title>金沢ランニングクエスト 道中ガイド</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{--bg:#fbf6ec;--card:#fff;--ink:#22344f;--ink2:#5a6b85;--line:#e6dcc8;--navy:#1f3a63;--gold:#c9a24b;--pink:#e91e7a;--green:#43a047;--blue:#1e88e5;--purple:#8e24aa;--orange:#fb8c00}
 :root:not([data-theme="light"]){color-scheme:light dark}
@@ -341,16 +339,16 @@ function render(){
   const _wp=[...new Set(((byLv[cur]&&byLv[cur].miti)||[]).map(x=>x.gq||x.n))].map(encodeURIComponent).concat([`${s.lat},${s.lon}`]).join('%7C'); const gmap=`https://www.google.com/maps/dir/?api=1&origin=${START.lat},${START.lon}&destination=${START.lat},${START.lon}&travelmode=walking&waypoints=${_wp}`;
   let h=`<div class="card"><div class="head"><div><h2>Lv${s.lv} ${s.name}小学校<small>${s.yomi}しょうがっこう</small></h2><div class="meta">往復 ${s.rt}km（芸術村発着・徒歩実測）${L?'・'+(L.school.addr||''):''}</div></div><a class="gbtn" target="_blank" rel="noopener" href="${gmap}">📍 Googleマップで道順を開く</a></div>`;
   const Lx = Object.assign({steps:STEPS[s.name]||[]}, L || {spots:[], school:{name:s.name+'小学校',addr:'',spots:[]}, around:[]}); Lx.steps=STEPS[s.name]||[]; 
-  h+=`<div class="tabs"><span class="tab ${tab==='route'?'on':''}" data-t="route">🛣️ 道順とうんちく</span><span class="tab ${tab==='map'?'on':''}" data-t="map">🗺️ 地図（ルート）</span><span class="tab ${tab==='school'?'on':''}" data-t="school">🏫 学校・校下</span><span class="tab ${tab==='detour'?'on':''}" data-t="detour">🧭 寄り道スポット</span><span class="tab ${tab==='hyochu'?'on':''}" data-t="hyochu">🪧 まちしるべ標柱</span><span class="tab ${tab==='kyu'?'on':''}" data-t="kyu">🏷️ 旧町名（消えた町名）</span><span class="tab ${tab==='kentei'?'on':''}" data-t="kentei">🎓 この地域の金沢検定</span><span class="tab ${tab==='around'?'on':''}" data-t="around">📚 範囲外の余談</span></div>`;
-  h+=`<div class="chips">${CATS.map(c=>`<span class="chip ${catOn.has(c)?'on':''}" data-c="${c}">${c}</span>`).join('')}<span class="chip ${verifiedOnly?'on':''}" data-v="1">★◎のみ（喋る用）</span></div></div>`;
+  h+=`<div class="tabs"><span class="tab ${tab==='route'?'on':''}" data-t="route">🛣️ 道順とうんちく</span><span class="tab ${tab==='map'?'on':''}" data-t="map">📍 往復ルート・寄り道3選</span><span class="tab ${tab==='school'?'on':''}" data-t="school">🏫 学校・校下</span><span class="tab ${tab==='detour'?'on':''}" data-t="detour">🧭 寄り道スポット</span><span class="tab ${tab==='hyochu'?'on':''}" data-t="hyochu">🪧 まちしるべ標柱</span><span class="tab ${tab==='kyu'?'on':''}" data-t="kyu">🏷️ 旧町名（消えた町名）</span><span class="tab ${tab==='kentei'?'on':''}" data-t="kentei">🎓 この地域の金沢検定</span><span class="tab ${tab==='around'?'on':''}" data-t="around">📚 範囲外の余談</span></div>`;
+  h+=`<div class="chips"><span class="chip ${verifiedOnly?'on':''}" data-v="1">★◎のみ（喋る用）</span></div></div>`;
   // route
   let r=`<div class="card panel ${tab==='route'?'on':''}"><div class="strip">`;
   r+=`<div class="step start"><h3>🏁 スタート：${START.name}</h3>${Lx.spots.filter(x=>x.at===0).map(spotHTML).join('')}</div>`;
-  Lx.steps.forEach((st,i)=>{ const n=i+1; const sp=Lx.spots.filter(x=>x.at===n).map(spotHTML).join(''); r+=`<div class="step"><h3>${n}. ${esc(st)}</h3>${sp}</div>`; });
+  { const mid=Lx.spots.filter(x=>x.at>0).sort((a,b)=>a.at-b.at).map(spotHTML).join(''); if(mid) r+=`<div class="step"><h3>🏃 道のとちゅう</h3>${mid}</div>`; }
   r+=`<div class="step goal"><h3>🏫 ゴール：${Lx.school.name}の校門でタッチ</h3>${(Lx.school.spots||[]).map(spotHTML).join('')}</div></div>${Lx.spots.length?'':'<p class="note">このレベルのうんちくは解放されたら装填する。</p>'}</div>`;
   h+=r;
   const gembed=`https://maps.google.com/maps?saddr=${START.lat},${START.lon}&daddr=${s.lat},${s.lon}&dirflg=w&hl=ja&output=embed`;
-  h+=`<div class="card panel ${tab==='map'?'on':''}"><p style="margin:10px 0"><a class="gbtn" target="_blank" rel="noopener" href="${gmap}">📍 Googleマップで往復ルートを開く（芸術村→寄り道→${s.name}小→芸術村・徒歩）</a></p><div id="lmap"></div>${(Lx.miti&&Lx.miti.length)?`<div style="margin-top:16px"><h3 style="font-family:'Zen Maru Gothic';font-weight:900;font-size:16px;margin:10px 0 8px">🧭 このルートの寄り道スポット（地図の📍）</h3>${Lx.miti.map((sp,i)=>`<div class="card" style="padding:12px;margin:8px 0;border:1px solid var(--line,#e6ddc9);border-radius:10px"><div style="font-family:'Zen Maru Gothic';font-weight:900;font-size:15px;margin-bottom:2px"><span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:#e91e7a;color:#fff;font-size:13px;line-height:24px;text-align:center;margin-right:6px">${i+1}</span>${sp.n}</div><div style="font-size:12px;color:#888;margin-bottom:2px">${sp.kind||''}　${sp.addr||''}</div><a class="gbtn" target="_blank" rel="noopener" style="display:inline-block;margin:4px 0 8px;font-size:13px;padding:6px 12px" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sp.gq||sp.n)}">📍 Googleマップで場所を見る</a><div style="font-size:13px;line-height:1.6">${[['🕐 いつ',sp.w5.when],['👤 だれが',sp.w5.who],['❓ なぜ',sp.w5.why],['📦 なにを',sp.w5.what],['🔧 どのように',sp.w5.how],['📍 どこで',sp.w5.where]].map(r=>`<div style="margin:6px 0"><div style="font-weight:700;color:var(--accent,#c9a24b);font-size:12px">${r[0]}</div><div>${r[1]}</div></div>`).join('')}</div></div>`).join('')}</div>`:''}<p class="note">上：Googleマップの徒歩ルート。下：OpenStreetMap＋実際の歩道ルート（取得できないときは直線）。往復 ${s.rt}km。</p></div>`;
+  h+=`<div class="card panel ${tab==='map'?'on':''}"><p style="margin:10px 0"><a class="gbtn" target="_blank" rel="noopener" href="${gmap}">📍 Googleマップで往復ルートを開く（芸術村→寄り道→${s.name}小→芸術村・徒歩）</a></p>${(Lx.miti&&Lx.miti.length)?`<div style="margin-top:16px"><h3 style="font-family:'Zen Maru Gothic';font-weight:900;font-size:16px;margin:10px 0 8px">🧭 このルートの寄り道スポット（地図の📍）</h3>${Lx.miti.map((sp,i)=>`<div class="card" style="padding:12px;margin:8px 0;border:1px solid var(--line,#e6ddc9);border-radius:10px"><div style="font-family:'Zen Maru Gothic';font-weight:900;font-size:15px;margin-bottom:2px"><span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:#e91e7a;color:#fff;font-size:13px;line-height:24px;text-align:center;margin-right:6px">${i+1}</span>${sp.n}</div><div style="font-size:12px;color:#888;margin-bottom:2px">${sp.kind||''}　${sp.addr||''}</div><a class="gbtn" target="_blank" rel="noopener" style="display:inline-block;margin:4px 0 8px;font-size:13px;padding:6px 12px" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sp.gq||sp.n)}">📍 Googleマップで場所を見る</a><div style="font-size:13px;line-height:1.6">${[['🕐 いつ',sp.w5.when],['👤 だれが',sp.w5.who],['❓ なぜ',sp.w5.why],['📦 なにを',sp.w5.what],['🔧 どのように',sp.w5.how],['📍 どこで',sp.w5.where]].map(r=>`<div style="margin:6px 0"><div style="font-weight:700;color:var(--accent,#c9a24b);font-size:12px">${r[0]}</div><div>${r[1]}</div></div>`).join('')}</div></div>`).join('')}</div>`:''}<p class="note">上：Googleマップの徒歩ルート。下：OpenStreetMap＋実際の歩道ルート（取得できないときは直線）。往復 ${s.rt}km。</p></div>`;
   h+=`<div class="card panel ${tab==='school'?'on':''}"><h3 style="font-family:'Zen Maru Gothic';font-weight:900;margin-bottom:6px">${Lx.school.name}（${Lx.school.addr||''}）</h3>${(Lx.school.spots||[]).map(spotHTML).join('')||'<p class="note">なし</p>'}</div>`;
   h+=`<div class="card panel ${tab==='detour'?'on':''}"><p class="note" style="margin-bottom:8px">走りながら「ちょっと寄ってみました」ができる場所。距離は校門またはルートからの目安。</p>${(Lx.detours||[]).map(sp=>spotHTML(Object.assign({},sp,{name:sp.name+'　📍'+(sp.dist||'')}))).join('')||'<p class="note">未装填</p>'}</div>`;
   h+=`<div class="card panel ${tab==='hyochu'?'on':''}"><p class="note" style="margin-bottom:8px">金沢市が昭和54年〜平成22年に市内224か所に建てた「歴史のまちしるべ」標柱（町名・坂・堀・用水の由来を刻んだ柱）。ルート近くの標柱を、市公式一覧の設置場所（住所）付きで。番号は市の標柱番号。住所をタップでGoogleマップ。</p>${(Lx.hyochu||[]).map(k=>`<div class="spot c-歴史"><span class="tg t-歴史">標柱 No.${k.no}</span><span class="nm">${esc(k.n)}（${esc(k.y)}）</span><span class="rk">◎ 金沢市公式</span><p>${esc(k.text)}</p><div class="src">📍 設置場所：<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('金沢市'+k.at)}" target="_blank" rel="noopener">金沢市${esc(k.at)}</a></div></div>`).join('')||'<p class="note">未装填</p>'}</div>`;
@@ -361,22 +359,9 @@ function render(){
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{tab=t.dataset.t;render();});
   document.querySelectorAll('.chip[data-c]').forEach(c=>c.onclick=()=>{const k=c.dataset.c; catOn.has(k)?catOn.delete(k):catOn.add(k); render();});
   const v=document.querySelector('.chip[data-v]'); if(v) v.onclick=()=>{verifiedOnly=!verifiedOnly;render();};
-  if(tab==='map') drawLeaflet(s);
+  
 }
-function drawLeaflet(s){
-  if(!window.L||!document.getElementById('lmap')) return;
-  var el=document.getElementById('lmap');
-  if(window.__rqmap){ try{window.__rqmap.remove();}catch(e){} window.__rqmap=null; }
-  const m=L.map(el); window.__rqmap=m;
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,crossOrigin:true,attribution:'© OpenStreetMap contributors'}).addTo(m);
-  setTimeout(function(){ try{m.invalidateSize();}catch(e){} },250);
-  const a=[START.lat,START.lon], b=[s.lat,s.lon];
-  L.marker(a).addTo(m).bindPopup('🏁 '+START.name); L.marker(b).addTo(m).bindPopup('🏫 '+s.name+'小学校');
-  const straight=L.polyline([a,b],{color:'#c9a24b',dashArray:'8 8',weight:3}).addTo(m); m.fitBounds(straight.getBounds().pad(0.25));
-  fetch(`https://router.project-osrm.org/route/v1/foot/${START.lon},${START.lat};${s.lon},${s.lat}?overview=full&geometries=geojson`)
-   .then(r=>r.json()).then(j=>{ if(j.routes&&j.routes[0]){ const pts=j.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]); const line=L.polyline(pts,{color:'#e91e7a',weight:5}).addTo(m); m.removeLayer(straight); m.fitBounds(line.getBounds().pad(0.15)); } })
-   .catch(()=>{});
-}
+
 function renderBar(){
   const bar=document.getElementById('lvbar'); bar.innerHTML='';
   BASE.schools.forEach(s=>{ const has=!!byLv[s.lv]; const b=document.createElement('button'); b.className='lvbtn'+(s.lv===cur?' on':'')+(has?'':' empty'); b.textContent=`Lv${s.lv} ${s.name}`; b.title=has?'':'未装填'; b.onclick=()=>{cur=s.lv;renderBar();render();}; bar.appendChild(b); });
