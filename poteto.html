@@ -61,7 +61,9 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .trTip{position:absolute;left:0;right:0;top:6px;text-align:center;font-family:var(--ui);font-size:14px;opacity:.85;pointer-events:none}
 /* ポテ */
 .pote{display:inline-block;position:relative;height:100%;transform-origin:50% 100%}
-.pote .pimg{display:block;height:100%;width:auto;filter:drop-shadow(0 5px 3px rgba(60,35,10,.28))}
+.pote{--sz:1}
+.pote .pimg{display:block;height:100%;width:auto;filter:drop-shadow(0 5px 3px rgba(60,35,10,.28));transform:scale(var(--sz));transform-origin:50% 100%;transition:transform .6s ease,filter .6s ease}
+.pote.hungry .pimg{filter:drop-shadow(0 5px 3px rgba(60,35,10,.28)) grayscale(.6) brightness(.95)}
 .pote .wear{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .poteBox{display:flex;justify-content:center}
 .pote{will-change:transform}
@@ -183,13 +185,20 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .starB svg{width:min(26vw,100px);height:auto}
 .starB .lb2{position:absolute;font:700 var(--kyo);color:#4A2E14;background:rgba(255,253,246,.9);border-radius:8px;padding:1px 6px;white-space:nowrap}
 .starB.pop{animation:pop .35s ease-out forwards}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.badge{background:var(--wall2);border:2px dashed var(--line);border-radius:14px;padding:8px 4px;text-align:center;opacity:.6}
+.badge.got{background:var(--paper);border:3px solid var(--carrot);opacity:1;box-shadow:var(--shadow)}
+.badge .be{font-size:30px;line-height:1.2}
+.badge .bn{font-size:12px;font-weight:900;line-height:1.2;margin-top:2px}
+.badge .bd{font-size:10px;color:var(--ink2);line-height:1.2;margin-top:1px}
 .gend{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--paper);border:3px solid var(--ink);color:var(--ink);border-radius:16px;font-size:20px;text-align:center;padding:16px}
 .gend b{font-size:44px}
 .room{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   background:linear-gradient(var(--wall) 0 78%,var(--floor) 78% 100%);padding:8px 16px 0}
 .room::before{content:"";position:absolute;left:0;right:0;top:78%;height:6px;background:var(--floor2)}
 .room .bubble{width:100%;max-width:340px;margin-bottom:10px;z-index:2;font-size:15px;padding:8px 12px}
-.room .poteBox{height:min(27vh,200px);z-index:1;margin-bottom:2vh;position:relative}
+.room .poteBox{height:min(27vh,200px);z-index:1;margin-bottom:2vh;position:relative;overflow:visible}
+.room{overflow:visible}
 .shelf{position:absolute;left:12px;right:12px;top:6px;display:flex;flex-wrap:wrap;gap:2px;font-size:22px;line-height:1.2;
   min-height:32px;padding:2px 6px;border-bottom:7px solid var(--frame);border-radius:0 0 3px 3px;opacity:.95}
 .shelf:empty{display:none}
@@ -375,7 +384,7 @@ const LS_KEY="pote-gakkou-v1";
 const SKILL_IDS=["count","add","sub","bun","katachi","clock","kotoba","bunzukuri","kata","kanji","kaku"];
 function freshState(){
   const s={v:1,updatedAt:0,items:{},skills:{},lessons:0,days:{},room:[],letters:[],fixed:0,wish:null,log:[],met:false,
-    carrot:0,owned:["g:balloon"],inv:{},wearing:{},fed:{},play:{},gameBest:{},belly:50,bellyDate:"",
+    carrot:0,owned:["g:balloon"],inv:{},wearing:{},fed:{},play:{},gameBest:{},belly:50,bellyDate:"",size:30,hungryDays:0,badges:[],growIntro:false,
     settings:{sfx:true,limit:3,call:"むっちゃん",autoUrl:"",autoMode:"day"}};
   SKILL_IDS.forEach(id=>s.skills[id]={lv:0,hist:[],n:0});
   return s;
@@ -389,6 +398,7 @@ function normalize(o){
   ["room","letters","log","owned"].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!s.owned.includes("g:balloon"))s.owned.push("g:balloon"); // ふうせんは デフォルト
   ["inv","wearing","fed","play","gameBest"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});if(typeof s.carrot!=="number")s.carrot=0;if(typeof s.belly!=="number")s.belly=50;if(s.belly<=3&&!s.bellyPct){s.belly=Math.round(s.belly*33);s.bellyPct=1}if(typeof s.bellyDate!=="string")s.bellyDate="";
+  if(typeof s.size!=="number")s.size=30;if(typeof s.hungryDays!=="number")s.hungryDays=0;if(!Array.isArray(s.badges))s.badges=[];
   return s;
 }
 function loadLocal(){try{const t=localStorage.getItem(LS_KEY);if(t)S=normalize(JSON.parse(t))}catch(e){}}
@@ -745,6 +755,7 @@ const WEAR={
 const FOOD={lettuce:{name:"レタス",e:"🥬",price:2,heal:15},carrot:{name:"にんじん",e:"🥕",price:3,heal:25},apple:{name:"りんご",e:"🍎",price:4,heal:35},corn:{name:"とうもろこし",e:"🌽",price:5,heal:45},strawberry:{name:"いちご",e:"🍓",price:6,heal:60}};
 const BELLY_DECAY=40; // 1日で へる %
 const BELLY_FULL=80; // まんぷく ボーナスの ライン
+const SIZE_MIN=30, SIZE_MAX=120, SIZE_UP=6, SIZE_DOWN=5; // サイズ(%)
 const DECO={window:{name:"まどと カーテン",e:"🪟",price:12,pos:"left:10%;top:6%;font-size:56px"},pic:{name:"ポテの え",e:"🖼️",price:10,pos:"right:12%;top:12%;font-size:46px"},
   plant:{name:"おおきな はっぱ",e:"🪴",price:8,pos:"left:6%;bottom:6%;font-size:52px"},bear:{name:"くまの ぬいぐるみ",e:"🧸",price:10,pos:"right:8%;bottom:8%;font-size:44px"},
   lamp:{name:"あかりの ランプ",e:"🛋️",price:14,pos:"right:30%;bottom:4%;font-size:56px"},star:{name:"おほしさま",e:"🌟",price:6,pos:"left:38%;top:4%;font-size:36px"}};
@@ -807,27 +818,34 @@ function renderWear(){
 }
 /* ---------- ごはん ---------- */
 function dayDiff(a,b){return Math.round((new Date(b+"T00:00:00")-new Date(a+"T00:00:00"))/864e5)}
-function tickBelly(){const t=ymd();if(!S.bellyDate){S.bellyDate=t;return}const d=dayDiff(S.bellyDate,t);if(d>0){S.belly=Math.max(0,S.belly-d*BELLY_DECAY);S.bellyDate=t;save(false)}}
+function tickBelly(){const t=ymd();if(!S.bellyDate){S.bellyDate=t;return}const d=dayDiff(S.bellyDate,t);
+  if(d>0){for(let i=0;i<d;i++){S.belly=Math.max(0,S.belly-BELLY_DECAY);if(S.belly===0){S.hungryDays++;S.size=Math.max(SIZE_MIN,S.size-SIZE_DOWN)}}S.bellyDate=t;save(false)}}
+function isHungry(){return S.belly===0}
+function sizePct(){return Math.max(SIZE_MIN,Math.min(SIZE_MAX,S.size||30))}
 function bellyHTML(w){const c=S.belly>=BELLY_FULL?"#E4483B":S.belly>0?"#F08A24":"#999";return `<span class="bbar" style="width:${w||70}px"><i style="width:${S.belly}%;background:${c}"></i></span> ${S.belly}%`}
-const BELLY_LINE=()=>{const c=call();return S.belly===0?pick([`${c}、ポテ おなかが ぺこぺこ。ごはん ちょうだい。`,`くぅ〜。おなかが なってる。${c}、ごはん おねがい。`,`おなかが すいて、あそぶ げんきが でないよ。`,`${c}、ごはんの ふくろに なにか ある？`,`ポテ、ぺこぺこで ぼーっと しちゃう。`]):null}
+const BELLY_LINE=()=>{const c=call();if(S.belly!==0)return null;
+  if(S.hungryDays>=3)return pick([`${c}…。ポテ、3にちも ごはんを もらえなくて、ちょっと やせちゃった。でも ${c}に あえて うれしい。ごはん、くれる？`,`${c}、ひさしぶり。ポテ、おなかが ぺこぺこで ちいさく なっちゃった。また いっしょに おおきく なろうね。`,`${c}。ポテ、まってたよ。おなかが すいて やせたけど、${c}が きてくれたから もう だいじょうぶ。`]);
+  return pick([`${c}、ポテ おなかが ぺこぺこ。ごはん ちょうだい。`,`くぅ〜。おなかが なってる。${c}、ごはん おねがい。`,`おなかが すいて、あそぶ げんきが でないよ。`,`${c}、ごはんの ふくろに なにか ある？`,`ポテ、ぺこぺこで ぼーっと しちゃう。`])}
 function openFeed(){ac();SFX.tap();openPage("🍽️ ポテの ごはん","");renderFeed()}
 function renderFeed(){
   tickBelly();const foods=Object.entries(FOOD).filter(([k])=>(S.inv["f:"+k]||0)>0);const full=S.belly>=100;
   let h=`<div class="poteBox" style="height:170px;margin-bottom:8px">${poteHTML("feedPote","front","idle")}</div>
-   <p style="text-align:center;margin:0 0 10px;font-size:15px">ポテの おなか：${bellyHTML(120)}<br><span style="font-size:13px;color:var(--ink2)">${full?"おなか いっぱい。1にちで 40% へるよ。":S.belly===0?"ぺこぺこ。0%だと あそべないよ。":`1にちで 40% へるよ。${BELLY_FULL}% いじょうで あそぶと 🥕が ふえる。`}</span></p>`;
+   <p style="text-align:center;margin:0 0 10px;font-size:15px">ポテの おなか：${bellyHTML(120)}<br>おおきさ：${sizePct()}%${S.size>=SIZE_MAX?"(さいだい！)":""}<br><span style="font-size:13px;color:var(--ink2)">${full?"おなか いっぱい。あげると どんどん おおきく なるよ。":S.belly===0?"ぺこぺこ。はやく ごはんを あげてね。":`おなかを 100%に すると ちょっと おおきく なる。わすれると やせちゃうよ。`}</span></p>`;
   if(!foods.length)h+=`<p style="text-align:center">ごはんの ふくろは からっぽ。<br>「おみせ」で かってきてね。</p><button class="big-btn go" id="goShop">🏪 おみせへ</button>`;
   else h+=foods.map(([k,v])=>`<div class="item"><div class="ic">${v.e}</div><div class="nm">${v.name}<small>＋${v.heal}%　${S.inv["f:"+k]}こ もってる</small></div><button class="buy" data-feed="${k}" ${full?"disabled":""}>あげる</button></div>`).join("");
   $("#pageBody").innerHTML=h;
   $("#pageBody").onclick=async e=>{if(e.target.closest("#goShop")){SHOPTAB="food";openShop();return}
     const b=e.target.closest("[data-feed]");if(!b||S.belly>=100)return;const k=b.dataset.feed,v=FOOD[k];
-    S.inv["f:"+k]--;S.belly=Math.min(100,S.belly+v.heal);S.bellyDate=ymd();save(true);
+    const was=S.belly;S.inv["f:"+k]--;S.belly=Math.min(100,S.belly+v.heal);S.bellyDate=ymd();S.hungryDays=0;
+    let grew=false;if(was<100&&S.belly>=100&&S.size<SIZE_MAX){S.size=Math.min(SIZE_MAX,S.size+SIZE_UP);grew=true}
+    save(true);
     const pb=$("#pageBody"),pt=$("#feedPote"),r1=b.getBoundingClientRect(),r2=pt.getBoundingClientRect(),rp=pb.getBoundingClientRect();
     const f=document.createElement("span");f.className="fly";f.textContent=v.e;f.style.left=(r1.left-rp.left)+"px";f.style.top=(r1.top-rp.top+pb.scrollTop)+"px";
     f.style.setProperty("--dx",(r2.left+r2.width/2-r1.left-17)+"px");f.style.setProperty("--dy",(r2.top+r2.height*.55-r1.top)+"px");pb.appendChild(f);
     pb.querySelectorAll("[data-feed]").forEach(x=>x.disabled=true);
-    await sleep(900);pt.className="pote munch";SFX.chalk();await sleep(1300);pt.className="pote hop";chu("happy");
+    await sleep(900);pt.className="pote munch";SFX.chalk();await sleep(1300);pt.className="pote "+(grew?"happy":"hop");applySize(pt);chu("happy");
     const c=S.settings.call||"むっちゃん";
-    const msg=pick([`むしゃむしゃ。${v.name}、おいしい。`,`${v.name}だ。ポテ だいすき。`,`ごちそうさま。${c}、ありがとう。`,`もぐもぐ。ほっぺが おちそう。`,`チューチュー。${v.name}、さいこう。`,`しあわせの あじ。`,`${c}が くれる ${v.name}は、とくべつに おいしいの。`,`もぐもぐ。もう ひとつ ほしいな。`,`おなかが あったかく なった。`,`${v.name}、ぜんぶ たべちゃった。`]);
+    const msg=grew?pick([`むしゃむしゃ。ポテ、おおきく なった きがする。`,`ごちそうさま。あれ、ポテ ちょっと おおきく なった？`,`まんぷく。ポテ、すくすく そだってるよ。`,`おいしかった。${c}の おかげで おおきく なれる。`]):pick([`むしゃむしゃ。${v.name}、おいしい。`,`${v.name}だ。ポテ だいすき。`,`ごちそうさま。${c}、ありがとう。`,`もぐもぐ。ほっぺが おちそう。`,`チューチュー。${v.name}、さいこう。`,`しあわせの あじ。`,`${c}が くれる ${v.name}は、とくべつに おいしいの。`,`もぐもぐ。もう ひとつ ほしいな。`,`おなかが あったかく なった。`,`${v.name}、ぜんぶ たべちゃった。`]);
     await ask(msg,"よかったね","もどる");renderFeed()}
 }
 /* ---------- あそびの じかん ---------- */
@@ -1010,7 +1028,7 @@ function weakTags(){return analyze(30).weak.map(r=>r.t)}
 const call=()=>Math.random()<.25?"むーちゃん":(S.settings.call||"むっちゃん");
 const L={
   first:()=>`むっちゃん！ポテだよ。ポテね、がっこうで べんきょう して みたいの。むっちゃん、ポテの {先生|せんせい}に なって くれる？`,
-  yes:()=>`やったー！ありがとう、むっちゃん。ボタンを おして、ポテに {教|おし}えて くれる ことを ひとつ えらんでね。`,
+  yes:()=>`やったー！ありがとう、むっちゃん。これから いっしょに べんきょう しようね。あっ、それとね…ポテは ごはんを もらうと おおきく なるの。まいにち ちょっとでも ごはんを あげてね。わすれると ちょっと やせて さみしく なるけど、また くれたら げんきに なるよ。いっしょに おおきく なろう。したの ボタンから、おしえて くれる ことを えらんでね。`,
   hello:()=>{const h=new Date().getHours();const g=h<11?"おはよう":h<18?"こんにちは":"こんばんは";const c=call();
     return pick([`${g}、${c} {先生|せんせい}。{今日|きょう}は {何|なに}を {教|おし}えて くれる？`,`${g}、${c}。ポテ、{今日|きょう}も がっこう がんばるよ。`,`${g}。ポテ、${c}が くるのを まってたんだ。`,`${g}、${c} {先生|せんせい}。ポテ、はなまる いっぱい ほしいな。`,
      `${g}。きょうの {先生|せんせい}も ${c}だね。うれしいな。`,`${g}、${c}。ポテの あたま、{今日|きょう}も げんきだよ。`,`${g}。ポテ、ノートと えんぴつ、じゅんび できてるよ。`,`${g}、${c} {先生|せんせい}。じゅぎょう、はじめよう。`,
@@ -1124,8 +1142,9 @@ const LT={
 let TOKEN=0;
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id))}
 function setBubble(el,t){el.innerHTML=esc(disp(t));el.dataset.t=t}
-function poteSet(el,view,anim){el.querySelector(".pimg").src=IMG[view];el.className="pote "+(anim||"idle");el.querySelector(".wear").innerHTML=view==="front"?wearSVG():""}
-function poteHTML(id,view,anim){return `<span class="pote ${anim||"idle"}" id="${id}"><img class="pimg" src="${IMG[view]}" alt="ポテ"><svg class="wear" viewBox="0 0 416 560">${view==="front"?wearSVG():""}</svg></span>`}
+function applySize(el){if(!el)return;el.style.setProperty("--sz",(sizePct()/100).toFixed(3));el.classList.toggle("hungry",isHungry())}
+function poteSet(el,view,anim){el.querySelector(".pimg").src=IMG[view];el.className="pote "+(anim||"idle");el.querySelector(".wear").innerHTML=view==="front"?wearSVG():"";applySize(el)}
+function poteHTML(id,view,anim){return `<span class="pote ${anim||"idle"}" id="${id}" style="--sz:${(sizePct()/100).toFixed(3)}"><img class="pimg" src="${IMG[view]}" alt="ポテ"><svg class="wear" viewBox="0 0 416 560">${view==="front"?wearSVG():""}</svg></span>`}
 
 /* ---------- ホーム ---------- */
 function todayCount(){return S.days[ymd()]||0}
@@ -1145,13 +1164,14 @@ function showHome(){
   const nd=Object.keys(S.days).length;$("#daysTxt").textContent=nd?`がっこう ${nd}にちめ`:"";
   $("#subjects").innerHTML=SKILL_IDS.map(id=>`<button class="subj" data-skill="${id}"><span class="ic">${SK[id].icon}</span><span class="nm">${SK[id].name}</span><span class="st">${stars(id)}</span>${(!z&&S.wish===id)?'<span class="wish">ポテの おねがい</span>':""}</button>`).join("");
   if(!S.met){$("#subjects").innerHTML=`<button class="big-btn go" id="btnYes" style="grid-column:1/-1;min-height:72px">いいよ！ せんせいに なる</button>`;
-    $("#btnYes").onclick=()=>{ac();chu("happy");S.met=true;save(true);showHome();$("#homePote").className="pote hop";
+    $("#btnYes").onclick=()=>{ac();chu("happy");S.met=true;S.growIntro=true;save(true);showHome();$("#homePote").className="pote hop";
       setBubble($("#homeBubble"),L.yes())}}
   let t;
   const unread=S.letters.some(l=>l.parent&&!l.read);
   homeIdleLoop();
   const bl=BELLY_LINE();
-  if(!S.met)t=L.first();else if(unread)t=L.newLetter();else if(z)t=L.sleepy();else if(bl&&Math.random()<.6)t=bl;else if(S.wish&&SK[S.wish])t=L.wish(SK[S.wish].name);else t=L.hello();
+  if(!S.met)t=L.first();
+  else if(unread)t=L.newLetter();else if(z)t=L.sleepy();else if(bl&&Math.random()<.6)t=bl;else if(S.wish&&SK[S.wish])t=L.wish(SK[S.wish].name);else t=L.hello();
   setBubble($("#homeBubble"),t);
   $("#btnLetters").textContent=unread?"💌 おてがみ ●":"💌 おてがみ";
 }
@@ -1506,7 +1526,7 @@ function finishLesson(){
   sk.n++;S.lessons++;S.days[today]=(S.days[today]||0)+1;
   // レベルアップ: いまの レベルで さいきん 8もん中 7もん せいかい
   if(sk.hist.length>=8&&sk.hist.reduce((a,b)=>a+b,0)>=7&&sk.lv<def.levels.length){sk.lv++;sk.hist=[];les.leveled=sk.lv}
-  const earned=3+Math.min(2,les.fixedLabels.length);S.carrot+=earned;
+  const earned=3+Math.min(2,les.fixedLabels.length);S.carrot+=earned;S.carrotEver=(S.carrotEver||0)+earned;
   S.wish=nextWish(les.skill);
   const nm=def.levels[Math.min(les.lv,def.levels.length-1)],c=S.settings.call||"むっちゃん";
   const lines=[LT.head(c),LT.thanks(c,nm)];
@@ -1521,8 +1541,10 @@ function finishLesson(){
   // ★ とくべつな おてがみ: つづけて きた 日数が しきい値を こえたら 1回だけ
   maybeSpecial(today);
   if(S.letters.length>24)S.letters=S.letters.slice(-24);
+  const newBadges=checkBadges();
   save(true);
   const z=asleep();show("finish");SFX.gift();autoSend("授業のあと");
+  if(newBadges.length){const b=newBadges[0];setTimeout(()=>{chu("happy");ask(`🎉 あたらしい バッジ ゲット！\n\n${b.e} ${b.name}\n（${b.desc}）\n\n「てちょう」で みられるよ。`,"やったー","OK")},400)}
   $("#finishBody").innerHTML=`<div class="gift">きょうの じゅぎょう、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">${les.fixedLabels.length?"ポテに おしえた ぶんも はいってるよ。":"おみせで つかってね。"}</span></div>
    <div class="stage" style="padding:0 0 10px"><div class="poteBox">${poteHTML("finPote","front","hop")}</div><div class="bubble left" id="finBubble"></div></div>
    ${letterHTML(S.letters[S.letters.length-1])}
@@ -1546,6 +1568,20 @@ function learnedKanji(){const set=new Set();
 function dispRuby(t,set){let used=false;const html=esc(t).replace(/\{([^|}]*)\|([^}]*)\}/g,(m,k,r)=>{
   if(k&&Array.from(k).every(ch=>set.has(ch))){used=true;return `<ruby>${k}<rt>${r}</rt></ruby>`}return r});return {html,used}}
 const KANJI_LINES=["きょう、まどから {山|やま}が きれいに みえたよ。","{犬|いぬ}が さんぽ してるのを みたよ。","{空|そら}が あおくて、いい きもちだった。","{雨|あめ}の おとって、ポテ すきなの。","{花|はな}に {水|みず}を あげたよ。","{月|つき}が まるかったね。","{虫|むし}の こえが きこえるよ。","{木|き}の はっぱが ゆれてた。","{手|て}を あらってから ごはんに したよ。","{川|かわ}の おとが きこえた。","{人|ひと}が いっぱい あるいてたよ。","{目|め}を とじると、むっちゃんの かおが うかぶの。","{口|くち}を おおきく あけて、にんじんを たべたよ。","{耳|みみ}を すますと、とりの こえ。","{大|おお}きな くもが ながれてたよ。","{金|きん}いろの はっぱを みつけたよ。","{土|つち}の なかで、みみずが うごいてた。","{火|ひ}は あぶないから、ポテは さわらないよ。","{石|いし}を ひろって、たからものに したよ。","{草|くさ}の うえで ごろんと したよ。","{早|はや}おき して、むっちゃんを まってたの。","{白|しろ}い ねこが とおったよ。","{赤|あか}い はなが さいてたよ。","{青|あお}い そらに とりが とんでた。"];
+const BADGES=[
+  {id:"start",name:"はじめの いっぽ",e:"🌱",cond:()=>S.lessons>=1,desc:"はじめて べんきょうした"},
+  {id:"d3",name:"3にち れんぞく",e:"🔥",cond:()=>streakDays()>=3,desc:"3にち つづけて きた"},
+  {id:"d7",name:"1しゅうかん れんぞく",e:"⭐",cond:()=>streakDays()>=7,desc:"7にち つづけて きた"},
+  {id:"d14",name:"2しゅうかん れんぞく",e:"🏅",cond:()=>streakDays()>=14,desc:"14にち つづけて きた"},
+  {id:"d30",name:"1かげつ れんぞく",e:"👑",cond:()=>streakDays()>=30,desc:"30にち つづけて きた"},
+  {id:"fat",name:"まるまる ポテ",e:"🐹",cond:()=>sizePct()>=SIZE_MAX,desc:"ポテが さいだいまで おおきくなった"},
+  {id:"carrot50",name:"にんじん はかせ",e:"🥕",cond:()=>S.carrot>=50||(S.carrotEver||0)>=50,desc:"にんじんを 50ぽん あつめた"},
+  {id:"teach20",name:"おしえ じょうず",e:"✏️",cond:()=>(S.fixed||0)>=20,desc:"ポテに 20かい おしえた"},
+  {id:"lesson30",name:"がんばりやさん",e:"📒",cond:()=>S.lessons>=30,desc:"30かい じゅぎょうした"}
+];
+function streakDays(){let n=0;for(let i=0;i<400;i++){if(S.days[addDays(-i)])n++;else if(i>0)break}return n}
+function checkBadges(){const got=[];BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.cond()){S.badges.push(b.id);got.push(b)}});return got}
+
 function maybeSpecial(today){
   // つづけて きた 日数
   let streak=0;for(let i=0;i<400;i++){if(S.days[addDays(-i)])streak++;else if(i>0)break}
@@ -1566,7 +1602,8 @@ $("#btnBack").onclick=()=>showHome();
 $("#btnShop").onclick=openShop;$("#btnWear").onclick=openWear;$("#btnFeed").onclick=openFeed;$("#btnPlay").onclick=choosePlay;
 $("#btnTecho").onclick=()=>{ac();SFX.tap();
   const h=SKILL_IDS.map(id=>{const lv=S.skills[id].lv;return `<div class="card"><h3>${SK[id].icon} ${SK[id].name}</h3>${SK[id].levels.map((n,i)=>`<div class="stamp ${i<lv?"got":i===lv?"now":""}"><i>${i<lv?"◎":""}</i>${esc(n)}${i===lv?" ← いま ここ":""}</div>`).join("")}</div>`}).join("");
-  openPage("📒 ポテの できたよ てちょう",`<p class="techoLead" style="margin:0 0 10px;font-size:15px">むっちゃんが おしえて、ポテが できるように なった こと。<br>ポテに おしえた かいすう：${S.fixed}かい。</p>`+h)};
+  const bh=`<div class="card"><h3>🎖 あつめた バッジ（${S.badges.length}／${BADGES.length}）</h3><div class="badges">${BADGES.map(b=>{const got=S.badges.includes(b.id);return `<div class="badge ${got?"got":""}"><div class="be">${got?b.e:"❓"}</div><div class="bn">${got?esc(b.name):"？？？"}</div><div class="bd">${got?esc(b.desc):"まだ ひみつ"}</div></div>`}).join("")}</div></div>`;
+  openPage("📒 ポテの できたよ てちょう",`<p class="techoLead" style="margin:0 0 10px;font-size:15px">むっちゃんが おしえて、ポテが できるように なった こと。<br>ポテに おしえた かいすう：${S.fixed}かい。</p>`+bh+h)};
 $("#btnLetters").onclick=()=>{ac();SFX.tap();
   let touched=false;S.letters.forEach(l=>{if(l.parent&&!l.read){l.read=true;touched=true}});if(touched)save(true);
   const ls=S.letters.slice().reverse();
