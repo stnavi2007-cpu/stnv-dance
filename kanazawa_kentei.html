@@ -81,6 +81,12 @@ body.hasbar .wrap{padding-bottom:150px}
 .top{margin-bottom:4px;font-size:13px}
 .quit{margin-top:8px}
 .tag.lv{font-weight:700;border-width:1.5px}
+.lvbar{display:flex;gap:6px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
+.lvbar .lvl{font-size:12px;color:var(--ink-soft);flex:0 0 100%}
+.lvb{flex:1;min-width:0;background:var(--card);border:2px solid var(--line);color:var(--ink-soft);padding:8px 4px;font:inherit;font-size:13px;font-weight:700;border-radius:6px;cursor:pointer;line-height:1.3}
+.lvb small{display:block;font-weight:400;font-size:11px}
+.lvb.on{border-color:var(--c);color:var(--c);background:#fff}
+.lvb:not(.on){opacity:.5;text-decoration:line-through}
 </style>
 </head>
 <body>
@@ -105,6 +111,15 @@ const ALL=[];
 const RUBY=(()=>{try{return localStorage.getItem("kk_ruby")!=="0";}catch(e){return true;}})();
 ROUNDS.forEach(r=>r.q.forEach(q=>ALL.push({...q,q0:q.q,o0:q.o,e0:q.e,q:RUBY?(q.fq||q.q):q.q,o:RUBY?(q.fo||q.o):q.o,e:RUBY?(q.fe||q.e):q.e,key:r.id+"-"+q.n,src:r.label+" 問"+q.n,g:q.g||"その他",rid:r.id})));
 const LV={S:{m:"◎",t:"初級",c:"var(--kusa)"},M:{m:"○",t:"中級",c:"var(--ai)"},A:{m:"△",t:"上級寄り",c:"var(--ink-soft)"}};
+let LVON=(()=>{try{const v=JSON.parse(localStorage.getItem("kk_lv")||"null");if(v&&(v.S||v.M||v.A))return v;}catch(e){}return {S:1,M:1,A:1};})();
+const lvSave=()=>{try{localStorage.setItem("kk_lv",JSON.stringify(LVON));}catch(e){}};
+const inLv=q=>!!LVON[q.lv];
+const PL=()=>ALL.filter(inLv);
+const lvSig=()=>["S","M","A"].filter(l=>LVON[l]).join("");
+const pk=k=>lvSig()==="SMA"?k:k+"|"+lvSig();
+const scQ=sc=>sc.qs().filter(inLv);
+const lvBar=()=>`<div class="lvbar"><span class="lvl">出す問題</span>${["S","M","A"].map(l=>`<button class="lvb ${LVON[l]?"on":""}" data-lv="${l}" style="--c:${LV[l].c}">${LV[l].m}${LV[l].t}候補<small>${ALL.filter(q=>q.lv===l).length}</small></button>`).join("")}</div>`;
+const lvBind=(after)=>{document.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{const l=b.dataset.lv;if(LVON[l]&&lvSig().length===1){alert("最低1つは押しとかなあかん");return;}LVON[l]=LVON[l]?0:1;lvSave();after();});};
 const lvTag=q=>`<span class="tag lv" style="border-color:${LV[q.lv].c};color:${LV[q.lv].c}">${LV[q.lv].m}${LV[q.lv].t}${q.lvf?"":"?"}</span>`;
 
 // ---- 記録（ブラウザに保存） ----
@@ -125,7 +140,7 @@ const daysLeft=()=>S.exam?Math.ceil((new Date(S.exam+"T00:00:00")-new Date(dkey(
 // ---- 選択肢の横串索引：この語が正解になる問題 ----
 const ANSIDX={};
 // ---- 全問制覇のくくり（順番固定） ----
-const SCOPES=[{k:"all",label:"ぜんぶ",qs:()=>ALL},{k:"lv:S",label:"◎初級だけ（公式初級・ジュニア＋初級と推定した問題）",qs:()=>ALL.filter(q=>q.lv==="S")},{k:"lv:SM",label:"◎初級＋○中級（△上級寄りを除く）",qs:()=>ALL.filter(q=>q.lv!=="A")},{k:"lv:Sk",label:"◎初級だけ・本の問題のみ（公式過去問を除く）",qs:()=>ALL.filter(q=>q.lv==="S"&&q.rid.startsWith("kb"))}]
+const SCOPES=[{k:"all",label:"ぜんぶ",qs:()=>ALL}]
  .concat(ROUNDS.map(r=>({k:"r:"+r.id,label:r.label,qs:()=>ALL.filter(q=>q.key.startsWith(r.id+"-"))})))
  .concat(GENRES.map(g=>({k:"g:"+g,label:g,qs:()=>ALL.filter(q=>q.g===g)})));
 const scopeOf=k=>SCOPES.find(x=>x.k===k);
@@ -152,21 +167,22 @@ function weighted(base,n){
 // ---- メニュー ----
 function menu(){
   document.body.classList.remove("hasbar");
-  const weakL=ALL.filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});
-  const seen=ALL.filter(q=>rec(q.key).seen>0).length;
-  const tot=ALL.reduce((s,q)=>s+rec(q.key).seen,0),ok=ALL.reduce((s,q)=>s+rec(q.key).ok,0);
-  const examN=Math.min(100,ALL.length);
-  const dueL=ALL.filter(isDue),unseenN=ALL.filter(q=>rec(q.key).seen===0).length,dl=daysLeft();
+  const P=PL();
+  const weakL=P.filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});
+  const seen=P.filter(q=>rec(q.key).seen>0).length;
+  const tot=P.reduce((s,q)=>s+rec(q.key).seen,0),ok=P.reduce((s,q)=>s+rec(q.key).ok,0);
+  const examN=Math.min(100,P.length);
+  const dueL=P.filter(isDue),unseenN=P.filter(q=>rec(q.key).seen===0).length,dl=daysLeft();
   const pace=dl!==null&&dl>0?Math.ceil((unseenN+dueL.length)/dl):null;
   const plan=`<div class="plan">${dl===null?"<span>試験日は「成績・分析」で設定できる</span>":dl>=0?`<b>試験まで あと ${dl} 日</b>${pace!==null?`<span>未出題 ${unseenN}＋復習待ち ${dueL.length} → 1日 ${pace} 問ペース</span>`:""}`:"<b>試験日は過ぎとる</b>"}<span>今日 ${todayN()} 問　連続 ${streakDays()} 日</span></div>`;
   $app.innerHTML=`
    <h2>今日はどれで攻める？</h2>
    ${plan}
-   <p class="hint">登録 ${ALL.length} 問。出題は「まだ見てへん問題」「間違えた問題」「復習の時期が来た問題」ほど当たりやすい重み付きランダム。</p>
+   ${lvBar()}
+   <p class="hint">登録 ${ALL.length} 問のうち、押してあるレベルの ${P.length} 問から出す（全モード共通・問題の左上の印と同じ。「?」は推定）。出題は「まだ見てへん問題」「間違えた問題」「復習の時期が来た問題」ほど当たりやすい重み付きランダム。</p>
    ${dueL.length?`<button class="btn odo" data-m="review"><strong>今日の復習 ${Math.min(20,dueL.length)}問</strong><small>忘れかける前にもう一回。復習待ち ${dueL.length} 問（正解のたびに次は1→3→7→14→30日後）</small></button>`:""}
    <button class="btn" data-m="exam"><strong>模擬試験 ${examN}問</strong><small>本番形式：解説なしで最後まで解いて一括採点・90分タイマー</small></button>
    <button class="btn kusa" data-m="drill"><strong>練習 20問</strong><small>1問ごとに正誤と解説。空き時間用</small></button>
-   <button class="btn kusa" data-m="lvS"><strong>◎初級だけ 20問</strong><small>初級で出そうな問題だけ（${ALL.filter(q=>q.lv==="S").length}問）。問題の左上に ◎初級／○中級／△上級寄り の印。「?」付きは推定（物差しは成績・分析の下に）</small></button>
    <button class="btn enji" data-m="weak" ${weakL.length?"":"disabled"}><strong>苦手だけ</strong><small>${weakL.length?"未克服 "+weakL.length+" 問。模試・練習・全問制覇どれで間違えても自動でここに入る（3連続正解で卒業）":"未克服の問題なし"}</small></button>
    <button class="btn" style="border-left-color:var(--odo)" data-m="flag" ${Object.keys(S.flag).length?"":"disabled"}><strong>🔖 要注意だけ</strong><small>${Object.keys(S.flag).length?"自分で印を付けた "+Object.keys(S.flag).length+" 問。答えたあと「🔖要注意に入れる」で追加":"答えたあと「🔖 要注意に入れる」を押した問題がここに集まる"}</small></button>
    <button class="btn murasaki" data-m="genre"><strong>分野を選んで練習</strong><small>弱い分野を集中的に</small></button>
@@ -175,11 +191,12 @@ function menu(){
    <button class="btn" style="border-left-color:var(--murasaki)" data-m="ref"><strong>📋 まとめ表（一覧で丸暗記）</strong><small>条例・年表・歴代藩主・歴代市長・名誉市民・姉妹都市・三文豪と作品・偉人が何した・開館年・加賀野菜・無形民俗文化財の ${REF.length} 表。全部このアプリの問題とカードから抜き出したもの</small></button>
    <button class="btn odo" data-m="stats"><strong>成績・分析</strong><small>正答率 ${pct(ok,tot)}%　既出 ${seen}/${ALL.length} 問　受験 ${S.hist.length} 回</small></button>
    <p class="stat">合格ライン：正答率80%以上（金沢検定初級の本番と同じ）</p>`;
-  $app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>({exam:()=>start("exam"),drill:()=>start("drill"),weak:()=>start("weak"),flag:()=>start("flag"),lvS:()=>start("lvS"),review:()=>start("review"),genre:genreMenu,seq:scopeMenu,stats:stats,jiji:jijiPage,ref:refPage})[b.dataset.m]());
+  lvBind(menu);
+  $app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>({exam:()=>start("exam"),drill:()=>start("drill"),weak:()=>start("weak"),flag:()=>start("flag"),review:()=>start("review"),genre:genreMenu,seq:scopeMenu,stats:stats,jiji:jijiPage,ref:refPage})[b.dataset.m]());
 }
 function genreMenu(){
   $app.innerHTML=`<h2>分野を選ぶ</h2><p class="hint">その分野の問題だけ、重み付きで最大20問。</p>`+
-   GENRES.map(g=>{const qs=ALL.filter(q=>q.g===g);const t=qs.reduce((s,q)=>s+rec(q.key).seen,0),o=qs.reduce((s,q)=>s+rec(q.key).ok,0);
+   GENRES.map(g=>{const qs=PL().filter(q=>q.g===g);const t=qs.reduce((s,q)=>s+rec(q.key).seen,0),o=qs.reduce((s,q)=>s+rec(q.key).ok,0);
      return `<button class="btn murasaki" data-g="${g}" ${qs.length?"":"disabled"}><strong>${g}</strong><small>${qs.length}問　正答率 ${t?pct(o,t)+"%":"—"}</small></button>`;}).join("")+
    `<button class="next ghost" id="bk">メニューへ戻る</button>`;
   $app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>start("genre",b.dataset.g));
@@ -187,31 +204,30 @@ function genreMenu(){
 }
 
 function scopeMenu(){
-  const item=sc=>{const qs=sc.qs(),n=qs.length,p=Math.min(prog(sc.k),n),done=p>=n&&n>0;
+  const item=sc=>{const qs=scQ(sc),n=qs.length,p=Math.min(prog(pk(sc.k)),n),done=p>=n&&n>0;
     return `<div class="scp"><button class="btn" style="border-left-color:${done?"var(--kusa)":"var(--ink)"}" data-s="${sc.k}" ${n?"":"disabled"}><strong>${sc.label}</strong><small>${n}問　${done?"制覇済み ✔（押すと最初から）":p?"第"+(p+1)+"問から続き（"+p+"/"+n+" 済）":"未着手"}</small><div class="pb"><i style="width:${pct(p,n)}%"></i></div></button>${p?`<button class="rst" data-r="${sc.k}" title="最初から">↺</button>`:""}</div>`;};
-  $app.innerHTML=`<h2>全問制覇</h2><p class="hint">くくりを選ぶと、その中の問題を決まった順番で最後まで一気に出す（途中で「中断」しても、次は続きの問題から）。どこまで進んだかは1問ごとに自動で保存。間違えた問題はいつも通り「苦手だけ」に入る。</p>
+  $app.innerHTML=`<h2>全問制覇</h2>${lvBar()}<p class="hint">くくりを選ぶと、その中の問題を決まった順番で最後まで一気に出す（途中で「中断」しても、次は続きの問題から）。どこまで進んだかは1問ごとに自動で保存。間違えた問題はいつも通り「苦手だけ」に入る。</p>
    <h2 style="font-size:16px">ぜんぶ</h2>${item(SCOPES[0])}
-   <h2 style="font-size:16px;margin-top:14px">レベルで絞る</h2>${SCOPES.filter(x=>x.k.startsWith("lv:")).map(item).join("")}
    <h2 style="font-size:16px;margin-top:14px">回ごと</h2>${SCOPES.filter(x=>x.k.startsWith("r:")).map(item).join("")}
    <h2 style="font-size:16px;margin-top:14px">分野ごと</h2>${SCOPES.filter(x=>x.k.startsWith("g:")).map(item).join("")}
    <button class="next ghost" id="bk">メニューへ戻る</button>`;
-  $app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const k=b.dataset.s,n=scopeOf(k).qs().length;if(prog(k)>=n){if(!confirm("制覇済みや。最初からもう一周する？"))return;S.prog[k]={pos:0,t:Date.now()};store.save(S);}start("seq",k);});
-  $app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{if(confirm("このくくりの進み具合を最初に戻す？（正解・不正解の記録は消えへん）")){S.prog[b.dataset.r]={pos:0,t:Date.now()};store.save(S);scopeMenu();}});
+  lvBind(scopeMenu);
+  $app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const k=b.dataset.s,n=scQ(scopeOf(k)).length;if(prog(pk(k))>=n){if(!confirm("制覇済みや。最初からもう一周する？"))return;S.prog[pk(k)]={pos:0,t:Date.now()};store.save(S);}start("seq",k);});
+  $app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{if(confirm("このくくりの進み具合を最初に戻す？（正解・不正解の記録は消えへん）")){S.prog[pk(b.dataset.r)]={pos:0,t:Date.now()};store.save(S);scopeMenu();}});
   document.getElementById("bk").onclick=menu;
 }
 
 // ---- 出題 ----
 let M={};
 function start(mode,genre){
-  let base=ALL,n;
-  if(mode==="weak"){base=ALL.filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});n=base.length;}
-  else if(mode==="flag"){base=ALL.filter(q=>S.flag[q.key]);n=base.length;}
-  else if(mode==="review"){base=ALL.filter(isDue).sort((a,b)=>(rec(a.key).due||0)-(rec(b.key).due||0));n=Math.min(20,base.length);M={mode,pool:base.slice(0,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
-  else if(mode==="genre"){base=ALL.filter(q=>q.g===genre);n=Math.min(20,base.length);}
-  else if(mode==="lvS"){base=ALL.filter(q=>q.lv==="S");n=Math.min(20,base.length);}
+  let base=PL(),n;
+  if(mode==="weak"){base=PL().filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});n=base.length;}
+  else if(mode==="flag"){base=PL().filter(q=>S.flag[q.key]);n=base.length;}
+  else if(mode==="review"){base=PL().filter(isDue).sort((a,b)=>(rec(a.key).due||0)-(rec(b.key).due||0));n=Math.min(20,base.length);M={mode,pool:base.slice(0,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
+  else if(mode==="genre"){base=PL().filter(q=>q.g===genre);n=Math.min(20,base.length);}
   else if(mode==="exam"){n=Math.min(100,base.length);}
   else n=Math.min(20,base.length);
-  if(mode==="seq"){const sc=scopeOf(genre);base=sc.qs();const pos=Math.min(prog(genre),base.length);M={mode,scope:genre,scopeLabel:sc.label,base,startPos:pos,pool:base.slice(pos),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
+  if(mode==="seq"){const sc=scopeOf(genre);base=scQ(sc);const key=pk(genre);const pos=Math.min(prog(key),base.length);M={mode,scope:key,scopeLabel:sc.label,base,startPos:pos,pool:base.slice(pos),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   M={mode,genre,pool:weighted(base,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};
   if(mode==="exam"){M.timer=setInterval(tick,1000);}
   ask();
@@ -262,7 +278,7 @@ function finish(){
   S.hist.unshift({d:Date.now(),mode:M.mode,n:tot,ok,rate,sec:Math.floor((Date.now()-M.t0)/1000)});S.hist=S.hist.slice(0,50);store.save(S);
   // 分野別
   const gs={};M.ans.forEach(a=>{const g=gs[a.q.g]||(gs[a.q.g]={t:0,o:0});g.t++;if(a.ok)g.o++;});
-  const label={exam:"模擬試験",drill:"練習",weak:"苦手だけ",flag:"要注意だけ",lvS:"◎初級だけ",review:"今日の復習",genre:"分野練習",seq:"全問制覇「"+(M.scopeLabel||"")+"」"}[M.mode];
+  const label={exam:"模擬試験",drill:"練習",weak:"苦手だけ",flag:"要注意だけ",review:"今日の復習",genre:"分野練習",seq:"全問制覇「"+(M.scopeLabel||"")+"」"}[M.mode];
   const seqLeft=M.mode==="seq"?M.base.length-(M.startPos+M.pool.length):0;
   $app.innerHTML=`
    <h2>${label}の結果</h2>
