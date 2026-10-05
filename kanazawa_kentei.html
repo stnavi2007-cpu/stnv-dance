@@ -90,7 +90,7 @@ body.hasbar .wrap{padding-bottom:150px}
 .lvb.on{border-color:var(--c);color:var(--c);background:var(--card)}
 .lvb:not(.on){opacity:.5;text-decoration:line-through}
 .prevb{display:block;width:100%;background:transparent;border:1.5px dashed var(--ai);color:var(--ai);padding:8px;font:inherit;font-size:14px;border-radius:4px;margin:4px 0 6px;cursor:pointer}
-.hist{display:inline-block;margin-left:6px;font-size:11px;color:var(--ink-soft);letter-spacing:1px}.hist b{font-weight:700}.hist b.o{color:var(--kusa)}.hist b.x{color:var(--enji)}.hist.new{letter-spacing:0;border:1px solid var(--line);border-radius:3px;padding:0 4px}
+.histline{margin:-2px 0 8px;font-size:13px}.hist{display:inline-block;margin-left:0;font-size:13px;color:var(--ink-soft);letter-spacing:2px}.hist b{font-size:15px}.hist b{font-weight:700}.hist b.o{color:var(--kusa)}.hist b.x{color:var(--enji)}.hist.new{letter-spacing:0;border:1px solid var(--line);border-radius:3px;padding:0 4px}
 </style>
 </head>
 <body>
@@ -99,7 +99,7 @@ body.hasbar .wrap{padding-bottom:150px}
 <header style="position:relative">
   <button id="themeq" title="ダーク／ライト切替" style="position:absolute;right:0;top:0;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:4px 10px;font:inherit;font-size:14px;cursor:pointer">🌓</button>
   <h1>金沢検定 道場</h1>
-  <p>初級合格ライン80点を、公式過去問の土台から固める</p>
+  <p>初級合格ライン80点を、公式過去問の土台から固める <span style="font-size:11px;opacity:.6">v2026.10.06</span></p>
   <div class="gosai"><span class="c1"></span><span class="c2"></span><span class="c3"></span><span class="c4"></span><span class="c5"></span></div>
 </header>
 <main id="app"></main>
@@ -276,7 +276,7 @@ function ask(){
   $app.innerHTML=`
    <div class="top"><span>${M.loop?"弱点つぶし "+M.round+"周目":M.mode==="seq"?"全問制覇「"+M.scopeLabel+"」 第"+(M.startPos+M.idx+1)+"問 / "+M.base.length:"問 "+(M.idx+1)+" / "+tot}</span><span>${M.mode==="exam"?'<span class="timer" id="tm"></span>':"正解 "+ok+"　不正解 "+ng}</span></div>
    <div class="bar"><i style="width:${M.mode==="exam"?M.idx/tot*100:ok/tot*100}%"></i>${M.mode==="exam"?"":`<b style="left:${ok/tot*100}%;width:${ng/tot*100}%"></b>`}</div>
-   <p class="src">${lvTag(q)}<span class="tag">${q.g}</span>${q.src}${M.mode==="exam"?"":histTag(q)}</p>
+   <p class="src">${lvTag(q)}<span class="tag">${q.g}</span>${q.src}</p>${M.mode==="exam"?"":`<p class="histline">${histTag(q)}</p>`}
    <p class="q">${q.q}</p>
    ${order.map((oi,k)=>`<button class="opt" data-o="${oi}"><span class="k">${KANA[k]}</span>${q.o[oi]}</button>`).join("")}
    <div id="fb"></div>
