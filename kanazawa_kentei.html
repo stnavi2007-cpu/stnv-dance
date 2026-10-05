@@ -171,6 +171,7 @@ function weighted(base,n){
 
 // ---- メニュー ----
 function menu(){
+  sessClear();if(M&&M.timer){clearInterval(M.timer);M.timer=null;}
   document.body.classList.remove("hasbar");
   const P=PL();
   const weakL=P.filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});
@@ -224,6 +225,20 @@ function scopeMenu(){
 
 // ---- 出題 ----
 let M={};
+const BYKEY={};ALL.forEach(q=>BYKEY[q.key]=q);
+function sessSave(){try{if(!M||!M.pool)return;localStorage.setItem("kk_sess",JSON.stringify({mode:M.mode,genre:M.genre,scope:M.scope,scopeLabel:M.scopeLabel,startPos:M.startPos,loop:M.loop,round:M.round,t0:M.t0,keys:M.pool.map(q=>q.key),idx:M.idx,ans:M.ans.map(a=>({k:a.q.key,ok:a.ok,chosen:a.chosen})),ts:Date.now()}));}catch(e){}}
+function sessClear(){try{localStorage.removeItem("kk_sess");}catch(e){}}
+function resume(){
+  let d=null;try{d=JSON.parse(localStorage.getItem("kk_sess")||"null");}catch(e){}
+  if(!d||!d.keys||d.idx>=d.keys.length||Date.now()-(d.ts||0)>7*86400000){sessClear();return false;}
+  const pool=d.keys.map(k=>BYKEY[k]);if(pool.some(q=>!q)){sessClear();return false;}
+  M={mode:d.mode,genre:d.genre,scope:d.scope,scopeLabel:d.scopeLabel,startPos:d.startPos||0,pool,idx:d.idx,ans:(d.ans||[]).map(a=>({q:BYKEY[a.k],ok:a.ok,chosen:a.chosen})).filter(a=>a.q),loop:!!d.loop,round:d.round||0,t0:d.t0||Date.now(),timer:null};
+  if(M.mode==="seq"&&M.genre){const sc=scopeOf(M.genre);if(!sc){sessClear();return false;}M.base=scQ(sc);}
+  if(M.ans.length>M.idx)M.idx=M.ans.length;  // 答えた直後(次へを押す前)に閉じた場合は次の問題から
+  if(M.idx>=M.pool.length){sessClear();return false;}
+  if(M.mode==="exam"){if(Date.now()-M.t0>5400000){sessClear();return false;}M.timer=setInterval(tick,1000);}
+  ask();return true;
+}
 function start(mode,genre){
   let base=PL(),n;
   if(mode==="weak"){base=PL().filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});n=base.length;}
@@ -232,7 +247,7 @@ function start(mode,genre){
   else if(mode==="genre"){base=PL().filter(q=>q.g===genre);n=Math.min(20,base.length);}
   else if(mode==="exam"){n=Math.min(100,base.length);}
   else n=Math.min(20,base.length);
-  if(mode==="seq"){const sc=scopeOf(genre);base=scQ(sc);const key=pk(genre);const pos=Math.min(prog(key),base.length);M={mode,scope:key,scopeLabel:sc.label,base,startPos:pos,pool:base.slice(pos),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
+  if(mode==="seq"){const sc=scopeOf(genre);base=scQ(sc);const key=pk(genre);const pos=Math.min(prog(key),base.length);M={mode,genre,scope:key,scopeLabel:sc.label,base,startPos:pos,pool:base.slice(pos),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   M={mode,genre,pool:weighted(base,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};
   if(mode==="exam"){M.timer=setInterval(tick,1000);}
   ask();
@@ -264,6 +279,7 @@ function ask(){
    <div id="fb"></div>
    ${M.mode!=="exam"&&M.idx>0&&M.ans[M.idx-1]?'<button class="prevb" id="pv">← 前の問題を見直す</button>':""}
    ${M.mode==="exam"||M.loop?"":'<button class="quit" id="qt">中断してメニューへ'+(M.mode==="seq"?"（進み具合は保存済み）":"")+'</button>'}`;
+  sessSave();
   const pv=document.getElementById("pv");if(pv)pv.onclick=reviewPrev;
   const qt=document.getElementById("qt");if(qt)qt.onclick=()=>{if(confirm("中断する？"))menu();};
   if(M.mode==="exam")tick();
@@ -275,6 +291,7 @@ function answer(q,chosen,btn){
   const ok=chosen===q.a-1;
   M.ans.push({q,ok,chosen});
   if(!M.loop)record(q,ok); else if(ok){const r=rec(q.key);r.streak++;store.save(S);}
+  M.idx<M.pool.length-1?sessSave():sessClear();
   $app.querySelectorAll(".opt").forEach(b=>b.disabled=true);
   if(M.mode==="exam"){btn.classList.add("sel");setTimeout(()=>{M.idx++;M.idx<M.pool.length?ask():finish();},250);return;}
   $app.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.o===q.a-1)b.classList.add("right");else if(b===btn)b.classList.add("wrong");});
@@ -292,7 +309,7 @@ function finish(){
   const missed=M.ans.filter(a=>!a.ok).map(a=>a.q);
   if(M.loop){
     if(!missed.length){$app.innerHTML=`<h2>弱点、全部つぶした</h2><p class="pass ok">${M.round}周で完全制覇。</p><button class="next" id="bk">メニューへ戻る</button>`;document.getElementById("bk").onclick=menu;return;}
-    M.pool=shuffle(missed);M.ans=[];M.idx=0;M.round++;ask();return;
+    M.pool=shuffle(missed);M.ans=[];M.idx=0;M.round++;sessSave();ask();return;
   }
   const tot=M.pool.length,ok=tot-missed.length,rate=pct(ok,tot),pass=rate>=80;
   S.hist.unshift({d:Date.now(),mode:M.mode,n:tot,ok,rate,sec:Math.floor((Date.now()-M.t0)/1000)});S.hist=S.hist.slice(0,50);store.save(S);
@@ -401,7 +418,7 @@ function stats(){
   document.getElementById("bk").onclick=menu;
   document.getElementById("rs").onclick=()=>{if(confirm("成績記録をすべて消す。ええか？")){S={q:{},hist:[],prog:{},days:{},flag:{}};store.save(S);menu();}};
 }
-menu();
+if(!resume())menu();
 
 (()=>{const q=document.getElementById("themeq");if(q)q.onclick=()=>{const b=document.getElementById("themetg");if(b)b.click();};})();
 (()=>{const b=document.getElementById("themetg");if(!b)return;const label=()=>{let t="auto";try{t=localStorage.getItem("kk_theme")||"auto";}catch(e){}return t==="dark"?"🌙 表示：ダーク（タップでライト）":t==="light"?"☀️ 表示：ライト（タップで端末に合わせる）":"🌓 表示：端末に合わせる（タップでダーク）";};b.textContent=label();b.onclick=()=>{let t="auto";try{t=localStorage.getItem("kk_theme")||"auto";}catch(e){}const n=t==="auto"?"dark":t==="dark"?"light":"auto";try{if(n==="auto")localStorage.removeItem("kk_theme");else localStorage.setItem("kk_theme",n);}catch(e){}if(n==="auto")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",n);b.textContent=label();};})();
