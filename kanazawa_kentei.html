@@ -90,6 +90,7 @@ body.hasbar .wrap{padding-bottom:150px}
 .lvb.on{border-color:var(--c);color:var(--c);background:var(--card)}
 .lvb:not(.on){opacity:.5;text-decoration:line-through}
 .prevb{display:block;width:100%;background:transparent;border:1.5px dashed var(--ai);color:var(--ai);padding:8px;font:inherit;font-size:14px;border-radius:4px;margin:4px 0 6px;cursor:pointer}
+.hist{display:inline-block;margin-left:6px;font-size:11px;color:var(--ink-soft);letter-spacing:1px}.hist b{font-weight:700}.hist b.o{color:var(--kusa)}.hist b.x{color:var(--enji)}.hist.new{letter-spacing:0;border:1px solid var(--line);border-radius:3px;padding:0 4px}
 </style>
 </head>
 <body>
@@ -125,6 +126,7 @@ const pk=k=>lvSig()==="SMA"?k:k+"|"+lvSig();
 const scQ=sc=>sc.qs().filter(inLv);
 const lvBar=()=>`<div class="lvbar"><span class="lvl">出す問題</span>${["S","M","A"].map(l=>`<button class="lvb ${LVON[l]?"on":""}" data-lv="${l}" style="--c:${LV[l].c}">${LV[l].m}${LV[l].t}候補<small>${ALL.filter(q=>q.lv===l).length}</small></button>`).join("")}</div>`;
 const lvBind=(after)=>{document.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{const l=b.dataset.lv;if(LVON[l]&&lvSig().length===1){alert("最低1つは押しとかなあかん");return;}LVON[l]=LVON[l]?0:1;lvSave();after();});};
+const histTag=q=>{const r=rec(q.key);if(!r.seen)return `<span class="hist new">はじめて</span>`;const lg=(r.log||"").slice(-10);return `<span class="hist">過去${lg.split("").map(c=>`<b class="${c==="○"?"o":"x"}">${c}</b>`).join("")}${r.streak>=3?" 🎓":""}</span>`;};
 const lvTag=q=>`<span class="tag lv" style="border-color:${LV[q.lv].c};color:${LV[q.lv].c}">${LV[q.lv].m}${LV[q.lv].t}${q.lvf?"":"?"}</span>`;
 
 // ---- 記録（ブラウザに保存） ----
@@ -189,8 +191,8 @@ function menu(){
    ${dueL.length?`<button class="btn odo" data-m="review"><strong>今日の復習 ${Math.min(20,dueL.length)}問</strong><small>忘れかける前にもう一回。復習待ち ${dueL.length} 問（正解のたびに次は1→3→7→14→30日後）</small></button>`:""}
    <button class="btn" data-m="exam"><strong>模擬試験 ${examN}問</strong><small>本番形式：解説なしで最後まで解いて一括採点・90分タイマー</small></button>
    <button class="btn kusa" data-m="drill"><strong>練習 20問</strong><small>1問ごとに正誤と解説。空き時間用</small></button>
-   <button class="btn enji" data-m="weak" ${weakL.length?"":"disabled"}><strong>苦手だけ</strong><small>${weakL.length?"未克服 "+weakL.length+" 問。模試・練習・全問制覇どれで間違えても自動でここに入る（3連続正解で卒業）":"未克服の問題なし"}</small></button>
-   <button class="btn" style="border-left-color:var(--odo)" data-m="flag" ${Object.keys(S.flag).length?"":"disabled"}><strong>🔖 要注意だけ</strong><small>${Object.keys(S.flag).length?"自分で印を付けた "+Object.keys(S.flag).length+" 問。答えたあと「🔖要注意に入れる」で追加":"答えたあと「🔖 要注意に入れる」を押した問題がここに集まる"}</small></button>
+   <button class="btn enji" data-m="weak" ${weakL.length?"":"disabled"}><strong>苦手だけ</strong><small>${weakL.length?"未克服 "+weakL.length+" 問。どのモードで間違えても自動でここに入る。間違えとる順に出し、3連続正解で自動卒業":"未克服の問題なし"}</small></button>
+   <button class="btn" style="border-left-color:var(--odo)" data-m="flag" ${Object.keys(S.flag).length?"":"disabled"}><strong>🔖 要注意だけ</strong><small>${Object.keys(S.flag).length?"自分で印を付けた "+Object.keys(S.flag).length+" 問。間違えとる順に出す。3連続正解で自動で卒業":"答えたあと「🔖 要注意に入れる」を押した問題がここに集まる"}</small></button>
    <button class="btn murasaki" data-m="genre"><strong>分野を選んで練習</strong><small>弱い分野を集中的に</small></button>
    <button class="btn" style="border-left-color:var(--ink)" data-m="seq"><strong>全問制覇（順番に網羅）</strong><small>回ごと・分野ごと・ぜんぶ。最後まで一気に出す。中断しても次は続きから。取りこぼしゼロ${prog("all")?"　ぜんぶ "+prog("all")+"/"+ALL.length+"済":""}</small></button>
    <button class="btn" style="border-left-color:var(--enji)" data-m="jiji"><strong>🗞️ 時事ネタ帳（本の締め切り以降）</strong><small>2025年夏〜2026年9月8日の石川・金沢の目を引く話題 ${JIJI.length} 本。北國新聞を読んどらんと答えられん「最近の話題」対策。問題にはなっとらん、読むだけ</small></button>
@@ -241,8 +243,9 @@ function resume(){
 }
 function start(mode,genre){
   let base=PL(),n;
-  if(mode==="weak"){base=PL().filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;});n=base.length;}
-  else if(mode==="flag"){base=PL().filter(q=>S.flag[q.key]);n=base.length;}
+  const worstFirst=a=>a.map(q=>{const r=rec(q.key);const acc=r.seen?r.ok/r.seen:0;return{q,s:r.streak*100+acc*50-r.ng*5+Math.random()};}).sort((x,y)=>x.s-y.s).map(x=>x.q);  // 連続正解が少なく・正答率が低く・ミスが多い順
+  if(mode==="weak"){base=worstFirst(PL().filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;}));M={mode,pool:base,idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
+  else if(mode==="flag"){base=worstFirst(PL().filter(q=>S.flag[q.key]));M={mode,pool:base,idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   else if(mode==="review"){base=PL().filter(isDue).sort((a,b)=>(rec(a.key).due||0)-(rec(b.key).due||0));n=Math.min(20,base.length);M={mode,pool:base.slice(0,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   else if(mode==="genre"){base=PL().filter(q=>q.g===genre);n=Math.min(20,base.length);}
   else if(mode==="exam"){n=Math.min(100,base.length);}
@@ -273,7 +276,7 @@ function ask(){
   $app.innerHTML=`
    <div class="top"><span>${M.loop?"弱点つぶし "+M.round+"周目":M.mode==="seq"?"全問制覇「"+M.scopeLabel+"」 第"+(M.startPos+M.idx+1)+"問 / "+M.base.length:"問 "+(M.idx+1)+" / "+tot}</span><span>${M.mode==="exam"?'<span class="timer" id="tm"></span>':"正解 "+ok+"　不正解 "+ng}</span></div>
    <div class="bar"><i style="width:${M.mode==="exam"?M.idx/tot*100:ok/tot*100}%"></i>${M.mode==="exam"?"":`<b style="left:${ok/tot*100}%;width:${ng/tot*100}%"></b>`}</div>
-   <p class="src">${lvTag(q)}<span class="tag">${q.g}</span>${q.src}</p>
+   <p class="src">${lvTag(q)}<span class="tag">${q.g}</span>${q.src}${M.mode==="exam"?"":histTag(q)}</p>
    <p class="q">${q.q}</p>
    ${order.map((oi,k)=>`<button class="opt" data-o="${oi}"><span class="k">${KANA[k]}</span>${q.o[oi]}</button>`).join("")}
    <div id="fb"></div>
@@ -286,7 +289,7 @@ function ask(){
   $app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(q,+b.dataset.o,b));
   window.scrollTo(0,0);
 }
-function record(q,ok){const r=rec(q.key);r.seen++;r.last=Date.now();if(ok){r.ok++;r.streak++;}else{r.ng++;r.streak=0;}r.log=((r.log||"")+(ok?"○":"×")).slice(-10);r.due=nextDue(ok,r.streak);S.days[dkey()]=(S.days[dkey()]||0)+1;if(M.mode==="seq"&&!M.loop)S.prog[M.scope]={pos:M.startPos+M.idx+1,t:Date.now()};store.save(S);}
+function record(q,ok){const r=rec(q.key);r.seen++;r.last=Date.now();if(ok){r.ok++;r.streak++;if(r.streak>=3&&S.flag[q.key]){delete S.flag[q.key];r.grad=Date.now();}}else{r.ng++;r.streak=0;}r.log=((r.log||"")+(ok?"○":"×")).slice(-10);r.due=nextDue(ok,r.streak);S.days[dkey()]=(S.days[dkey()]||0)+1;if(M.mode==="seq"&&!M.loop)S.prog[M.scope]={pos:M.startPos+M.idx+1,t:Date.now()};store.save(S);}
 function answer(q,chosen,btn){
   const ok=chosen===q.a-1;
   M.ans.push({q,ok,chosen});
@@ -296,7 +299,7 @@ function answer(q,chosen,btn){
   if(M.mode==="exam"){btn.classList.add("sel");setTimeout(()=>{M.idx++;M.idx<M.pool.length?ask():finish();},250);return;}
   $app.querySelectorAll(".opt").forEach(b=>{if(+b.dataset.o===q.a-1)b.classList.add("right");else if(b===btn)b.classList.add("wrong");});
   document.getElementById("fb").innerHTML=`
-    <div class="abar" id="abar"><p class="verdict ${ok?"ok":"ng"}">${ok?"○ 正解":"× 不正解　正解「"+q.o[q.a-1]+"」"}</p><div class="abtn"><button class="next" id="nx">${M.idx+1<M.pool.length?"次の問題へ":"結果を見る"}</button><button class="flagb ${S.flag[q.key]?"on":""}" id="fg" title="要注意">${S.flag[q.key]?"🔖済":"🔖"}</button></div></div>
+    <div class="abar" id="abar"><p class="verdict ${ok?"ok":"ng"}">${ok?"○ 正解"+(rec(q.key).streak>=3?"　🎓3連続正解で卒業":""):"× 不正解　正解「"+q.o[q.a-1]+"」"}</p><div class="abtn"><button class="next" id="nx">${M.idx+1<M.pool.length?"次の問題へ":"結果を見る"}</button><button class="flagb ${S.flag[q.key]?"on":""}" id="fg" title="要注意">${S.flag[q.key]?"🔖済":"🔖"}</button></div></div>
     <details class="exp"><summary><span class="lab">ポイント</span></summary>${q.e||'<span style="opacity:.6">この回は問題用紙のみ公開（公式解説なし）</span>'}${crossRef(q)}${kbRef(q)}<p class="qh">${qhist(q)}</p></details>`;
   document.body.classList.add("hasbar");
   const nx=document.getElementById("nx");nx.focus({preventScroll:true});nx.onclick=()=>{document.body.classList.remove("hasbar");M.idx++;M.idx<M.pool.length?ask():finish();};
