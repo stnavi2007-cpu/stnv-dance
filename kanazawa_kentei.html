@@ -99,7 +99,7 @@ body.hasbar .wrap{padding-bottom:150px}
 <header style="position:relative">
   <button id="themeq" title="ダーク／ライト切替" style="position:absolute;right:0;top:0;background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:20px;padding:4px 10px;font:inherit;font-size:14px;cursor:pointer">🌓</button>
   <h1>金沢検定 道場</h1>
-  <p>初級合格ライン80点を、公式過去問の土台から固める <span style="font-size:11px;opacity:.6">v2026.10.07</span></p>
+  <p>初級合格ライン80点を、公式過去問の土台から固める <span style="font-size:11px;opacity:.6">v2026.10.11</span></p>
   <div class="gosai"><span class="c1"></span><span class="c2"></span><span class="c3"></span><span class="c4"></span><span class="c5"></span></div>
 </header>
 <main id="app"></main>
@@ -122,8 +122,8 @@ const lvSave=()=>{try{localStorage.setItem("kk_lv",JSON.stringify(LVON));}catch(
 const inLv=q=>!!LVON[q.lv];
 const PL=()=>ALL.filter(inLv);
 const lvSig=()=>["S","M","A"].filter(l=>LVON[l]).join("");
-const pk=k=>lvSig()==="SMA"?k:k+"|"+lvSig();
-const scQ=sc=>sc.qs().filter(inLv);
+const pk=k=>k.startsWith("lv:")||lvSig()==="SMA"?k:k+"|"+lvSig();  // レベル集中のくくりは上のレベル切替と無関係
+const scQ=sc=>sc.lvfix?sc.qs():sc.qs().filter(inLv);
 const lvBar=()=>`<div class="lvbar"><span class="lvl">出す問題</span>${["S","M","A"].map(l=>`<button class="lvb ${LVON[l]?"on":""}" data-lv="${l}" style="--c:${LV[l].c}">${LV[l].m}${LV[l].t}候補<small>${ALL.filter(q=>q.lv===l).length}</small></button>`).join("")}</div>`;
 const lvBind=(after)=>{document.querySelectorAll("[data-lv]").forEach(b=>b.onclick=()=>{const l=b.dataset.lv;if(LVON[l]&&lvSig().length===1){alert("最低1つは押しとかなあかん");return;}LVON[l]=LVON[l]?0:1;lvSave();after();});};
 const histTag=q=>{const r=rec(q.key);if(!r.seen)return `<span class="hist new">はじめて</span>`;const lg=(r.log||"").slice(-10);return `<span class="hist">過去${lg.split("").map(c=>`<b class="${c==="○"?"o":"x"}">${c}</b>`).join("")}${r.streak>=3?" 🎓":""}</span>`;};
@@ -149,7 +149,8 @@ const ANSIDX={};
 // ---- 全問制覇のくくり（順番固定） ----
 const SCOPES=[{k:"all",label:"ぜんぶ",qs:()=>ALL}]
  .concat(ROUNDS.map(r=>({k:"r:"+r.id,label:r.label,qs:()=>ALL.filter(q=>q.key.startsWith(r.id+"-"))})))
- .concat(GENRES.map(g=>({k:"g:"+g,label:g,qs:()=>ALL.filter(q=>q.g===g)})));
+ .concat(GENRES.map(g=>({k:"g:"+g,label:g,qs:()=>ALL.filter(q=>q.g===g)})))
+ .concat(["S","M","A"].map(l=>({k:"lv:"+l,label:LV[l].m+LV[l].t+"だけ",lvfix:1,qs:()=>ALL.filter(q=>q.lv===l)})));
 const scopeOf=k=>SCOPES.find(x=>x.k===k);
 const prog=k=>(S.prog[k]||{pos:0}).pos;
 ALL.forEach(q=>{const a=q.o0[q.a-1];(ANSIDX[a]||(ANSIDX[a]=[])).push(q);});
@@ -187,12 +188,14 @@ function menu(){
    <h2>今日はどれで攻める？</h2>
    ${plan}
    ${lvBar()}
-   <p class="hint">登録 ${ALL.length} 問のうち、押してあるレベルの ${P.length} 問から出す（全モード共通・問題の左上の印と同じ。「?」は推定）。出題は「まだ見てへん問題」「間違えた問題」「復習の時期が来た問題」ほど当たりやすい重み付きランダム。</p>
+   <p class="hint">登録 ${ALL.length} 問のうち、押してあるレベルの ${P.length} 問から出す（「レベル集中」以外の全モード共通・問題の左上の印と同じ。「?」は推定）。出題は「まだ見てへん問題」「間違えた問題」「復習の時期が来た問題」ほど当たりやすい重み付きランダム。</p>
    ${dueL.length?`<button class="btn odo" data-m="review"><strong>今日の復習 ${Math.min(20,dueL.length)}問</strong><small>忘れかける前にもう一回。復習待ち ${dueL.length} 問（正解のたびに次は1→3→7→14→30日後）</small></button>`:""}
    <button class="btn" data-m="exam"><strong>模擬試験 ${examN}問</strong><small>本番形式：解説なしで最後まで解いて一括採点・90分タイマー</small></button>
    <button class="btn kusa" data-m="drill"><strong>練習 20問</strong><small>1問ごとに正誤と解説。空き時間用</small></button>
    <button class="btn enji" data-m="weak" ${weakL.length?"":"disabled"}><strong>苦手だけ</strong><small>${weakL.length?"未克服 "+weakL.length+" 問。どのモードで間違えても自動でここに入る。間違えとる順に出し、3連続正解で自動卒業":"未克服の問題なし"}</small></button>
    <button class="btn" style="border-left-color:var(--odo)" data-m="flag" ${Object.keys(S.flag).length?"":"disabled"}><strong>🔖 要注意だけ</strong><small>${Object.keys(S.flag).length?"自分で印を付けた "+Object.keys(S.flag).length+" 問。間違えとる順に出す。3連続正解で自動で卒業":"答えたあと「🔖 要注意に入れる」を押した問題がここに集まる"}</small></button>
+   <button class="btn" style="border-left-color:var(--kusa)" data-m="lvf"><strong>🎯 レベル集中（初級だけ・中級だけ・上級寄りだけ）</strong><small>1つのレベルの問題だけを全部順番に、または未出題だけ。上の「出す問題」の切替とは別に使える</small></button>
+   <button class="btn" style="border-left-color:var(--ai)" data-m="unseen" ${unseenN?"":"disabled"}><strong>🆕 未出題だけ 20問</strong><small>${unseenN?"まだ1回も出てへん問題 "+unseenN+" 問から（押してあるレベルの中）":"押してあるレベルの問題は全部1回以上出た"}</small></button>
    <button class="btn murasaki" data-m="genre"><strong>分野を選んで練習</strong><small>弱い分野を集中的に</small></button>
    <button class="btn" style="border-left-color:var(--ink)" data-m="seq"><strong>全問制覇（順番に網羅）</strong><small>回ごと・分野ごと・ぜんぶ。最後まで一気に出す。中断しても次は続きから。取りこぼしゼロ${prog("all")?"　ぜんぶ "+prog("all")+"/"+ALL.length+"済":""}</small></button>
    <button class="btn" style="border-left-color:var(--enji)" data-m="jiji"><strong>🗞️ 時事ネタ帳（本の締め切り以降）</strong><small>2025年夏〜2026年9月8日の石川・金沢の目を引く話題 ${JIJI.length} 本。北國新聞を読んどらんと答えられん「最近の話題」対策。問題にはなっとらん、読むだけ</small></button>
@@ -200,7 +203,7 @@ function menu(){
    <button class="btn odo" data-m="stats"><strong>成績・分析</strong><small>正答率 ${pct(ok,tot)}%　既出 ${seen}/${ALL.length} 問　受験 ${S.hist.length} 回</small></button>
    <p class="stat">合格ライン：正答率80%以上（金沢検定初級の本番と同じ）</p>`;
   lvBind(menu);
-  $app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>({exam:()=>start("exam"),drill:()=>start("drill"),weak:()=>start("weak"),flag:()=>start("flag"),review:()=>start("review"),genre:genreMenu,seq:scopeMenu,stats:stats,jiji:jijiPage,ref:refPage})[b.dataset.m]());
+  $app.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>({exam:()=>start("exam"),drill:()=>start("drill"),weak:()=>start("weak"),flag:()=>start("flag"),review:()=>start("review"),unseen:()=>start("unseen",""),lvf:levelMenu,genre:genreMenu,seq:scopeMenu,stats:stats,jiji:jijiPage,ref:refPage})[b.dataset.m]());
 }
 function genreMenu(){
   $app.innerHTML=`<h2>分野を選ぶ</h2><p class="hint">その分野の問題だけ、重み付きで最大20問。</p>`+
@@ -211,6 +214,21 @@ function genreMenu(){
   document.getElementById("bk").onclick=menu;
 }
 
+function levelMenu(){
+  const card=l=>{const sc=scopeOf("lv:"+l),qs=sc.qs(),n=qs.length,p=Math.min(prog(sc.k),n),done=p>=n&&n>0,un=qs.filter(q=>rec(q.key).seen===0).length,
+      t=qs.reduce((s,q)=>s+rec(q.key).seen,0),o=qs.reduce((s,q)=>s+rec(q.key).ok,0),est=qs.filter(q=>!q.lvf).length;
+    return `<h2 style="font-size:16px;margin-top:14px;color:${LV[l].c}">${LV[l].m}${LV[l].t}　${n}問</h2>
+     <p class="hint">既出 ${n-un}/${n}　正答率 ${t?pct(o,t)+"%":"—"}${est?"　うち印が推定（?）"+est+"問":""}</p>
+     <div class="scp"><button class="btn" style="border-left-color:${done?"var(--kusa)":LV[l].c}" data-s="${sc.k}" ${n?"":"disabled"}><strong>${LV[l].t}だけ全部（順番に網羅）</strong><small>${done?"制覇済み ✔（押すと最初から）":p?"第"+(p+1)+"問から続き（"+p+"/"+n+" 済）":"未着手"}</small><div class="pb"><i style="width:${pct(p,n)}%"></i></div></button>${p?`<button class="rst" data-r="${sc.k}" title="最初から">↺</button>`:""}</div>
+     <button class="btn" style="border-left-color:var(--ai)" data-u="${l}" ${un?"":"disabled"}><strong>🆕 ${LV[l].t}の未出題だけ 20問</strong><small>${un?"まだ1回も出てへん "+un+" 問から":"全部1回以上出た"}</small></button>`;};
+  $app.innerHTML=`<h2>レベル集中</h2><p class="hint">選んだレベルの問題だけを出す（上の「出す問題」の切替は関係なし）。「全部」は決まった順番で最後まで。中断しても次は続きから。「未出題だけ」はまだ1回も出てへん問題からランダムに20問ずつ。レベルの印はアプリの目安（◎初級＝本番初級レベル、○中級、△上級寄り）。間違えた問題はいつも通り「苦手だけ」に入る。</p>
+   ${["S","M","A"].map(card).join("")}
+   <button class="next ghost" id="bk">メニューへ戻る</button>`;
+  $app.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const k=b.dataset.s,n=scQ(scopeOf(k)).length;if(prog(pk(k))>=n){if(!confirm("制覇済みや。最初からもう一周する？"))return;S.prog[pk(k)]={pos:0,t:Date.now()};store.save(S);}start("seq",k);});
+  $app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{if(confirm("このレベルの進み具合を最初に戻す？（正解・不正解の記録は消えへん）")){S.prog[pk(b.dataset.r)]={pos:0,t:Date.now()};store.save(S);levelMenu();}});
+  $app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>start("unseen",b.dataset.u));
+  document.getElementById("bk").onclick=menu;
+}
 function scopeMenu(){
   const item=sc=>{const qs=scQ(sc),n=qs.length,p=Math.min(prog(pk(sc.k)),n),done=p>=n&&n>0;
     return `<div class="scp"><button class="btn" style="border-left-color:${done?"var(--kusa)":"var(--ink)"}" data-s="${sc.k}" ${n?"":"disabled"}><strong>${sc.label}</strong><small>${n}問　${done?"制覇済み ✔（押すと最初から）":p?"第"+(p+1)+"問から続き（"+p+"/"+n+" 済）":"未着手"}</small><div class="pb"><i style="width:${pct(p,n)}%"></i></div></button>${p?`<button class="rst" data-r="${sc.k}" title="最初から">↺</button>`:""}</div>`;};
@@ -247,6 +265,7 @@ function start(mode,genre){
   if(mode==="weak"){base=worstFirst(PL().filter(q=>{const r=rec(q.key);return r.ng>0&&r.streak<3;}));M={mode,pool:base,idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   else if(mode==="flag"){base=worstFirst(PL().filter(q=>S.flag[q.key]));M={mode,pool:base,idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
   else if(mode==="review"){base=PL().filter(isDue).sort((a,b)=>(rec(a.key).due||0)-(rec(b.key).due||0));n=Math.min(20,base.length);M={mode,pool:base.slice(0,n),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};ask();return;}
+  else if(mode==="unseen"){base=(genre?ALL.filter(q=>q.lv===genre):PL()).filter(q=>rec(q.key).seen===0);M={mode,genre:genre||"",pool:shuffle(base).slice(0,20),idx:0,ans:[],loop:false,round:0,t0:Date.now(),timer:null};if(!M.pool.length){menu();return;}ask();return;}
   else if(mode==="genre"){base=PL().filter(q=>q.g===genre);n=Math.min(20,base.length);}
   else if(mode==="exam"){n=Math.min(100,base.length);}
   else n=Math.min(20,base.length);
@@ -274,7 +293,7 @@ function ask(){
   const q=M.pool[M.idx],order=shuffle([0,1,2,3]),tot=M.pool.length;
   const ok=M.ans.filter(a=>a.ok).length,ng=M.ans.length-ok;
   $app.innerHTML=`
-   <div class="top"><span>${M.loop?"弱点つぶし "+M.round+"周目":M.mode==="seq"?"全問制覇「"+M.scopeLabel+"」 第"+(M.startPos+M.idx+1)+"問 / "+M.base.length:"問 "+(M.idx+1)+" / "+tot}</span><span>${M.mode==="exam"?'<span class="timer" id="tm"></span>':"正解 "+ok+"　不正解 "+ng}</span></div>
+   <div class="top"><span>${M.loop?"弱点つぶし "+M.round+"周目":M.mode==="seq"?"全問制覇「"+M.scopeLabel+"」 第"+(M.startPos+M.idx+1)+"問 / "+M.base.length:(M.mode==="unseen"?"🆕未出題 ":"")+"問 "+(M.idx+1)+" / "+tot}</span><span>${M.mode==="exam"?'<span class="timer" id="tm"></span>':"正解 "+ok+"　不正解 "+ng}</span></div>
    <div class="bar"><i style="width:${M.mode==="exam"?M.idx/tot*100:ok/tot*100}%"></i>${M.mode==="exam"?"":`<b style="left:${ok/tot*100}%;width:${ng/tot*100}%"></b>`}</div>
    <p class="src">${lvTag(q)}<span class="tag">${q.g}</span>${q.src}</p>${M.mode==="exam"?"":`<p class="histline">${histTag(q)}</p>`}
    <p class="q">${q.q}</p>
@@ -318,8 +337,9 @@ function finish(){
   S.hist.unshift({d:Date.now(),mode:M.mode,n:tot,ok,rate,sec:Math.floor((Date.now()-M.t0)/1000)});S.hist=S.hist.slice(0,50);store.save(S);
   // 分野別
   const gs={};M.ans.forEach(a=>{const g=gs[a.q.g]||(gs[a.q.g]={t:0,o:0});g.t++;if(a.ok)g.o++;});
-  const label={exam:"模擬試験",drill:"練習",weak:"苦手だけ",flag:"要注意だけ",review:"今日の復習",genre:"分野練習",seq:"全問制覇「"+(M.scopeLabel||"")+"」"}[M.mode];
+  const label={exam:"模擬試験",drill:"練習",weak:"苦手だけ",flag:"要注意だけ",review:"今日の復習",unseen:(M.genre?LV[M.genre].t+"の":"")+"未出題だけ",genre:"分野練習",seq:"全問制覇「"+(M.scopeLabel||"")+"」"}[M.mode];
   const seqLeft=M.mode==="seq"?M.base.length-(M.startPos+M.pool.length):0;
+  const unLeft=M.mode==="unseen"?(M.genre?ALL.filter(q=>q.lv===M.genre):PL()).filter(q=>rec(q.key).seen===0).length:0;
   $app.innerHTML=`
    <h2>${label}の結果</h2>
    <p class="big">${rate}<small>%（${ok} / ${tot}）</small></p>
@@ -331,8 +351,10 @@ function finish(){
    <div class="loopnote">間違えた問題だけをもう一度出す。全問正解するまで何周でも続く。</div>
    <button class="next" id="lp">弱点つぶしを始める</button>`:""}
    ${M.mode==="seq"?(seqLeft>0?`<p class="hint">「${M.scopeLabel}」${M.startPos+M.pool.length}/${M.base.length} 済。あと ${seqLeft} 問。</p><button class="next" id="sq">続きの${seqLeft}問へ</button>`:`<p class="pass ok">「${M.scopeLabel}」${M.base.length}問、全部出し切った。制覇。</p>`):""}
+   ${M.mode==="unseen"?(unLeft>0?`<p class="hint">未出題はあと ${unLeft} 問。</p><button class="next" id="un">次の未出題${Math.min(20,unLeft)}問へ</button>`:`<p class="pass ok">未出題はゼロ。全部1回は出た。</p>`):""}
    <button class="next ghost" id="bk">メニューへ戻る</button>`;
-  const sq=document.getElementById("sq");if(sq)sq.onclick=()=>start("seq",M.scope);
+  const sq=document.getElementById("sq");if(sq){const g=M.genre;sq.onclick=()=>start("seq",g);}
+  const un=document.getElementById("un");if(un){const g=M.genre;un.onclick=()=>start("unseen",g);}
   const lp=document.getElementById("lp");if(lp)lp.onclick=()=>{M.loop=true;M.round=1;M.mode="drill";M.pool=shuffle(missed);M.ans=[];M.idx=0;ask();};
   document.getElementById("bk").onclick=menu;
 }
