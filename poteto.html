@@ -44,7 +44,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .screen.on{display:flex}
 
 /* 分かち書き: ことばの とちゅうで おらない */
-.bubble,.letter,.exp .cap,.exp .memoNote,.gift,.q-sub,.modal p,.stamp,.techoLead,.gprompt,.gend{word-break:normal;overflow-wrap:break-word;line-break:strict;text-align:left}
+.bubble,.letter,.exp .cap,.exp .memoNote,.gift,.q-sub,.modal p,.stamp,.techoLead,.gprompt,.gend{word-break:keep-all;overflow-wrap:break-word;line-break:strict;text-align:left}
 .exp .cap,.gift,.modal p,.gprompt,.gend{text-align:center}
 /* ふきだし */
 .bubble{position:relative;background:var(--paper);border:3px solid var(--ink);border-radius:20px;padding:10px 14px;
@@ -185,6 +185,33 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .starB svg{width:min(26vw,100px);height:auto}
 .starB .lb2{position:absolute;font:700 var(--kyo);color:#4A2E14;background:rgba(255,253,246,.9);border-radius:8px;padding:1px 6px;white-space:nowrap}
 .starB.pop{animation:pop .35s ease-out forwards}
+.norikoe{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);background:#FFE27A;color:#4A2E14;font:900 18px var(--ui);padding:6px 14px;border-radius:999px;border:3px solid #B48A16;white-space:nowrap;animation:nori .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes nori{0%{transform:translateX(-50%) scale(.3);opacity:0}100%{transform:translateX(-50%) scale(1);opacity:1}}
+.hsum{font-size:14px;font-weight:900;margin:0 0 6px}
+.hrow{display:flex;justify-content:space-between;gap:8px;padding:6px 2px;border-top:1px dashed var(--line);font-size:15px}
+.hrow .hq{font-family:var(--kyo)}.hrow .hs{white-space:nowrap;font-size:13px;color:var(--ink2)}
+.hrow.done .hs{color:var(--carrot-d);font-weight:900}
+.mkpick{max-height:44vh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:0 0 6px}
+.mkgrid{display:grid;gap:6px}.mkgrid.g3{grid-template-columns:repeat(3,1fr)}
+.mko{background:var(--paper);border:3px solid var(--ink);border-radius:12px;box-shadow:var(--shadow);min-height:44px;font:900 20px var(--ui);padding:4px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.mko.sm{font-size:16px;white-space:nowrap;letter-spacing:-.02em}
+.mko:active{transform:translateY(3px);box-shadow:none}
+.mko small{font-size:11px;font-weight:700}
+.mko.wide{font:600 17px var(--kyo);text-align:left;align-items:flex-start;padding:6px 10px}
+.mko.mkg{min-height:66px}.mko.mkg .ic{font-size:22px}.mko.mkg .nm{font-size:13px;white-space:pre-line;text-align:center}
+.subj.mkt{background:#FFF4D6;border-color:var(--carrot-d)}
+.subjects .subj.wide{width:calc(50% - 3px);min-height:48px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:6px;align-items:center;justify-items:start;padding:4px 10px}
+.subj.wide .ic{grid-row:1/3;font-size:24px}.subj.wide .nm{font-size:14px;text-align:left}.subj.wide .st{font-size:11px}
+.subj.hz{background:#EAF4FF;border-color:#2C6FBB}
+.subj .cnt{position:absolute;top:-8px;right:-4px;min-width:22px;height:22px;border-radius:11px;background:#E4483B;color:#fff;font:900 13px/18px var(--ui);text-align:center;border:2px solid var(--ink);padding:0 4px}
+.asleep .subj.hz{opacity:1;pointer-events:auto}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .subj.mkt{background:#5A4520}:root:not([data-theme="light"]) .subj.hz{background:#22405E;border-color:#7FB0E6}}
+:root[data-theme="dark"] .subj.mkt{background:#5A4520}:root[data-theme="dark"] .subj.hz{background:#22405E;border-color:#7FB0E6}
+.hzrow{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;padding:10px 4px;border:0;border-top:1px dashed var(--line);background:none;font-size:16px;color:var(--ink);text-align:left}
+.hzrow .hq{font-family:var(--kyo)}.hzrow .hq small{font-size:11px;color:var(--carrot-d)}.hzrow .hs{white-space:nowrap;font-size:13px;color:var(--ink2);font-weight:900}
+.hzrow:active{background:var(--wall2)}
+.bubble .more{color:var(--carrot-d);font-size:13px;white-space:nowrap;animation:blinkm 1s ease-in-out infinite alternate}
+@keyframes blinkm{from{opacity:1}to{opacity:.25}}
 .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .badge{background:var(--wall2);border:2px dashed var(--line);border-radius:14px;padding:8px 4px;text-align:center;opacity:.6}
 .badge.got{background:var(--paper);border:3px solid var(--carrot);opacity:1;box-shadow:var(--shadow)}
@@ -196,8 +223,8 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .room{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
   background:linear-gradient(var(--wall) 0 78%,var(--floor) 78% 100%);padding:8px 16px 0}
 .room::before{content:"";position:absolute;left:0;right:0;top:78%;height:6px;background:var(--floor2)}
-.room .bubble{width:100%;max-width:340px;margin-bottom:10px;z-index:2;font-size:15px;padding:8px 12px}
-.room .poteBox{height:min(27vh,200px);z-index:1;margin-bottom:2vh;position:relative;overflow:visible}
+.room .bubble{width:100%;max-width:340px;margin-bottom:10px;z-index:2;font-size:15px;padding:8px 12px;flex-shrink:0}
+.room .poteBox{height:min(27vh,200px);min-height:56px;flex-shrink:1;z-index:1;margin-bottom:2vh;position:relative;overflow:visible}
 .room{overflow:visible}
 .shelf{position:absolute;left:12px;right:12px;top:6px;display:flex;flex-wrap:wrap;gap:2px;font-size:22px;line-height:1.2;
   min-height:32px;padding:2px 6px;border-bottom:7px solid var(--frame);border-radius:0 0 3px 3px;opacity:.95}
@@ -214,7 +241,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .subj .tx,.card h3 .tx{font-family:var(--kyo);color:var(--carrot-d);font-weight:600}
 .subj .nm{font-size:12px;font-weight:900;letter-spacing:-.03em;white-space:pre-line;line-height:1.15;text-align:center}
 .subj .st{font-size:9px;color:var(--ink2);letter-spacing:0}
-.subj .wish{position:absolute;top:-10px;right:-4px;background:var(--carrot);color:#fff;font-size:10px;border-radius:10px;
+.subj .wish{position:absolute;top:-10px;right:auto;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;background:var(--carrot);color:#fff;font-size:10px;border-radius:10px;
   padding:2px 7px;border:2px solid var(--ink)}
 .asleep .subj{opacity:.45;pointer-events:none}
 .nav{display:flex;gap:8px;padding:4px 12px 12px;background:var(--floor)}
@@ -260,6 +287,7 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .stage{display:flex;align-items:flex-end;gap:6px;padding:8px 12px 4px;height:132px}
 .stage .poteBox{height:120px;flex:none;width:96px;display:flex;justify-content:center}
 .stage .bubble{flex:1;align-self:center;font-size:16px}
+.stage .pote .pimg{transform:scale(calc(.6 + var(--sz)*.4))}
 .ctrl{padding:6px 12px 12px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px}
 .ctrl.num{min-height:246px}.ctrl.slim{min-height:0}
 .hpad{height:150px;background:#FFFDF6;border:3px solid var(--ink);border-radius:14px;overflow:hidden;touch-action:none;position:relative;
@@ -294,10 +322,11 @@ button:focus-visible{outline:3px solid var(--batsu);outline-offset:2px}
 .hd{display:flex;align-items:center;gap:10px;padding:10px 12px 0}
 .hd h2{margin:0;font-size:19px;font-weight:900}
 .hd .x{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);background:var(--paper);font-size:18px}
-.letter{background:var(--paper);border:3px solid var(--ink);border-radius:8px;padding:18px 16px;font-family:var(--kyo);font-size:20px;line-height:2.1;
-  background-image:repeating-linear-gradient(transparent 0 40px,var(--line) 40px 41.6px);box-shadow:var(--shadow);margin-bottom:12px}
+.letter{background:var(--paper);border:3px solid var(--ink);border-radius:8px;padding:14px 16px;font-family:var(--kyo);font-size:20px;line-height:44px;
+  background-image:repeating-linear-gradient(to bottom,transparent 0 36px,var(--line) 36px 38px,transparent 38px 44px);background-origin:content-box;background-clip:padding-box;background-size:100% 44px;box-shadow:var(--shadow);margin-bottom:12px}
+.letter p,.letter ruby,.letter rt,.letter span{line-height:44px}.letter p{font-size:inherit}
 .letter p{margin:0}.letter .from{text-align:right}
-.letter ruby{ruby-position:over}.letter rt{font-size:.5em;color:var(--ink2);font-family:var(--ui)}
+.letter ruby{ruby-position:over;line-height:1}.letter rt{font-size:.5em;line-height:1;color:var(--ink2);font-family:var(--ui)}
 .gift{text-align:center;font-size:17px;margin:4px 0 14px}
 .gift b{display:block;font-size:64px;line-height:1.2;animation:hop .6s ease-out 2}
 .card{background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
@@ -397,7 +426,7 @@ function normalize(o){
   ["items","days"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});
   ["room","letters","log","owned"].forEach(k=>{if(!Array.isArray(s[k]))s[k]=[]});
   if(!s.owned.includes("g:balloon"))s.owned.push("g:balloon"); // ふうせんは デフォルト
-  ["inv","wearing","fed","play","gameBest"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});if(typeof s.carrot!=="number")s.carrot=0;if(typeof s.belly!=="number")s.belly=50;if(s.belly<=3&&!s.bellyPct){s.belly=Math.round(s.belly*33);s.bellyPct=1}if(typeof s.bellyDate!=="string")s.bellyDate="";
+  ["inv","wearing","fed","play","gameBest","hatena"].forEach(k=>{if(!s[k]||typeof s[k]!=="object")s[k]={}});if(typeof s.carrot!=="number")s.carrot=0;if(typeof s.belly!=="number")s.belly=50;if(s.belly<=3&&!s.bellyPct){s.belly=Math.round(s.belly*33);s.bellyPct=1}if(typeof s.bellyDate!=="string")s.bellyDate="";
   if(typeof s.size!=="number")s.size=30;if(typeof s.hungryDays!=="number")s.hungryDays=0;if(!Array.isArray(s.badges))s.badges=[];
   return s;
 }
@@ -476,7 +505,7 @@ function mkSub(a,b,lv){const ans=a-b,borrow=(a>10&&b>a-10&&b<a);
     explain:()=>framesHTML(cells)+`<div class="cap">${cap}</div>`};
 }
 const EMO=["🍎","🍓","🐟","🌸","⭐","🥕","🐹","🍙","🎈","🐣"];
-function mkCount(n,lv){const e=pick(EMO);let pic="";
+function mkCount(n,lv,ee){const e=ee||pick(EMO);let pic="";
   for(let i=0;i<n;i++){pic+=e;if(i%5===4&&i<n-1)pic+=(i%10===9?"<br>":"　")}
   return {key:`count:${n}`,lv,type:"num",ans:String(n),label:`かぞえる ${n}`,
     wrongs:uniq([n-1,n+1,n+2].filter(x=>x>=0).map(String)),
@@ -512,18 +541,29 @@ function mkKazuNext(n,dir,lv){const ans=n+dir;
     explain:()=>`<div class="cap">${dir>0?`${n}より 1 おおきい かずは <b>${ans}</b>。`:`${n}より 1 ちいさい かずは <b>${ans}</b>。`}</div>`}}
 const BUN_THINGS=[["🍎","りんご","こ"],["🍬","あめ","こ"],["🌸","はな","ほん"],["🐟","さかな","ひき"],["🥕","にんじん","ほん"],["🎈","ふうせん","こ"],["📕","ほん","さつ"],["🍙","おにぎり","こ"],["🐣","ひよこ","わ"],["🍓","いちご","こ"]];
 function emoRow(e,n,mark){let h="";for(let i=0;i<n;i++)h+=(mark&&i>=n-mark)?`<span style="opacity:.35">${e}</span>`:e;return `<div style="font-size:26px;line-height:1.3;letter-spacing:2px">${h}</div>`}
-function mkBunAdd(a,b,lv){const t=pick(BUN_THINGS);const ans=a+b;
+const SUBVERB={"りんご":"たべました","あめ":"たべました","さかな":"およいで いきました","にんじん":"たべました","おにぎり":"たべました","いちご":"たべました","はな":"ともだちに あげました","ふうせん":"とんで いきました","ほん":"ともだちに かしました","ひよこ":"おうちに かえりました"};
+function subVerb(t){return SUBVERB[t[1]]||"なくなりました"}
+const ADDVERB={"さかな":"およいで きました","ひよこ":"やって きました"};
+function addVerb(t){return ADDVERB[t[1]]||"もらいました"}
+const LIVING=["さかな","ひよこ"];
+function iru(t){return LIVING.includes(t[1])?"います":"あります"}
+function motsu(t){return LIVING.includes(t[1])?"かっています":"もっています"}
+// かずと かぞえかた(1ぽん・3ぼん・6ぴき など)
+function cs(n,u){const d=Number(n)%10;if(u==="ほん")return (d===1||d===6||d===8||d===0)?"ぽん":d===3?"ぼん":"ほん";if(u==="ひき")return (d===1||d===6||d===8||d===0)?"ぴき":d===3?"びき":"ひき";return u}
+function cn(n,u){return n+cs(n,u)}
+function nanU(u){return u==="ほん"?"なんぼん":u==="ひき"?"なんびき":"なん"+u}
+function mkBunAdd(a,b,lv,tt){const t=tt||pick(BUN_THINGS);const ans=a+b;
   return {key:`bun:add:${a}+${b}`,lv,type:"num",ans:String(ans),label:`${t[1]}を あわせる(${a}と${b})`,wrongs:uniq([ans-1,ans+1,Math.abs(a-b)].filter(x=>x>=0&&x!==ans).map(String)),
-    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]} あります。${b}${t[2]} もらいました。`,main:"ぜんぶで なん"+t[2]+"？",sm:true,slotBelow:true},
+    q:{emoji:t[0],sub:`${t[1]}が ${cn(a,t[2])} ${iru(t)}。${cn(b,t[2])} ${addVerb(t)}。`,main:"ぜんぶで "+nanU(t[2])+"？",sm:true,slotBelow:true},
     explain:()=>`${emoRow(t[0],a)}<div class="cap" style="font-size:16px">と</div>${emoRow(t[0],b)}<div class="cap">「ぜんぶで」は たしざん。<br>${a}＋${b}＝<b>${ans}</b>。</div>`}}
-function mkBunSub(a,b,lv){const t=pick(BUN_THINGS);const ans=a-b;
+function mkBunSub(a,b,lv,tt){const t=tt||pick(BUN_THINGS);const ans=a-b;
   return {key:`bun:sub:${a}-${b}`,lv,type:"num",ans:String(ans),label:`${t[1]}の のこり(${a}から${b})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
-    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]} あります。${b}${t[2]} たべました。`,main:"のこりは なん"+t[2]+"？",sm:true,slotBelow:true},
-    explain:()=>`${emoRow(t[0],a,b)}<div class="cap">「のこりは」は ひきざん。<br>${b}${t[2]} なくなったから、<br>${a}−${b}＝<b>${ans}</b>。</div>`}}
+    q:{emoji:t[0],sub:`${t[1]}が ${cn(a,t[2])} ${iru(t)}。${cn(b,t[2])} ${subVerb(t)}。`,main:"のこりは "+nanU(t[2])+"？",sm:true,slotBelow:true},
+    explain:()=>`${emoRow(t[0],a,b)}<div class="cap">「のこりは」は ひきざん。<br>${cn(b,t[2])} へったから、<br>${a}−${b}＝<b>${ans}</b>。</div>`}}
 function mkBunDiff(a,b,lv){const t=pick(BUN_THINGS);const ans=Math.abs(a-b),big=a>b?"ポテ":"むっちゃん";
   return {key:`bun:diff:${a}v${b}`,lv,type:"num",ans:String(ans),label:`ちがい(${a}と${b})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
-    q:{emoji:t[0],sub:`ポテは ${t[1]}を ${a}${t[2]}、むっちゃんは ${b}${t[2]} もっています。`,main:"ちがいは なん"+t[2]+"？",sm:true,slotBelow:true},
-    explain:()=>`<div class="cap" style="font-size:15px">ポテ</div>${emoRow(t[0],a)}<div class="cap" style="font-size:15px">むっちゃん</div>${emoRow(t[0],b)}<div class="cap">ならべて くらべると、<br>${big}が <b>${ans}</b>${t[2]} おおい。<br>${Math.max(a,b)}−${Math.min(a,b)}＝${ans}。</div>`}}
+    q:{emoji:t[0],sub:`ポテは ${t[1]}を ${cn(a,t[2])}、むっちゃんは ${cn(b,t[2])} ${motsu(t)}。`,main:"ちがいは "+nanU(t[2])+"？",sm:true,slotBelow:true},
+    explain:()=>`<div class="cap" style="font-size:15px">ポテ</div>${emoRow(t[0],a)}<div class="cap" style="font-size:15px">むっちゃん</div>${emoRow(t[0],b)}<div class="cap">ならべて くらべると、<br>${big}が <b>${ans}</b>${cs(ans,t[2])} おおい。<br>${Math.max(a,b)}−${Math.min(a,b)}＝${ans}。</div>`}}
 const ANIMALS=["🐹","🐶","🐱","🐰","🐻","🐼","🐸","🐥"];
 function mkBunOrder(n,k,fromFront,lv){const row=shuffle(ANIMALS).slice(0,n);const idx=fromFront?k-1:n-k;const ans=row[idx];
   return {key:`bun:ord:${n}-${k}-${fromFront?"f":"b"}`,lv,type:"choice",ans,wrongs:shuffle(row.filter(x=>x!==ans)).slice(0,2),label:`${fromFront?"まえ":"うしろ"}から ${k}ばんめ`,kj:true,
@@ -531,7 +571,7 @@ function mkBunOrder(n,k,fromFront,lv){const row=shuffle(ANIMALS).slice(0,n);cons
     explain:()=>`<div style="font-size:30px;letter-spacing:4px">${row.map((x,i)=>i===idx?`<span style="border-bottom:4px solid #FFE27A">${x}</span>`:x).join("")}</div><div class="cap">${fromFront?"まえ":"うしろ"}から 1、2、3と かぞえて<br><b>${ans}</b> が ${k}ばんめ。</div>`}}
 function mkBunTwo(a,b,c,lv){const t=pick(BUN_THINGS);const ans=a+b-c;
   return {key:`bun:two:${a}+${b}-${c}`,lv,type:"num",ans:String(ans),label:`ふえて へって(${a}+${b}-${c})`,wrongs:uniq([ans-1,ans+1,a+b].filter(x=>x>=0&&x!==ans).map(String)),
-    q:{emoji:t[0],sub:`${t[1]}が ${a}${t[2]}。${b}${t[2]} ふえて、${c}${t[2]} へりました。`,main:"いま なん"+t[2]+"？",sm:true,slotBelow:true},
+    q:{emoji:t[0],sub:`${t[1]}が ${cn(a,t[2])}。${cn(b,t[2])} ふえて、${cn(c,t[2])} へりました。`,main:"いま "+nanU(t[2])+"？",sm:true,slotBelow:true},
     explain:()=>`<div class="cap">じゅんばんに。<br>${a}＋${b}＝${a+b}。<br>${a+b}−${c}＝<b>${ans}</b>。</div>`}}
 const HIRA="あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん";
 const KAKU_KANJI="一二三四五六七八九十日月火水木金土山川人口目手";
@@ -1152,6 +1192,163 @@ function canPlayNow(){const t=ymd();return todayCount()>=(S.settings.limit||3)&&
 function reachedLimit(){return todayCount()>=(S.settings.limit||3)}
 function asleep(){const t=ymd();return reachedLimit()&&(S.play[t]>0||ownedGames().length===0||S.belly<=0)}
 function stars(id){const lv=S.skills[id].lv,max=SK[id].levels.length;return "★".repeat(Math.min(lv,max))+"☆".repeat(Math.max(0,max-lv))}
+/* ===== はてな・もんだいづくりの セリフ(どれも「。」か「？」で おわる) ===== */
+Object.assign(L,{
+  check:()=>pick(["あっ、はてなを みつけたよ。むっちゃんの こたえ、ちょっと ちがう みたい。どうする？","はてな はっけん。ここが のびる ところだよ。どうやって のりこえる？","むっちゃんの こたえ、おしいね。はてなが ひとつ みつかったよ。","あれ、はてなが でてきた。ちょうせん したから みつかったんだよ。","はてなを みつけたね。まちがいは、のびる まえの しるし。",
+    "おっ、はてなだ。いっしょに のりこえよう。どの やりかたに する？","むっちゃんの こたえと ほんとうの こたえ、ちがう みたい。たからさがしの はじまりだよ。","はてな ひとつ ゲット。ここを のりこえたら、また つよく なれるね。","ちょっと ちがったね。でも、やって みたから わかった ことだよ。","はてなが みつかった。ポテ、むっちゃんが どう のりこえるか みたいな。",
+    "まちがえるのは、ちゃんと かんがえた しょうこ。はてなを のりこえよう。","ここが むっちゃんの はてな。もういちど かんがえる？ ヒントを みる？","おしい。はてなノートに いれて おくね。いまから のりこえて みよう。","はてなを みつける むっちゃん、かっこいいよ。つぎは どうする？","ちがったけど だいじょうぶ。はてなは たからもの なんだよ。",
+    "あっ、ここに はてなが かくれてた。みつけて くれて ありがとう。","むっちゃん、はてな はっけん。ポテも いっしょに かんがえるね。","まちがいは わるい ことじゃ ないよ。ここから どう うごくかが だいじ。","はてなが でた。ゆっくりで いいよ。どう する？","ちょっと ちがう みたい。でも、ちょうせん した むっちゃんは えらい。",
+    "はてなを ひとつ みつけたね。のりこえる みちは みっつ あるよ。","あれれ、ちがう みたい。ここが むっちゃんの のびしろだね。","はてなが ひとつ。これを のりこえたら、ポテに じまん してね。","おしかったね。はてなを みつけるのも、べんきょうの だいじな ところ。","むっちゃんの こたえ、ちがってた。でも それで いいの。ここから だよ。",
+    "はてな、みーつけた。どうやって やっつける？","ちがったね。まちがえた ところが わかると、もっと かしこく なれるよ。","はてなが でてきたね。にげずに むかって いこう。","おっと、ちがう みたい。どれで のりこえるか、えらんでね。","はてなを みつけた。それは ちゃんと やって みた しるしだよ。"]),
+  selfFix:()=>pick(["じぶんで なおせたね。これが いちばん すごい こと。","やった。じぶんの ちからで はてなを なおしたよ。","もういちど かんがえて、できたね。あきらめない むっちゃん、かっこいい。","みなおしたら わかったね。それが べんきょうの ちから。","じぶんで きづけたね。ポテ、うれしくて とびはねちゃう。",
+    "ちがう ところを みつけて、なおせたね。はなまる。","さっきは ちがったけど、いまは できた。それが のびるって こと。","むっちゃん、じぶんで のりこえたね。すごい。","かんがえなおす ちから、ばっちりだね。","まちがいを じぶんで なおせる ひとは、どんどん かしこく なるよ。",
+    "できた。はてなが「わかった」に かわったね。","もういちど ちょうせん して よかったね。","じぶんで なおした こたえは、わすれにくいんだって。","あきらめずに かんがえたね。ポテ、そんけい しちゃう。","やったね。ちがいに きづいて、じぶんで なおした。",
+    "さすが むっちゃん。みなおしの めいじんだね。","ちゃんと なおせた。ポテも まねして みる。","さっきの まちがいが、いまの せいかいに つながったね。","できたね。まちがえたから、もっと わかったんだよ。","じぶんで のりこえた はてな、だいじに しようね。",
+    "なおせたね。むっちゃんの あたま、ぐんぐん のびてる。","もう いっかいで できた。それが ほんとうの ちから。","ゆっくり かんがえたら できたね。えらい。","ちがう ところに きづく めが あるね。","はてなを たからものに かえたね。",
+    "むっちゃん、すごい。じぶんの ちからで なおした。","かんがえなおして、こたえに たどりついたね。","いいね。まちがえても なおせば だいじょうぶ。","できた。ポテ、むっちゃんの がんばりを みてたよ。","じぶんで なおせる むっちゃんは、さいこうの {先生|せんせい}。"]),
+  norikoe:q=>pick([`「${q}」、まえは はてなだったのに、きょうは できたね。のりこえた。`,`やった。はてなだった「${q}」を のりこえたよ。`,`「${q}」、ちゃんと おぼえてたね。はてなノートに ハンコを おすね。`,`まえに まちがえた「${q}」が、いまは できた。これが のびるって こと。`,`「${q}」の はてな、やっつけたね。`,
+    `すごい。「${q}」を のりこえた。ポテ、うれしい。`,`「${q}」、もう はてなじゃ ないね。むっちゃんの ものに なった。`,`はてなを ひとつ のりこえたよ。「${q}」、かんぺき。`,`「${q}」、まえは むずかしかったのにね。むっちゃん、つよく なった。`,`のりこえ せいこう。「${q}」に ハンコ。`,
+    `「${q}」が できた。あの ときの まちがいの おかげだね。`,`まえの むっちゃんより、いまの むっちゃんは つよいよ。「${q}」が しょうこ。`,`「${q}」、とうとう のりこえたね。ポテ、はくしゅ。`,`はてなだった「${q}」が、とくいに かわったね。`,`「${q}」、ちゃんと できた。まちがえて よかったね。`,
+    `やったね。「${q}」の はてな、きえちゃった。`,`「${q}」、のりこえた。はてなノートが きらきら してるよ。`,`まえに つまずいた「${q}」、きょうは すいすい。`,`「${q}」を のりこえた むっちゃん、かっこいい。`,`のりこえた。「${q}」は もう こわくないね。`,
+    `「${q}」、はてなから せいかいへ。だいせいちょう。`,`「${q}」の はてな、みごとに のりこえた。`,`ポテ、みてたよ。「${q}」を のりこえた ところ。`,`「${q}」、まちがえた ことが あるから、いま できるんだよ。`,`はてな ひとつ クリア。「${q}」、ばっちり。`,
+    `「${q}」、もう だいじょうぶだね。のりこえ ハンコ。`,`「${q}」が できた。あきらめなかった おかげ。`,`まえは はてな、いまは にっこり。「${q}」。`,`「${q}」、のりこえたね。つぎの はてなも たのしみ。`,`「${q}」の はてなを やっつけた。むっちゃん、さすが。`]),
+  hatenaWait:n=>{const c=call();return pick([`はてなノートに はてなが ${n}こ まってるよ。のりこえに いこう。`,`${c}、まえに みつけた はてなが ${n}こ。きょう のりこえられるかな。`,`はてなが ${n}こ、${c}を まってるよ。じゅぎょうで でて くるかも。`,`${c}、はてなを のりこえる じゅんびは できてる？ ${n}こ まってるよ。`,`まえの はてな、おぼえてる？ ${n}こ あるよ。いっしょに やっつけよう。`,
+    `はてなノート、のぞいて みた？ のりこえ まちが ${n}こ。`,`きょうも はてなを のりこえに いこう。${c}なら できるよ。`,`はてなは にげないから だいじょうぶ。${c}の ペースで いこうね。`,`${c}、はてなを のりこえると ハンコが もらえるよ。`,`まえに まちがえた もんだい、きょうは できるかも。ためして みよう。`])},
+  mkPick:()=>pick(["むっちゃん {先生|せんせい}、どんな もんだいを ポテに だして くれる？","きょうは むっちゃんが もんだいを つくる ひ。なにに する？","ポテ、むっちゃんの もんだいに ちょうせん したい。えらんでね。","どんな もんだいかな。ポテ、どきどき してる。","むっちゃんの もんだい、たのしみ。すきなのを えらんでね。",
+    "むずかしい もんだいでも いいよ。ポテ、がんばるから。","もんだいを つくるのって、{先生|せんせい} みたいだね。","つぎは どの もんだいに する？","ポテを びっくり させる もんだい、まってるね。","むっちゃん、もんだいの しゅるいを えらんでね。",
+    "ポテの あたま、じゅんび ばんたん。どんな もんだい？","きょうの もんだいは なにかな。わくわく。","むっちゃんが つくる もんだい、ポテ だいすき。","どれでも いいよ。ポテ、まけないからね。","もんだいを えらんだら、かずや ことばを きめてね。",
+    "むっちゃん {先生|せんせい}、もんだい おねがい します。","ポテ、すわって まってるね。もんだいを どうぞ。","どんな もんだいで ポテを ためすの？","むっちゃんの もんだいで、ポテ かしこく なりたい。","つぎの もんだい、なにに しようか。",
+    "ポテ、さっきより もっと がんばるね。もんだいを えらんで。","むっちゃん、もんだいを つくる てんさいだね。つぎは？","ポテが まちがえたら、ちゃんと おしえてね。","もんだいの しゅるいは いっぱい あるよ。すきなのを どうぞ。","むっちゃんの もんだいで、ポテ どこまで できるかな。",
+    "もんだいを つくると、むっちゃんの あたまも つよく なるよ。","きょうは ポテが せいと。むっちゃんが {先生|せんせい}。","どの もんだいに する？ ポテ、しっぽ ふって まってる。","ポテに ぴったりの もんだい、えらんでね。","さあ、もんだいを つくろう。ポテ、ちょうせん する。"]),
+  mkThink:()=>pick(["むっちゃんの もんだい、うけとったよ。かんがえるね。","うーん、むっちゃんの もんだい、なかなか むずかしい。","ちょっと まってね。ポテ、いっしょうけんめい かんがえてる。","むっちゃん {先生|せんせい}の もんだいだ。がんばって とくね。","ふむふむ。これは こう かな。","ポテの あたまが ぐるぐる まわってる。",
+    "いい もんだいだね。ポテ、ほんきで かんがえる。","えっと、えっと。もうすこし まってね。","むっちゃん、もんだい つくるの じょうずだね。かんがえるよ。","ポテ、まちがえないように がんばる。","しずかに かんがえるね。","むずかしいけど、やって みる。",
+    "こたえ、わかった きが する。","ポテの ゆびで かぞえて みるね。","うーん、これは ひっかけかな。","むっちゃんの もんだい、たのしい。かんがえるね。","ポテ、まけないよ。","よーし、とくぞ。",
+    "どきどき。あってると いいな。","いま かんがえ ちゅう。もう ちょっと。","むっちゃんが つくった もんだい、だいじに とくね。","あたまの なかで ノートを ひらいてる。","これは ポテの とくいかも。","ちょっと むずかしい。でも にげないよ。",
+    "ポテ、むっちゃんみたいに かんがえて みる。","ひとつずつ たしかめるね。","こたえを きめたよ。かくね。","むっちゃん {先生|せんせい}、みててね。","ポテの ぜんりょく、いくよ。","ふーっ。しゅうちゅう。"]),
+  mkRight:()=>pick(["やった。むっちゃん {先生|せんせい}の まる、うれしい。","まる もらえた。ポテ、がんばって よかった。","あってたんだね。たしかめて くれて ありがとう。","むっちゃんの まるは とくべつ。","やったー。むっちゃんの もんだい、とけたよ。","はなまる。むっちゃん、ちゃんと たしかめて えらいね。",
+    "あってた。むっちゃんの もんだい、たのしかった。","まるだ。ポテ、しっぽ ぴょんぴょん。","ちゃんと みて くれたね。ありがとう。","むっちゃんが まるを くれると、げんきが でる。","せいかい。むっちゃん、こたえを しってて すごい。","よかった。つぎも がんばるね。",
+    "むっちゃんの もんだい、ポテ できたよ。","まるを つける むっちゃん、{先生|せんせい} みたい。","やったね。ふたりとも せいかいだ。","ポテ、むっちゃんの もんだいで かしこく なった。","まる、ありがとう。うれしいな。","たしかめて くれる {先生|せんせい}、だいすき。",
+    "あってた。むっちゃんの まるで ほっとした。","むっちゃん、まるを つけるの じょうずだね。","ポテ、できた。むっちゃんの おかげ。","まる もらった。もっと むずかしいのでも いいよ。","せいかいだって。ポテ、じしん ついた。","むっちゃん {先生|せんせい}、ありがとう。",
+    "むっちゃんの もんだいと ポテの こたえ、ぴったり。","まるだ。チューチュー。","はなまる、ポテの たからもの。","ちゃんと けいさん して たしかめたんだね。えらい。","むっちゃんの もんだい、いい もんだいだった。","やった。つぎの もんだいも まってるね。"]),
+  mkCaught:()=>pick(["ばれちゃった。ほんとうの こたえ、おしえて。","ちがうって わかったの？ すごい。ただしい こたえを おしえて。","あっ、ポテ まちがえた。むっちゃん {先生|せんせい}、こたえ おしえて。","よく みつけたね。ほんとうは いくつ？ おしえて。","むっちゃん、ポテの まちがいに きづいたね。こたえを おしえて ほしいな。","ちがったか。むっちゃんの こたえを みせて。",
+    "ポテの こたえ、ちがってた？ ただしいのを おしえて。","むっちゃん、するどい。ほんとうの こたえは なに？","まちがいを みつける むっちゃん、かっこいい。こたえを おしえて。","あちゃー。ポテ、まちがえちゃった。おしえて くれる？","さすが {先生|せんせい}。ほんとうの こたえを ポテに おしえて。","ばつ、かあ。ポテ、しりたい。こたえ おしえて。",
+    "むっちゃん、よく たしかめたね。ただしい こたえ、おねがい。","ポテの まちがい、みつけて くれて ありがとう。こたえは？","ちがうんだね。むっちゃんが おしえて くれたら、ポテ おぼえる。","よく みてたね。ほんとうの こたえを おしえて。","むっちゃん {先生|せんせい}、ポテに ただしい こたえを みせて。","ちがってたか。むっちゃん、たすけて。",
+    "むっちゃんの め、ごまかせないね。こたえを おしえて。","ポテ、どこで まちがえたかな。こたえを おしえて。","ばつ、ありがとう。むっちゃんの こたえで ポテ なおすね。","むっちゃん、ポテに こたえを おしえて くれる？","まちがいに きづく むっちゃん、すごい。ほんとうは？","ちがうって いって くれて うれしい。こたえ、おしえて。",
+    "むっちゃん {先生|せんせい}、こたえ あわせ しよう。ほんとうは？","ポテ、なおしたいの。ただしい こたえを おしえて。","たしかめて くれて ありがとう。こたえを みせてね。","ばれた。むっちゃん、こたえを おしえて。","よく きづいたね。ほんとうの こたえは どれ？","むっちゃんの おかげで まちがいが わかった。こたえ おしえて。"]),
+  mkMissed:()=>pick(["まる、ありがとう。でも ポテ、ちょっと しんぱい。もういちど たしかめて みて。","あれ？ ポテの こたえ、ほんとに あってるかな。","まる もらえて うれしいけど、ポテ じしんが ないの。もういちど みて。","うーん、ポテ まちがえてる きが する。たしかめて くれる？","ほんとに まる？ ポテ、どきどき してる。",
+    "あれれ、ポテの こたえ、あやしい きが する。","むっちゃん、もういちど けいさん して みて。","まる、ありがとう。でも はてなの においが する。","ポテ、こたえを まちがえたかも。たしかめて ほしいな。","まるで いいのかな。もういちど みて みよう。",
+    "あれ？ なんだか ちがう きが するよ。","ポテの こたえ、あってるか いっしょに みよう。","ちょっと まって。ポテ、まちがえてる かも。","むっちゃん、もういちど ゆっくり みて くれる？","ほんとかな。はてなが かくれてる かも。"]),
+  mkWrongX:()=>pick(["えっ、ちがうの？ ポテ、あってる きが するんだけど。もういちど みて みて。","あれ？ ポテの こたえ、あってる と おもう。たしかめて くれる？","ばつ？ ポテ、ちゃんと かんがえたよ。もういちど みて。","うーん、ポテ あってる きが するの。いっしょに たしかめよう。","ほんとに ちがう？ もういちど けいさん して みて。",
+    "ポテ、じしん あったのに。もういちど みて くれる？","あれれ、ポテの こたえで あってる かも。","ちょっと まって。もういちど たしかめて みよう。","むっちゃん、ゆっくり みて みて。ポテ、あってる かもよ。","ばつかあ。でも ポテ、あってる と おもうな。",
+    "もういちど いっしょに かぞえて みよう。","あれ？ はてなが でて きたね。たしかめよう。","ポテの こたえ、もういちど みて くれる？","ほんとかな。ふたりで たしかめよう。","むっちゃん {先生|せんせい}、もういちど チェック おねがい。"]),
+  mkHerWrong:()=>pick(["あれ？ ポテ、かんがえて みたら ちがう きが するの。いっしょに たしかめよう。","むっちゃん、その こたえ、ちょっと ちがう みたい。せつめいを みて みよう。","はてなが でたね。いっしょに たしかめよう。","ポテも まちがえて、むっちゃんも まちがえた。でも だいじょうぶ。いっしょに みよう。","おしい。ほんとうの こたえを ふたりで たしかめよう。",
+    "あれれ、ちがう みたい。こくばんを みて みよう。","まちがえても だいじょうぶ。ここから わかれば いいの。","むっちゃんの こたえ、もういちど みて みよう。","はてな、みーつけた。ふたりで のりこえよう。","ちがったね。せつめいを みたら きっと わかるよ。",
+    "ポテと いっしょに こたえ あわせ しよう。","ふたりの はてなだね。いっしょに みよう。","おしかったね。こたえを たしかめよう。","まちがえるのも べんきょう。せつめいを みてね。","むっちゃん、だいじょうぶ。いっしょに たしかめれば わかるよ。"])
+});
+Object.assign(LT,{
+  norikoe:(c,q)=>pick([`きょうの いちばんの たからものは、「${q}」を のりこえた こと。`,`まえに まちがえた「${q}」が できたね。ポテ、うれしくて なみだが でそう。`,`「${q}」を のりこえた ${c}、ほんとうに かっこよかったよ。`,`はてなだった「${q}」が できるように なったね。まちがえた ことが、ちからに かわったんだよ。`,`「${q}」、まえは むずかしかったのに、きょうは できた。${c}は のびてるよ。`,
+    `きょう、「${q}」の はてなを のりこえたね。ポテは ずっと みてたよ。`,`「${q}」を のりこえた ことを、おとうさんと おかあさんにも おしえて あげてね。`,`${c}、「${q}」の はてなを やっつけたね。つぎの はてなも、きっと のりこえられる。`,`「${q}」が できたのは、まえに まちがえて、にげなかったから。`,`はてなノートに「${q}」の ハンコが ついたよ。たからものが ふえたね。`,
+    `「${q}」を のりこえた きょうは、とくべつな ひ。`,`まちがえても だいじょうぶって、「${q}」が おしえて くれたね。`,`${c}、「${q}」の こと おぼえてる？ まえは ちがったのに、きょうは できたんだよ。`,`「${q}」を のりこえた ${c}に、ポテから はなまる 100こ。`,`はてなを のりこえる ${c}は、せかいいちの ちょうせんしゃ。「${q}」が しょうこだよ。`,
+    `「${q}」が できた ことが、ポテの きょうの いちばんの うれしい こと。`,`まちがいは のびる まえの しるし。「${q}」で わかったね。`,`「${q}」を のりこえた ${c}。こつこつって すごいね。`,`きょうは「${q}」に かったね。つぎも いっしょに ちょうせん しよう。`,`「${q}」、まえは はてな、いまは とくい。${c}の せいちょう、うれしいな。`,
+    `${c}が「${q}」を のりこえた しゅんかん、ポテ チューって ないちゃった。`,`「${q}」、まちがえた ことが あったから、こんなに うれしいんだね。`,`はてなを のりこえる たびに、${c}は つよく なるよ。きょうは「${q}」。`,`「${q}」の はてな、きょうで さよなら。${c}、すごい。`,`きょうの ${c}は、「${q}」を のりこえた ゆうしゃ。`,
+    `「${q}」を のりこえた こと、ポテの にっきに かいて おくね。`,`まえに つまずいた「${q}」を、じぶんの ちからで のりこえたね。`,`「${q}」が できた ${c}を みて、ポテも がんばろうって おもったよ。`,`${c}、「${q}」の はてなを のりこえたね。にげない こころ、たからものだよ。`,`「${q}」を のりこえた。これからも はてなを みつけて、のりこえて いこうね。`]),
+  found:(c,n)=>pick([`きょうは はてなを ${n}こ みつけたね。のりこえる ひが たのしみ。`,`はてなを ${n}こ みつけた ${c}。ちょうせん した しるしだよ。`,`きょう みつけた はてな ${n}こ、ポテの ノートに しまって おいたよ。`,`まちがえた ところが わかったね。そこから のびて いくんだよ。`,`${c}、はてなを みつけるのも べんきょうだよ。きょうも よく がんばったね。`,
+    `はてなは わるい ものじゃ ないよ。のりこえる たのしみが ふえただけ。`,`きょうの はてな ${n}こは、${c}の のびしろ。わくわく するね。`,`まちがえても へいき。${c}が ちょうせん した あかしだから。`,`はてなを ${n}こ みつけた。また こんど ためして みようね。`,`はてなを みつけた ${c}は、えらい。にげなかったからね。`,
+    `きょうの はてなは、つぎの「できた」の たね だよ。`,`はてなが あると、つぎに できた とき もっと うれしいよ。`,`${c}、はてな ${n}こ。のりこえに いく ひを、ポテも まってるね。`,`まちがいを みつけられる ${c}は、どんどん かしこく なるよ。`,`はてなは たからの ちず。${c}と いっしょに さがして いこう。`]),
+  make:(c,n)=>pick([`きょうは ${c}が ポテに もんだいを だして くれたね。たのしかった。`,`${c}の もんだい、どれも おもしろかったよ。`,`もんだいを つくるのは、とくより むずかしいんだって。${c}、すごいね。`,`${c} {先生|せんせい}の もんだい、ポテ がんばって といたよ。`,`ポテの まちがいを みつけて くれて ありがとう。`,
+    `${c}が つくった もんだい、ポテの たからもの。`,`もんだいを だす ${c}、ほんものの {先生|せんせい} みたいだった。`,`${c}の もんだいで、ポテの あたまが ぐるぐる うごいたよ。`,`ポテの こたえを ちゃんと たしかめて くれたね。`,`${c}が もんだいを つくると、${c}の あたまも つよく なるんだよ。`,
+    `きょうの もんだい、ポテ ゆめに みそう。`,`${c}の もんだいに こたえるの、だいすき。`,`また もんだいを だしてね。ポテ、まってる。`,`${c}が まるを つけて くれると、ポテ とびあがっちゃう。`,`もんだいを つくって、たしかめて。${c}は もう りっぱな {先生|せんせい}。`])
+});
+
+/* ===== ❓ はてな コーナー(まちがえた もんだいを ふくしゅう。なんかいでも できる) ===== */
+Object.assign(L,{
+  toHatena:()=>pick(["おしい。この もんだいは はてな コーナーに いれて おくね。あとで ふくしゅう してね。","ちょっと ちがった みたい。はてな コーナーで また ちょうせん してね。","この もんだいは はてなに なったよ。はてな コーナーで ふくしゅう しようね。","あれれ、はてなが でたね。はてな コーナーに しまって おくから、あとで やってみてね。","だいじょうぶ。この もんだいは はてな コーナーで まってるよ。",
+    "まちがえても へいき。はてな コーナーで ふくしゅう すれば、きっと できるよ。","はてな ひとつ みつけた。はてな コーナーで のりこえてね。","おしかったね。はてな コーナーに いれたよ。あとで もういちど かんがえて みてね。","ここは はてなに しておくね。はてな コーナーで ふくしゅう してね。","ちがったけど、ちょうせん したのが えらい。はてな コーナーで また あおうね。",
+    "この もんだい、はてな コーナーに おいて おくね。じかんの ある ときに やってみて。","はてなを みつけたね。はてな コーナーで のりこえたら、ポテに おしえてね。","まちがえた もんだいは たからもの。はてな コーナーに しまって おくよ。","いまは つぎに いこう。この もんだいは はてな コーナーで ふくしゅう してね。","はてなが ひとつ ふえたね。はてな コーナーで まってるよ。",
+    "あわてなくて いいよ。はてな コーナーで ゆっくり かんがえてね。","この もんだいは あとで。はてな コーナーで ふくしゅう しようね。","ちょっと ちがったね。はてな コーナーに いれたから、あとで たしかめてね。","はてな はっけん。はてな コーナーで のりこえる ひが たのしみ。","まちがえるのは かんがえた しょうこ。はてな コーナーで ふくしゅう してね。",
+    "この もんだい、はてな コーナーに いれたよ。なんかいでも ちょうせん できるよ。","おっと、はてなだ。はてな コーナーで また やって みようね。","はてな コーナーに ひとつ たまったよ。ふくしゅう したら、つよく なれるね。","だいじょうぶ、だいじょうぶ。はてな コーナーで まってるからね。","この もんだいは、はてな コーナーで もういちど。",
+    "はてなに なった もんだいは、あとで ふくしゅう すると わすれにくいんだって。はてな コーナーで やってね。","ちがったけど、つぎに いこう。はてな コーナーで また あえるよ。","はてなを ひとつ ゲット。はてな コーナーで ふくしゅう してね。","おしい。はてな コーナーに しまったよ。こんど いっしょに のりこえよう。","この もんだいは はてな コーナーへ。ふくしゅう、まってるね。"]),
+  hzAsk:()=>pick(["この はてな、いっしょに かんがえよう。","まえに まちがえた もんだいだよ。ゆっくり かんがえてね。","はてなに ちょうせん。むっちゃんなら できるよ。","よく みてね。あわてなくて いいよ。","この もんだい、おぼえてる？ やって みよう。",
+    "はてなを のりこえる チャンスだよ。","ゆっくりで いいよ。こたえを えらんでね。","まえは ちがったけど、いまは どうかな。","この はてな、やっつけちゃおう。","よーく かんがえてから えらんでね。",
+    "はてな コーナーへ ようこそ。この もんだいだよ。","いっかい まちがえた もんだいは、つぎ できると うれしいよ。","こんどは できるかな。ポテ、おうえん してるよ。","じっくり みてね。むっちゃんの ペースで いいよ。","この はてなを たからものに かえよう。",
+    "まちがえた ところを おもいだして みてね。","さあ、はてなに ちょうせん。","ゆびで かぞえても いいよ。","いっしょに のりこえよう。こたえは どれかな。","まえの はてな、きょうは どうかな。",
+    "おちついて かんがえれば だいじょうぶ。","この もんだい、むっちゃんを まってたよ。","はてなを ひとつずつ へらして いこうね。","ポテも いっしょに みてるよ。","できなくても だいじょうぶ。やって みるのが だいじ。",
+    "むずかしかった もんだいだね。もういちど やって みよう。","こたえを えらんだら、ポテが たしかめるね。","まちがえても、また ここで ちょうせん できるよ。","いちばん だいじなのは、あきらめない こと。","はてなの もんだい、はじめよう。"]),
+  hzNotYet:()=>pick(["まだ はてなだね。どう する？","おしい。もういちど かんがえる？ ヒントを みる？","ちがったけど、だいじょうぶ。どう のりこえる？","うーん、ちがう みたい。どれに する？","まだ ちょっと ちがうね。えらんでね。",
+    "おしかったね。つぎの やりかたを えらんでね。","ちがったね。あわてなくて いいよ。","まだ はてなの まま。どう する？","もうすこし。ヒントも あるよ。","ちがったけど、かんがえたのが えらい。どう する？",
+    "あれ、ちがう みたい。もういちど やって みる？","おしい。ここからが だいじだよ。","まだ のりこえて ないね。どう する？","ちがったね。こたえを みても いいんだよ。","はてな、なかなか てごわいね。どう する？","だいじょうぶ。まちがえても、ここは なんかいでも できるよ。","ちがったね。どの やりかたで いく？","うん、まだ ちょっと ちがう。ヒントを みても いいよ。","おしいなあ。もう いっかい かんがえて みる？","ちがったけど、にげなかったのが えらい。","まだ はてな。いっしょに かんがえよう。","ちょっと ちがったね。ゆっくりで いいよ。","おっと、ちがう みたい。どう のりこえる？","まちがえても へいき。つぎに どう するか えらんでね。","ちがったね。こたえを みるのも ひとつの てだよ。","あと すこしかも。どう する？","うーん、ざんねん。でも ここからだよ。","まだ はてなが のこってるね。えらんでね。","ちがう みたい。ポテと いっしょに かんがえよう。","おしい。あきらめずに いこう。"]),
+  hzFixed:()=>pick(["なおせたね。つぎは さいしょの 1かいで できるかな。","じぶんで なおせた。この はてなは もうすぐ のりこえられるよ。","できたね。また こんど、1かいで できるか ためそう。","やった。もう ひといき。つぎは いっぱつで いこう。","なおせたね。はてな コーナーで また まってるよ。",
+    "かんがえなおして できたね。つぎも ちょうせん しよう。","すごい。あと すこしで のりこえだよ。","できたね。こんどは さいしょから できるかも。","みなおして わかったね。また ためして みよう。","なおせた むっちゃん、かっこいい。つぎは 1かいで できるかな。",
+    "いいね。もういちど やったら きっと のりこえられる。","できた。この はてな、もうすぐ さよならだね。","じぶんで きづけたね。また こんど あおう。","なおせたね。つぎに きたら いっぱつで こたえよう。","やったね。のりこえまで あと 1ぽ。","なおせた。この ちょうしで いこう。","できたね。また こんど、さいしょから ためそう。","みなおしたら できたね。すごい。","じぶんの ちからで なおしたね。つぎは いっぱつかな。","できた。はてなが ちいさく なったよ。","いいぞ。もう すこしで のりこえだね。","なおせたね。この もんだい、もう こわくないね。","かんがえなおして せいかい。かっこいい。","やった。つぎに あったら 1かいで いこう。","できたね。ポテも うれしい。","ヒントから ちゃんと たどりついたね。","じぶんで みつけたね。つぎも まってるよ。","なおせた むっちゃん、すてき。","あと ひといきで さよならだね、はてな。","できたね。また ここで ためして みよう。"]),
+  hzAnsSeen:()=>pick(["こたえが わかったね。また こんど ちょうせん しよう。","いっしょに たしかめたね。つぎは できるよ。","わかったね。この はてなは また でて くるよ。","こたえを みるのも べんきょう。つぎ ためそうね。","そういう ことだったんだね。また はてな コーナーで あおう。",
+    "わかったら もう だいじょうぶ。つぎに ちょうせん しよう。","こたえを しったね。こんどは じぶんで できるかな。","いっしょに みたから よく わかったね。","これで はてなの なぞが とけたね。また ためそう。","わかったね。あしたも やって みると いいよ。",
+    "たしかめたね。つぎは きっと できる。","こたえが わかると すっきり するね。","ちゃんと みたね。また ちょうせん しよう。","よし、わかった。つぎは のりこえよう。","こたえを おぼえたら、また ためして みてね。","こたえが わかって すっきり。つぎは じぶんで できるよ。","いっしょに みたね。また あとで ちょうせん しよう。","わかった ことが ふえたね。","みるのも だいじな べんきょう。また ためそう。","これで わかったね。こんどは きっと できる。","そうだったんだね。つぎに いかそう。","こたえを みて なっとく したね。","わかったら こわくないね。また あおう。","しっかり みたね。えらい。","この はてなは また でて くるよ。そのとき ためそう。","わかったね。あしたの むっちゃんは もっと できる。","こたえを しったら、もう いっぽ まえへ。","みて わかるのも ちからだよ。","よし、おぼえた。つぎに ちょうせん しよう。","わかったね。ポテも いっしょに おぼえたよ。"]),
+  hzDone:n=>pick([`はてな コーナー、おしまい。のりこえた はてなは ${n}こ だよ。`,`よく がんばったね。きょう のりこえた はてなは ${n}こ。`,`おつかれさま。${n}この はてなを のりこえたよ。`,`はてなに ちょうせん した むっちゃん、かっこよかった。のりこえたのは ${n}こ。`,`ふくしゅう おしまい。のりこえた はてなは ${n}こ。また いつでも きてね。`,`はてな コーナー、おつかれさま。のりこえたのは ${n}こ だよ。`,`ちょうせん した ことが いちばん だいじ。のりこえたのは ${n}こ。`,`きょうの はてな、${n}こ のりこえたね。`,`よく かんがえたね。のりこえた はてなは ${n}こ。`,`また いつでも ふくしゅう しにきてね。のりこえたのは ${n}こ。`])
+});
+L.hatenaWait=n=>{const c=call();return pick([`はてな コーナーに はてなが ${n}こ まってるよ。`,`${c}、はてな コーナーで ふくしゅう する？ ${n}こ あるよ。`,`はてなが ${n}こ、${c}を まってるよ。`,`はてな コーナーの はてな ${n}こ、いっしょに のりこえよう。`,`まえの はてな、おぼえてる？ はてな コーナーに ${n}こ あるよ。`,
+  `${c}、はてな コーナーは なんかいでも いけるよ。いま ${n}こ。`,`はてな コーナーで まってる はてなが ${n}こ。ちょうせん する？`,`ふくしゅうは いつでも できるよ。はてなは ${n}こ。`,`はてなを のりこえたら、ポテに おしえてね。いま ${n}こ。`,`${c}、はてな コーナーに いって みる？ ${n}こ まってるよ。`])};
+
+function hatenaItem(k,h){let it=itemByKey(k);if(it)return it;
+  if(h&&h.mk){const g=MAKE.find(x=>x.id===h.mk.g);if(g){try{return g.build(h.mk.v)}catch(e){}}}return null}
+function hatenaOpenList(){return Object.entries(S.hatena||{}).filter(([k,h])=>!h.done&&hatenaItem(k,h)).sort((a,b)=>(a[1].d||"").localeCompare(b[1].d||""))}
+function hatenaOpenN(){return hatenaOpenList().length}
+function mdOf(d){const p=(d||"").split("-");return p.length===3?`${Number(p[1])}/${Number(p[2])}`:""}
+function openHatena(){ac();SFX.tap();LES=null;
+  const open=hatenaOpenList(),done=Object.values(S.hatena||{}).filter(h=>h.done).sort((a,b)=>(b.dd||"").localeCompare(a.dd||"")).slice(0,10);
+  const batch=Math.min(10,open.length);
+  const h=`<p class="techoLead" style="margin:0 0 10px;font-size:15px">まちがえた もんだいが ここに たまるよ。なんかいでも ちょうせん できるよ。さいしょの 1かいで できたら「のりこえた」に なるよ。</p>`+
+   (open.length?`<button class="big-btn go" id="hzAll" style="margin-bottom:12px">❓ じゅんばんに やる(${batch}もん)</button>
+    <div class="card"><h3>❓ まだ はてな(${open.length}こ)</h3>${open.map(([k,x])=>`<button class="hzrow" data-k="${esc(k)}"><span class="hq">${esc(x.q)}${x.fx?' <small>✏️ あと すこし</small>':""}</span><span class="hs">${mdOf(x.d)} ▶</span></button>`).join("")}</div>`
+   :`<div class="card"><h3>❓ まだ はてな(0こ)</h3><p style="margin:4px 0">いまは はてなが ないよ。じゅぎょうで まちがえたら、ここに たまるよ。</p></div>`)+
+   (done.length?`<div class="card"><h3>🌟 のりこえた はてな</h3>${done.map(x=>`<div class="hrow done"><span class="hq">${esc(x.q)}</span><span class="hs">🌟 ${mdOf(x.dd)}</span></div>`).join("")}</div>`:"");
+  openPage("❓ はてな コーナー",h);
+  const b=$("#pageBody");
+  if($("#hzAll"))$("#hzAll").onclick=()=>{ac();SFX.tap();startHatena(open.slice(0,10).map(e=>e[0]))};
+  b.querySelectorAll(".hzrow").forEach(r=>r.onclick=()=>{ac();SFX.tap();startHatena([r.dataset.k])})}
+function startHatena(keys){LES={mode:"hz",queue:keys,i:0,total:keys.length,results:[],norikoe:[],earned:0,cur:null};
+  show("lesson");$("#prog").innerHTML=keys.map(()=>"<span>❓</span>").join("");hzNext()}
+function hzNext(){TOKEN++;const les=LES;if(!les)return;if(les.i>=les.queue.length)return hzEnd();
+  const k=les.queue[les.i],h=S.hatena[k],it=hatenaItem(k,h);if(!h||!it||h.done){les.i++;return hzNext()}
+  les.cur={it,k,h,tries:0,memo:null,t0:Date.now()};
+  renderBoard(it);poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),L.hzAsk());
+  inputAnswer(it,it.type==="num"?"📝 こたえを うってね。":"📝 こたえを えらんでね。",[],v=>hzAnswer(v))}
+function hzAnswer(v){const les=LES,cur=les.cur,it=cur.it,h=cur.h,today=ymd();cur.memo=v;$("#ctrl").innerHTML="";
+  if(v===it.ans){
+    renderBoard(it,esc(it.ans));$("#slot").classList.add("fixd");hanamaru();
+    if(cur.tries===0){h.done=true;h.dd=today;delete h.fx;S.norikoe=(S.norikoe||0)+1;les.norikoe.push(it.label);
+      const gain=(h.d<today)?1:0;if(gain){S.carrot+=gain;S.carrotEver=(S.carrotEver||0)+gain;les.earned+=gain;carrotTxt()}
+      $("#board").insertAdjacentHTML("beforeend",`<div class="norikoe">🌟 はてなを のりこえた${gain?" 🥕+1":""}</div>`);setBubble($("#lesBubble"),L.norikoe(it.label));setTimeout(()=>chu("happy"),900)}
+    else{h.fx=(h.fx||0)+1;S.selfFix=(S.selfFix||0)+1;setBubble($("#lesBubble"),L.hzFixed())}
+    if(cur.tries===0)hzLog(true);return hzNextBtn()}
+  SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideL","tilt");
+  if(cur.tries===0)hzLog(false);
+  if(cur.tries>=1)return hzShowAns();
+  setBubble($("#lesBubble"),L.hzNotYet());
+  const c=$("#ctrl");c.classList.add("slim");c.classList.remove("num");
+  c.innerHTML=`<div class="memo">❓ はてなを どう のりこえる？</div><div class="choice"><button class="long" data-a="retry">🤔 もういちど かんがえる</button><button class="long" data-a="hint">💡 ヒントを みる</button><button class="long" data-a="ans">📖 こたえを みる</button></div>`;
+  c.querySelector(".choice").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;ac();SFX.tap();const a=b.dataset.a;
+    if(a==="ans")return hzShowAns();
+    cur.tries++;renderBoard(it);poteSet($("#lesPote"),"front","idle");
+    if(a==="retry"){S.retryN=(S.retryN||0)+1;setBubble($("#lesBubble"),pick(["ゆっくりで いいよ。もういちど かんがえて みて。","よく みてね。むっちゃんなら できるよ。","あせらなくて だいじょうぶ。もう いっかい。","さっきと ちがう みかたで みて みよう。","ゆびで かぞえても いいよ。もういちど。"]));
+      inputAnswer(it,"🤔 もういちど こたえを えらんでね。",[cur.memo],hzAnswer)}
+    else{S.hintN=(S.hintN||0)+1;setBubble($("#lesBubble"),hintText(it,cur.memo));inputAnswer(it,"💡 ヒントを みて、もういちど。",[cur.memo],hzAnswer)}}}
+function hzShowAns(){const cur=LES.cur;showExplain(cur.it,true);poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),L.hzAnsSeen());hzNextBtn()}
+function hzLog(ok){const cur=LES.cur;S.log.push({d:ymd(),k:cur.it.key,ok:ok?1:0,ms:Date.now()-cur.t0,j:null,h:0,hz:1});if(S.log.length>400)S.log=S.log.slice(-400)}
+function hzNextBtn(){const les=LES;const pips=$("#prog").children;if(pips[les.i])pips[les.i].classList.add("done");les.i++;save(false);
+  nextBtn(les.i>=les.queue.length?"おしまい":"つぎの はてな",hzNext)}
+function hzEnd(){TOKEN++;const les=LES,n=les.norikoe.length;const newBadges=checkBadges();save(true);
+  $("#board").innerHTML=`<div class="exp"><div class="q-emoji">${n?"🌟":"❓"}</div><div class="cap">はてな コーナー、おしまい。<br>のりこえた はてな：<b>${n}こ</b>${les.earned?`<br>🥕 +${les.earned}`:""}</div></div>`;
+  poteSet($("#lesPote"),"front",n?"hop":"idle");setBubble($("#lesBubble"),L.hzDone(n));
+  const c=$("#ctrl");c.classList.add("slim");c.classList.remove("num");
+  c.innerHTML=`<button class="big-btn go" id="hzBack">❓ はてな コーナーに もどる</button><button class="big-btn" id="hzHome" style="margin-top:8px">🏠 おうちに もどる</button>`;
+  $("#hzBack").onclick=()=>openHatena();$("#hzHome").onclick=()=>{ac();SFX.tap();LES=null;showHome()};
+  if(newBadges.length){const b=newBadges[0];setTimeout(()=>{chu("happy");ask(`🎉 あたらしい バッジ ゲット！\n\n${b.e} ${b.name}\n（${b.desc}）\n\n「てちょう」で みられるよ。`,"やったー","OK")},400)}}
+
+/* ホームの ふきだし: ながい ときは わけて、タップで つぎへ */
+function homeSay(t){const el=$("#homeBubble");if(!el)return;const parts=[];let cur="";
+  (t.match(/[^。！？]+[。！？]+/g)||[t]).forEach(s=>{s=s.trim();if(cur&&(cur+" "+s).length>52){parts.push(cur);cur=s}else cur=cur?cur+" "+s:s});if(cur)parts.push(cur);
+  el._pages=parts.slice(1);setBubble(el,parts[0]);if(el._pages.length)el.insertAdjacentHTML("beforeend",' <span class="more">▶</span>')}
+
 function showHome(){
   TOKEN++;shush();show("home");
   const z=asleep();$("#room").classList.toggle("asleep",z);$("#home").classList.toggle("asleep",z);
@@ -1162,20 +1359,20 @@ function showHome(){
   tickBelly();$("#belly").innerHTML="🍽️ "+bellyHTML(52);$("#btnFeed").classList.toggle("hungry",S.belly===0);
   const canPlay=canPlayNow();$("#btnPlay").className=canPlay?"on":"off";
   const nd=Object.keys(S.days).length;$("#daysTxt").textContent=nd?`がっこう ${nd}にちめ`:"";
-  $("#subjects").innerHTML=SKILL_IDS.map(id=>`<button class="subj" data-skill="${id}"><span class="ic">${SK[id].icon}</span><span class="nm">${SK[id].name}</span><span class="st">${stars(id)}</span>${(!z&&S.wish===id)?'<span class="wish">ポテの おねがい</span>':""}</button>`).join("");
+  $("#subjects").innerHTML=SKILL_IDS.map(id=>`<button class="subj" data-skill="${id}"><span class="ic">${SK[id].icon}</span><span class="nm">${SK[id].name}</span><span class="st">${stars(id)}</span>${(!z&&S.wish===id)?'<span class="wish">ポテの おねがい</span>':""}</button>`).join("")+`<button class="subj mkt wide" data-make="1"><span class="ic">🧑‍🏫</span><span class="nm">もんだいを つくる</span><span class="st">ポテに だす</span></button>`+(()=>{const n=hatenaOpenN();return `<button class="subj hz wide" data-hz="1"><span class="ic">❓</span><span class="nm">はてな コーナー</span><span class="st">${n?`まだ ${n}こ`:"ふくしゅう"}</span>${n?`<span class="cnt">${n}</span>`:""}</button>`})();
   if(!S.met){$("#subjects").innerHTML=`<button class="big-btn go" id="btnYes" style="grid-column:1/-1;min-height:72px">いいよ！ せんせいに なる</button>`;
     $("#btnYes").onclick=()=>{ac();chu("happy");S.met=true;S.growIntro=true;save(true);showHome();$("#homePote").className="pote hop";
-      setBubble($("#homeBubble"),L.yes())}}
+      homeSay(L.yes())}}
   let t;
   const unread=S.letters.some(l=>l.parent&&!l.read);
   homeIdleLoop();
   const bl=BELLY_LINE();
   if(!S.met)t=L.first();
-  else if(unread)t=L.newLetter();else if(z)t=L.sleepy();else if(bl&&Math.random()<.6)t=bl;else if(S.wish&&SK[S.wish])t=L.wish(SK[S.wish].name);else t=L.hello();
-  setBubble($("#homeBubble"),t);
+  else if(unread)t=L.newLetter();else if(z)t=L.sleepy();else if(bl&&Math.random()<.6)t=bl;else if(hatenaOpenN()&&Math.random()<.35)t=L.hatenaWait(hatenaOpenN());else if(S.wish&&SK[S.wish])t=L.wish(SK[S.wish].name);else t=L.hello();
+  homeSay(t);
   $("#btnLetters").textContent=unread?"💌 おてがみ ●":"💌 おてがみ";
 }
-$("#subjects").addEventListener("click",e=>{const b=e.target.closest(".subj");if(!b||asleep())return;ac();SFX.tap();S.met=true;startLesson(b.dataset.skill)});
+$("#subjects").addEventListener("click",e=>{const b=e.target.closest(".subj");if(!b)return;if(b.dataset.hz)return openHatena();if(asleep())return;ac();SFX.tap();S.met=true;if(b.dataset.make)startMake();else startLesson(b.dataset.skill)});
 let homeIdleTimer=null;
 function homeIdleLoop(){clearTimeout(homeIdleTimer);
   homeIdleTimer=setTimeout(function tick(){
@@ -1202,7 +1399,7 @@ $("#homePote").addEventListener("click",()=>{ac();const img=$("#homePote");
   if(r<.3){poteSpin(img)}else if(r<.55){img.className="pote wiggle";setTimeout(()=>{img.className="pote idle"},1300)}else if(r<.8){img.className="pote happy";setTimeout(()=>{img.className="pote idle"},1600)}else{img.className="pote hop";setTimeout(()=>{img.className="pote idle"},1100)}
   if(!S.met)return;
   setBubble($("#homeBubble"),L.pat())});
-$("#homeBubble").addEventListener("click",()=>{ac();chu()});
+$("#homeBubble").addEventListener("click",()=>{ac();const el=$("#homeBubble");if(el._pages&&el._pages.length){SFX.tap();const n=el._pages.shift();setBubble(el,n);if(el._pages.length)el.insertAdjacentHTML("beforeend",' <span class="more">▶</span>');return}chu()});
 $("#lesBubble").addEventListener("click",()=>{ac();chu()});
 
 /* ---------- レッスン ---------- */
@@ -1226,7 +1423,7 @@ function buildSession(skill){
   const nWrong=avg<1.5?3:2;
   const plan=shuffle(list.map((_,i)=>i<nWrong));
   const handPlan=shuffle(list.map((_,i)=>i<2));
-  return {skill,lv,list,plan,handPlan,bonus,i:0,total:list.length+(bonus?1:0),results:[],requeued:{},fixedLabels:[],bothLabels:[],leveled:null};
+  return {skill,lv,list,plan,handPlan,bonus,i:0,total:list.length+(bonus?1:0),results:[],requeued:{},fixedLabels:[],bothLabels:[],leveled:null,norikoe:[],hatenaNew:0};
 }
 function startLesson(skill){
   LES=buildSession(skill);show("lesson");
@@ -1342,7 +1539,9 @@ function renderMemoInput(it,forceTap){
   const les=LES,hand=!forceTap&&!window.__NOHAND&&!les.cur.isBonus&&handEligible(it)&&les.handPlan[les.i%les.handPlan.length];
   if(hand){
     c.classList.remove("num");
-    const sub=it.q.fill?"□に はいる じを かいてね。":it.q.main&&it.type==="num"?"こたえを かいてね。":(it.q.sub||"").replace(/は どっち？$|は どれ？$/,"を かいてね。").replace(/どっち？|どれ？/,"かいてね。");
+    // 「どっち？」「どれ？」(えらぶ ききかた)の ときだけ「かいてね」に いいかえる。それ いがいは もんだい文を そのまま のこす
+    const qs=String(it.q.sub||"");
+    const sub=it.q.fill?"□に はいる じを かいてね。":/(どっち|どれ)？$/.test(qs)?qs.replace(/は どっち？$|は どれ？$/,"を かいてね。").replace(/どっち？$|どれ？$/,"かいてね。"):!qs&&it.type==="num"?"こたえを かいてね。":null;
     renderBoard(it,null,sub);
     c.innerHTML=`<div class="memo">✍️ こたえを ゆびで かいてね</div><div class="hpad"><canvas id="cvM"></canvas></div><div class="judge" style="gap:8px"><button class="big-btn" id="hmClear" style="flex:1;min-height:50px">けす</button><button class="big-btn go" id="hmDone" style="flex:2;min-height:50px">かけた</button></div>`;
     const wrap=c.querySelector(".hpad"),cv=$("#cvM");const W=wrap.clientWidth,H=wrap.clientHeight;const pad=makePad(cv,W,H);
@@ -1398,10 +1597,12 @@ async function judge(saysOK){
   const fixAndHana=async()=>{ // こたえを なおして はなまる
     renderBoard(it,`<s>${esc(cur.pAns)}</s>${esc(it.ans)}`);$("#slot").classList.add("fixd");
     poteSet($("#lesPote"),"front","hop");setBubble($("#lesBubble"),L.got(it.ans));await sleep(600);if(my!==TOKEN)return;hanamaru();
+    if(mOK&&wouldOvercome(it))showNorikoe(it);
     nextBtn("つぎへ",()=>record(mOK))};
   if(mOK&&pOK){
     if(saysOK){hanamaru();setBubble($("#lesBubble"),L.hana()+" "+L.praise());}
     else{SFX.hmm();setBubble($("#lesBubble"),L.same(it.ans));await sleep(1500);if(my!==TOKEN)return;hanamaru();}
+    if(wouldOvercome(it))showNorikoe(it);
     nextBtn("つぎへ",()=>record(true));
   }else if(mOK&&!pOK){
     SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideR","tilt");
@@ -1410,18 +1611,17 @@ async function judge(saysOK){
     showExplain(it,false);if(!cur.isBonus){les.fixedLabels.push(it.label)}S.fixed++;
     nextBtn("ポテに おしえる",fixAndHana);
   }else{
-    SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideL","tilt");setBubble($("#lesBubble"),L.check());
-    await sleep(1700);if(my!==TOKEN)return;
-    showExplain(it,true);if(!pOK)les.bothLabels.push(it.label);
-    nextBtn("わかった",async()=>{
-      if(pOK){renderBoard(it,esc(it.ans));setBubble($("#lesBubble"),L.poteRight());poteSet($("#lesPote"),"front","idle");nextBtn("つぎへ",()=>record(false))}
-      else{setBubble($("#lesBubble"),L.bothWrong());renderBoard(it,`<s>${esc(cur.pAns)}</s>${esc(it.ans)}`);$("#slot").classList.add("fixd");poteSet($("#lesPote"),"front","hop");nextBtn("つぎへ",()=>record(false))}
-    });
+    SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideL","tilt");
+    addHatena(it);if(!pOK)les.bothLabels.push(it.label);
+    $("#board").innerHTML=`<div class="exp"><div class="q-emoji">❓</div><div class="cap">この もんだいは<br>「はてな コーナー」に いれたよ。</div></div>`;
+    setBubble($("#lesBubble"),L.toHatena());
+    nextBtn("つぎへ",()=>record(false));
   }
 }
 function record(mOK){
   if(!LES||!LES.cur||LES.cur.done)return;LES.cur.done=true;
   const les=LES,cur=les.cur,it=cur.it,st=itemState(it.key),today=ymd();
+  if(mOK&&overcome(it))les.norikoe.push(it.label);
   st.seen++;
   if(mOK){st.ok++;st.box=Math.min(5,st.box+1);st.due=addDays(BOX_DAYS[st.box])}
   else{st.box=0;st.due=addDays(1)}
@@ -1429,7 +1629,6 @@ function record(mOK){
   if(!cur.isBonus&&it.lv===les.lv&&!les.requeued[it.key]){sk.hist.push(mOK?1:0);if(sk.hist.length>8)sk.hist.shift()}
   S.log.push({d:today,k:it.key,ok:mOK?1:0,ms:Date.now()-cur.t0,j:cur.judgeOK==null?null:(cur.judgeOK?1:0),h:cur.memoImg?1:0});if(S.log.length>400)S.log=S.log.slice(-400);
   les.results.push({it,mOK});
-  if(!mOK&&!cur.isBonus&&!les.requeued[it.key]){les.requeued[it.key]=2;les.list.push(it);les.total++;$("#prog").insertAdjacentHTML("beforeend","<span>🥕</span>")}
   const pips=$("#prog").children;if(pips[les.i])pips[les.i].classList.add("done");
   les.i++;save(false);nextQ();
 }
@@ -1521,17 +1720,182 @@ function specialLetter(){const c=S.settings.call||"むっちゃん";
   t=t.replace(/\{c\}/g,c);
   return t}
 
+/* ===== はてな(×)を みつけて のりこえる ===== */
+function addHatena(it){if(!it||!it.key)return;S.hatena=S.hatena||{};const h=S.hatena[it.key],t=ymd();
+  if(!h||h.done){S.hatena[it.key]={d:t,q:it.label||"",sk:it.skill||"",done:false};S.hatenaEver=(S.hatenaEver||0)+1;if(LES)LES.hatenaNew=(LES.hatenaNew||0)+1}
+  else{h.d=t;delete h.fx}
+  if(LES&&LES.mode==="make"&&LES.mkv&&!itemByKey(it.key))S.hatena[it.key].mk=LES.mkv;
+  const ks=Object.keys(S.hatena);if(ks.length>300){ks.filter(k=>S.hatena[k].done).sort((a,b)=>(S.hatena[a].dd||"").localeCompare(S.hatena[b].dd||"")).slice(0,ks.length-300).forEach(k=>delete S.hatena[k])}}
+function wouldOvercome(it){const h=S.hatena&&it&&S.hatena[it.key];return !!(h&&!h.done&&h.d<ymd())}
+function overcome(it){if(!wouldOvercome(it))return false;const h=S.hatena[it.key];h.done=true;h.dd=ymd();S.norikoe=(S.norikoe||0)+1;return true}
+function showNorikoe(it){const b=$("#board");if(b)b.insertAdjacentHTML("beforeend",`<div class="norikoe">🌟 はてなを のりこえた</div>`);setBubble($("#lesBubble"),L.norikoe(it.label));setTimeout(()=>chu("happy"),900)}
+function hatenaOpenDue(){return Object.values(S.hatena||{}).filter(h=>!h.done&&h.d<ymd()).length}
+function hintText(it,memo){
+  if(it.type==="num"){const a=Number(it.ans),m=Number(memo);let h=`ヒント。ほんとうの こたえは、「${memo}」より ${a>m?"おおきい":"ちいさい"}よ。`;
+    if(it.q&&it.q.emojiHTML)h+=" 5こずつ かぞえて みてね。";else if(Math.abs(a-m)===1)h+=" あと 1つ ちがうだけ。";return h}
+  return `ヒント。さっき えらんだ「${memo}」では ないよ。よく みてね。`}
+/* こたえを えらぶ／うつ(共通) */
+function inputAnswer(it,label,exclude,cb){const c=$("#ctrl");c.classList.remove("slim");
+  if(it.type==="num"){c.classList.add("num");
+    c.innerHTML=`<div class="memo">${label} <b id="memoV">&nbsp;</b></div><div class="pad" id="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-n="${n}">${n}</button>`).join("")}<button class="del" data-n="del">けす</button><button data-n="0">0</button><button class="ok" data-n="ok" disabled>これ</button></div>`;
+    let v="";const upd=()=>{$("#memoV").textContent=v||" ";c.querySelector(".ok").disabled=!v};
+    $("#pad").onclick=e=>{const b=e.target.closest("button");if(!b)return;ac();const n=b.dataset.n;
+      if(n==="del"){v=v.slice(0,-1);SFX.tap()}else if(n==="ok"){if(v)cb(String(Number(v)));return}else{if(v.length<2)v+=n;SFX.tap()}upd()};
+  }else{c.classList.remove("num");
+    let opts=[it.ans].concat(it.wrongs);const rest=opts.filter(o=>o===it.ans||!(exclude||[]).includes(o));if(rest.length>=2)opts=rest;
+    opts=shuffle(opts);
+    c.innerHTML=`<div class="memo">${label}</div><div class="choice${it.kj?" kj":""}" id="choice">${opts.map(o=>`<button data-v="${esc(o)}" class="${o.length>6?"long":""}">${esc(o)}</button>`).join("")}</div>`;
+    $("#choice").onclick=e=>{const b=e.target.closest("button");if(!b)return;ac();SFX.tap();cb(b.dataset.v)}}}
+/* ×の あとの うごきを えらぶ */
+function missChoices(it,pOK){const cur=LES.cur,c=$("#ctrl");c.classList.add("slim");c.classList.remove("num");
+  const more=cur.tries<1;
+  c.innerHTML=`<div class="memo">❓ はてなを どう のりこえる？</div><div class="choice">${more?`<button class="long" data-a="retry">🤔 もういちど かんがえる</button><button class="long" data-a="hint">💡 ヒントを みる</button>`:""}<button class="long" data-a="ans">📖 こたえを みる</button></div>`;
+  c.querySelector(".choice").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;ac();SFX.tap();const a=b.dataset.a;
+    if(a==="retry"){cur.tries++;S.retryN=(S.retryN||0)+1;renderBoard(it);poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),pick(["ゆっくりで いいよ。もういちど かんがえて みて。","よく みてね。むっちゃんなら できるよ。","あせらなくて だいじょうぶ。もう いっかい。","さっきと ちがう みかたで みて みよう。","ゆびで かぞえても いいよ。もういちど。"]));
+      inputAnswer(it,"🤔 もういちど こたえを えらんでね。",[cur.memo],v=>missRetry(it,v,pOK))}
+    else if(a==="hint"){cur.tries++;S.hintN=(S.hintN||0)+1;renderBoard(it);poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),hintText(it,cur.memo));
+      inputAnswer(it,"💡 ヒントを みて、もういちど。",[cur.memo],v=>missRetry(it,v,pOK))}
+    else missAnswer(it,pOK)}}
+function missRetry(it,v,pOK){const cur=LES.cur;
+  if(v===it.ans){cur.selfFix=true;S.selfFix=(S.selfFix||0)+1;renderBoard(it,esc(it.ans));$("#slot").classList.add("fixd");hanamaru();setBubble($("#lesBubble"),L.selfFix());
+    nextBtn("つぎへ",()=>record(false))}
+  else{SFX.hmm();cur.memo=v;setBubble($("#lesBubble"),pick(["おしい。こたえを みて、いっしょに たしかめよう。","ちがったね。だいじょうぶ、こたえを いっしょに みよう。","もうすこし。こたえを みたら、きっと わかるよ。"]));
+    setTimeout(()=>{if(LES&&LES.cur===cur)missAnswer(it,pOK)},1200)}}
+function missAnswer(it,pOK){const cur=LES.cur;showExplain(it,true);
+  nextBtn("わかった",async()=>{
+    if(pOK){renderBoard(it,esc(it.ans));setBubble($("#lesBubble"),L.poteRight());poteSet($("#lesPote"),"front","idle");nextBtn("つぎへ",()=>record(false))}
+    else{setBubble($("#lesBubble"),L.bothWrong());renderBoard(it,`<s>${esc(cur.pAns)}</s>${esc(it.ans)}`);$("#slot").classList.add("fixd");poteSet($("#lesPote"),"front","hop");nextBtn("つぎへ",()=>record(false))}})}
+
+/* ===== むっちゃんが ポテに もんだいを だす ===== */
+const rng=(a,b)=>{const r=[];for(let i=a;i<=b;i++)r.push(i);return r};
+const numOpts=(a,b)=>rng(a,b).map(n=>({v:n,h:String(n)}));
+function emoPic(e,n){let p="";for(let i=0;i<n;i++){p+=e;if(i%5===4&&i<n-1)p+=(i%10===9?"<br>":"　")}return p}
+const LENS=[50,70,90,110,130,150];
+const barMini=(n,c)=>`<svg viewBox="0 0 150 16" style="width:100%;height:16px;display:block"><rect width="${n}" height="16" rx="5" fill="${c}"/></svg>`;
+function mkGrpName(gi,e){const g=GROUPS[gi];const wr=shuffle(GRP_OK[gi]).slice(0,2).map(i=>GROUPS[i][0]);
+  return {key:`grpname:${e}`,lv:0,type:"choice",ans:g[0],wrongs:wr,label:`${e}の なかま`,
+    q:{emoji:e,sub:"これは なんの なかま？",slotBelow:true,sm:true},
+    explain:()=>`<div class="q-emoji">${e}</div><div class="cap">これは「<b>${g[0]}</b>」の なかま。<br>${g[1].join(" ")}</div>`}}
+const MAKE=[
+ {id:"add",name:"たしざん",ic:"➕",steps:[{k:"a",p:"さいしょの かずを えらんでね。",o:()=>numOpts(0,10)},{k:"b",p:"たす かずを えらんでね。",o:()=>numOpts(0,10)}],
+  prev:v=>`<div class="q-main">${v.a??"□"} ＋ ${v.b??"□"} ＝ ？</div>`,build:v=>mkAdd(v.a,v.b,0)},
+ {id:"sub",name:"ひきざん",ic:"➖",steps:[{k:"a",p:"はじめの かずを えらんでね。",o:()=>numOpts(1,19)},{k:"b",p:"ひく かずを えらんでね。",o:v=>numOpts(0,Math.min(v.a,9))}],
+  prev:v=>`<div class="q-main">${v.a??"□"} − ${v.b??"□"} ＝ ？</div>`,build:v=>mkSub(v.a,v.b,0)},
+ {id:"count",name:"かぞえる",ic:"🔢",steps:[{k:"e",p:"かぞえる ものを えらんでね。",o:()=>EMO.map(e=>({v:e,h:e}))},{k:"n",p:"いくつ ならべる？",o:()=>numOpts(1,20)}],
+  prev:v=>`<div class="q-emoji" style="font-size:24px;line-height:1.35">${v.e?(v.n?emoPic(v.e,v.n):v.e):"🔢"}</div><div class="q-sub">いくつ あるかな？</div>`,build:v=>mkCount(v.n,0,v.e)},
+ {id:"cmp",name:"おおきさ\nくらべ",ic:"⚖️",steps:[{k:"a",p:"ひとつめの かずを えらんでね。",o:()=>numOpts(0,20)},{k:"b",p:"ふたつめの かずを えらんでね。",o:v=>numOpts(0,20).filter(x=>x.v!==v.a)}],
+  prev:v=>`<div class="q-main sm">${v.a??"□"}　と　${v.b??"□"}</div><div class="q-sub">おおきいのは どっち？</div>`,build:v=>mkCompare(v.a,v.b,0)},
+ {id:"clock",name:"とけい",ic:"🕒",steps:[{k:"h",p:"みじかい はりは なんじに する？",o:()=>numOpts(1,12)},{k:"m",p:"ながい はりは なんぷんに する？",o:()=>[0,5,10,15,20,25,30,35,40,45,50,55].map(m=>({v:m,h:m===0?"ちょうど":m===30?"はん":m+funpun(m)}))}],
+  prev:v=>clockSVG(v.h||12,v.m||0),build:v=>mkClock(v.h,v.m,0)},
+ {id:"bun",name:"ぶんしょう\nだい",ic:"📖",steps:[{k:"t",p:"どんな おはなしに する？",o:()=>[{v:"add",h:"ふえる おはなし"},{v:"sub",h:"へる おはなし"}]},
+   {k:"th",p:"なにの おはなし？",o:()=>BUN_THINGS.map((t,i)=>({v:i,h:`${t[0]}<small>${t[1]}</small>`}))},
+   {k:"a",p:"はじめに いくつ ある？",o:v=>numOpts(v.t==="sub"?2:1,10)},
+   {k:"b",p:v=>v.t==="sub"?"いくつ へる？":"いくつ ふえる？",o:v=>numOpts(1,v.t==="sub"?v.a-1:10)}],
+  prev:v=>{if(v.th==null)return `<div class="q-emoji">📖</div><div class="q-sub">おはなしを つくろう。</div>`;const t=BUN_THINGS[v.th];
+    const q=n=>n==null?"□"+t[2]:cn(n,t[2]);return `<div class="q-emoji">${t[0]}</div><div class="q-sub">${t[1]}が ${q(v.a)} ${iru(t)}。${q(v.b)} ${v.t==="sub"?subVerb(t):addVerb(t)}。</div>`},
+  build:v=>v.t==="sub"?mkBunSub(v.a,v.b,0,BUN_THINGS[v.th]):mkBunAdd(v.a,v.b,0,BUN_THINGS[v.th])},
+ {id:"len",name:"ながさ",ic:"📏",steps:[{k:"a",p:"あかの ながさを えらんでね。",o:()=>LENS.map(n=>({v:n,h:barMini(n,"#E4483B")}))},{k:"b",p:"あおの ながさを えらんでね。",o:v=>LENS.filter(n=>n!==v.a).map(n=>({v:n,h:barMini(n,"#2C6FBB")}))},
+   {k:"w",p:"ポテに どっちを きく？",o:()=>[{v:"long",h:"ながいのは？"},{v:"short",h:"みじかいのは？"}]}],
+  prev:v=>barSVG([{n:"あか",c:"#E4483B",len:v.a||0},{n:"あお",c:"#2C6FBB",len:v.b||0}],260),build:v=>mkLenCmp(v.a,v.b,1,v.w)},
+ {id:"shape",name:"かたち",ic:"🔺",steps:[{k:"k",p:"ポテに みせる かたちを えらんでね。",o:()=>Object.keys(SHAPES).map((k,i)=>({v:k,h:shapeSVG(k,SHAPE_COLS[i],40)}))}],
+  prev:v=>`<div class="q-emoji">🔺</div>`,build:v=>mkShapeName(v.k,0)},
+ {id:"kata",name:"カタカナ",ic:'<span class="tx">ア</span>',steps:[{k:"it",p:"ポテに かかせる ことばを えらんでね。",o:()=>SK.kata.items.map(it=>({v:it.key,h:`${it.q.emoji}<small>${((it.q.sub||"").match(/「(.+?)」/)||[0,""])[1]}</small>`}))}],
+  prev:v=>`<div class="q-emoji">🔤</div>`,build:v=>SK.kata.map[v.it]},
+ {id:"kanji",name:"かんじの\nよみ",ic:'<span class="tx">山</span>',steps:[{k:"it",p:"ポテに よませる かんじを えらんでね。",o:()=>SK.kanji.items.filter(it=>it.key.startsWith("kanji:r:")).map(it=>({v:it.key,h:`<span style="font-family:var(--kyo);font-size:24px">${esc(it.q.main)}</span>`}))}],
+  prev:v=>`<div class="q-emoji">📝</div>`,build:v=>SK.kanji.map[v.it]},
+ {id:"hawohe",name:"は・を・へ",ic:"✏️",steps:[{k:"it",p:"ポテに だす ぶんを えらんでね。",o:()=>SK.kotoba.items.filter(it=>it.key.startsWith("kotoba:p:")).map(it=>({v:it.key,h:`${it.q.emoji||""} ${esc(it.q.fill)}`}))}],
+  prev:v=>`<div class="q-emoji">✏️</div>`,build:v=>SK.kotoba.map[v.it],cols:1},
+ {id:"opp",name:"はんたい\nことば",ic:"🔁",steps:[{k:"it",p:"ポテに きく ことばを えらんでね。",o:()=>SK.bunzukuri.items.filter(it=>it.key.startsWith("opp:")).map(it=>({v:it.key,h:esc(it.q.main)}))}],
+  prev:v=>`<div class="q-emoji">🔁</div>`,build:v=>SK.bunzukuri.map[v.it]},
+ {id:"grp",name:"なかまわけ",ic:"🧺",steps:[{k:"g",p:"ポテに みせる ものを えらんでね。",o:()=>GROUPS.flatMap((g,gi)=>g[1].map(e=>({v:gi+"|"+e,h:e})))}],
+  prev:v=>`<div class="q-emoji">🧺</div>`,build:v=>{const [gi,e]=v.g.split("|");return mkGrpName(Number(gi),e)}}];
+function startMake(){LES={mode:"make",i:0,total:5,results:[],norikoe:[],hatenaNew:0,fixedLabels:[],bothLabels:[],requeued:{},cur:null};
+  show("lesson");$("#prog").innerHTML=Array.from({length:5},()=>"<span>🥕</span>").join("");makeMenu()}
+function makeMenu(){TOKEN++;const les=LES;if(!les)return;poteSet($("#lesPote"),"front","idle");
+  $("#board").innerHTML=`<div class="q-emoji">🧑‍🏫</div><div class="q-sub">どんな もんだいを ポテに だす？</div><div class="q-main sm">${les.i+1} もんめ ／ 5</div>`;
+  if(!S.makeIntro){S.makeIntro=true;save(false);setBubble($("#lesBubble"),"きょうは むっちゃんが せんせいの ばん。もんだいを つくって、ポテの こたえに ◯か ✕を つけてね。")}
+  else setBubble($("#lesBubble"),L.mkPick());
+  const c=$("#ctrl");c.classList.remove("slim","num");
+  c.innerHTML=`<div class="mkpick"><div class="mkgrid g3">${MAKE.map(g=>`<button class="mko mkg" data-g="${g.id}"><span class="ic">${g.ic}</span><span class="nm">${g.name}</span></button>`).join("")}</div></div>`;
+  c.querySelector(".mkgrid").onclick=e=>{const b=e.target.closest("[data-g]");if(!b)return;ac();SFX.tap();makeStep(MAKE.find(g=>g.id===b.dataset.g),{},0)}}
+function makeStep(g,v,si){TOKEN++;const st=g.steps[si];$("#board").innerHTML=`<div class="exp">${g.prev(v)}</div>`;
+  const p=typeof st.p==="function"?st.p(v):st.p;const opts=st.o(v);
+  const cols=g.cols||(opts.length<=4?2:opts.length<=12?4:opts.length<=24?5:6);
+  const c=$("#ctrl");c.classList.remove("slim","num");
+  c.innerHTML=`<div class="memo">🧑‍🏫 ${esc(p)}</div><div class="mkpick"><div class="mkgrid" style="grid-template-columns:repeat(${cols},1fr)">${opts.map((o,i)=>`<button class="mko${cols===1?" wide":(cols>=4&&String(o.h).replace(/<[^>]*>/g,"").length>=3?" sm":"")}" data-i="${i}">${o.h}</button>`).join("")}</div></div><button class="big-btn" id="mkBack" style="min-height:44px;font-size:15px">← もどる</button>`;
+  c.querySelector(".mkgrid").onclick=e=>{const b=e.target.closest("[data-i]");if(!b)return;ac();SFX.tap();const nv=Object.assign({},v,{[st.k]:opts[Number(b.dataset.i)].v});
+    if(si+1<g.steps.length)makeStep(g,nv,si+1);else{const it=g.build(nv);if(it){LES.mkv={g:g.id,v:nv};makeAsk(it,g)}}};
+  $("#mkBack").onclick=()=>{ac();SFX.tap();if(si===0)makeMenu();else{const pv=Object.assign({},v);delete pv[g.steps[si-1].k];makeStep(g,pv,si-1)}}}
+async function poteWrite(ans,my){poteSet($("#lesPote"),"back","write");const slot=$("#slot"),chars=Array.from(ans);slot.innerHTML="";
+  for(const ch of chars){await sleep(chars.length>5?200:330);if(my!==TOKEN)return false;SFX.chalk();slot.textContent+=ch;SFX.chalk()}
+  await sleep(450);if(my!==TOKEN)return false;poteSet($("#lesPote"),"front","hop");chu();return true}
+async function makeAsk(it,g){const my=++TOKEN,les=LES;les.cur={it,g,t0:Date.now(),mk:true,rejudged:false,pAns:null};
+  renderBoard(it);poteSet($("#lesPote"),"front","tilt");setBubble($("#lesBubble"),L.mkThink());
+  const c=$("#ctrl");c.classList.add("slim");c.classList.remove("num");c.innerHTML=`<div class="memo">🤔 ポテが かんがえて いるよ。</div>`;
+  await sleep(1600);if(my!==TOKEN)return;
+  const wr=(it.wrongs||[]).filter(w=>w!==it.ans);const right=!wr.length||Math.random()<0.65;les.cur.pAns=right?it.ans:pick(wr);
+  if(!await poteWrite(les.cur.pAns,my))return;
+  setBubble($("#lesBubble"),L.done(les.cur.pAns));makeJudgeUI()}
+function makeJudgeUI(){const c=$("#ctrl");c.classList.remove("slim","num");
+  c.innerHTML=`<div class="memo">🧑‍🏫 ポテの こたえは あってる？</div><div class="judge"><button class="maru" id="jO"><b>◯</b>あってる</button><button class="batsu" id="jX"><b>✕</b>ちがうよ</button></div>`;
+  $("#jO").onclick=()=>makeJudge(true);$("#jX").onclick=()=>makeJudge(false)}
+async function makeJudge(saysOK){const my=++TOKEN,les=LES,cur=les.cur,it=cur.it;ac();SFX.tap();const pOK=cur.pAns===it.ans;$("#ctrl").innerHTML="";
+  if(saysOK===pOK){
+    if(pOK){hanamaru();setBubble($("#lesBubble"),L.mkRight());makeDone(true);return}
+    SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideR","tilt");setBubble($("#lesBubble"),L.mkCaught());await sleep(900);if(my!==TOKEN)return;
+    inputAnswer(it,"📝 ほんとうの こたえを おしえてね。",[cur.pAns],v=>makeTeach(v));return}
+  SFX.hmm();chu("hmm");poteSet($("#lesPote"),"sideL","tilt");setBubble($("#lesBubble"),pOK?L.mkWrongX():L.mkMissed());
+  if(!cur.rejudged){cur.rejudged=true;const c=$("#ctrl");c.classList.add("slim");
+    c.innerHTML=`<div class="memo">❓ はてなを どう のりこえる？</div><div class="choice"><button class="long" data-a="re">🤔 もういちど よく みる</button><button class="long" data-a="ans">📖 こたえを みる</button></div>`;
+    c.querySelector(".choice").onclick=e=>{const b=e.target.closest("[data-a]");if(!b)return;ac();SFX.tap();
+      if(b.dataset.a==="re"){poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),pick(["もういちど、よく みてね。","ゆっくり たしかめて みて。","こんどは どうかな。よく みてね。"]));makeJudgeUI()}else makeReveal()}}
+  else makeReveal()}
+function makeReveal(){const cur=LES.cur,it=cur.it,pOK=cur.pAns===it.ans;
+  $("#board").innerHTML=`<div class="exp">${it.explain()}<div class="memoNote">ポテの こたえ「${esc(cur.pAns)}」は ${pOK?"あってたよ":"ちがってたよ"}。ただしくは「${esc(it.ans)}」。</div></div>`;
+  poteSet($("#lesPote"),"front","idle");setBubble($("#lesBubble"),pick(["いっしょに たしかめたね。これで ばっちり。","たしかめたから、もう だいじょうぶ。","まちがえた ところが わかったね。それが はてなの たからもの。","ふたりで みたら よく わかったね。"]));
+  addHatena(it);makeDone(false)}
+function makeTeach(v){const cur=LES.cur,it=cur.it;
+  if(v===it.ans){renderBoard(it,`<s>${esc(cur.pAns)}</s>${esc(it.ans)}`);$("#slot").classList.add("fixd");hanamaru();setBubble($("#lesBubble"),L.got(it.ans));makeDone(true)}
+  else{setBubble($("#lesBubble"),L.mkHerWrong());poteSet($("#lesPote"),"sideL","tilt");
+    $("#board").innerHTML=`<div class="exp">${it.explain()}<div class="memoNote">むっちゃんの こたえ「${esc(v)}」→ ただしくは「${esc(it.ans)}」</div></div>`;addHatena(it);makeDone(false)}}
+function makeDone(ok){const les=LES,cur=les.cur,it=cur.it;
+  S.log.push({d:ymd(),k:it.key,ok:ok?1:0,ms:Date.now()-cur.t0,j:null,h:0,mk:1});if(S.log.length>400)S.log=S.log.slice(-400);
+  if(ok&&wouldOvercome(it)){overcome(it);les.norikoe.push(it.label);showNorikoe(it)}
+  S.made=(S.made||0)+1;les.results.push({it,mOK:ok});
+  const pips=$("#prog").children;if(pips[les.i])pips[les.i].classList.add("done");les.i++;save(false);
+  nextBtn(les.i>=les.total?"おしまいに する":"つぎの もんだいを つくる",()=>{if(les.i>=les.total)finishMake();else makeMenu()})}
+function finishMake(){TOKEN++;const les=LES,today=ymd();S.lessons++;S.days[today]=(S.days[today]||0)+1;S.makeN=(S.makeN||0)+1;
+  const okN=les.results.filter(r=>r.mOK).length;const earned=3+Math.min(3,les.norikoe.length);S.carrot+=earned;S.carrotEver=(S.carrotEver||0)+earned;
+  const c=S.settings.call||"むっちゃん";const lines=[LT.head(c),LT.make(c,okN)];
+  if(les.norikoe.length)lines.push(LT.norikoe(c,les.norikoe[0]));else if(les.hatenaNew)lines.push(LT.found(c,les.hatenaNew));
+  lines.push(LT.close(c));
+  S.letters.push({d:today,lines});maybeSpecial(today);if(S.letters.length>24)S.letters=S.letters.slice(-24);
+  const newBadges=checkBadges();save(true);
+  const z=asleep();show("finish");SFX.gift();autoSend("もんだいづくりの あと");
+  if(newBadges.length){const b=newBadges[0];setTimeout(()=>{chu("happy");ask(`🎉 あたらしい バッジ ゲット！\n\n${b.e} ${b.name}\n（${b.desc}）\n\n「てちょう」で みられるよ。`,"やったー","OK")},400)}
+  $("#finishBody").innerHTML=`<div class="gift">ポテへの もんだい、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">5もんの うち ${okN}もん、ポテの こたえを ただしく たしかめたよ。</span></div>
+   <div class="stage" style="padding:0 0 10px"><div class="poteBox">${poteHTML("finPote","front","hop")}</div><div class="bubble left" id="finBubble"></div></div>
+   ${letterHTML(S.letters[S.letters.length-1])}
+   ${z&&ownedGames().length&&playsLeft()>0&&S.belly>0?`<button class="big-btn" id="finPlay" style="margin-bottom:10px">🎈 あそびの じかん</button>`:""}
+   ${z?"":`<button class="big-btn" id="finMore" style="margin-bottom:10px">もうひとつ べんきょう する</button>`}
+   <button class="big-btn go" id="finEnd">きょうは おしまい。また あした。</button>`;
+  setBubble($("#finBubble"),L.letterWait());$("#finBubble").onclick=()=>{ac();chu()};
+  if(!z)$("#finMore").onclick=()=>{ac();showHome()};
+  if($("#finPlay"))$("#finPlay").onclick=()=>{LES=null;choosePlay()};
+  $("#finEnd").onclick=()=>{ac();showHome()};LES=null}
+
 function finishLesson(){
   TOKEN++;const les=LES,sk=S.skills[les.skill],def=SK[les.skill],today=ymd();
   sk.n++;S.lessons++;S.days[today]=(S.days[today]||0)+1;
   // レベルアップ: いまの レベルで さいきん 8もん中 7もん せいかい
   if(sk.hist.length>=8&&sk.hist.reduce((a,b)=>a+b,0)>=7&&sk.lv<def.levels.length){sk.lv++;sk.hist=[];les.leveled=sk.lv}
-  const earned=3+Math.min(2,les.fixedLabels.length);S.carrot+=earned;S.carrotEver=(S.carrotEver||0)+earned;
+  const earned=3+Math.min(2,les.fixedLabels.length)+Math.min(3,les.norikoe.length);S.carrot+=earned;S.carrotEver=(S.carrotEver||0)+earned;
   S.wish=nextWish(les.skill);
   const nm=def.levels[Math.min(les.lv,def.levels.length-1)],c=S.settings.call||"むっちゃん";
   const lines=[LT.head(c),LT.thanks(c,nm)];
   if(les.fixedLabels.length)lines.push(LT.fixed(c,les.fixedLabels[0]));
   else lines.push(LT.perfect(c));
+  if(les.norikoe.length)lines.push(LT.norikoe(c,les.norikoe[0]));else if(les.hatenaNew)lines.push(LT.found(c,les.hatenaNew));
   if(les.bothLabels.length)lines.push(LT.both(c,les.bothLabels[0]));
   if(les.leveled!=null&&les.leveled<def.levels.length)lines.push(`{次|つぎ}は「${def.levels[les.leveled]}」に ちょうせん するね。`);
   else if(les.leveled!=null)lines.push(`ポテ、「${def.name}」は ぜんぶ できるように なったよ。`);
@@ -1545,7 +1909,7 @@ function finishLesson(){
   save(true);
   const z=asleep();show("finish");SFX.gift();autoSend("授業のあと");
   if(newBadges.length){const b=newBadges[0];setTimeout(()=>{chu("happy");ask(`🎉 あたらしい バッジ ゲット！\n\n${b.e} ${b.name}\n（${b.desc}）\n\n「てちょう」で みられるよ。`,"やったー","OK")},400)}
-  $("#finishBody").innerHTML=`<div class="gift">きょうの じゅぎょう、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">${les.fixedLabels.length?"ポテに おしえた ぶんも はいってるよ。":"おみせで つかってね。"}</span></div>
+  $("#finishBody").innerHTML=`<div class="gift">きょうの じゅぎょう、おしまい。<b>🥕 +${earned}</b>にんじんが ${S.carrot}こに なったよ。<br><span style="font-size:13px;color:var(--ink2)">${les.norikoe.length?"はてなを のりこえた ぶんも はいってるよ。":les.fixedLabels.length?"ポテに おしえた ぶんも はいってるよ。":"おみせで つかってね。"}</span></div>
    <div class="stage" style="padding:0 0 10px"><div class="poteBox">${poteHTML("finPote","front","hop")}</div><div class="bubble left" id="finBubble"></div></div>
    ${letterHTML(S.letters[S.letters.length-1])}
    ${z&&ownedGames().length&&playsLeft()>0&&S.belly>0?`<button class="big-btn" id="finPlay" style="margin-bottom:10px">🎈 あそびの じかん</button>`:""}
@@ -1577,7 +1941,14 @@ const BADGES=[
   {id:"fat",name:"まるまる ポテ",e:"🐹",cond:()=>sizePct()>=SIZE_MAX,desc:"ポテが さいだいまで おおきくなった"},
   {id:"carrot50",name:"にんじん はかせ",e:"🥕",cond:()=>S.carrot>=50||(S.carrotEver||0)>=50,desc:"にんじんを 50ぽん あつめた"},
   {id:"teach20",name:"おしえ じょうず",e:"✏️",cond:()=>(S.fixed||0)>=20,desc:"ポテに 20かい おしえた"},
-  {id:"lesson30",name:"がんばりやさん",e:"📒",cond:()=>S.lessons>=30,desc:"30かい じゅぎょうした"}
+  {id:"lesson30",name:"がんばりやさん",e:"📒",cond:()=>S.lessons>=30,desc:"30かい じゅぎょうした"},
+  {id:"hat1",name:"はてな はっけん",e:"🔍",cond:()=>(S.hatenaEver||0)>=1,desc:"はじめて はてなを みつけた"},
+  {id:"nor1",name:"はじめての のりこえ",e:"🌟",cond:()=>(S.norikoe||0)>=1,desc:"はてなを 1こ のりこえた"},
+  {id:"nor5",name:"のりこえ 5",e:"🚀",cond:()=>(S.norikoe||0)>=5,desc:"はてなを 5こ のりこえた"},
+  {id:"nor20",name:"のりこえ ゆうしゃ",e:"🏆",cond:()=>(S.norikoe||0)>=20,desc:"はてなを 20こ のりこえた"},
+  {id:"nor50",name:"のりこえ マスター",e:"💎",cond:()=>(S.norikoe||0)>=50,desc:"はてなを 50こ のりこえた"},
+  {id:"self5",name:"みなおし めいじん",e:"🔁",cond:()=>(S.selfFix||0)>=5,desc:"じぶんで 5かい なおした"},
+  {id:"make20",name:"もんだい はかせ",e:"🧑‍🏫",cond:()=>(S.made||0)>=20,desc:"ポテに もんだいを 20こ だした"}
 ];
 function streakDays(){let n=0;for(let i=0;i<400;i++){if(S.days[addDays(-i)])n++;else if(i>0)break}return n}
 function checkBadges(){const got=[];BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.cond()){S.badges.push(b.id);got.push(b)}});return got}
@@ -1603,7 +1974,9 @@ $("#btnShop").onclick=openShop;$("#btnWear").onclick=openWear;$("#btnFeed").oncl
 $("#btnTecho").onclick=()=>{ac();SFX.tap();
   const h=SKILL_IDS.map(id=>{const lv=S.skills[id].lv;return `<div class="card"><h3>${SK[id].icon} ${SK[id].name}</h3>${SK[id].levels.map((n,i)=>`<div class="stamp ${i<lv?"got":i===lv?"now":""}"><i>${i<lv?"◎":""}</i>${esc(n)}${i===lv?" ← いま ここ":""}</div>`).join("")}</div>`}).join("");
   const bh=`<div class="card"><h3>🎖 あつめた バッジ（${S.badges.length}／${BADGES.length}）</h3><div class="badges">${BADGES.map(b=>{const got=S.badges.includes(b.id);return `<div class="badge ${got?"got":""}"><div class="be">${got?b.e:"❓"}</div><div class="bn">${got?esc(b.name):"？？？"}</div><div class="bd">${got?esc(b.desc):"まだ ひみつ"}</div></div>`}).join("")}</div></div>`;
-  openPage("📒 ポテの できたよ てちょう",`<p class="techoLead" style="margin:0 0 10px;font-size:15px">むっちゃんが おしえて、ポテが できるように なった こと。<br>ポテに おしえた かいすう：${S.fixed}かい。</p>`+bh+h)};
+  const HL=Object.values(S.hatena||{}).sort((a,b)=>((b.dd||b.d)||"").localeCompare((a.dd||a.d)||"")),openN=HL.filter(x=>!x.done).length;
+  const hh=`<div class="card"><h3>❓ はてな</h3><div class="hsum">みつけた ${S.hatenaEver||0}こ ／ のりこえた ${S.norikoe||0}こ ／ まだ ${openN}こ</div><button class="big-btn" id="goHz" style="margin-top:8px;min-height:48px;font-size:16px">❓ はてな コーナーへ いく</button></div>`;
+  openPage("📒 ポテの できたよ てちょう",`<p class="techoLead" style="margin:0 0 10px;font-size:15px">むっちゃんが おしえて、ポテが できるように なった こと。<br>ポテに おしえた かいすう：${S.fixed}かい。</p>`+hh+bh+h);if($("#goHz"))$("#goHz").onclick=openHatena};
 $("#btnLetters").onclick=()=>{ac();SFX.tap();
   let touched=false;S.letters.forEach(l=>{if(l.parent&&!l.read){l.read=true;touched=true}});if(touched)save(true);
   const ls=S.letters.slice().reverse();
@@ -1613,8 +1986,19 @@ $("#btnLetters").onclick=()=>{ac();SFX.tap();
 $("#btnAdult").onclick=()=>{ac();SFX.tap();
   openPage("🔑 おうちのひと",`<div class="card adult"><h3>大人の方の確認</h3><p style="margin:4px 0 8px">7 × 8 の答えを入力してください。</p><input id="gate" type="tel" inputmode="numeric" maxlength="3" aria-label="7かける8の答え"> <button class="s" id="gateOK">ひらく</button><div id="gateMsg"></div></div>`);
   $("#gateOK").onclick=()=>{if($("#gate").value.trim()==="56")adultPage();else $("#gateMsg").textContent="答えがちがいます。"}};
+function hatenaStats(){const H=Object.values(S.hatena||{}),wk=addDays(-7);return {open:H.filter(h=>!h.done).length,ever:S.hatenaEver||0,nor:S.norikoe||0,week:H.filter(h=>h.done&&(h.dd||"")>=wk),self:S.selfFix||0,hint:S.hintN||0,retry:S.retryN||0,made:S.made||0}}
+function hatenaCardHTML(){const t=hatenaStats();
+  return `<div class="card adult"><h3>🌟 ×(はてな)を のりこえる力</h3>
+    <div class="row"><span>みつけた はてな(累計)</span><b>${t.ever}こ</b></div>
+    <div class="row"><span>のりこえた(はてなコーナー等で1回目に正解)</span><b>${t.nor}こ</b></div>
+    <div class="row"><span>まだ のりこえ中</span><b>${t.open}こ</b></div>
+    <div class="row"><span>自分で見直して直した</span><b>${t.self}回</b></div>
+    <div class="row"><span>ヒント／もういちど を選んだ</span><b>${t.hint}回／${t.retry}回</b></div>
+    <div class="row"><span>ポテに出した問題</span><b>${t.made}問</b></div>
+    ${t.week.length?`<p style="margin:8px 0 0"><b>今週のりこえた：</b>${t.week.slice(0,10).map(h=>esc(h.q)).join("、")}</p>`:""}
+    <p style="margin:8px 0 0;font-size:13px"><b>声かけ例</b><br>・「×みつけたん？ええやん。どうする？」<br>・「どこで間違えたか自分で見つけたんが、いちばんすごいわ」<br>・「前は間違えてたのに、今日できたやん」(のりこえを一緒に喜ぶ)<br>・避けたい言葉：「なんで間違えたん」「さっきも言うたやろ」</p></div>`}
 function reportHTML(){const a=analyze(30);const total=a.rows.reduce((s,r)=>s+r.n,0);
-  if(total<10)return `<div class="card adult"><h3>📈 傾向レポート(直近30日)</h3><p style="margin:4px 0">まだ${total}問。10問以上たまると、つまずきの傾向と対策が出ます。</p></div>`;
+  if(total<10)return `<div class="card adult"><h3>📈 傾向レポート(直近30日)</h3><p style="margin:4px 0">まだ${total}問。10問以上たまると、つまずきの傾向と対策が出ます。</p></div>`+hatenaCardHTML();
   const pct=x=>Math.round(x*100)+"%";
   let h=`<div class="card adult"><h3>📈 傾向レポート(直近30日・${total}問)</h3>`;
   h+=`<div class="row"><span>全体の正答率</span><b>${pct(a.rows.reduce((s,r)=>s+r.rate*r.n,0)/total)}</b></div>`;
@@ -1623,7 +2007,7 @@ function reportHTML(){const a=analyze(30);const total=a.rows.reduce((s,r)=>s+r.n
   if(a.hand>=3&&a.tap>=3)h+=`<div class="row"><span>手書き／ボタンの正答率</span><b>${pct(a.handOk/a.hand)}／${pct(a.tapOk/a.tap)}</b></div>`;
   if(a.judged>=5&&a.jok/a.judged<0.75)h+=`<p style="margin:8px 0 0"><b>⚠ 見落としが多め。</b>ポテの答えが合ってるか確かめずに◯を押している可能性。「メモと同じ？」と声をかけると直ります。</p>`;
   if(a.avgMs>25000)h+=`<p style="margin:8px 0 0"><b>⚠ 1問に時間がかかっている。</b>疲れている時間帯か、難しすぎる可能性。段階を1つ戻すのも手(設定の下)。</p>`;
-  h+=`</div>`;
+  h+=`</div>`+hatenaCardHTML();
   if(a.weak.length){h+=`<div class="card adult"><h3>🔎 つまずき(正答率70%未満)と対策</h3>`;
     a.weak.slice(0,5).forEach(r=>{h+=`<div style="padding:6px 0;border-top:1px dashed var(--line)"><b>${esc(r.name)}</b>　${pct(r.rate)}(${r.n}問)<br><span style="font-size:13px">${esc(ADVICE[r.t]||"同じ種類の問題を、次の授業で多めに出します。")}</span></div>`});
     h+=`<p style="margin:8px 0 0;font-size:13px">→ 次の授業から、5問のうち2問はこの種類が優先して出ます。ポテの「きょうの おねがい」もここに寄せます。</p></div>`}
@@ -1635,6 +2019,7 @@ function reportText(){const a=analyze(30),today=ymd(),total=a.rows.reduce((s,r)=
   if(total){L.push(`全体の正答率：${pct(a.rows.reduce((s,r)=>s+r.rate*r.n,0)/total)}`);if(a.avgMs)L.push(`1問の平均時間：${Math.round(a.avgMs/1000)}秒`);
     if(a.judged>=5)L.push(`ポテの答えを正しく◯✕できた率：${pct(a.jok/a.judged)}`);if(a.hand>=3&&a.tap>=3)L.push(`手書き／ボタンの正答率：${pct(a.handOk/a.hand)}／${pct(a.tapOk/a.tap)}`)}
   L.push("",`授業の合計：${S.lessons}回　来た日数：${Object.keys(S.days).length}日　🥕${S.carrot}本`);
+  {const t=hatenaStats();L.push("","【×(はてな)を のりこえる力】",`みつけた：${t.ever}こ　のりこえた：${t.nor}こ　のりこえ中：${t.open}こ`,`自分で見直して直した：${t.self}回　ポテに出した問題：${t.made}問`);if(t.week.length)L.push("今週のりこえた："+t.week.slice(0,10).map(h=>h.q).join("、"))}
   L.push("","【いまの段階】");SKILL_IDS.forEach(id=>{const sk=S.skills[id],def=SK[id];L.push(`・${def.name.replace("\n","")}：${sk.lv>=def.levels.length?"全段階クリア":def.levels[sk.lv]+`(${sk.lv+1}/${def.levels.length})`}`)});
   if(a.weak.length){L.push("","【つまずき(70%未満)と対策】");a.weak.slice(0,5).forEach(r=>{L.push(`▼ ${r.name}　${pct(r.rate)}(${r.n}問)`);L.push(`　→ ${ADVICE[r.t]||"同じ種類を次の授業で多めに出します。"}`)})}
   else if(total>=10)L.push("","【つまずき】70%未満の種類なし");
@@ -1699,12 +2084,13 @@ function adultPage(){
      <p style="margin:10px 0 2px">やり直し</p><button class="s" data-set="reset">記録をすべて消す</button></div>
    <div class="card adult"><h3>このアプリのしくみ</h3>
      <p style="margin:4px 0">お子さんが「先生」、ポテが「生徒」です。お子さんは先に自分の答えをメモし(思い出す練習)、そのあとポテの答えに ◯ か ✕ をつけます。ポテは小学1年生がつまずきやすい形でわざと間違えます。</p>
-     <p style="margin:4px 0">お子さんの答えが違っていたときは、バツ音や減点は出さず「いっしょに たしかめよう」に進み、同じ問題が授業の最後と翌日にもう一度出ます。正解した問題は 1日→3日→7日→14日→30日 と間をあけて復習に出ます。</p>
+     <p style="margin:4px 0">お子さんの答えが違っていたときは、バツ音や減点は出さず、その場では答えを見せずに「はてな コーナーで ふくしゅう してね」とだけ伝えて次へ進みます。間違えた問題はホームの「❓ はてな コーナー」にたまり、回数の制限なしでいつでも解き直せます。最初の1回で正解すると「のりこえた」になり、間違えた日より後の日に のりこえた場合は🥕が1本もらえます(×そのものや、間違えた当日の解き直しにはごほうびを付けません。わざと間違える動機を作らないためです)。はてな コーナーで間違えたときは「もういちど かんがえる」「ヒントを みる」「こたえを みる」から自分で次の動きを選びます。間違えた問題は翌日の授業にも復習として出ます。正解した問題は 1日→3日→7日→14日→30日 と間をあけて復習に出ます。</p>
+     <p style="margin:4px 0">「もんだいを つくる」では、お子さんが問題の種類と数・ことばを選んで問題を作り、ポテが答えます。お子さんがポテの答えに ◯✕ をつけ、ポテが間違えていたら正しい答えを教えます。お子さんの判定や答えが違っていたら、ポテが一緒に確かめて直します(教える側に回ると理解が深まることが知られています)。これも授業1回に数えます。</p>
      <p style="margin:4px 0">今の段階で直近8問中7問を正解すると、次の段階に進みます。点数やランキング、連続ログインの仕掛けはありません。</p>
      <p style="margin:4px 0">「せんせいの こたえメモ」は、5問のうち2問が「手で書く」形になります(数字・ひらがな・カタカナ・漢字)。書いたあとに「かいたのは どれ？」で自分の答えを選ぶので、書く練習と選ぶ練習の両方になります。「ぶんしょうだい」は場面を絵で見せて、たし算・ひき算・ちがい・順番を扱います。「かく」は黒板のうすい字を指でなぞります(はみ出しが大きいときは1回だけやり直し、2回目は必ず合格にします)。</p>
      <p style="margin:4px 0">🥕にんじんは、授業1回で3本(ポテの間違いを直すと最大＋2本)。正解の数では増えません。おみせで、ごはん・ふく・へやのかざり・あそびの道具と交換します。</p>
      <p style="margin:4px 0">ポテの「おなか」は0〜100%。1日たつごとに40%減り、ごはんで回復します(レタス＋15%、にんじん＋25%、りんご＋35%、とうもろこし＋45%、いちご＋60%)。0%だと「あそびの じかん」で遊べません。80%以上で遊ぶと🥕が1本多くもらえます。</p>
-     <p style="margin:4px 0">「あそびの じかん」は、授業を1回するごとに1回だけ。ゲームの問題は、お子さんがすでに授業でやった問題から出るので、遊びがそのまま復習になります。ゲームで間違えた問題は翌日の授業に出ます。</p></div>`);
+     <p style="margin:4px 0">「あそびの じかん」は、1日の上限まで授業をしたら1回だけ。ゲームの問題は、お子さんがすでに授業でやった問題から出るので、遊びがそのまま復習になります。ゲームで間違えた問題は翌日の授業に出ます。</p></div>`);
   $("#btnShare").onclick=shareReport;
   $("#btnExport").onclick=()=>{try{const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
     $("#pageBody").insertAdjacentHTML("afterbegin",`<div class="card adult"><h3>📦 ひっこしコード</h3><p style="margin:4px 0;font-size:13px">下の文字を ぜんぶ コピーして、あたらしい 開き方の「②コードから よみこむ」に はりつけてください。</p><textarea id="expBox" readonly style="width:100%;height:34vh;font:12px/1.5 monospace;padding:8px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink)">${code}</textarea><button class="s" id="expCopy">コピーする</button><span id="expDone" style="font-size:13px"></span></div>`);
