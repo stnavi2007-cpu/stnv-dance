@@ -103,6 +103,10 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .chip{position:absolute;left:6px;top:6px;background:#000a;color:var(--gold2);font-size:11px;font-weight:800;padding:1px 7px;border-radius:999px}.chip.r{left:auto;right:6px;background:#d8b45a;color:#1b1711}
 .bbody{padding:8px;display:flex;flex-direction:column;gap:2px;flex:1;font-size:13px}.bbody b{font-size:15px}.bbody .eff{color:#9fd48a;font-weight:800;font-size:12px}.bbody button{margin-top:auto;padding:9px 6px;font-size:13px}
 .ib{flex:1;padding:10px 2px;font-size:14px;white-space:nowrap}.gold.ib{flex:1.4}
+.ageinfo{margin-top:6px;background:#241d12;border-radius:10px;padding:8px 10px;font-size:13px}.agen{font-family:"DotGothic16",sans-serif;font-size:20px;color:var(--gold2)}
+.emaki{background:linear-gradient(#efe4c8,#e2d2a8);color:#2a1f14;border-color:#8a6a3a}.emaki .mute{color:#6a5a3a}.emaki.bad{background:linear-gradient(#ead8c8,#d8bca8)}
+.emy{font-family:"DotGothic16",sans-serif;color:#8a2f2a;font-size:13px}.emt{font-family:"DotGothic16",sans-serif;font-size:21px;margin:2px 0 4px}.emd{font-size:14px;line-height:1.6}
+.eme{margin-top:8px;background:#2a1f14;color:#f3dc9a;border-radius:8px;padding:6px 10px;font-weight:800;font-size:14px}.emaki.bad .eme{background:#4a1f1f;color:#ffd0c8}.emaki.calm .emt{font-size:17px}
 .bcard.big{max-width:260px;margin:0 auto}
 canvas{display:none}img.share{width:100%;border-radius:12px;margin-top:8px}
 </style>
@@ -274,6 +278,11 @@ function pixelate(root){(root||document).querySelectorAll("svg[data-px]").forEac
   const pr=pxRender(t,res).then(u=>{PXC.set(k,u);return u});PXC.set(k,pr);pr.then(put)})}
 if(typeof MutationObserver!=="undefined")new MutationObserver(()=>pixelate()).observe(document.documentElement,{childList:true,subtree:true});
 
+/* ===== 校下データ（出典：金沢市地域防災計画 参考資料12「指定避難場所一覧表」の校下・地区名62件／位置：国土地理院 指定緊急避難場所・指定避難所データ〈2026-11-01更新〉の小学校・公民館の座標／郵便番号→町名：日本郵便データ〈jpostcode-data〉／町名→校下：金沢市「地区計画の区域内の町会一覧」等による部分対応） ===== */
+const KDATA=[{"n":"野町","y":"のまち","r":"城南","lat":36.55314,"lon":136.64741},{"n":"弥生","y":"やよい","r":"城南","lat":36.54973,"lon":136.64637},{"n":"中村町","y":"なかむらまち","r":"城南","lat":36.56086,"lon":136.642},{"n":"十一屋","y":"じゅういちや","r":"城南","lat":36.54501,"lon":136.66099},{"n":"泉野","y":"いずみの","r":"城南","lat":36.54223,"lon":136.65422},{"n":"長坂台","y":"ながさかだい","r":"城南","lat":36.53499,"lon":136.65736},{"n":"新竪町","y":"しんたてまち","r":"城南","lat":36.55589,"lon":136.6569},{"n":"菊川","y":"きくがわ","r":"城南","lat":36.55005,"lon":136.66169},{"n":"材木","y":"ざいもく","r":"中央","lat":36.56693,"lon":136.66759},{"n":"味噌蔵町","y":null,"r":"中央","lat":36.56524,"lon":136.66507},{"n":"長町","y":"ながまち","r":"中央","lat":36.56335,"lon":136.64924},{"n":"松ヶ枝","y":null,"r":"中央","lat":36.56998,"lon":136.65081},{"n":"長土塀","y":"ながどへ","r":"中央","lat":36.56718,"lon":136.64535},{"n":"芳斎","y":"ほうさい","r":"中央","lat":36.57212,"lon":136.64894},{"n":"此花","y":"このはな","r":"中央","lat":36.57717,"lon":136.65192},{"n":"瓢箪","y":"ひょうたん","r":"中央","lat":36.57681,"lon":136.65729},{"n":"馬場","y":null,"r":"城北","lat":36.57445,"lon":136.66508},{"n":"浅野町","y":null,"r":"城北","lat":36.58208,"lon":136.65887},{"n":"森山","y":"もりやま","r":"城北","lat":36.57835,"lon":136.66818},{"n":"小坂","y":"こさか","r":"城北","lat":36.5901,"lon":136.67767},{"n":"千坂","y":null,"r":"城北","lat":36.60575,"lon":136.67532},{"n":"夕日寺","y":"ゆうひでら","r":"城北","lat":36.57757,"lon":136.69238},{"n":"諸江","y":"もろえ","r":"北西部","lat":36.58863,"lon":136.64793},{"n":"浅野川","y":null,"r":"北西部","lat":36.62107,"lon":136.64165},{"n":"鞍月","y":"くらつき","r":"北西部","lat":36.60173,"lon":136.63254},{"n":"粟崎","y":"あわがさき","r":"北西部","lat":36.62123,"lon":136.62457},{"n":"川北","y":null,"r":"北西部","lat":36.60386,"lon":136.6519},{"n":"大浦","y":"おおうら","r":"北西部","lat":36.62332,"lon":136.65318},{"n":"米丸","y":"よねまる","r":"西南部","lat":36.56566,"lon":136.62},{"n":"新神田","y":"しんかんだ","r":"西南部","lat":36.565,"lon":136.63477},{"n":"押野","y":"おしの","r":"西南部","lat":36.54586,"lon":136.60935},{"n":"西南部","y":null,"r":"西南部","lat":36.55585,"lon":136.60825},{"n":"三和","y":null,"r":"西南部","lat":36.558,"lon":136.59675},{"n":"三馬","y":"みんま","r":"南部","lat":36.54356,"lon":136.63374},{"n":"米泉","y":"よないずみ","r":"南部","lat":36.54574,"lon":136.62818},{"n":"富樫","y":"とがし","r":"南部","lat":36.5295,"lon":136.64574},{"n":"伏見台","y":"ふしみだい","r":"南部","lat":36.52665,"lon":136.638},{"n":"額","y":"ぬか","r":"南部","lat":36.5103,"lon":136.62158},{"n":"四十万","y":"しじま","r":"南部","lat":36.50277,"lon":136.61756},{"n":"扇台","y":null,"r":"南部","lat":36.52276,"lon":136.62544},{"n":"長田町","y":"ながたまち","r":"西部","lat":36.57537,"lon":136.64223},{"n":"戸板","y":"といた","r":"西部","lat":36.57927,"lon":136.62276},{"n":"西","y":null,"r":"西部","lat":36.59217,"lon":136.63656},{"n":"二塚","y":null,"r":"西部","lat":36.57275,"lon":136.59717},{"n":"安原","y":"やすはら","r":"西部","lat":36.56697,"lon":136.57938},{"n":"大徳","y":null,"r":"西部","lat":36.59143,"lon":136.61004},{"n":"金石町","y":null,"r":"西部","lat":36.60894,"lon":136.59865},{"n":"大野町","y":"おおのまち","r":"西部","lat":36.61035,"lon":136.60332},{"n":"小立野","y":"こだつの","r":"東部","lat":36.55159,"lon":136.67837},{"n":"崎浦","y":null,"r":"東部","lat":36.53734,"lon":136.68157},{"n":"内川","y":null,"r":"東部","lat":36.50447,"lon":136.676},{"n":"犀川","y":null,"r":"東部","lat":36.51149,"lon":136.69806},{"n":"湯涌","y":"ゆわく","r":"東部","lat":36.49166,"lon":136.75354},{"n":"田上","y":"たがみ","r":"東部","lat":36.54622,"lon":136.69319},{"n":"東浅川","y":null,"r":"東部","lat":36.52043,"lon":136.7055},{"n":"俵","y":"たわら","r":"東部","lat":36.53439,"lon":136.72505},{"n":"医王山","y":null,"r":"東部","lat":36.55548,"lon":136.75983},{"n":"森本","y":"もりもと","r":"北部","lat":36.62277,"lon":136.69316},{"n":"花園","y":"はなぞの","r":"北部","lat":36.63262,"lon":136.70823},{"n":"湖南","y":"こなん","r":"北部","lat":36.63314,"lon":136.68609},{"n":"薬師谷","y":null,"r":"北部","lat":36.60856,"lon":136.70837},{"n":"三谷","y":null,"r":"北部","lat":36.59681,"lon":136.73775}];
+const ZTOWN={"9200001":["千木町"],"9200002":["千木"],"9200003":["疋田"],"9200004":["疋田町"],"9200005":["高柳町"],"9200006":["宮保町"],"9200007":["田中町"],"9200008":["今昭町"],"9200011":["松寺町"],"9200012":["磯部町"],"9200013":["沖町"],"9200014":["諸江町"],"9200015":["諸江町","諸江町上丁"],"9200016":["諸江町","諸江町中丁"],"9200017":["諸江町","諸江町下丁"],"9200018":["三口町"],"9200021":["七ツ屋町"],"9200022":["北安江"],"9200023":["北安江町"],"9200024":["西念"],"9200025":["駅西本町"],"9200026":["西念町"],"9200027":["駅西新町"],"9200031":["広岡"],"9200032":["広岡町"],"9200033":["日吉町"],"9200034":["醒ケ井町"],"9200035":["中橋町"],"9200036":["元菊町"],"9200041":["長田本町"],"9200042":["長田町"],"9200043":["長田"],"9200044":["南広岡町"],"9200045":["向中町"],"9200046":["大和町"],"9200047":["大豆田本町"],"9200051":["二口町"],"9200052":["薬師堂町"],"9200053":["若宮町"],"9200054":["若宮"],"9200055":["北町"],"9200056":["出雲町"],"9200057":["桜田町"],"9200058":["示野中町"],"9200059":["示野町"],"9200061":["問屋町"],"9200062":["割出町"],"9200063":["三浦町"],"9200064":["南新保町"],"9200065":["二ツ屋町"],"9200067":["二宮町"],"9200068":["戸板"],"9200069":["戸板西"],"9200101":["利屋町"],"9200102":["岸川町"],"9200103":["花園八幡町"],"9200104":["四坊高坂町","四坊町"],"9200105":["月影町"],"9200106":["今町"],"9200107":["二日市町"],"9200111":["浅丘町"],"9200112":["榎尾町"],"9200113":["俵原町"],"9200114":["加賀朝日町"],"9200115":["千杉町"],"9200116":["地代町"],"9200121":["琴町"],"9200122":["上平町"],"9200123":["滝下町"],"9200124":["中尾町"],"9200125":["今泉町"],"9200126":["朝日牧町"],"9200127":["南千谷町"],"9200128":["北千石町"],"9200129":["琴坂町"],"9200131":["東原町"],"9200132":["清水谷町"],"9200133":["堀切町"],"9200134":["曲子原町"],"9200135":["土子原町"],"9200136":["松根町"],"9200137":["竹又町"],"9200141":["直江野町"],"9200142":["納年町"],"9200143":["北方町"],"9200144":["小嶺町"],"9200145":["市瀬町"],"9200146":["柚木町"],"9200147":["不室町"],"9200148":["牧山町"],"9200151":["梨木町"],"9200152":["鳴瀬元町"],"9200153":["宮野町"],"9200154":["正部町"],"9200155":["高坂町"],"9200156":["古屋谷町"],"9200157":["車町"],"9200161":["鞁筒町"],"9200162":["小池町"],"9200163":["桐山町"],"9200164":["堅田町"],"9200165":["深谷町"],"9200166":["四王寺町"],"9200167":["福畠町"],"9200168":["小野町"],"9200171":["岩出町"],"9200172":["河原市町"],"9200173":["不動寺町"],"9200174":["薬師町"],"9200175":["上涌波町"],"9200176":["下涌波町"],"9200177":["北陽台"],"9200178":["月浦町"],"9200201":["木越町","木越町瑞樹団地","みずき"],"9200202":["木越"],"9200203":["木越町"],"9200204":["千田町"],"9200205":["大浦町"],"9200206":["北寺町"],"9200207":["須崎町"],"9200208":["蚊爪町"],"9200209":["東蚊爪町"],"9200210":["大河端西"],"9200211":["湊"],"9200212":["北間町"],"9200213":["大河端町"],"9200214":["三ツ屋町"],"9200215":["弓取町"],"9200219":["かたつ"],"9200223":["戸水町"],"9200224":["五郎島町"],"9200225":["大野町新町"],"9200226":["粟崎町"],"9200227":["粟崎浜町"],"9200231":["大野町","大野町ソ","大野町タ","大野町ヌ","大野町ヨ","大野町レ"],"9200310":["金石相生町"],"9200311":["金石上浜町"],"9200312":["金石松前町"],"9200313":["金石浜町"],"9200314":["金石御船町"],"9200315":["金石下寺町"],"9200316":["金石通町"],"9200317":["金石下本町"],"9200318":["金石味噌屋町"],"9200319":["金石上越前町"],"9200321":["金石海禅寺町"],"9200322":["金石今町"],"9200330":["金石新町"],"9200331":["大野町"],"9200332":["無量寺町"],"9200333":["無量寺"],"9200334":["桂町"],"9200335":["金石東"],"9200336":["金石本町"],"9200337":["金石西"],"9200338":["金石北"],"9200339":["木曳野"],"9200341":["寺中町"],"9200342":["畝田町","畝田西"],"9200343":["畝田中"],"9200344":["畝田東"],"9200345":["藤江北"],"9200346":["藤江南"],"9200347":["松村町"],"9200348":["松村"],"9200351":["普正寺町"],"9200352":["観音堂町"],"9200353":["赤土町"],"9200354":["二ツ寺町"],"9200355":["稚日野町"],"9200356":["専光寺町"],"9200357":["佐奇森町"],"9200361":["袋畠町"],"9200362":["古府","古府町","古府町","古府町西"],"9200363":["古府町","古府町南"],"9200364":["松島","松島町"],"9200365":["神野町"],"9200366":["南塚町"],"9200367":["北塚町"],"9200368":["神野"],"9200370":["上安原"],"9200371":["下安原町"],"9200372":["豊穂町"],"9200373":["みどり"],"9200374":["上安原町","上安原南"],"9200375":["中屋町"],"9200376":["福増町"],"9200377":["打木町"],"9200378":["いなほ"],"9200379":["中屋南"],"9200381":["中屋"],"9200801":["神谷内町"],"9200802":["三池町"],"9200803":["神宮寺町"],"9200804":["鳴和"],"9200805":["小金町"],"9200806":["神宮寺"],"9200807":["乙丸町"],"9200808":["三池新町"],"9200809":["三池栄町"],"9200811":["小坂町"],"9200812":["南御所町"],"9200813":["御所町"],"9200814":["鳴和町"],"9200815":["鳴和台"],"9200816":["山の上町"],"9200817":["春日町"],"9200818":["大樋町"],"9200821":["山王町"],"9200822":["東長江町"],"9200823":["夕日寺町"],"9200824":["伝燈寺町"],"9200825":["釣部町"],"9200826":["小二又町"],"9200827":["牧町"],"9200831":["東山"],"9200832":["卯辰町"],"9200833":["末広町"],"9200834":["常盤町"],"9200835":["東御影町"],"9200836":["子来町"],"9200837":["鶯町"],"9200838":["観音町"],"9200841":["浅野本町"],"9200842":["元町"],"9200843":["森山"],"9200844":["小橋町"],"9200845":["瓢箪町"],"9200846":["昌永町"],"9200847":["堀川町"],"9200848":["京町"],"9200849":["堀川新町"],"9200851":["笠市町"],"9200852":["此花町"],"9200853":["本町"],"9200854":["安江町"],"9200855":["武蔵町"],"9200856":["昭和町"],"9200857":["折違町"],"9200858":["木ノ新保町"],"9200861":["三社町"],"9200862":["芳斉"],"9200863":["玉川町"],"9200864":["高岡町"],"9200865":["長町"],"9200866":["中央通町"],"9200867":["長土塀"],"9200868":["六枚町"],"9200869":["上堤町"],"9200901":["彦三町"],"9200902":["尾張町"],"9200903":["博労町"],"9200904":["下近江町"],"9200905":["上近江町"],"9200906":["十間町"],"9200907":["青草町"],"9200908":["主計町"],"9200909":["袋町"],"9200910":["下新町"],"9200911":["橋場町"],"9200912":["大手町"],"9200913":["西町三番丁"],"9200914":["西町四番丁"],"9200915":["西町藪ノ内通"],"9200916":["下松原町"],"9200917":["下堤町"],"9200918":["尾山町"],"9200919":["南町"],"9200921":["材木町"],"9200922":["横山町"],"9200923":["桜町"],"9200924":["田井町"],"9200925":["天神町"],"9200926":["暁町"],"9200927":["扇町"],"9200928":["並木町"],"9200931":["兼六元町"],"9200932":["小将町"],"9200933":["東兼六町"],"9200934":["宝町"],"9200935":["石引"],"9200936":["兼六町"],"9200937":["丸の内"],"9200938":["飛梅町"],"9200939":["下石引町"],"9200941":["旭町"],"9200942":["小立野"],"9200943":["上野本町"],"9200944":["三口新町"],"9200945":["大桑新町"],"9200946":["大桑町","大桑町カ","大桑町コ","大桑町サ乙","大桑町サ甲","大桑町ソ","大桑町タ","大桑町ツ甲","大桑町ナ","大桑町メ","大桑町ユ","大桑町ヨ","大桑町ラ","大桑町穴欠","大桑町穴淵欠","大桑町子","大桑町庚","大桑町葭島","大桑町下葭島欠"],"9200947":["笠舞本町"],"9200951":["花里町"],"9200952":["錦町"],"9200953":["涌波"],"9200954":["涌波町"],"9200955":["土清水"],"9200956":["舘山町"],"9200957":["舘町"],"9200961":["香林坊"],"9200962":["広坂"],"9200963":["出羽町"],"9200964":["本多町"],"9200965":["笠舞"],"9200966":["城南"],"9200967":["菊川"],"9200968":["幸町"],"9200971":["鱗町"],"9200972":["杉浦町"],"9200973":["枝町"],"9200974":["川岸町"],"9200975":["中川除町"],"9200976":["十三間町"],"9200977":["十三間町中丁"],"9200978":["水溜町"],"9200981":["片町"],"9200982":["大工町"],"9200983":["池田町一番丁"],"9200984":["池田町二番丁"],"9200985":["池田町三番丁"],"9200986":["池田町四番丁"],"9200987":["池田町立丁"],"9200988":["木倉町"],"9200991":["下柿木畠"],"9200992":["上柿木畠"],"9200993":["下本多町"],"9200994":["茨木町"],"9200995":["新竪町"],"9200996":["油車"],"9200997":["竪町"],"9200998":["里見町"],"9200999":["柿木畠"],"9201101":["荒山町","奥新保町","砂子坂町"],"9201102":["二俣町"],"9201103":["田島町"],"9201104":["清水町"],"9201105":["戸室新保"],"9201106":["戸室別所","湯谷原町"],"9201107":["小豆沢町"],"9201108":["俵町"],"9201109":["中山町"],"9201111":["魚帰町","大菱池町","小菱池町","菱池小原町"],"9201112":["折谷町"],"9201113":["上山町"],"9201114":["古郷町"],"9201115":["石黒町"],"9201116":["板ケ谷町"],"9201117":["横谷町"],"9201118":["湯涌河内町"],"9201119":["湯涌曲町"],"9201121":["東町"],"9201122":["湯涌荒屋町"],"9201123":["湯涌町"],"9201124":["湯涌田子島町"],"9201125":["上原町"],"9201126":["白見町"],"9201127":["下谷町"],"9201128":["羽場町"],"9201129":["芝原町"],"9201131":["東荒屋町"],"9201132":["朝加屋町"],"9201133":["藤六町"],"9201134":["東市瀬町"],"9201135":["北袋町"],"9201136":["西市瀬町"],"9201137":["七曲町"],"9201138":["茅原町"],"9201141":["平等本町"],"9201142":["蓮如町"],"9201143":["高池町"],"9201144":["袋板屋町"],"9201145":["浅川町"],"9201146":["上中町"],"9201147":["銚子町"],"9201148":["金川町"],"9201149":["打尾町"],"9201151":["田上町"],"9201152":["田上"],"9201153":["田上新町"],"9201154":["太陽が丘"],"9201155":["田上本町"],"9201156":["田上の里"],"9201157":["田上さくら"],"9201158":["朝霧台"],"9201161":["鈴見台"],"9201162":["鈴見町"],"9201163":["角間新町"],"9201164":["角間町"],"9201165":["若松町"],"9201166":["上若松町"],"9201167":["もりの里"],"9201301":["永安町"],"9201302":["末町"],"9201303":["辰巳町"],"9201304":["上辰巳町"],"9201311":["菅池町"],"9201312":["瀬領町"],"9201313":["駒帰町"],"9201314":["娚杉町"],"9201315":["寺津町"],"9201316":["二又新町"],"9201321":["水淵町"],"9201322":["相合谷町"],"9201323":["下鴛原町"],"9201324":["鴛原町"],"9201325":["城力町"],"9201326":["熊走町"],"9201331":["天池町"],"9201332":["樫見町"],"9201333":["国見町"],"9201334":["平町"],"9201335":["大平沢町"],"9201336":["中戸町"],"9201337":["山川町"],"9201341":["別所町"],"9201342":["蓮花町"],"9201343":["小原町"],"9201344":["住吉町"],"9201345":["新保町"],"9201346":["三小牛町"],"9203101":["才田町"],"9203102":["忠縄町"],"9203103":["湖陽"],"9203104":["八田町東"],"9203105":["八田町西"],"9203106":["八田町"],"9203107":["湖南町"],"9203111":["梅田町"],"9203112":["観法寺町"],"9203113":["塚崎町"],"9203114":["吉原町"],"9203115":["弥勒町"],"9203116":["南森本町"],"9203117":["北森本町"],"9203121":["大場町"],"9203122":["福久町"],"9203123":["福久東"],"9203124":["荒屋"],"9203125":["荒屋町"],"9203126":["福久"],"9203131":["百坂町"],"9203132":["法光寺町"],"9203133":["柳橋町"],"9203134":["金市町"],"9203135":["横枕町"],"9208201":["鞍月東"],"9208202":["西都"],"9208203":["鞍月"],"9208204":["戸水"],"9208205":["大友"],"9208213":["直江東"],"9208214":["直江南"],"9208215":["直江西"],"9208216":["直江町"],"9208217":["近岡町"],"9208218":["直江北"],"9208221":["御供田町"],"9208222":["大友町"],"9218001":["高畠"],"9218002":["玉鉾"],"9218003":["玉鉾町"],"9218004":["米丸町"],"9218005":["間明町"],"9218006":["進和町"],"9218011":["入江"],"9218012":["本江町"],"9218013":["新神田"],"9218014":["糸田"],"9218015":["東力"],"9218016":["東力町"],"9218021":["御影町"],"9218022":["中村町"],"9218023":["千日町"],"9218024":["白菊町"],"9218025":["増泉"],"9218026":["糸田新町"],"9218027":["神田"],"9218031":["野町"],"9218032":["清川町"],"9218033":["寺町"],"9218034":["泉野町"],"9218035":["泉が丘"],"9218036":["弥生"],"9218041":["泉"],"9218042":["泉本町"],"9218043":["西泉"],"9218044":["米泉町"],"9218045":["大桑"],"9218046":["大桑町","大桑町ア","大桑町イ","大桑町ヰ","大桑町ウ","大桑町上野","大桑町オ乙","大桑町鐘搗山","大桑町上川原","大桑町上猫下","大桑町ケ","大桑町御所谷","大桑町小寺山","大桑町シ","大桑町下上野","大桑町下西欠","大桑町平","大桑町ツ乙","大桑町ツ丙","大桑町テ","大桑町ト","大桑町中上野","大桑町中尾山","大桑町中平","大桑町中ノ大平","大桑町西ノ山","大桑町猫シタイ","大桑町ノ","大桑町ハ","大桑町開","大桑町法師山","大桑町坊山","大桑町鱒川淵","大桑町ム","大桑町元末","大桑町元涌波庚","大桑町ヤ","大桑町リ","大桑町ル","大桑町レ乙","大桑町レ甲","大桑町ロ乙","大桑町ロ甲","大桑町和","三小牛町","三小牛町ヘ"],"9218047":["大豆田本町","大豆田本町ハ","大豆田本町ロ"],"9218051":["黒田"],"9218052":["保古"],"9218053":["保古町"],"9218054":["西金沢"],"9218055":["西金沢新町"],"9218056":["押野"],"9218061":["森戸"],"9218062":["新保本"],"9218063":["八日市出町"],"9218064":["八日市"],"9218065":["上荒屋"],"9218066":["矢木"],"9218101":["法島町"],"9218102":["西大桑町"],"9218103":["つつじが丘"],"9218104":["野田町"],"9218105":["平和町"],"9218106":["十一屋町"],"9218107":["野田"],"9218111":["若草町"],"9218112":["長坂"],"9218114":["長坂町"],"9218115":["長坂台"],"9218116":["泉野出町"],"9218117":["緑が丘"],"9218121":["平栗"],"9218122":["清瀬町"],"9218123":["坪野町"],"9218124":["倉ケ嶽"],"9218131":["三十苅町"],"9218132":["しじま台"],"9218133":["四十万町"],"9218134":["南四十万"],"9218135":["四十万"],"9218141":["馬替"],"9218142":["光が丘"],"9218143":["大額町"],"9218144":["額谷町"],"9218145":["額谷"],"9218146":["額乙丸町"],"9218147":["大額"],"9218148":["額新保"],"9218149":["額新町"],"9218151":["窪"],"9218152":["高尾"],"9218153":["高尾町"],"9218154":["高尾南"],"9218155":["高尾台"],"9218161":["有松"],"9218162":["三馬"],"9218163":["横川"],"9218164":["久安"],"9218171":["富樫"],"9218172":["伏見新町"],"9218173":["円光寺"],"9218174":["山科町"],"9218175":["山科"],"9218176":["円光寺本町"],"9218177":["伏見台"],"9218178":["寺地"]};
+const TK={"かたつ":["浅野川"],"みずき":["大浦"],"もりの里":["田上"],"三口町":["浅野川"],"三池町":["小坂"],"上安原":["安原"],"上若松町":["田上"],"上荒屋":["三和"],"中屋":["安原"],"中屋南":["三和"],"二ツ屋町":["戸板"],"二口町":["戸板"],"二宮町":["戸板"],"入江":["米丸"],"八日市":["押野"],"八日市出町":["西南部"],"出雲町":["戸板"],"北町":["戸板"],"千木":["千坂"],"南新保町":["鞍月"],"南森本町":["森本"],"卯辰町":["馬場"],"四十万":["四十万"],"塚崎町":["森本"],"大友町":["鞍月"],"大桑町":["崎浦"],"大河端町":["浅野川"],"太陽が丘":["田上"],"子来町":["馬場"],"寺中町":["大徳"],"広岡":["長田町"],"御供田町":["鞍月"],"戸水":["鞍月"],"打木町":["安原"],"新保本":["西南部"],"朝霧台":["田上"],"東山":["馬場"],"松村":["大徳"],"桂町":["大徳"],"桜田町":["戸板"],"横川":["三馬"],"河原市町":["薬師谷"],"泉野町":["弥生"],"湖陽":["湖南"],"無量寺町":["大徳"],"玉鉾":["新神田"],"田上":["田上"],"田上さくら":["田上"],"田上の里":["田上"],"田上本町":["田上"],"畝田中":["大徳"],"畝田東":["大徳"],"畝田西":["大徳"],"直江北":["鞍月"],"直江町":["鞍月"],"示野中町":["戸板"],"示野町":["戸板"],"福久町":["千坂"],"福増町":["安原"],"笠舞":["菊川"],"米泉町":["米丸"],"粟崎町":["粟崎"],"花園八幡町":["花園"],"若宮":["戸板"],"若松町":["田上"],"薬師堂町":["戸板"],"藤江北":["大徳"],"藤江南":["大徳"],"西念":["西"],"西泉":["米泉"],"野田町":["長坂台"],"金石上浜町":["金石町"],"金石下寺町":["金石町"],"金石今町":["金石町"],"金石味噌屋町":["金石町"],"金石御船町":["金石町"],"金石新町":["金石町"],"金石松前町":["金石町"],"金石浜町":["金石町"],"金石海禅寺町":["金石町"],"鈴見台":["材木"],"長田本町":["長田町"],"駅西本町":["戸板"],"高柳町":["浅野町"],"鶯町":["馬場"],"高畠":["米丸"]};
+
 </script>
 <script>
 /* ===== 百万石バトル v0.3 ===== */
@@ -285,9 +294,9 @@ const GOAL=1000000, ACTIVE=0.6;
 const PT={quiz:2,quizAll:5,nyukon:10,hagure:5,invite:15,invitee:5,kagaMax:15},AVG_DAY=30;
 
 /* ---------- 校下（仮一覧：正式な61校下は金沢まるっとの一覧に差し替え予定） ---------- */
-const KOUKA=["米丸","泉野","長田町","諸江町","西南部","大徳","鞍月","木曳野","緑","伏見台","十一屋","弥生","長坂台","三馬","額","四十万","富樫","米泉","新竪町","中央","小立野","兼六","馬場","浅野町","森山町","千坂","夕日寺","田上","杜の里","大浦","鳴和台","浅野川","粟崎","大野町","金石町","戸板","押野","西","明成","犀桜","菫台","扇台","泉","安原","湯涌","内川","医王山","不動寺","花園"];
-const ZIP2K={"9218001":"米丸","9218002":"米丸","9218011":"米丸","9218013":"米丸"};
-const KANAZAWA_ZIP=z=>/^92[01]\d{4}$/.test(z);
+const KOUKA=KDATA.map(x=>x.n);  // 金沢市の公式62校下
+const KANAZAWA_ZIP=z=>!!ZTOWN[z];
+const kInfo=k=>KDATA.find(x=>x.n===k)||{};
 
 /* ---------- 問題（試作用：公開前に「掟と関所」で一次資料と照合） ---------- */
 const QUIZ=[
@@ -355,6 +364,46 @@ const INV_ITEMS=[
 const UPKEEP=.01, REPAIR=.30, DECAY=.85, GROW=1.3, UW=3;
 const lotCost=n=>Math.round(15*Math.pow(1.4,n-3)*(typeof disc==="function"&&S.lock?disc():1));
 
+/* ---------- 年代（昔の言い回しで覚える） ---------- */
+// 区分：江戸の言葉。加賀藩の重臣「年寄（加賀八家）」にちなむ
+const AGEG=[
+ {id:"warabe",n:"童",y:"わらべ",min:0,max:14,d:"元服（成人の儀式）前の子ども"},
+ {id:"wakashu",n:"若衆",y:"わかしゅ",min:15,max:29,d:"元服をすませた若者"},
+ {id:"sonen",n:"壮年",y:"そうねん",min:30,max:44,d:"働きざかり、家を支える年ごろ"},
+ {id:"toshiyori",n:"年寄",y:"としより",min:45,max:64,d:"江戸では重役のこと。加賀藩の最上位の重臣「加賀八家」も年寄と呼ばれた"},
+ {id:"inkyo",n:"隠居",y:"いんきょ",min:65,max:200,d:"家督をゆずり、悠々と暮らす身"},
+];
+const ageG=a=>AGEG.find(g=>a>=g.min&&a<=g.max)||AGEG[2];
+// 本人の年の呼び名（論語の「志学・而立・不惑…」と長寿の祝い名）
+function ageWord(a){const L=[[99,"白寿","はくじゅ","99歳。百から一を引くと「白」"],[90,"卒寿","そつじゅ","90歳。卒の略字「卆」が九十に見える"],[88,"米寿","べいじゅ","88歳。米の字が八十八に見える"],[80,"傘寿","さんじゅ","80歳。傘の略字が八十に見える"],[77,"喜寿","きじゅ","77歳。喜の草書が七十七に見える"],[70,"古希","こき","70歳。杜甫の詩「人生七十古来稀なり」から"],[60,"耳順","じじゅん","60歳。論語「六十にして耳順う」"],[50,"知命","ちめい","50歳。論語「五十にして天命を知る」"],[40,"不惑","ふわく","40歳。論語「四十にして惑わず」"],[30,"而立","じりつ","30歳。論語「三十にして立つ」"],[15,"志学","しがく","15歳。論語「吾十有五にして学に志す」"]];
+  const r=L.find(x=>a>=x[0]);return r?{n:r[1],y:r[2],d:r[3]}:null}
+const ageArt=a=>a<15?"kodomo":a>=65?"nenpai":"seijin";
+
+/* ---------- 日替わりのできごと（史実がふりかかる：全員同じ日に同じできごと） ---------- */
+// fx：all/quiz/game/nyukon=獲得の倍率、hv=毎朝の収穫の倍率、cost=建物・区画の値段、guard=防災・治水で被害を軽くできる
+const STORY=[
+ {id:"kaisaku",y:"1651年",t:"改作法",d:"3代藩主・前田利常が農政改革「改作法」を始めた。年貢の仕組みを整え、加賀藩の財政を立て直したといわれる。",fx:{hv:2},e:"毎朝の収穫 2倍"},
+ {id:"tatsumi",y:"1632年",t:"辰巳用水 完成",d:"前年の大火をうけ、板屋兵四郎が犀川上流から城下へ水を引く辰巳用水を完成させた。",fx:{hv:1.5,game:1.1},e:"収穫 1.5倍・ミニゲーム +10%"},
+ {id:"kanei",y:"1631年",t:"寛永の大火",d:"金沢城下が大火に見舞われ、城も焼けた。この教訓から辰巳用水が引かれる。",fx:{all:.8},guard:1,e:"すべての獲得 −20%（防災・治水で軽減）"},
+ {id:"horeki",y:"1759年",t:"宝暦の大火",d:"金沢の城下の大半が焼けたと伝わる大火。城も大きな被害を受けた。",fx:{all:.75},guard:1,e:"すべての獲得 −25%（防災・治水で軽減）"},
+ {id:"sanpachi",y:"1963年",t:"三八豪雪",d:"昭和38年1月、北陸を中心に記録的な大雪。交通がまひし、暮らしが止まった。",fx:{all:.8,game:.9},guard:1,e:"獲得 −20%・ミニゲーム さらに−10%（防災・治水で軽減）"},
+ {id:"ikko",y:"1488年",t:"加賀一向一揆",d:"門徒らが守護・富樫政親を倒し、以後約100年「百姓の持ちたる国」と呼ばれた。",fx:{under:1.5},e:"番付の下半分の校下は獲得 +50%"},
+ {id:"toshiie",y:"1583年",t:"前田利家 金沢入城",d:"前田利家が金沢城に入り、加賀藩300年の礎が築かれた。",fx:{all:1.2},e:"すべての獲得 +20%"},
+ {id:"meirindo",y:"1792年",t:"藩校 明倫堂 開校",d:"11代藩主・前田治脩が藩校「明倫堂」を開いた。",fx:{quiz:1.5},e:"今日の十問 1.5倍"},
+ {id:"kenrokuen",y:"1822年",t:"兼六園と名付けられる",d:"白河藩主・松平定信が、六つのすぐれた景観をかね備える庭として「兼六園」と名付けたとされる。",fx:{nyukon:1.5,all:1.05},e:"一問入魂 1.5倍・すべて +5%"},
+ {id:"utatsu",y:"1867年",t:"卯辰山の開拓",d:"14代藩主・前田慶寧が卯辰山を切り開き、養生所などを設けた。",fx:{cost:.5},e:"建物・区画が半額"},
+ {id:"shiko",y:"1887年",t:"第四高等中学校",d:"金沢に第四高等中学校（のちの第四高等学校）が置かれ、学都・金沢の柱となった。",fx:{quiz:1.3,nyukon:1.3},e:"十問・一問入魂 +30%"},
+ {id:"shinkansen",y:"2015年",t:"北陸新幹線 金沢開業",d:"3月14日、北陸新幹線の長野〜金沢間が開業した。",fx:{invite:2,all:1.1},e:"援軍ボーナス 2倍・すべて +10%"},
+ {id:"kanabi",y:"2004年",t:"金沢21世紀美術館 開館",d:"10月、円いガラスの美術館が開館した。",fx:{nyukon:1.3,game:1.1},e:"一問入魂 +30%・ミニゲーム +10%"},
+ {id:"nezumi",y:"2020年",t:"鼠多門 復元",d:"7月、金沢城の鼠多門と鼠多門橋が復元された。",fx:{cost:.8,all:1.05},e:"建物・区画 2割引・すべて +5%"},
+];
+function storyToday(){const h=hash(today()+"story");if(h%100>=45)return null;return STORY[(h>>>8)%STORY.length]}
+function storyMul(kind){const st=storyToday();if(!st)return 1;const f=st.fx;let m=1;
+  if(kind&&f[kind])m*=f[kind];if(f.all&&kind!=="hv")m*=f.all;
+  if(f.under&&kind!=="hv"){const r=ranking(),i=r.findIndex(x=>x.k===S.kouka);if(i>=r.length/2)m*=f.under}
+  if(st.guard&&m<1){const g=Math.min(.9,catBonus("bousai")+.15*myLv("chisui"));m=1-(1-m)*(1-g)}
+  return m}
+
 /* ---------- 内政（信長の野望式：校下のみんなで蔵の石を投資→レベルが上がると校下全員に効く） ---------- */
 const NAISEI=[
  {id:"chisui",n:"治水",d:"用水と堤。大雪の被害をへらし、毎朝の収穫も少し増える",per:"大雪の被害 −15%・収穫 +0.5石"},
@@ -368,16 +417,14 @@ const NLV=[0,150,500,1200,3000,7000];          // 校下の合計投資でLv1〜
 const nLv=t=>NLV.filter(x=>t>=x).length-1;
 function nTotals(k){const h=hash(k+"nai"),m=(demo().find(x=>x.k===k)||{m:0}).m;const o={};NAISEI.forEach((n,i)=>{o[n.id]=Math.round(m*((h>>>(i*3))%9)*20)+(k===S.kouka?(S.inv[n.id]||0):0)});return o}
 const myLv=id=>S.lock?nLv(nTotals(S.kouka)[id]):0;
-// 地図上のおおよその位置（東西×南北の格子。正式な校下区域データで正確な配置に差し替え予定）
-const POS={"粟崎":[2,0],"大浦":[4,1],"花園":[6,0],"不動寺":[8,1],"大野町":[0,2],"金石町":[0,3],"鳴和台":[6,2],"浅野川":[5,3],"千坂":[7,3],"夕日寺":[8,3],"医王山":[10,4],"諸江町":[3,3],"戸板":[2,4],"鞍月":[1,4],"木曳野":[0,4],"大徳":[1,5],"安原":[0,6],"西":[3,5],"明成":[2,5],"長田町":[4,4],"浅野町":[5,4],"森山町":[6,4],"馬場":[6,5],"中央":[4,6],"新竪町":[5,6],"兼六":[6,6],"菫台":[3,6],"緑":[2,6],"米丸":[1,7],"泉":[3,7],"弥生":[4,7],"犀桜":[5,7],"小立野":[7,7],"田上":[8,6],"杜の里":[9,6],"西南部":[0,8],"押野":[2,8],"十一屋":[3,8],"泉野":[5,8],"扇台":[7,8],"米泉":[2,9],"三馬":[3,9],"長坂台":[4,9],"伏見台":[5,9],"富樫":[6,9],"額":[4,10],"四十万":[6,10],"内川":[8,10],"湯涌":[10,9]};
 // 建物カードの写真（たけさん撮影の写真を入れると、イラストの代わりに写真で表示）
 const PHOTO={/* 例: shiro:"photos/shiro.jpg" */};
 const pic=id=>PHOTO[id]?`<img src="${PHOTO[id]}" alt="" onerror="this.outerHTML=ART['${id}']">`:ART[id];
 
 /* ---------- 状態 ---------- */
 const KEY="hmg_v5";
-const S0={name:"",g:"m",a:"seijin",kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null,inv:{},kouken:0,mapSel:""};
-let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};S.total=S.total??S.koku;
+const S0={name:"",g:"m",a:"seijin",age:0,seen:{},kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null,inv:{},kouken:0,mapSel:""};
+let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};S.seen=S.seen||{};S.total=S.total??S.koku;if(S.age)S.a=ageArt(S.age);
 if(S.lock&&S.lock!==SEASON_ID){S.past=(S.past||[]).concat([{season:S.lock,kouka:S.kouka,koku:S.koku}]);S.koku=0;S.lock="";S.days={};REG={step:2,carry:1}}  // 城下町・内政・蔵・位は引き継ぎ
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s),app=$("#app"),abar=$("#abar");
@@ -415,27 +462,27 @@ const title=k=>TITLES[rankLv(k)][1];
 const built=()=>S.town.filter(Boolean);
 const owned=id=>built().filter(b=>b.id===id).length;
 const bdef=id=>BLD.find(b=>b.id===id);
-const disc=()=>1-.05*myLv("kogyo");
+const disc=()=>(1-.05*myLv("kogyo"))*((storyToday()||{fx:{}}).fx.cost||1);
 const nextCost=d=>Math.round((d.rep?d.cost*Math.pow(GROW,owned(d.id)):d.cost)*disc());
 function units(cat){return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat)return s;return s+(d.uniq?UW:(d.w||1))*(b.old?.5:1)},0)}
 function catBonus(cat){const c=CATS[cat];return c.max?c.max*(1-Math.pow(DECAY,units(cat))):0}
 function harvest(){let sum=0,i=0;built().filter(b=>bdef(b.id)?.hv).sort((a,b)=>bdef(b.id).hv-bdef(a.id).hv).forEach(b=>{sum+=bdef(b.id).hv*Math.pow(.85,i++)*(b.old?.5:1)});
   if(S.invites>=1)sum+=3;sum+=1.2*myLv("nogyo")+.5*myLv("chisui");return Math.round(sum*10)/10}
 function upkeep(){return Math.round(built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:b.paid*UPKEEP),0)*100)/100}
-function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
+function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);if(kind==="invite")m*=((storyToday()||{fx:{}}).fx.invite||1);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
 function seasonEvent(){if(!S.lock)return null;const r=ranking();const i=r.findIndex(x=>x.k===S.kouka);const bs=catBonus("bousai");
   if(i===0){const p=Math.round(20*(1-bs)*(1-.15*myLv("chisui")));return {cls:"ng",t:`❄️ 大雪：首位の校下は獲得 −${p}%`+(p<20?`（防災・治水で軽減中）`:""),mul:1-p/100}}
   if(i===r.length-1)return {cls:"ok",t:"⚔️ 一揆の大将：最下位の校下は獲得 +50%",mul:1.5};
   if(i>=r.length-6)return {cls:"ok",t:"🐎 援軍到着：下位の校下は獲得 +30%",mul:1.3};
   return null}
-function addKoku(n,why,kind){const e=seasonEvent();n=Math.round(n*(kind?mult(kind):1)*sakugara().m*(e?e.mul:1)*10)/10;S.koku+=n;S.total=(S.total||0)+n;S.kura+=n;save();hd();if(why)toast(`+${f1(n)}石 ${why}`);return n}
+function addKoku(n,why,kind){const e=seasonEvent();n=Math.round(n*(kind?mult(kind):1)*sakugara().m*(e?e.mul:1)*storyMul(kind||"all")*10)/10;S.koku+=n;S.total=(S.total||0)+n;S.kura+=n;save();hd();if(why)toast(`+${f1(n)}石 ${why}`);return n}
 function hd(){$("#hdKoku").firstChild.textContent=f1(S.kura)+"石"}
 
 // 毎朝の決算（収穫と維持費。払えなければ老朽化）
 function dailyTick(){if(!S.lock)return;const t=today();if(!S.tick){S.tick=t;save();return}
   const days=Math.min(7,dBetween(S.tick,t));if(days<=0)return;
   let hv=0,up=0,aged=0;
-  for(let d=0;d<days;d++){const h=harvest();if(h){hv+=addKoku(h,"")}
+  for(let d=0;d<days;d++){const h=harvest()*storyMul("hv");if(h){hv+=addKoku(h,"")}
     let u=upkeep();
     while(u>S.kura){const cand=built().filter(b=>!b.old&&bdef(b.id)).sort((a,b)=>b.paid-a.paid)[0];if(!cand)break;cand.old=1;aged++;u=upkeep()}
     S.kura-=u;up+=u}
@@ -450,10 +497,12 @@ function register(){abar.className="abar";
     <label class="mute">なまえ（ランキングに出ます）</label><input id="nm" maxlength="10" placeholder="例：たけ" value="${S.name||""}">
     <div class="mute" style="margin-top:10px">せいべつ</div>
     <div class="seg">${[["m","おとこ"],["f","おんな"]].map(([v,l])=>`<button class="${S.g===v?"on":""}" onclick="S.g='${v}';register()">${l}</button>`).join("")}</div>
-    <div class="mute" style="margin-top:10px">ねんだい</div>
-    <div class="seg">${[["kodomo","こども"],["seijin","せいじん"],["nenpai","年配"]].map(([v,l])=>`<button class="${S.a===v?"on":""}" onclick="S.a='${v}';register()">${l}</button>`).join("")}</div>
-    <button class="pri" style="margin-top:14px" onclick="S.name=$('#nm').value.trim();if(!S.name)return toast('なまえを入れてください');REG.step=2;register()">つぎへ</button></div>`;
-    $("#nm").addEventListener("input",e=>S.name=e.target.value);return}
+    <div class="mute" style="margin-top:10px">年齢（必須・ランキングの年代分けに使います）</div>
+    <input id="age" inputmode="numeric" maxlength="3" placeholder="例：48" value="${S.age||""}">
+    <div id="ageInfo" class="ageinfo">${ageInfo(S.age)}</div>
+    <button class="pri" style="margin-top:14px" onclick="regNext()">つぎへ</button></div>`;
+    $("#nm").addEventListener("input",e=>S.name=e.target.value);
+    $("#age").addEventListener("input",e=>{const a=parseInt(e.target.value.replace(/\D/g,""))||0;const prev=ageArt(S.age||30);S.age=a;$("#ageInfo").innerHTML=ageInfo(a);if(a&&ageArt(a)!==prev){S.a=ageArt(a);$("#avPrev").innerHTML=avatar(S.g,S.a,0)}});return}
   if(REG.step===2){
     const inv=Q_.get("k");
     app.innerHTML=`<div class="card"><h2>🏯 陣地をきめる（2/2）</h2>
@@ -465,19 +514,28 @@ function register(){abar.className="abar";
     <div id="pick"></div></div>`;
     if(REG.zip)zipGo(true);return}
 }
+function ageInfo(a){if(!a||a<1||a>120)return `<span class="mute">年齢を入れると、昔の言い回しで年代が出ます</span>`;const g=ageG(a),w=ageWord(a);
+  return `<div><b class="agen">${g.n}</b><small>（${g.y}）</small> <span class="mute">${g.min}〜${g.max<200?g.max+"歳":"歳以上"}・${g.d}</span></div>${w?`<div class="mute">あなたの年の呼び名：<b style="color:var(--gold2)">${w.n}</b>（${w.y}）…${w.d}</div>`:""}`}
+function regNext(){S.name=$('#nm').value.trim();const a=parseInt(($('#age').value||"").replace(/\D/g,""))||0;
+  if(!S.name)return toast('なまえを入れてください');if(a<1||a>120)return toast('年齢を入れてください（必須）');S.age=a;S.a=ageArt(a);REG.step=2;register()}
 function zipGo(silent){const z=($("#zip").value||"").replace(/\D/g,"");REG.zip=z;
   if(z.length!==7){if(!silent)toast("7桁で入れてください");return}
-  const k=ZIP2K[z];
-  if(k){$("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>の住民として参戦します</div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',true)">${k}校下で参戦する</button>`;return}
-  REG.mode=KANAZAWA_ZIP(z)?"kz":"out";REG.sort=REG.sort||"many";pickList()}
+  REG.sort=REG.sort||"many";
+  if(!KANAZAWA_ZIP(z)){REG.mode="out";return pickList()}
+  const towns=ZTOWN[z],c=[...new Set(towns.flatMap(t=>TK[t]||[]))];REG.mode="kz";REG.towns=towns;
+  if(c.length){$("#pick").innerHTML=`<div class="okbox"><div style="flex:1"><div class="mute">〒${z.slice(0,3)}-${z.slice(3)}　${towns.join("・")}</div><b>この町がふくまれる校下</b></div></div>
+    ${c.map(k=>`<button class="kitem" style="width:100%;margin-top:6px" onclick="pickK('${k}',true)"><span class="kf">${flagSvg(k,color(k))}</span><span class="kn">${k}校下<small>${kInfo(k).y||""}${kInfo(k).r?"・"+kInfo(k).r+"地域":""}</small></span><span class="km">これ</span></button>`).join("")}
+    <div class="notice" style="margin:8px 0">同じ町でも丁目で校下が分かれることがあります。ちがう場合は下から選んでください。</div><button style="width:100%" onclick="pickList()">ちがう（62校下から選ぶ）</button>`;return}
+  pickList()}
 function pickList(){const d=demo();const s=REG.sort;
-  const L=d.slice().sort((a,b)=>s==="many"?b.m-a.m:s==="few"?a.m-b.m:a.k.localeCompare(b.k,"ja"));
-  $("#pick").innerHTML=`<div class="notice" style="margin:10px 0">${REG.mode==="kz"?"金沢市内ですが、この郵便番号の校下はまだ登録がありません。下からえらんでください。":"金沢市外の郵便番号です。<b>援軍</b>として、好きな校下をえらんでください。"}</div>
-  <div class="seg sm">${[["many","人が多い順"],["few","少ない順"],["name","名前順"]].map(([v,l])=>`<button class="${s===v?"on":""}" onclick="REG.sort='${v}';pickList()">${l}</button>`).join("")}</div>
+  const RG=[...new Set(KDATA.map(x=>x.r))];
+  const L=d.slice().sort((a,b)=>s==="many"?b.m-a.m:s==="few"?a.m-b.m:s==="area"?(RG.indexOf(kInfo(a.k).r)-RG.indexOf(kInfo(b.k).r))||a.k.localeCompare(b.k,"ja"):a.k.localeCompare(b.k,"ja"));
+  $("#pick").innerHTML=`<div class="notice" style="margin:10px 0">${REG.mode==="kz"?`金沢市内（${(REG.towns||[]).join("・")}）です。この町の校下はまだ自動で判定できないので、下から選んでください。`:"金沢市外の郵便番号です。<b>援軍</b>として、好きな校下をえらんでください。"}</div>
+  <div class="seg sm">${[["many","人が多い順"],["few","少ない順"],["area","地域別"],["name","名前順"]].map(([v,l])=>`<button class="${s===v?"on":""}" onclick="REG.sort='${v}';pickList()">${l}</button>`).join("")}</div>
   <div class="mute" style="margin:6px 0">人数は<b>デモ用の仮の数字</b>です</div>
-  <div class="klist">${L.map(x=>`<button class="kitem" onclick="pickK('${x.k}')"><span class="kf">${flagSvg(x.k,color(x.k))}</span><span class="kn">${x.k}<small>${fmt(x.koku)}石</small></span><span class="km">${x.m?`${x.m}人`:`<b class="first">0人・一番乗り</b>`}</span></button>`).join("")}</div>`}
-function pickK(k){const m=demo().find(x=>x.k===k).m;
-  $("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>に援軍として参戦します<div class="mute">いま ${m}人</div></div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',false)">${k}校下で参戦する</button><button style="width:100%;margin-top:8px" onclick="pickList()">えらびなおす</button>`}
+  <div class="klist">${L.map(x=>`<button class="kitem" onclick="pickK('${x.k}')"><span class="kf">${flagSvg(x.k,color(x.k))}</span><span class="kn">${x.k}<small>${kInfo(x.k).r?kInfo(x.k).r+"地域・":""}${fmt(x.koku)}石</small></span><span class="km">${x.m?`${x.m}人`:`<b class="first">0人・一番乗り</b>`}</span></button>`).join("")}</div>`}
+function pickK(k,res){REG.res=!!res;const m=demo().find(x=>x.k===k).m;
+  $("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>に${REG.mode==="kz"?"住民":"援軍"}として参戦します<div class="mute">いま ${m}人</div></div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',REG.mode==='kz')">${k}校下で参戦する</button><button style="width:100%;margin-top:8px" onclick="pickList()">えらびなおす</button>`}
 const lockNote=()=>`<div class="notice" style="margin:10px 0">⚠️ <b>このシーズンが終わるまで、校下は変えられません。</b></div>`;
 function doReg(k,resident){S.kouka=k;S.zip=resident?REG.zip:"";S.lock=SEASON_ID;S.tick=today();save();
   if(Q_.get("k")){S.from=Q_.get("from")||"";addKoku(PT.invitee,"援軍として参戦")}
@@ -496,6 +554,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
     <div style="flex:1;min-width:0">
       <div class="pname">${S.name}<span class="tag">${title(S.total||0)}</span></div>
       <div class="pk"><span class="kf sm">${flagSvg(S.kouka,color(S.kouka))}</span>${S.kouka}校下 <span class="tag">${S.zip?"住民":"援軍"}</span></div>
+      <div class="mute">${S.age?`${ageG(S.age).n}（${ageG(S.age).y}）${ageWord(S.age)?"・"+ageWord(S.age).n:""}`:""}</div>
       <div class="mute">今シーズンの手柄 <b style="color:var(--gold2)">${f1(S.koku)}石</b></div>
       <div class="mute" style="font-size:11px">🔒 校下は次のシーズンまで変更できません・通算の手柄 ${f1(S.total||0)}石</div>
     </div>
@@ -516,6 +575,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
     ${ev?`<div class="evb ${ev.cls}">${ev.t}</div>`:""}
   </div>
 
+  ${storyCard()}
   <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🗾 金沢の陣地図</h2><span class="mute">柱の高さ＝石高</span></div>
     <div class="mapw" onclick="mapView()">${isoMap(S.kouka)}</div>
     <button class="gold" style="width:100%" onclick="mapView()">地図をひらく</button></div>
@@ -567,6 +627,12 @@ function home(){abar.className="abar";if(!S.lock)return register();
   </div>
 
   <div class="card">
+    <h2>👥 年代別ランキング <span class="tag">デモ</span></h2>
+    <div class="mute">どの年代がいちばん石を集めているか。登録の年齢で自動で分かれます。</div>
+    ${ageRank()}
+  </div>
+
+  <div class="card">
     <h2>🤝 援軍をよぶ</h2>
     <div class="mute">あなたのURLから1人参戦するごとに、<b>あなたに+15石</b>（${S.kouka}校下の石高にも入ります）。さらに呼んだ人数で、<b>援軍を呼んだ人しか手に入らない品</b>がもらえます。</div>
     <div style="margin:8px 0;font-weight:800">呼んだ援軍：${S.invites}人</div>
@@ -583,6 +649,16 @@ function invite(){const u=location.origin+location.pathname+"?k="+encodeURICompo
 function inviteArrived(){S.invites++;const got=addKoku(PT.invite,"援軍が参戦！","invite");const it=INV_ITEMS.find(i=>i.need===S.invites);
   if(it&&it.kind==="bld"){if(!S.town.includes(null)){S.lots++;S.town.push(null)}S.town[S.town.indexOf(null)]={id:it.id,paid:0,inv:1}}
   if(it)toast(`🎁 ${it.n} を手に入れた！`);save();home()}
+
+function storyCard(){const st=storyToday();if(!st)return `<div class="card emaki calm"><div class="emt">📜 けふは何事もなき日</div><div class="mute">きょうは史実のできごとは起きていません。毎日およそ2日に1回、歴史がふりかかります。</div><div class="mute" style="margin-top:4px">できごと帳 ${Object.keys(S.seen).length} / ${STORY.length}</div></div>`;
+  if(!S.seen[st.id]){S.seen[st.id]=today();save()}
+  const bad=st.guard,m=storyMul("all");
+  return `<div class="card emaki ${bad?"bad":"good"}"><div class="emy">${st.y}</div><div class="emt">${bad?"⚠️":"✨"} ${st.t}</div><div class="emd">${st.d}</div>
+  <div class="eme">${st.e}${bad&&m>0.8?`<br><small>あなたの城下町の防災・治水で、被害は −${Math.round((1-m)*100)}% にとどまっています</small>`:""}</div>
+  <details class="mute" style="margin-top:6px"><summary>できごと帳 ${Object.keys(S.seen).length} / ${STORY.length}</summary>${STORY.map(x=>`<div>${S.seen[x.id]?`${x.y} ${x.t}`:"？？？"}</div>`).join("")}</details></div>`}
+function ageRank(){const R=AGEG.map((g,i)=>({g,m:3+hash(g.id+SEASON_ID)%9,koku:Math.round((3+hash(g.id+SEASON_ID)%9)*AVG_DAY*ACTIVE*Math.max(1,dBetween(SEASON_START,today())+1)*(.7+(hash(g.id)%60)/100))}));
+  const mine=R.find(x=>x.g.id===ageG(S.age||30).id);if(mine){mine.m++;mine.koku+=S.koku}R.sort((a,b)=>b.koku-a.koku);
+  return R.map((x,i)=>`<div class="rank ${x===mine?"me":""}"><div class="bz">${BANZUKE(i)}</div><div class="name">${x.g.n}<small>（${x.g.y}）${x.g.min}〜${x.g.max<200?x.g.max:""}歳・${x.m}人</small></div><div class="pt">${fmt(x.koku)}石</div></div>`).join("")}
 
 /* ---------- 画面：内政 ---------- */
 function naisei(){abar.className="abar";hd();const T=nTotals(S.kouka);
@@ -603,33 +679,35 @@ function kouroList(){const m=(demo().find(x=>x.k===S.kouka)||{m:1}).m;const L=Ar
   return L.slice(0,10).map((x,i)=>`<div class="rank ${x.me?"me":""}"><div class="bz">${BANZUKE(i)}</div><div class="name">${x.n}</div><div class="pt">${fmt(x.v)}石</div></div>`).join("")}
 
 /* ---------- 地図（3Dの斜め俯瞰） ---------- */
-const PJ=(x,y)=>[(x-y)*16+180,(x+y)*8+78];
+// 実際の位置（緯度経度）→ km → 中心部を広げる（密集した旧市街を見やすく）→ 斜め俯瞰
+const MAPXY=(()=>{const la0=KDATA.reduce((a,x)=>a+x.lat,0)/KDATA.length,lo0=KDATA.reduce((a,x)=>a+x.lon,0)/KDATA.length,c=Math.cos(la0*Math.PI/180);
+  const P=KDATA.map(x=>{const dx=(x.lon-lo0)*111.32*c,dy=(la0-x.lat)*110.57;return {n:x.n,dx,dy,r:Math.hypot(dx,dy)}});const rmax=Math.max(...P.map(p=>p.r));const o={};
+  P.forEach(p=>{const k=p.r?Math.pow(p.r/rmax,.55)*5.4/p.r:0;o[p.n]=[5+p.dx*k,5+p.dy*k]});return o})();
+const PJ=(x,y)=>[(x-y)*15.5+180,(x+y)*7.75+70];
 const pts=a=>a.map(p=>PJ(...p).join(",")).join(" ");
 function isoMap(sel){const rk=ranking(),mx=Math.max(1,...rk.map(x=>x.koku));
-  let s=`<svg viewBox="0 0 360 270" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f4a6e"/><stop offset="1" stop-color="#173a58"/></linearGradient></defs>`;
-  s+=`<polygon points="${pts([[-2.6,-1],[-.6,-1],[-.6,11],[-2.6,11]])}" fill="url(#sea)"/>`;
-  s+=`<text x="${PJ(-1.8,3)[0]}" y="${PJ(-1.8,3)[1]}" font-size="9" fill="#8fb9d8" font-family="sans-serif" transform="rotate(27 ${PJ(-1.8,3).join(" ")})">日本海</text>`;
-  s+=`<polygon points="${pts([[-.6,-1],[11,-1],[11,11],[-.6,11]])}" fill="#2c3a22"/>`;
-  s+=`<polygon points="${pts([[8.6,-1],[11,-1],[11,11],[8.6,11]])}" fill="#253220"/>`;
-  [[9.6,1.5],[10.4,3],[9.4,5],[10.5,7],[9.6,10.5],[10.6,10]].forEach(([x,y])=>{const[a,b]=PJ(x,y);s+=`<path d="M${a-9} ${b} L${a} ${b-14} L${a+9} ${b}Z" fill="#3a4a2e"/><path d="M${a-3} ${b-9} L${a} ${b-14} L${a+3} ${b-9}Z" fill="#e8ecef" opacity=".7"/>`});
-  const river=(p,n,lab)=>{s+=`<polyline points="${pts(p)}" fill="none" stroke="#4f8ac0" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>`;const[a,b]=PJ(...lab);s+=`<text x="${a}" y="${b}" font-size="8" fill="#9cc8ec" font-family="sans-serif" font-weight="700">${n}</text>`};
-  river([[10.8,10.4],[8.6,9.2],[7,8.2],[5.6,7.6],[4.5,6.6],[3.4,6.3],[2,5.6],[.6,5.2],[-.8,5.1]],"犀川",[7.8,9.6]);
-  river([[10.8,2.2],[8.6,3.4],[7.2,4.1],[5.6,4.5],[4.5,3.6],[3,3.6],[1.4,2.8],[-.8,2.4]],"浅野川",[8.4,2.6]);
-  const L=KOUKA.filter(k=>POS[k]).map(k=>({k,p:POS[k],r:rk.find(x=>x.k===k)})).sort((a,b)=>(a.p[0]+a.p[1])-(b.p[0]+b.p[1]));
-  const tile=(x,y,h,c,k,me)=>{const d=.42,t=[[x-d,y-d],[x+d,y-d],[x+d,y+d],[x-d,y+d]].map(p=>PJ(...p));const up=t.map(([a,b])=>[a,b-h]);
-    return `<g onclick="mapTap('${k}')" style="cursor:pointer"><polygon points="${[t[3],t[2],up[2],up[3]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.7)"/><polygon points="${[t[1],t[2],up[2],up[1]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.5)"/><polygon points="${up.map(p=>p.join(",")).join(" ")}" fill="${c}" stroke="${me?"#ffd76a":"#00000055"}" stroke-width="${me?2:.6}"/></g>`};
+  let s=`<svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f4a6e"/><stop offset="1" stop-color="#173a58"/></linearGradient></defs>`;
+  s+=`<polygon points="${pts([[-1,-1],[11,-1],[11,11],[-1,11]])}" fill="#2c3a22"/>`;
+  // 日本海側（いちばん海側の校下より外を海に＝飾り。海岸線は正確ではありません）
+  const W=Object.values(MAPXY);const coast=[];for(let y=-1;y<=11;y+=1){const near=W.filter(p=>Math.abs(p[1]-y)<1.6);coast.push([Math.min(...(near.length?near:W).map(p=>p[0]))-.7,y])}
+  s+=`<polygon points="${pts([[-1,-1],...coast,[-1,11]])}" fill="url(#sea)"/>`;
+  s+=`<text x="${PJ(-.6,1.5)[0]}" y="${PJ(-.6,1.5)[1]}" font-size="9" fill="#8fb9d8" font-family="sans-serif" transform="rotate(27 ${PJ(-.6,1.5).join(" ")})">日本海</text>`;
+  [[10.4,2],[10.6,4.5],[10.2,7],[10.6,9.5],[9.2,10.6]].forEach(([x,y])=>{const[a,b]=PJ(x,y);s+=`<path d="M${a-9} ${b} L${a} ${b-14} L${a+9} ${b}Z" fill="#3a4a2e"/><path d="M${a-3} ${b-9} L${a} ${b-14} L${a+3} ${b-9}Z" fill="#e8ecef" opacity=".7"/>`});
+  const L=KOUKA.map(k=>({k,p:MAPXY[k],r:rk.find(x=>x.k===k)})).sort((a,b)=>(a.p[0]+a.p[1])-(b.p[0]+b.p[1]));
+  const tile=(x,y,h,c,k,me)=>{const d=.24,t=[[x-d,y-d],[x+d,y-d],[x+d,y+d],[x-d,y+d]].map(p=>PJ(...p));const up=t.map(([a,b])=>[a,b-h]);
+    return `<g onclick="mapTap('${k}')" style="cursor:pointer"><polygon points="${[t[3],t[2],up[2],up[3]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.7)"/><polygon points="${[t[1],t[2],up[2],up[1]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.5)"/><polygon points="${up.map(p=>p.join(",")).join(" ")}" fill="${c}" stroke="${me?"#ffd76a":"#00000055"}" stroke-width="${me?2:.5}"/></g>`};
   let mine=null;
-  L.forEach(o=>{const h=3+o.r.koku/mx*46,me=o.k===sel;s+=tile(o.p[0],o.p[1],h,o.r.m?color(o.k):"#5a5446",o.k,me);if(me)mine={...o,h}});
+  L.forEach(o=>{const h=2+o.r.koku/mx*40,me=o.k===sel;s+=tile(o.p[0],o.p[1],h,o.r.m?color(o.k):"#5a5446",o.k,me);if(me)mine={...o,h}});
   if(mine){const[a,b]=PJ(...mine.p),top=b-mine.h;const lab=`${mine.k} ${fmt(mine.r.koku)}石`,w=lab.length*8.4+14;
-    s+=`<line x1="${a}" y1="${top}" x2="${a}" y2="${top-26}" stroke="#ffd76a" stroke-width="1.5"/><g transform="translate(${Math.min(352-w,Math.max(8,a-w/2))} ${top-46})"><rect width="${w}" height="20" rx="10" fill="#1b1711" stroke="#ffd76a"/><text x="${w/2}" y="14" font-size="11.5" font-weight="900" text-anchor="middle" fill="#f3dc9a" font-family="sans-serif">${lab}</text></g><circle cx="${a}" cy="${top}" r="3.5" fill="#ffd76a"/>`}
+    s+=`<line x1="${a}" y1="${top}" x2="${a}" y2="${Math.max(30,top-24)}" stroke="#ffd76a" stroke-width="1.5"/><g transform="translate(${Math.min(352-w,Math.max(8,a-w/2))} ${Math.max(8,top-44)})"><rect width="${w}" height="20" rx="10" fill="#1b1711" stroke="#ffd76a"/><text x="${w/2}" y="14" font-size="11.5" font-weight="900" text-anchor="middle" fill="#f3dc9a" font-family="sans-serif">${lab}</text></g><circle cx="${a}" cy="${top}" r="3.5" fill="#ffd76a"/>`}
   return s+`</svg>`}
 function mapView(){abar.className="abar";hd();const k=S.mapSel||S.kouka;
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🗾 金沢の陣地図</h2><button onclick="S.mapSel='';home()">もどる</button></div>
   <div class="mapw big">${isoMap(k)}</div><div id="mapInfo"></div>
-  <div class="notice" style="margin-top:8px">柱の高さ＝校下の石高、色つき＝参加者がいる校下。柱をタップすると詳しく見られます。<br>※ 位置はおおよその仮配置です（正式な校下の区域データで正確な地図に差し替え予定）。</div></div>`;mapInfo(k)}
+  <div class="notice" style="margin-top:8px">柱の高さ＝校下の石高、色つき＝参加者がいる校下。柱をタップすると詳しく見られます。<br>※ 柱の位置は各校下の小学校（学校がない校下は公民館）の実際の位置です（国土地理院のデータ）。密集した中心部は見やすいよう少し広げて描いています。海岸線は飾りです。</div></div>`;mapInfo(k)}
 function mapTap(k){if(!$("#mapInfo"))return mapView();S.mapSel=k;mapView()}
 function mapInfo(k){const rk=ranking(),i=rk.findIndex(x=>x.k===k),r=rk[i],T=nTotals(k);
-  $("#mapInfo").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div style="flex:1"><b style="font-size:17px">${k}校下</b>${k===S.kouka?'<span class="tag">わが校下</span>':""}<div class="mute">${BANZUKE(i)}・${fmt(r.koku)}石・${r.m}人</div>
+  $("#mapInfo").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div style="flex:1"><b style="font-size:17px">${k}校下</b>${k===S.kouka?'<span class="tag">わが校下</span>':""}<div class="mute">${kInfo(k).y?kInfo(k).y+"・":""}${kInfo(k).r?kInfo(k).r+"地域・":""}${BANZUKE(i)}・${fmt(r.koku)}石・${r.m}人</div>
   <div class="mute" style="font-size:12px">内政：${NAISEI.map(n=>`${n.n}${nLv(T[n.id])}`).join(" ")}</div></div></div>`}
 
 /* ---------- 画面：城下町 ---------- */
