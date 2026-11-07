@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="robots" content="noindex">
+<title>百万石バトル（試作）</title>
+<style>
+:root{--bg:#0f0d0a;--panel:#1b1711;--gold:#d8b45a;--gold2:#f3dc9a;--red:#b8352b;--ink:#f3ede0;--mute:#a79c86;--green:#3f9a5a;--blue:#3b7fd1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5}
+body{padding-bottom:84px;overscroll-behavior:none}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(#1b1711,#0f0d0a);border-bottom:1px solid #3a3020;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:18px;letter-spacing:.08em;color:var(--gold2)}
+header h1 small{display:block;font-size:11px;color:var(--mute);letter-spacing:.2em}
+.koku{font-weight:800;color:var(--gold);font-size:15px;text-align:right;line-height:1.2}
+.koku small{display:block;color:var(--mute);font-weight:400;font-size:11px}
+main{padding:14px;max-width:520px;margin:0 auto}
+.card{background:var(--panel);border:1px solid #3a3020;border-radius:14px;padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:16px;color:var(--gold2)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;border:0;border-radius:12px;padding:12px 14px;background:#2a2318;color:var(--ink);font-weight:700;cursor:pointer}
+button.pri{background:linear-gradient(135deg,#b8352b,#7d1f18);color:#fff;width:100%;font-size:17px;padding:14px}
+button.gold{background:linear-gradient(135deg,#d8b45a,#9c7a2a);color:#1b1711}
+button:disabled{opacity:.4}
+.mute{color:var(--mute);font-size:13px}
+.big{font-size:28px;font-weight:900;color:var(--gold)}
+input,select{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid #3a3020;background:#0f0d0a;color:var(--ink)}
+.tag{display:inline-block;background:#2a2318;border-radius:999px;padding:2px 10px;font-size:12px;color:var(--gold2);margin-right:4px}
+.flag{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;flex:none}
+.rank{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2a2318}
+.rank .n{width:26px;text-align:center;font-weight:900;color:var(--gold)}
+.rank .name{flex:1}
+.rank .name small{display:block;color:var(--mute);font-size:12px}
+.rank .pt{font-weight:800;color:var(--gold2)}
+.me{background:#241d12;border-radius:10px;padding:10px 8px}
+/* quiz */
+.q{font-size:18px;font-weight:700;margin:6px 0 12px}
+.opt{display:block;width:100%;text-align:left;margin-bottom:8px;background:#241d12;border:1px solid #3a3020;font-weight:600;padding:14px}
+.opt.ok{background:#1f4a2c;border-color:var(--green)}
+.opt.ng{background:#4a1f1f;border-color:var(--red)}
+.prog{height:6px;background:#2a2318;border-radius:3px;overflow:hidden;margin-bottom:10px}
+.prog i{display:block;height:100%;background:var(--gold);width:0}
+.abar{position:fixed;left:0;right:0;bottom:0;background:#1b1711;border-top:1px solid #3a3020;padding:10px 14px;z-index:9;display:none}
+.abar.on{display:block}
+.abar .res{font-weight:800;margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ing{background:#241d12;border:1px solid #3a3020;border-radius:12px;padding:10px 4px;text-align:center;font-weight:700;font-size:14px;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ing span{font-size:26px}
+.ing.sel{outline:2px solid var(--gold)}
+.ing.bad{background:#4a1f1f}
+.ing.good{background:#1f4a2c}
+.pot{background:#0f0d0a;border:2px dashed #3a3020;border-radius:12px;min-height:60px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.timer{font-size:22px;font-weight:900;color:var(--gold2);text-align:right}
+.timer.hot{color:#ff6a5c}
+/* veg swipe */
+.stage{position:relative;height:300px;background:#0f0d0a;border-radius:14px;border:1px solid #3a3020;overflow:hidden;margin:8px 0}
+.veg{position:absolute;left:50%;top:30%;transform:translateX(-50%);width:200px;background:#241d12;border:1px solid #3a3020;border-radius:16px;padding:16px;text-align:center;font-weight:800;font-size:20px;touch-action:none;user-select:none}
+.veg span{display:block;font-size:46px}
+.lane{position:absolute;top:8px;font-size:12px;color:var(--mute);font-weight:700}
+.lane.l{left:10px}.lane.r{right:10px}
+.flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+.flash.ok{background:rgba(63,154,90,.35);opacity:1;transition:opacity .4s}
+.flash.ng{background:rgba(184,53,43,.4);opacity:1;transition:opacity .4s}
+.center{text-align:center}
+.toast{position:fixed;left:50%;bottom:100px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;font-size:15px;transform:translateX(-50%);background:#d8b45a;color:#1b1711;font-weight:800;padding:10px 16px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
+.notice{font-size:12px;color:var(--mute);border-left:3px solid #3a3020;padding-left:8px}
+canvas{display:none}
+.evb{margin-top:8px;border-radius:10px;padding:8px 10px;font-weight:700;font-size:14px}
+.evb.ng{background:#2b3a4f;color:#cfe3ff}.evb.ok{background:#3a2a12;color:#ffd98a}
+.town{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;background:#16130d;border-radius:12px;padding:8px}
+.lot{background:#211b12;border-radius:10px;text-align:center;padding:8px 2px;font-size:12px;color:var(--mute)}
+.lot span{display:block;font-size:26px}.lot.on{background:#2c3a1e;color:var(--ink);font-weight:700}
+.shop{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #2a2318}
+.shop button{padding:8px 10px;font-size:14px}
+.hg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:30;display:flex;align-items:center;justify-content:center;padding:16px}
+.hgbox{background:var(--panel);border:2px solid #ff6a5c;border-radius:16px;padding:14px;width:100%;max-width:480px;animation:shake .4s}
+.hgt{font-size:20px;font-weight:900;color:#ff9a8f}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+img.share{width:100%;border-radius:12px;margin-top:8px}
+.ox{letter-spacing:.1em;font-size:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>百万石バトル<small>HYAKUMANGOKU BATTLE ・ 試作</small></h1>
+  <div class="koku" id="hdKoku">0石<small>蔵の石</small></div>
+</header>
+<main id="app"></main>
+<div class="abar" id="abar"></div>
+<div class="toast" id="toast"></div>
+<canvas id="cv" width="1080" height="1080"></canvas>
+
+<script>
+/* ========= データ ========= */
+// 校下リスト（試作用の暫定一覧。正式な61校下一覧と郵便番号の対応表は未装填＝資料待ち）
+const KOUKA=["米丸","泉野","長田町","諸江町","西南部","大徳","鞍月","木曳野","緑","伏見台","十一屋","弥生","長坂台","三馬","額","四十万","富樫","米泉","新竪町","中央","小立野","兼六","馬場","浅野町","森山町","千坂","夕日寺","田上","杜の里","大浦","鳴和台","浅野川","粟崎","大野町","金石町","戸板","押野","西","明成","犀桜","菫台","扇台","泉","安原","湯涌","内川","医王山","不動寺","花園"];
+// 郵便番号→校下（試作ではこの数件だけ。921-8001=高畠は米丸校下）
+const ZIP2K={"9218001":"米丸","9218002":"米丸","9218011":"米丸","9218013":"米丸"};
+
+// 今日の十問（試作用。公開前は「掟と関所」で一次資料と照合すること）
+const QUIZ=[
+ {q:"加賀藩の藩祖は？",o:["前田利家","前田利長","前田利常","前田綱紀"],a:0,e:"藩祖は前田利家。2代は利長。"},
+ {q:"金沢の三文豪にふくまれないのは？",o:["泉鏡花","室生犀星","徳田秋声","井上靖"],a:3,e:"三文豪は泉鏡花・室生犀星・徳田秋声。"},
+ {q:"辰巳用水をつくった人物は？",o:["板屋兵四郎","高峰譲吉","木村栄","八田與一"],a:0,e:"1632年、板屋兵四郎が辰巳用水を完成させたと伝わる。"},
+ {q:"治部煮に欠かせない金沢の麩は？",o:["すだれ麩","車麩","生麩","焼き麩"],a:0,e:"治部煮には「すだれ麩」。"},
+ {q:"北陸新幹線が金沢まで開業した年は？",o:["2010年","2015年","2020年","2024年"],a:1,e:"2015年3月14日に長野〜金沢が開業。"},
+ {q:"金沢21世紀美術館が開館した年は？",o:["1999年","2004年","2009年","2014年"],a:1,e:"2004年10月開館。"},
+ {q:"犀川と浅野川、「女川」と呼ばれるのは？",o:["犀川","浅野川","どちらも","どちらでもない"],a:1,e:"犀川は男川、浅野川は女川。"},
+ {q:"加賀野菜15品目にふくまれるのは？",o:["青首だいこん","源助だいこん","聖護院だいこん","三浦だいこん"],a:1,e:"加賀野菜は源助だいこん。"},
+ {q:"兼六園の「六勝」にふくまれないのは？",o:["宏大","幽邃","蒼古","豪華"],a:3,e:"六勝は宏大・幽邃・人力・蒼古・水泉・眺望。"},
+ {q:"金沢城公園で2020年に復元された門は？",o:["石川門","河北門","鼠多門","橋爪門"],a:2,e:"鼠多門と鼠多門橋は2020年7月に復元。"},
+];
+
+// 治部煮
+const JIBU_OK=[["鴨肉","🦆"],["すだれ麩","🟫"],["せり","🌿"],["しいたけ","🍄"],["わさび","🟢"],["小麦粉","🌾"]];
+const JIBU_NG=[["豆腐","⬜"],["ねぎ","🥬"],["かまぼこ","🍥"],["たまご","🥚"],["ちくわ","🍢"],["牛乳","🥛"]];
+
+// 加賀野菜仕分け（15品目は公式ブランドの一覧どおり）
+const KAGA=["さつまいも（五郎島金時）","加賀れんこん","たけのこ","加賀太きゅうり","金時草","加賀つるまめ","ヘタ紫なす","源助だいこん","金沢せり","打木赤皮甘栗かぼちゃ","金沢一本太ねぎ","二塚からしな","赤ずいき","くわい","金沢春菊"];
+const NOTKAGA=["青首だいこん","九条ねぎ","聖護院かぶ","下仁田ねぎ","京みず菜","賀茂なす","桜島だいこん","万願寺とうがらし","三浦だいこん","谺（こだま）すいか"];
+const VEGICON={"さつまいも（五郎島金時）":"🍠","加賀れんこん":"🪷","たけのこ":"🎍","加賀太きゅうり":"🥒","金時草":"🌿","加賀つるまめ":"🫛","ヘタ紫なす":"🍆","源助だいこん":"🥕","金沢せり":"🌱","打木赤皮甘栗かぼちゃ":"🎃","金沢一本太ねぎ":"🥬","二塚からしな":"🥬","赤ずいき":"🌿","くわい":"🫘","金沢春菊":"🌿"};
+
+// 城下町の建物（蔵の石で建てる→以後の獲得が増える）
+const BUILD=[
+ {id:"oumi",n:"近江町市場",i:"🐟",cost:300,k:"game",v:.10,d:"ミニゲームの石 +10%"},
+ {id:"tatsumi",n:"辰巳用水",i:"💧",cost:600,k:"game",v:.10,d:"ミニゲームの石 +10%"},
+ {id:"kenroku",n:"兼六園",i:"🌳",cost:1000,k:"quiz",v:.10,d:"今日の十問の石 +10%"},
+ {id:"chaya",n:"ひがし茶屋街",i:"🏮",cost:800,k:"quiz",v:.05,d:"今日の十問の石 +5%"},
+ {id:"kinpaku",n:"金箔工房",i:"✨",cost:500,k:"nyukon",v:.20,d:"一問入魂の石 +20%"},
+ {id:"shiro",n:"金沢城",i:"🏯",cost:2500,k:"all",v:.10,d:"すべての石 +10%"},
+];
+// 一問入魂（1日1問の難問・日替わり。試作用＝公開前に一次資料と照合）
+const NYUKON=[
+ {q:"積み方の違う石垣がいくつも見られることから、金沢城は何と呼ばれる？",o:["石垣の博物館","石垣の迷宮","石垣の城下町","石垣の宝庫"],a:0,e:"自然石を積む野面積みから、石を切りそろえた切込接ぎまで、時代ごとの積み方が見られることから「石垣の博物館」と呼ばれる。"},
+ {q:"兼六園の名付け親とされる人物は？",o:["松平定信","前田斉広","前田綱紀","小堀遠州"],a:0,e:"白河藩主・松平定信が、宋の『洛陽名園記』にちなんで名付けたとされる。"},
+ {q:"前田利家の正室で、のちに芳春院と呼ばれた人物は？",o:["まつ","ねね","お市","千代"],a:0,e:"利家の正室はまつ（芳春院）。"},
+ {q:"日本三名園にふくまれないのは？",o:["栗林公園","偕楽園","後楽園","兼六園"],a:0,e:"日本三名園は兼六園（金沢）・偕楽園（水戸）・後楽園（岡山）。"},
+];
+// はぐれ問題（メタルスライム方式：ランダム出現・5秒で逃げる）
+const HAGURE=[
+ {q:"加賀藩は「加賀◯◯万石」？",o:["百","五十","八十","二百"],a:0},
+ {q:"犀川は「男川」。では浅野川は？",o:["女川","子川","姫川","母川"],a:0},
+ {q:"兼六園があるのは何市？",o:["金沢市","白山市","小松市","七尾市"],a:0},
+ {q:"金沢の三文豪は泉鏡花・徳田秋声と、もう1人は？",o:["室生犀星","夏目漱石","井上靖","森鴎外"],a:0},
+];
+
+/* ========= 状態 ========= */
+const KEY="hmg_v1";
+let S=JSON.parse(localStorage.getItem(KEY)||"null")||{name:"",kouka:"",zip:"",koku:0,days:{},streak:0,last:"",games:{}};
+S.kura??=S.koku;S.builds??={};
+const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+const $=s=>document.querySelector(s);
+const app=$("#app"),abar=$("#abar");
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800)};
+
+// JST日付・シーズン（日曜開幕〜土曜）
+function jst(){return new Date(Date.now()+9*3600e3)}
+function today(){return jst().toISOString().slice(0,10)}
+function season(){const d=jst();const dow=d.getUTCDay();const start=new Date(d);start.setUTCDate(d.getUTCDate()-dow);const end=new Date(start);end.setUTCDate(start.getUTCDate()+6);const f=x=>`${x.getUTCMonth()+1}/${x.getUTCDate()}`;return {id:start.toISOString().slice(0,10),label:`${f(start)}(日)〜${f(end)}(土)`,left:6-dow}}
+function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h}
+function color(k){return `hsl(${hash(k)%360} 55% 42%)`}
+
+function buff(kind){let m=1;for(const b of BUILD)if(S.builds[b.id]&&(b.k===kind||b.k==="all"))m+=b.v;return m}
+function evMul(){const e=seasonEvent();return e?e.mul:1}
+function addKoku(n,why,kind){n=Math.round(n*(kind?buff(kind):1)*evMul());S.koku+=n;S.kura+=n;save();hd();toast(`+${n.toLocaleString()}石 ${why||""}`);return n}
+function hd(){$("#hdKoku").firstChild.textContent=S.kura.toLocaleString()+"石"}
+function dayRec(){return S.days[today()]||(S.days[today()]={quiz:null,jibu:null,kaga:null,nyukon:null,hagure:null})}
+
+/* ========= 校下ランキング（試作用の仮データ＝デモ） ========= */
+function demoRank(){
+  const sid=season().id;
+  const list=KOUKA.map(k=>{const h=hash(k+sid);return {k,members:40+h%260,koku:300000+(h%600000)}});
+  const mine=list.find(x=>x.k===S.kouka);
+  if(mine){mine.koku+=S.koku;mine.members+=1}
+  list.sort((a,b)=>b.koku-a.koku);
+  return list;
+}
+
+/* ========= 画面 ========= */
+function home(){
+  abar.className="abar";
+  if(!S.kouka){return register()}
+  const r=dayRec(),se=season();
+  const rank=demoRank();const myI=rank.findIndex(x=>x.k===S.kouka);const my=rank[myI];
+  const rival=rank[myI>0?myI-1:myI+1];const ev=seasonEvent();const nk=NYUKON[hash(today())%NYUKON.length];
+  app.innerHTML=`
+  <div class="card">
+    <div class="row" style="align-items:center">
+      <div class="flag" style="background:${color(S.kouka)}">${S.kouka[0]}</div>
+      <div style="flex:1"><div style="font-weight:800;font-size:18px">${S.kouka}校下 <span class="tag">${S.zip?'住民':'援軍'}</span></div>
+      <div class="mute">${S.name}さん ・ ${title(S.koku)}</div></div>
+    </div>
+    <hr>
+    <div class="row" style="justify-content:space-between">
+      <div><div class="mute">校下の石高</div><div class="big">${my.koku.toLocaleString()}石</div><div class="mute">${my.members}人が参戦 ・ 現在 <b style="color:var(--gold2)">${myI+1}位</b>/${rank.length}</div></div>
+      <div style="text-align:right"><div class="mute">今週 ${se.label}</div><div style="font-weight:800">あと${se.left}日</div><div class="mute">土曜20時 決着</div></div>
+    </div>
+    <div style="margin-top:10px"><div class="row" style="justify-content:space-between"><span class="mute">百万石まで</span><span class="mute">${Math.min(100,my.koku/1e4).toFixed(1)}%</span></div>
+      <div class="prog" style="height:10px;margin:4px 0 0"><i style="width:${Math.min(100,my.koku/1e4)}%"></i></div>
+      <div class="mute">先に<b style="color:var(--gold2)">100万石</b>に届いた校下が今週の勝ち</div></div>
+    ${rival?`<div class="notice" style="margin-top:8px">🔥 ${myI>0?'上':'下'}の<b>${rival.k}校下</b>まで ${Math.abs(rival.koku-my.koku).toLocaleString()}石</div>`:''}
+    ${ev?`<div class="evb ${ev.cls}">${ev.t}</div>`:''}
+  </div>
+
+  <div class="card">
+    <h2>🧠 今日の十問</h2>
+    ${r.quiz?`<div class="ox">${r.quiz.ox}</div><div class="mute">${r.quiz.n}/10問正解 ・ +${r.quiz.koku}石（明日また出ます）</div><button class="gold" style="margin-top:8px" onclick="share()">📸 結果を画像にして共有</button><div id="shareBox"></div>`
+    :`<div class="mute">全員おなじ10問。1日1回。正解1問=50石、全問正解で+250石。</div><button class="pri" style="margin-top:8px" onclick="quiz()">はじめる</button>`}
+  </div>
+
+  <div class="card">
+    <h2>🎯 一問入魂</h2>
+    <div class="mute">1日1問だけの難問。正解で<b style="color:var(--gold2)">300石</b>。1回きり・やり直しなし。</div>
+    ${r.nyukon?`<div style="margin-top:8px;font-weight:800">${r.nyukon.ok?'🎉 正解 +'+r.nyukon.koku.toLocaleString()+'石':'⚫ 不正解'}</div><div class="mute">${nk.e}</div>`
+      :`<button class="pri" style="margin-top:8px" onclick="nyukon()">一問に入魂する</button>`}
+    <div class="notice" style="margin-top:8px">昨日の正答率 ${20+hash(today()+'y')%35}%（デモ）</div>
+  </div>
+
+  <div class="card">
+    <h2>🎲 ミニゲーム札</h2>
+    <div class="mute">知らないと勝てない。勝つと覚えている。1日1回ずつ。</div>
+    <div class="row" style="margin-top:8px">
+      <button style="flex:1" ${r.jibu!=null?'disabled':''} onclick="jibu()">🍲 治部煮をつくれ<br><small class="mute">${r.jibu!=null?'本日 +'+r.jibu+'石':'60秒'}</small></button>
+      <button style="flex:1" ${r.kaga!=null?'disabled':''} onclick="kaga()">🥬 加賀野菜 仕分け<br><small class="mute">${r.kaga!=null?'本日 +'+r.kaga+'石':'45秒'}</small></button>
+    </div>
+    <div class="row" style="margin-top:8px"><button style="flex:1" disabled>🪙 金箔を打て<br><small class="mute">じゅんび中</small></button><button style="flex:1" disabled>🏛️ 予算テトリス<br><small class="mute">じゅんび中</small></button></div>
+  </div>
+
+  <div class="card">
+    <h2>🏘️ わたしの城下町</h2>
+    <div class="mute">蔵の石で建物を建てると、以後の獲得が増えます。使っても校下の石高は減りません。</div>
+    <div class="town">${BUILD.map(b=>`<div class="lot ${S.builds[b.id]?'on':''}"><span>${S.builds[b.id]?b.i:'🟫'}</span>${S.builds[b.id]?b.n:'空き地'}</div>`).join("")}</div>
+    <div class="mute" style="margin:8px 0 4px">蔵：<b style="color:var(--gold2)">${S.kura.toLocaleString()}石</b></div>
+    ${BUILD.filter(b=>!S.builds[b.id]).map(b=>`<div class="shop"><span style="font-size:24px">${b.i}</span><div style="flex:1"><b>${b.n}</b><div class="mute">${b.d}</div></div><button class="gold" ${S.kura<b.cost?'disabled':''} onclick="build('${b.id}')">${b.cost.toLocaleString()}石</button></div>`).join("")||'<div class="mute">ぜんぶ建てました 🎉</div>'}
+  </div>
+
+  <div class="card">
+    <h2>🏯 校下ランキング <span class="tag">デモ用の仮データ</span></h2>
+    ${rank.slice(0,8).map((x,i)=>row(x,i,x.k===S.kouka)).join("")}
+    ${myI>=8?`<div class="mute center">…</div>${row(my,myI,true)}`:''}
+    <div class="notice" style="margin-top:8px">※ 他校下の数字は試作の仮データです。本番はFirebaseで全員の石高を合算します。</div>
+  </div>
+
+  <div class="card">
+    <h2>🤝 援軍をよぶ</h2>
+    <div class="mute">このURLから登録した人1人につき、${S.kouka}校下に+100石。</div>
+    <button class="gold" style="margin-top:8px" onclick="invite()">🔗 招待リンクをコピー</button>
+    <hr>
+    <button onclick="if(confirm('登録をやり直しますか？（石高は残ります）')){S.kouka='';save();home()}">校下を変える</button>
+  </div>`;
+  hd();
+  maybeHagure();
+}
+function row(x,i,me){return `<div class="rank ${me?'me':''}"><div class="n">${i+1}</div><div class="flag" style="width:34px;height:34px;font-size:14px;background:${color(x.k)}">${x.k[0]}</div><div class="name">${x.k}校下<small>${x.members}人</small></div><div class="pt">${x.koku.toLocaleString()}石</div></div>`}
+function title(k){return k>=100000?"大名":k>=30000?"家老":k>=10000?"侍大将":k>=2000?"組頭":"足軽"}
+// シーズンの揺さぶり：首位に大雪・下位に援軍・最下位は一揆の大将
+function seasonEvent(){if(!S.kouka)return null;const r=demoRank();const i=r.findIndex(x=>x.k===S.kouka);
+  if(i===0)return {cls:"ng",t:"❄️ 大雪：首位の校下は今日の獲得 −20%",mul:.8};
+  if(i===r.length-1)return {cls:"ok",t:"⚔️ 一揆の大将：最下位の校下は今日の獲得 +50%（首位から石を奪う権利はじゅんび中）",mul:1.5};
+  if(i>=r.length-6)return {cls:"ok",t:"🐎 援軍到着：下位の校下は今日の獲得 +30%",mul:1.3};
+  return null}
+
+function register(){
+  const inv=new URLSearchParams(location.search).get("k");
+  app.innerHTML=`
+  <div class="card">
+    <h2>⚔️ 参戦する</h2>
+    <div class="mute">郵便番号で自分の陣地（校下）が決まります。金沢市外の方は「援軍」として好きな校下へ。</div>
+    <div style="margin-top:10px"><label class="mute">なまえ（ランキング表示用）</label><input id="nm" maxlength="10" placeholder="例：たけ" value="${S.name||''}"></div>
+    <div style="margin-top:10px"><label class="mute">郵便番号（ハイフンなし・7桁）</label><input id="zip" inputmode="numeric" maxlength="7" placeholder="9218001" oninput="zipCheck()"></div>
+    <div id="zipRes" class="mute" style="margin-top:6px"></div>
+    <div style="margin-top:10px"><label class="mute">校下をえらぶ（郵便番号で決まらないとき・援軍のとき）</label>
+      <select id="kk"><option value="">— えらぶ —</option>${KOUKA.map(k=>`<option ${inv===k?'selected':''}>${k}</option>`).join("")}</select></div>
+    ${inv?`<div class="notice" style="margin-top:8px">🤝 ${inv}校下から招待されています</div>`:''}
+    <button class="pri" style="margin-top:12px" onclick="doReg()">この校下で参戦</button>
+    <div class="notice" style="margin-top:10px">試作メモ：郵便番号→校下の自動判定は、いま米丸校下の一部（921-8001など）だけ入っています。正式な61校下の区域表を装填すれば全域で自動になります。</div>
+  </div>`;
+}
+function zipCheck(){const z=$("#zip").value.replace(/\D/g,"");const r=$("#zipRes");if(z.length<7){r.textContent="";return}
+  const k=ZIP2K[z];if(k){r.innerHTML=`✅ <b>${k}校下</b> の住民として参戦できます`;$("#kk").value=k}
+  else if(z.startsWith("920")||z.startsWith("921")){r.textContent="金沢市内のようですが、この郵便番号の校下はまだ登録がありません。下から校下をえらんでください。"}
+  else r.textContent="金沢市外の郵便番号です。援軍として好きな校下をえらんでください。"}
+function doReg(){const nm=$("#nm").value.trim(),z=$("#zip").value.replace(/\D/g,""),k=$("#kk").value;
+  if(!nm)return toast("なまえを入れてください");if(!k)return toast("校下をえらんでください");
+  S.name=nm;S.kouka=k;S.zip=ZIP2K[z]===k?z:"";save();
+  if(new URLSearchParams(location.search).get("k")){addKoku(100,"招待ボーナス")}
+  home()}
+function invite(){const u=location.origin+location.pathname+"?k="+encodeURIComponent(S.kouka);
+  const txt=`【百万石バトル】${S.kouka}校下に援軍たのむ！ ${u}`;
+  if(navigator.share){navigator.share({text:txt}).catch(()=>{})}else{navigator.clipboard?.writeText(txt);toast("コピーしました")}}
+
+/* ========= 今日の十問 ========= */
+let Q;
+function quiz(){Q={i:0,ox:"",n:0,order:shuffle(QUIZ.map((_,i)=>i))};qShow()}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function qShow(){abar.className="abar";const q=QUIZ[Q.order[Q.i]];const ord=shuffle([0,1,2,3]);
+  app.innerHTML=`<div class="card"><div class="prog"><i style="width:${Q.i*10}%"></i></div><div class="mute">第${Q.i+1}問 / 10</div><div class="q">${q.q}</div>
+  ${ord.map(j=>`<button class="opt" data-j="${j}" onclick="qAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
+function qAns(j){const q=QUIZ[Q.order[Q.i]];const ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
+  Q.ox+=ok?"🟡":"⚫";if(ok)Q.n++;
+  abar.className="abar on";abar.innerHTML=`<div class="res">${ok?"🟡 正解！":"⚫ 不正解"} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:8px">${q.e}</div><button class="pri" onclick="qNext()">${Q.i<9?"次の問題へ":"結果を見る"}</button>`}
+function qNext(){Q.i++;if(Q.i<10)return qShow();
+  let koku=Q.n*50+(Q.n===10?250:0);const r=dayRec();r.quiz={ox:Q.ox,n:Q.n,koku};
+  S.streak=(S.last&&daysBetween(S.last,today())===1)?S.streak+1:1;S.last=today();save();koku=addKoku(koku,"今日の十問","quiz");r.quiz.koku=koku;save();
+  abar.className="abar";app.innerHTML=`<div class="card center"><div class="mute">今日の十問</div><div class="big">${Q.n}/10</div><div class="ox">${Q.ox}</div><div style="margin:8px 0;font-weight:800">+${koku}石 ${Q.n===10?"🎉 全問正解ボーナス込み":""}</div><div class="mute">連続 ${S.streak}日</div>
+  <button class="gold" style="margin-top:10px;width:100%" onclick="share()">📸 結果を画像にして共有</button><div id="shareBox"></div><button style="margin-top:8px;width:100%" onclick="home()">ホームへ</button></div>`}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/864e5)}
+
+/* ========= 共有画像 ========= */
+function share(){const r=dayRec().quiz;if(!r)return;const c=$("#cv"),x=c.getContext("2d");
+  x.fillStyle="#0f0d0a";x.fillRect(0,0,1080,1080);
+  x.fillStyle=color(S.kouka);x.fillRect(0,0,1080,260);
+  x.fillStyle="#fff";x.font="900 120px sans-serif";x.textAlign="center";x.fillText(S.kouka+"校下",540,170);
+  x.fillStyle="#f3dc9a";x.font="900 72px sans-serif";x.fillText("百万石バトル・今日の十問",540,380);
+  x.fillStyle="#f3ede0";x.font="900 200px sans-serif";x.fillText(`${r.n}/10`,540,620);
+  x.font="110px sans-serif";x.fillText(r.ox,540,780);
+  x.fillStyle="#d8b45a";x.font="700 56px sans-serif";x.fillText(`+${r.koku}石　${S.name}（${title(S.koku)}）`,540,900);
+  x.fillStyle="#a79c86";x.font="40px sans-serif";x.fillText(today().replace(/-/g,".")+"　#百万石バトル #金沢まるっと",540,1000);
+  const url=c.toDataURL("image/png");const box=$("#shareBox");box.innerHTML=`<img class="share" src="${url}"><div class="mute center">長押しで保存 → インスタのストーリーへ</div>`;
+  c.toBlob(b=>{const f=new File([b],"hyakumangoku.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:"#百万石バトル"}).catch(()=>{})})}
+
+/* ========= 治部煮 ========= */
+let J;
+function jibu(){abar.className="abar";
+  app.innerHTML=`<div class="card"><h2>🍲 治部煮をつくれ</h2><div class="mute">12の具材から、治部煮に入れる<b>6つ</b>を選んで鍋へ。にせ具材を入れると減点。制限時間60秒。</div>
+  <div class="notice" style="margin-top:8px">ヒント：鴨肉に粉をまぶして、だしで煮る。仕上げにわさび。</div><button class="pri" style="margin-top:12px" onclick="jibuStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
+function jibuStart(){J={t:60,sel:[],done:false};const items=shuffle([...JIBU_OK.map(x=>({n:x[0],i:x[1],ok:true})),...JIBU_NG.map(x=>({n:x[0],i:x[1],ok:false}))]);J.items=items;
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🍲 治部煮</h2><div class="timer" id="tm">60</div></div>
+  <div class="pot" id="pot"><span class="mute">鍋はからっぽ</span></div>
+  <div class="grid">${items.map((it,k)=>`<div class="ing" id="ing${k}" onclick="jibuPick(${k})"><span>${it.i}</span>${it.n}</div>`).join("")}</div>
+  <button class="pri" style="margin-top:12px" id="jibuGo" onclick="jibuFinish()" disabled>できあがり！（6つ選ぶと押せます）</button></div>`;
+  J.timer=setInterval(()=>{J.t--;const tm=$("#tm");if(!tm)return clearInterval(J.timer);tm.textContent=J.t;if(J.t<=10)tm.classList.add("hot");if(J.t<=0)jibuFinish()},1000)}
+function jibuPick(k){if(J.done)return;const el=$("#ing"+k);const i=J.sel.indexOf(k);if(i>=0){J.sel.splice(i,1);el.classList.remove("sel")}else{if(J.sel.length>=6)return toast("鍋は6つまで");J.sel.push(k);el.classList.add("sel")}
+  $("#pot").innerHTML=J.sel.length?J.sel.map(k=>`<span style="font-size:28px">${J.items[k].i}</span>`).join(""):'<span class="mute">鍋はからっぽ</span>';$("#jibuGo").disabled=J.sel.length!==6}
+function jibuFinish(){if(J.done)return;J.done=true;clearInterval(J.timer);
+  let good=0,bad=0;J.items.forEach((it,k)=>{const el=$("#ing"+k);const picked=J.sel.includes(k);if(picked&&it.ok){good++;el.classList.add("good")}if(picked&&!it.ok){bad++;el.classList.add("bad")}if(!picked&&it.ok)el.classList.add("sel")});
+  const koku=Math.max(0,good*30-bad*30+(good===6&&bad===0?60:0)+(good===6&&bad===0?Math.round(J.t*1.5):0));
+  const got=addKoku(koku,"治部煮","game");dayRec().jibu=got;save();
+  abar.className="abar on";abar.innerHTML=`<div class="res">${good===6&&bad===0?"🎉 完璧な治部煮！":`正しい具材 ${good}/6 ・ にせ具材 ${bad}`}</div><div class="mute" style="margin-bottom:8px">治部煮＝鴨肉（または鶏肉）に小麦粉をまぶし、だしで煮て、すだれ麩・しいたけ・せりを合わせ、わさびを添える。${good===6&&bad===0?"残り時間ボーナス+"+Math.round(J.t*1.5)+"石":""}</div><button class="pri" onclick="home()">+${got}石 ・ ホームへ</button>`}
+
+/* ========= 加賀野菜 仕分け ========= */
+let K;
+function kaga(){abar.className="abar";
+  app.innerHTML=`<div class="card"><h2>🥬 加賀野菜 仕分け</h2><div class="mute">出てきた野菜が<b>加賀野菜15品目</b>なら<b>右</b>へ、ちがう野菜なら<b>左</b>へスワイプ（またはボタン）。45秒で何枚さばける？</div><button class="pri" style="margin-top:12px" onclick="kagaStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
+function kagaStart(){K={t:45,ok:0,ng:0,done:false,deck:shuffle([...KAGA.map(n=>({n,ok:true})),...NOTKAGA.map(n=>({n,ok:false}))])};
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🥬 仕分け</h2><div class="timer" id="tm">45</div></div>
+  <div class="stage" id="stage"><div class="lane l">← ちがう</div><div class="lane r">加賀野菜 →</div><div class="flash" id="flash"></div><div class="veg" id="veg"></div></div>
+  <div class="row"><button style="flex:1" onclick="kagaJudge(false)">← ちがう</button><button class="gold" style="flex:1" onclick="kagaJudge(true)">加賀野菜 →</button></div>
+  <div class="mute center" style="margin-top:6px">正解 <b id="kok">0</b> ・ ミス <b id="kng">0</b></div></div>`;
+  kagaNext();swipe($("#veg"));
+  K.timer=setInterval(()=>{K.t--;const tm=$("#tm");if(!tm)return clearInterval(K.timer);tm.textContent=K.t;if(K.t<=10)tm.classList.add("hot");if(K.t<=0)kagaFinish()},1000)}
+function kagaNext(){if(K.done||!$("#veg"))return;if(!K.deck.length)K.deck=shuffle([...KAGA.map(n=>({n,ok:true})),...NOTKAGA.map(n=>({n,ok:false}))]);K.cur=K.deck.pop();const v=$("#veg");v.innerHTML=`<span>${VEGICON[K.cur.n]||"🥬"}</span>${K.cur.n}`;v.style.transition="none";v.style.transform="translateX(-50%)"}
+function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok;const f=$("#flash");f.className="flash "+(ok?"ok":"ng");setTimeout(()=>f.className="flash",300);
+  if(ok)K.ok++;else K.ng++;$("#kok").textContent=K.ok;$("#kng").textContent=K.ng;
+  if(!ok)toast(`${K.cur.n} は ${K.cur.ok?"加賀野菜です":"加賀野菜ではありません"}`);
+  const v=$("#veg");v.style.transition="transform .18s";v.style.transform=`translateX(${right?"120%":"-320%"})`;setTimeout(kagaNext,180)}
+function swipe(el){let sx=0,dx=0;el.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;dx=0},{passive:true});
+  el.addEventListener("touchmove",e=>{dx=e.touches[0].clientX-sx;el.style.transition="none";el.style.transform=`translateX(calc(-50% + ${dx}px)) rotate(${dx/15}deg)`},{passive:true});
+  el.addEventListener("touchend",()=>{if(Math.abs(dx)>70)kagaJudge(dx>0);else{el.style.transition="transform .15s";el.style.transform="translateX(-50%)"}})}
+function kagaFinish(){if(K.done)return;K.done=true;clearInterval(K.timer);const got=addKoku(Math.min(400,Math.max(0,K.ok*20-K.ng*15)),"加賀野菜","game");dayRec().kaga=got;save();
+  abar.className="abar on";abar.innerHTML=`<div class="res">正解 ${K.ok} ・ ミス ${K.ng}</div><div class="mute" style="margin-bottom:8px">加賀野菜15品目：${KAGA.join("・")}</div><button class="pri" onclick="home()">+${got}石 ・ ホームへ</button>`}
+
+/* ========= 普請（建物） ========= */
+function build(id){const b=BUILD.find(x=>x.id===id);if(S.kura<b.cost)return;S.kura-=b.cost;S.builds[id]=today();save();toast(`${b.i} ${b.n} が建ちました！`);home()}
+
+/* ========= 一問入魂 ========= */
+function nyukon(){const q=NYUKON[hash(today())%NYUKON.length];const ord=shuffle([0,1,2,3]);abar.className="abar";
+  app.innerHTML=`<div class="card"><h2>🎯 一問入魂</h2><div class="mute">1回きり。よく考えて。</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="nyAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
+function nyAns(j){const q=NYUKON[hash(today())%NYUKON.length];const ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
+  const got=ok?addKoku(300,"一問入魂","nyukon"):0;dayRec().nyukon={ok,koku:got};save();
+  abar.className="abar on";abar.innerHTML=`<div class="res">${ok?'🎉 正解！ +'+got.toLocaleString()+'石':'⚫ 不正解'} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:8px">${q.e}</div><button class="pri" onclick="home()">ホームへ</button>`}
+
+/* ========= はぐれ問題（5秒で逃げる） ========= */
+let HG,HGP=false;
+function maybeHagure(){const r=dayRec();if(r.hagure!=null||HG||HGP)return;if(Math.random()>.35){r.hagure=false;save();return}
+  HGP=true;setTimeout(()=>{HGP=false;if(HG||dayRec().hagure!=null||abar.classList.contains("on"))return;showHagure()},1500)}
+function showHagure(){if(HG)return;const q=HAGURE[Math.floor(Math.random()*HAGURE.length)];const ord=shuffle([0,1,2,3]);HG={q,t:5000,start:Date.now()};
+  const ov=document.createElement("div");ov.className="hg";ov.id="hg";
+  ov.innerHTML=`<div class="hgbox"><div class="hgt">⚡ はぐれ問題が あらわれた！</div><div class="mute">5秒で逃げる・正解で150石</div><div class="prog" style="height:8px;margin:8px 0"><i id="hgbar" style="width:100%;background:#ff6a5c"></i></div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" onclick="hgAns(${j})">${q.o[j]}</button>`).join("")}</div>`;
+  document.body.appendChild(ov);
+  HG.timer=setInterval(()=>{const left=HG.t-(Date.now()-HG.start);const b=$("#hgbar");if(b)b.style.width=Math.max(0,left/HG.t*100)+"%";if(left<=0)hgEnd(null)},50)}
+function hgAns(j){hgEnd(j===HG.q.a)}
+function hgEnd(ok){clearInterval(HG.timer);const ov=$("#hg");if(ov)ov.remove();const r=dayRec();
+  if(ok){r.hagure=addKoku(150,"はぐれ問題 撃破")}else{r.hagure=0;toast(ok===null?"はぐれ問題は 逃げ出した…":"はぐれ問題は 逃げ出した…（不正解）")}
+  save();HG=null;home()}
+
+/* ========= 起動 ========= */
+document.addEventListener("gesturestart",e=>e.preventDefault());
+home();
+</script>
+</body>
+</html>
