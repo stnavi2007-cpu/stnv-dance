@@ -9,7 +9,7 @@
 <style>
 :root{--bg:#0f0d0a;--panel:#1b1711;--line:#3a3020;--gold:#d8b45a;--gold2:#f3dc9a;--red:#b8352b;--ink:#f3ede0;--mute:#a79c86;--green:#3f9a5a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5}
+html,body{touch-action:manipulation;margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5}
 body{padding-bottom:90px;overscroll-behavior:none}
 svg{display:block;width:100%;height:auto}
 img.px{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
@@ -107,6 +107,9 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .emaki{background:linear-gradient(#efe4c8,#e2d2a8);color:#2a1f14;border-color:#8a6a3a}.emaki .mute{color:#6a5a3a}.emaki.bad{background:linear-gradient(#ead8c8,#d8bca8)}
 .emy{font-family:"DotGothic16",sans-serif;color:#8a2f2a;font-size:13px}.emt{font-family:"DotGothic16",sans-serif;font-size:21px;margin:2px 0 4px}.emd{font-size:14px;line-height:1.6}
 .eme{margin-top:8px;background:#2a1f14;color:#f3dc9a;border-radius:8px;padding:6px 10px;font-weight:800;font-size:14px}.emaki.bad .eme{background:#4a1f1f;color:#ffd0c8}.emaki.calm .emt{font-size:17px}
+.mzbar{display:flex;gap:6px;align-items:center;justify-content:center;margin:8px 0 4px}.mzbar button{padding:6px 14px}.mzbar span{min-width:52px;text-align:center;font-weight:800;color:var(--gold2)}
+.mapz{overflow:auto;border-radius:12px;background:#141a10;max-height:62vh;margin:0 -6px;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}.mapin{min-width:100%}
+.mrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border-bottom:1px solid #2a2318;border-radius:0;padding:8px 2px}.mrow .name{flex:1;font-weight:700}.mrow .name small{display:block;color:var(--mute);font-weight:400;font-size:11px}.mrow .pt{font-weight:800;color:var(--gold2);font-size:14px}.mrow.me{background:#241d12}.mrow.sel{outline:1px solid var(--gold)}
 .backb{display:block;width:100%;margin:4px 0 12px;background:#2a2318;border:1px solid #4a3c24}
 .testp{border-color:#3a7ac8!important;background:#141c26}.testp h2{color:#9cc8ec!important}.testp button{background:#1f3a5a}
 .irr{border-color:#5a7a3a}.irr.bad{border-color:#8a3a2a}.irt{font-family:"DotGothic16",sans-serif;font-size:19px;margin:2px 0 4px}.irres{margin-top:8px;background:#241d12;border-radius:8px;padding:8px 10px;font-weight:800;color:var(--gold2)}.irr button{margin-top:8px}
@@ -179,7 +182,7 @@ function avatar(g,a,rank=0,bg="#3a3020",gold=false){
     s+=`<rect x="44" y="${hy-hr-7}" width="32" height="3" rx="1.5" fill="${old?"#8a7a5a":"#c9a14a"}"/>`;
     if(!old)s+=`<circle cx="77" cy="${hy-hr-6}" r="4" fill="#e7577a"/><path d="M77 ${hy-hr-2} l2 9" stroke="#c9a14a" stroke-width="1.4"/>`;
   }
-  if(gold)s+=`<path d="M${60-sw} 140 Q${60-sw} ${top+14} ${60-14} ${top} L${60+14} ${top} Q${60+sw} ${top+14} ${60+sw} 140" fill="none" stroke="#ffd76a" stroke-width="4"/><rect x="2" y="2" width="116" height="136" rx="15" fill="none" stroke="#ffd76a" stroke-width="3"/>`;
+  if(gold)s+=`<path d="M${60-sw+2} 140 Q${60-sw+2} ${top+16} ${60-15} ${top+3} L${60-9} ${top+3} L${60-12} 140Z" fill="#7a1f1a"/><path d="M${60+sw-2} 140 Q${60+sw-2} ${top+16} ${60+15} ${top+3} L${60+9} ${top+3} L${60+12} 140Z" fill="#7a1f1a"/><circle cx="${60-22}" cy="${top+26}" r="6" fill="#f3ede0"/><circle cx="${60-22}" cy="${top+26}" r="3" fill="none" stroke="#7a1f1a" stroke-width="1.6"/><circle cx="${60+22}" cy="${top+26}" r="6" fill="#f3ede0"/><circle cx="${60+22}" cy="${top+26}" r="3" fill="none" stroke="#7a1f1a" stroke-width="1.6"/>`;  // 陣羽織（家紋入り）
   return s+`</svg>`;
 }
 
@@ -335,12 +338,12 @@ const CATS={
 };
 // rep=何棟でも建てられる（建てるほど次が高くなる）／uniq=1つだけの名所（効き目3棟分）
 const BLD=[
- {id:"shogakko",n:"小学校",c:"manabi",cost:12,rep:1,d:"地区の学び舎。十問の石が増える"},
- {id:"toshokan",n:"図書館",c:"manabi",cost:22,rep:1,w:1.5,d:"本は知恵の蔵。十問の石が大きく増える"},
- {id:"kageki",n:"文化ホール",c:"bunka",cost:10,rep:1,d:"芸どころ金沢。一問入魂の石が増える"},
- {id:"ichiba",n:"市場",c:"sangyo",cost:15,rep:1,d:"台所をささえる。ミニゲームの石が増える"},
- {id:"koen",n:"公園",c:"midori",cost:15,rep:1,hv:2,d:"毎朝、蔵に石が入る"},
- {id:"shobo",n:"消防署",c:"bousai",cost:15,rep:1,d:"加賀鳶の心意気。大雪の被害をへらす"},
+ {id:"shogakko",n:"小学校",c:"manabi",cost:12,rep:1,lim:5,d:"地区の学び舎。十問の石が増える"},
+ {id:"toshokan",n:"図書館",c:"manabi",cost:22,rep:1,lim:4,w:1.5,d:"本は知恵の蔵。十問の石が大きく増える"},
+ {id:"kageki",n:"文化ホール",c:"bunka",cost:10,rep:1,lim:5,d:"芸どころ金沢。一問入魂の石が増える"},
+ {id:"ichiba",n:"市場",c:"sangyo",cost:15,rep:1,lim:6,d:"台所をささえる。ミニゲームの石が増える"},
+ {id:"koen",n:"公園",c:"midori",cost:15,rep:1,lim:5,hv:2,d:"毎朝、蔵に石が入る"},
+ {id:"shobo",n:"消防署",c:"bousai",cost:15,rep:1,lim:5,d:"加賀鳶の心意気。大雪の被害をへらす"},
  {id:"bijutsukan",n:"金沢21世紀美術館",c:"bunka",cost:100,uniq:1,d:"2004年開館の円い美術館"},
  {id:"eki",n:"金沢駅",c:"kotsu",cost:100,uniq:1,d:"援軍を呼んだときの石が増える"},
  {id:"kinpaku",n:"金箔工房",c:"sangyo",cost:75,uniq:1,d:"金箔の町の誇り"},
@@ -353,11 +356,11 @@ const BLD=[
 const INV_ITEMS=[
  {need:1,id:"banjo",n:"番所",kind:"bld",d:"毎朝 +3石（逓減なし・維持費なし）"},
  {need:3,id:"yagura",n:"物見櫓",kind:"bld",d:"はぐれ問題の出現率 35%→60%"},
- {need:5,id:"jinbaori",n:"金の陣羽織",kind:"look",d:"人物の着物に金の縁どり"},
+ {need:5,id:"jinbaori",n:"陣羽織",kind:"look",d:"人物に家紋入りの陣羽織を着せる"},
  {need:10,id:"honjin",n:"本陣",kind:"bld",d:"すべての獲得 +5%（頭打ちなし・維持費なし）"},
 ];
 const UPKEEP=.01, REPAIR=.30, DECAY=.85, GROW=1.3, UW=3;
-const lotCost=n=>Math.round(15*Math.pow(1.4,n-3)*(typeof disc==="function"&&S.lock?disc():1));
+const lotCost=n=>Math.round(15*Math.pow(n-2,1.5)*(typeof disc==="function"&&S.lock?disc():1));
 
 /* ---------- 年代（昔の言い回しで覚える） ---------- */
 // 区分：江戸の言葉。加賀藩の重臣「年寄（加賀八家）」にちなむ
@@ -460,7 +463,8 @@ const bdef=id=>BLD.find(b=>b.id===id);
 const disc=()=>(1-.05*myLv("kogyo"))*((storyToday()||{fx:{}}).fx.cost||1);
 const nextCost=d=>Math.round((d.rep?d.cost*Math.pow(GROW,owned(d.id)):d.cost)*disc());
 function units(cat){return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat)return s;return s+(d.uniq?UW:(d.w||1))*(b.old?.5:1)},0)}
-function catBonus(cat){const c=CATS[cat];return c.max?c.max*(1-Math.pow(DECAY,units(cat))):0}
+function umax(cat){return BLD.filter(d=>d.c===cat).reduce((s,d)=>s+(d.uniq?UW:(d.w||1)*(d.lim||1)),0)}
+function catBonus(cat,u){const c=CATS[cat];if(!c.max)return 0;const m=umax(cat);return m?c.max*(1-Math.pow(DECAY,u??units(cat)))/(1-Math.pow(DECAY,m)):0}
 function harvest(){let sum=0,i=0;built().filter(b=>bdef(b.id)?.hv).sort((a,b)=>bdef(b.id).hv-bdef(a.id).hv).forEach(b=>{sum+=bdef(b.id).hv*Math.pow(.85,i++)*(b.old?.5:1)});
   if(S.invites>=1)sum+=3;sum+=1.2*myLv("nogyo")+.5*myLv("chisui");return Math.round(sum*10)/10}
 function upkeep(){return Math.round(built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:b.paid*UPKEEP),0)*100)/100}
@@ -721,7 +725,7 @@ const MAPXY=(()=>{const la0=KDATA.reduce((a,x)=>a+x.lat,0)/KDATA.length,lo0=KDAT
   P.forEach(p=>{const k=p.r?Math.pow(p.r/rmax,.55)*5.4/p.r:0;o[p.n]=[5+p.dx*k,5+p.dy*k]});return o})();
 const PJ=(x,y)=>[(x-y)*15.5+180,(x+y)*7.75+70];
 const pts=a=>a.map(p=>PJ(...p).join(",")).join(" ");
-function isoMap(sel){const rk=ranking(),mx=Math.max(1,...rk.map(x=>x.koku));
+function isoMap(sel,labels){const rk=ranking(),mx=Math.max(1,...rk.map(x=>x.koku));
   let s=`<svg viewBox="0 0 360 260" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f4a6e"/><stop offset="1" stop-color="#173a58"/></linearGradient></defs>`;
   s+=`<polygon points="${pts([[-1,-1],[11,-1],[11,11],[-1,11]])}" fill="#2c3a22"/>`;
   // 日本海側（いちばん海側の校下より外を海に＝飾り。海岸線は正確ではありません）
@@ -734,28 +738,47 @@ function isoMap(sel){const rk=ranking(),mx=Math.max(1,...rk.map(x=>x.koku));
     return `<g onclick="mapTap('${k}')" style="cursor:pointer"><polygon points="${[t[3],t[2],up[2],up[3]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.7)"/><polygon points="${[t[1],t[2],up[2],up[1]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.5)"/><polygon points="${up.map(p=>p.join(",")).join(" ")}" fill="${c}" stroke="${me?"#ffd76a":"#00000055"}" stroke-width="${me?2:.5}"/></g>`};
   let mine=null;
   L.forEach(o=>{const h=2+o.r.koku/mx*40,me=o.k===sel;s+=tile(o.p[0],o.p[1],h,o.r.m?color(o.k):"#5a5446",o.k,me);if(me)mine={...o,h}});
-  if(mine){const[a,b]=PJ(...mine.p),top=b-mine.h;const lab=`${mine.k} ${fmt(mine.r.koku)}石`,w=lab.length*8.4+14;
-    s+=`<line x1="${a}" y1="${top}" x2="${a}" y2="${Math.max(30,top-24)}" stroke="#ffd76a" stroke-width="1.5"/><g transform="translate(${Math.min(352-w,Math.max(8,a-w/2))} ${Math.max(8,top-44)})"><rect width="${w}" height="20" rx="10" fill="#1b1711" stroke="#ffd76a"/><text x="${w/2}" y="14" font-size="11.5" font-weight="900" text-anchor="middle" fill="#f3dc9a" font-family="sans-serif">${lab}</text></g><circle cx="${a}" cy="${top}" r="3.5" fill="#ffd76a"/>`}
+  if(labels)L.forEach(o=>{const[a,b]=PJ(...o.p),h=2+o.r.koku/mx*40;s+=`<text x="${a}" y="${b-h-1.5}" font-size="3.6" text-anchor="middle" fill="#fff" stroke="#000" stroke-width=".5" paint-order="stroke" font-family="sans-serif" font-weight="700" onclick="mapTap('${o.k}')">${o.k}</text>`});
+  if(mine){const f=labels?Math.max(.3,1/MZ):1,[a,b]=PJ(...mine.p),top=b-mine.h;const lab=`${mine.k} ${fmt(mine.r.koku)}石`,w=(lab.length*8.4+14)*f,hh=20*f,gap=24*f;
+    s+=`<line x1="${a}" y1="${top}" x2="${a}" y2="${top-gap}" stroke="#ffd76a" stroke-width="${1.5*f}"/><g transform="translate(${Math.min(352-w,Math.max(2,a-w/2))} ${Math.max(2,top-gap-hh)}) scale(${f})"><rect width="${w/f}" height="20" rx="10" fill="#1b1711" stroke="#ffd76a"/><text x="${w/f/2}" y="14" font-size="11.5" font-weight="900" text-anchor="middle" fill="#f3dc9a" font-family="sans-serif">${lab}</text></g><circle cx="${a}" cy="${top}" r="${3.5*f}" fill="#ffd76a"/>`}
   return s+`</svg>`}
-function mapView(){abar.className="abar";hd();const k=S.mapSel||S.kouka;
+let MZ=1;
+function mapView(){abar.className="abar";hd();const k=S.mapSel||S.kouka,rk=ranking();
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🗾 金沢の陣地図</h2><button onclick="S.mapSel='';home()">もどる</button></div>
-  <div class="mapw big">${isoMap(k)}</div><div id="mapInfo"></div>
-  <div class="notice" style="margin-top:8px">柱の高さ＝校下の石高、色つき＝参加者がいる校下。柱をタップすると詳しく見られます。<br>※ 柱の位置は各校下の小学校（学校がない校下は公民館）の実際の位置です（国土地理院のデータ）。密集した中心部は見やすいよう少し広げて描いています。海岸線は飾りです。</div></div><button class="backb" onclick="S.mapSel='';home()">← ホームへもどる</button>`;mapInfo(k)}
-function mapTap(k){if(!$("#mapInfo"))return mapView();S.mapSel=k;mapView()}
+  <div class="mzbar"><button onclick="mapZoom(-1)">－</button><span id="mzv">${Math.round(MZ*100)}%</span><button onclick="mapZoom(1)">＋</button><button onclick="MZ=1;mapZoom(0)">もとに戻す</button></div>
+  <div class="mapz" id="mapz"><div class="mapin" id="mapin" style="width:${MZ*100}%">${isoMap(k,true)}</div></div>
+  <div class="mute center" style="font-size:12px">2本指でつまんで拡大／指1本でずらす。拡大すると校下名が読めます</div>
+  <div id="mapInfo"></div>
+  <div class="notice" style="margin-top:8px">柱の高さ＝校下の石高、色つき＝参加者がいる校下。※ 柱の位置は各校下の小学校（学校がない校下は公民館）の実際の位置です（国土地理院のデータ）。密集した中心部は少し広げて描いています。海岸線は飾りです。</div></div>
+  <div class="card"><h2>📋 62校下の一覧（石高順）</h2><div class="mute">タップすると地図でその校下を示します</div>
+  ${rk.map((x,i)=>`<button class="mrow ${x.k===S.kouka?"me":""} ${x.k===k?"sel":""}" onclick="mapTap('${x.k}')"><span class="bz">${BANZUKE(i)}</span><span class="kf sm">${flagSvg(x.k,color(x.k))}</span><span class="name">${x.k}<small>${kInfo(x.k).r||""}地域・${x.m}人</small></span><span class="pt">${fmt(x.koku)}石</span></button>`).join("")}</div>
+  <button class="backb" onclick="S.mapSel='';home()">← ホームへもどる</button>`;
+  mapInfo(k);pinch($("#mapz"));mapCenter(k)}
+function mapZoom(d){const z=$("#mapz"),k0=S.mapSel||S.kouka,cx=(z.scrollLeft+z.clientWidth/2)/z.scrollWidth,cy=(z.scrollTop+z.clientHeight/2)/z.scrollHeight;
+  MZ=Math.min(4,Math.max(1,MZ+d*.75));$("#mapin").style.width=MZ*100+"%";$("#mapin").innerHTML=isoMap(k0,true);$("#mzv").textContent=Math.round(MZ*100)+"%";
+  z.scrollLeft=cx*z.scrollWidth-z.clientWidth/2;z.scrollTop=cy*z.scrollHeight-z.clientHeight/2}
+function mapCenter(k){const z=$("#mapz");if(!z||MZ<=1)return;const p=MAPXY[k];if(!p)return;const[a,b]=PJ(...p);z.scrollLeft=a/360*z.scrollWidth-z.clientWidth/2;z.scrollTop=b/260*z.scrollHeight-z.clientHeight/2}
+function pinch(el){let d0=0,z0=1;const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);
+  el.addEventListener("touchstart",e=>{if(e.touches.length===2){d0=dist(e.touches);z0=MZ}},{passive:true});
+  el.addEventListener("touchmove",e=>{if(e.touches.length!==2||!d0)return;e.preventDefault();const r=el.getBoundingClientRect(),mx=(e.touches[0].clientX+e.touches[1].clientX)/2-r.left,my=(e.touches[0].clientY+e.touches[1].clientY)/2-r.top;
+    const fx=(el.scrollLeft+mx)/el.scrollWidth,fy=(el.scrollTop+my)/el.scrollHeight;MZ=Math.min(4,Math.max(1,z0*dist(e.touches)/d0));$("#mapin").style.width=MZ*100+"%";$("#mzv").textContent=Math.round(MZ*100)+"%";
+    el.scrollLeft=fx*el.scrollWidth-mx;el.scrollTop=fy*el.scrollHeight-my},{passive:false});
+  el.addEventListener("touchend",()=>{if(d0){$("#mapin").innerHTML=isoMap(S.mapSel||S.kouka,true)}d0=0},{passive:true})}
+function mapTap(k){S.mapSel=k;if(MZ<2)MZ=2.5;mapView()}
 function mapInfo(k){const rk=ranking(),i=rk.findIndex(x=>x.k===k),r=rk[i],T=nTotals(k);
   $("#mapInfo").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div style="flex:1"><b style="font-size:17px">${k}校下</b>${k===S.kouka?'<span class="tag">わが校下</span>':""}<div class="mute">${kInfo(k).y?kInfo(k).y+"・":""}${kInfo(k).r?kInfo(k).r+"地域・":""}${BANZUKE(i)}・${fmt(r.koku)}石・${r.m}人</div>
   <div class="mute" style="font-size:12px">内政：${NAISEI.map(n=>`${n.n}${nLv(T[n.id])}`).join(" ")}</div></div></div>`}
 
 /* ---------- 画面：城下町 ---------- */
 function town(){abar.className="abar";hd();
-  const cats=Object.entries(CATS).map(([k,c])=>{const v=k==="midori"?`毎朝+${harvest()}石`:`+${Math.round(catBonus(k)*100)}%`;return `<div class="cb"><b>${c.n}</b><span>${c.eff}</span><em>${v}${c.max?`<small> / 上限${Math.round(c.max*100)}%</small>`:""}</em></div>`}).join("");
+  const cats=Object.entries(CATS).map(([k,c])=>{const v=k==="midori"?`毎朝+${harvest()}石`:`+${Math.round(catBonus(k)*100)}%`;return `<div class="cb"><b>${c.n}</b><span>${c.eff}</span><em>${v}${c.max?`<small> / 全部建てると${Math.round(c.max*100)}%</small>`:""}</em></div>`}).join("");
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
   <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${f1(upkeep())}石</b></div>
   <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?(bdef(b.id)?ART[b.id]:ART[b.id]):ART.lot_empty}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
     <button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button></div>
   </div>
   <div class="card"><h2>📊 城下町の効き目</h2><div class="cbs">${cats}</div>
-  <div class="notice" style="margin-top:8px">同じ分野の建物は、建てるほど効き目の伸びがゆるやかになり、上限に近づきます。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div><button class="backb" onclick="home()">← ホームへもどる</button>`}
+  <div class="notice" style="margin-top:8px">同じ種類の建物は建てられる数に上限があり、建てるほど効き目の伸びはゆるやかになります（分野の建物を全部建てると「全部建てると○%」に届きます）。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div><button class="backb" onclick="home()">← ホームへもどる</button>`}
 function buyLot(){const c=lotCost(S.lots);if(S.kura<c)return toast(`蔵の石が足りません（あと${fmt(c-S.kura)}石）`);S.kura-=c;S.lots++;S.town.push(null);save();toast("区画が増えました");town()}
 function lotTap(i){const b=S.town[i];if(!b)return buildMenu(i);
   const d=bdef(b.id),inv=!d;const name=inv?INV_ITEMS.find(x=>x.id===b.id).n:d.n;
@@ -769,11 +792,11 @@ function repair(i){const b=S.town[i],c=Math.round(b.paid*REPAIR);if(S.kura<c)ret
 function buildMenu(i){
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🔨 何を建てる？</h2><button onclick="town()">もどる</button></div>
   <div class="mute">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b></div>
-  <div class="bcards">${BLD.map(d=>{const done=d.uniq&&owned(d.id),c=nextCost(d);const gain=d.c==="midori"?`毎朝+${f1(d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length))}石`:`${CATS[d.c].eff} +${Math.round((CATS[d.c].max*(1-Math.pow(DECAY,units(d.c)+(d.uniq?UW:(d.w||1))))-catBonus(d.c))*1000)/10}%`;
+  <div class="bcards">${BLD.map(d=>{const full=d.lim&&owned(d.id)>=d.lim,done=(d.uniq&&owned(d.id))||full,c=nextCost(d);const gain=d.c==="midori"?`毎朝+${f1(d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length))}石`:`${CATS[d.c].eff} +${Math.round((catBonus(d.c,units(d.c)+(d.uniq?UW:(d.w||1)))-catBonus(d.c))*1000)/10}%`;
     return `<div class="bcard ${done?"done":""} ${d.uniq?"rare":""}"><div class="bph">${pic(d.id)}<span class="chip">${CATS[d.c].n}</span>${d.uniq?'<span class="chip r">名所</span>':""}</div>
-    <div class="bbody"><b>${d.n}</b>${!d.uniq&&owned(d.id)?`<small class="mute"> ${owned(d.id)+1}棟目</small>`:""}<div class="mute">${d.d}</div><div class="eff">${gain}</div><div class="mute" style="font-size:11px">維持費 毎朝${f1(c*UPKEEP)}石</div>
-    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${done?"建設済":fmt(c)+"石で建てる"}</button></div></div>`}).join("")}</div></div><button class="backb" onclick="town()">← 城下町へもどる</button>`}
-function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c)return;S.kura-=c;S.town[i]={id,paid:c};save();toast(`${d.n} が建ちました！`);town()}
+    <div class="bbody"><b>${d.n}</b>${!d.uniq?`<small class="mute"> ${owned(d.id)}/${d.lim}棟</small>`:""}<div class="mute">${d.d}</div><div class="eff">${gain}</div><div class="mute" style="font-size:11px">維持費 毎朝${f1(c*UPKEEP)}石</div>
+    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${full?`上限${d.lim}棟`:done?"建設済":f1(c)+"石で建てる"}</button></div></div>`}).join("")}</div></div><button class="backb" onclick="town()">← 城下町へもどる</button>`}
+function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c||(d.lim&&owned(id)>=d.lim)||(d.uniq&&owned(id)))return;S.kura-=c;S.town[i]={id,paid:c};save();toast(`${d.n} が建ちました！`);town()}
 
 /* ---------- 今日の十問 ---------- */
 let Q;
@@ -859,6 +882,13 @@ async function share(){const r=dayRec().quiz;if(!r)return;const c=$("#cv"),x=c.g
   x.fillStyle="#a79c86";x.font="38px sans-serif";x.fillText("みんなで百万石　#百万石バトル",540,900);x.fillText(today().replace(/-/g,"."),540,960);
   const url=c.toDataURL("image/png");$("#shareBox").innerHTML=`<img class="share" src="${url}"><div class="mute center">長押しで保存 → インスタのストーリーへ</div>`;
   c.toBlob(b=>{if(!b)return;const f=new File([b],"hyakumangoku.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:"#百万石バトル"}).catch(()=>{})})}
+
+/* ---------- 画面の位置：ホーム以外は一番上から表示、ホームへ戻ったら前の位置に ---------- */
+let CUR="",HOME_Y=0;
+function screen(name,fn){return function(...a){if(CUR==="home"&&name!=="home")HOME_Y=window.scrollY;const r=fn.apply(this,a);CUR=name;
+  if(name==="home")requestAnimationFrame(()=>window.scrollTo(0,HOME_Y));else window.scrollTo(0,0);return r}}
+["town","buildMenu","lotTap","naisei","mapView","quiz","qShow","nyukon","jibu","jibuStart","kaga","kagaStart","irrQuiz","register"].forEach(n=>{window[n]=screen(n,window[n])});
+home=screen("home",home);
 
 /* ---------- 運営テスト用（?admin=1） ---------- */
 function adminPanel(){return `<div class="card testp"><h2>🧪 テストプレイ用（公開前に消します）</h2><div class="mute">いまの日付：${today()}（${S.dayShift?`${S.dayShift>0?"+":""}${S.dayShift}日ずらし中`:"本日"}）</div><div class="row" style="margin-top:6px">
