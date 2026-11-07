@@ -162,7 +162,7 @@ const SK="#f2d2b4",SK2="#e3b892",INK="#2a1f14";
 const RANKCOL=["#7a6646","#38597a","#8a2f2a","#4e3d78","#b8902e"];
 // 描き起こしの人物画。年代は童・若衆・壮年・年寄・隠居（AGEG）。届いた分から差しかえ
 // 位：足軽・組頭・侍大将・家老・大名／援軍10人の「錦の装束」
-const AVRANK={m_sonen:["ashigaru","kumigashira","samuraitaisho","karo","daimyo"]};
+const AVRANK={m_sonen:["ashigaru","kumigashira","samuraitaisho","karo","daimyo"],f_sonen:[null,null,null,null,"f_sonen_daimyo"]};
 const AVSP={m_sonen:"sp_sonen_m",f_sonen:"sp_sonen_f",m_wakashu:"sp_wakashu_m",f_wakashu:"sp_wakashu_f"};
 // 絵がまだない年代の代わり（若衆・年寄は壮年の絵を借りる。童・隠居は仮の絵）
 const AVSUB={wakashu:"sonen",toshiyori:"sonen"};
@@ -170,7 +170,7 @@ function avatarSrc(g,a,rank=0,gold=false){
   const grp=(typeof S!=="undefined"&&S.age&&typeof ageG==="function")?ageG(S.age).id:(a==="kodomo"?"warabe":a==="nenpai"?"inkyo":"sonen");
   const pick=T=>T[g+"_"+grp]||(AVSUB[grp]&&T[g+"_"+AVSUB[grp]]);
   if(gold){const s=pick(AVSP);if(s)return "hyakumangoku_img/av_"+s+".webp"}
-  const L=pick(AVRANK);return L?"hyakumangoku_img/av_"+L[Math.max(0,Math.min(rank,4))]+".webp":null}
+  const L=pick(AVRANK),f=L&&L[Math.max(0,Math.min(rank,4))];return f?"hyakumangoku_img/av_"+f+".webp":null}
 function avatar(g,a,rank=0,bg="#3a3020",gold=false){
   const src=avatarSrc(g,a,rank,gold);if(src)return `<img class="avimg" src="${src}" alt="">`;
   const kid=a==="kodomo",old=a==="nenpai",f=g==="f";
