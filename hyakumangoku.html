@@ -129,6 +129,7 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .ozG{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}.ozB{height:90px;font-size:18px;background:color-mix(in srgb,var(--c) 35%,#1b1711);border:2px solid var(--c)}.ozB.lit{background:var(--c);color:#fff;transform:scale(.96)}
 .trG{display:grid;gap:5px;margin:8px 0;background:#2c3a22;padding:6px;border-radius:10px}.trC{aspect-ratio:1/1;font-size:24px;background:#3a4a2e;padding:0}.trC.lit{background:#8a6a2a}.trC.ok{background:#5a4210}.trC.ng{background:#4a1f1f}
 .igW{position:relative;height:240px;background:linear-gradient(#1f2a3a,#141a10);border-radius:12px;margin:8px 0;overflow:hidden}.igS{position:absolute;height:12%;background:repeating-linear-gradient(90deg,#8a8476 0 18px,#6e695e 18px 20px);border:1px solid #4a463e;box-sizing:border-box}.igS.mv{background:repeating-linear-gradient(90deg,#a8a294 0 18px,#8a8476 18px 20px)}
+.buyw{position:relative;width:100%}.buyw img{opacity:.7;filter:saturate(.7)}.buyt{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);background:#f3ede0;color:#8a2f2a;border:2px solid #8a6a3a;border-radius:4px;padding:1px 8px;font-family:"DotGothic16",sans-serif;font-size:15px}
 .backb{display:block;width:100%;margin:4px 0 12px;background:#2a2318;border:1px solid #4a3c24}
 .testp{border-color:#3a7ac8!important;background:#141c26}.testp h2{color:#9cc8ec!important}.testp button{background:#1f3a5a}
 .irr{border-color:#5a7a3a}.irr.bad{border-color:#8a3a2a}.irt{font-family:"DotGothic16",sans-serif;font-size:19px;margin:2px 0 4px}.irres{margin-top:8px;background:#241d12;border-radius:8px;padding:8px 10px;font-weight:800;color:var(--gold2)}.irr button{margin-top:8px}
@@ -818,7 +819,7 @@ function town(){abar.className="abar";hd();
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
   <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${f1(upkeep())}石</b></div>
   <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?pic(b.id):pic('lot_empty')}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
-    ${S.lots<MAXLOT?`<button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button>`:""}</div>
+    ${S.lots<MAXLOT?`<button class="lot buy" onclick="buyLot()"><div class="buyw">${pic('lot_empty')}<b class="buyt">売地</b></div><span>${fmt(lotCost(S.lots))}石で区画を買う</span></button>`:""}</div>
   </div>
   <div class="card"><h2>📊 城下町の効き目</h2><div class="cbs">${cats}</div>
   <div class="notice" style="margin-top:8px">「最大」は、その分野の建物を全部建て、普請で最高の段まで上げたときの効き目です。同じ建物は1つだけ。小学校・図書館・文化ホール・市場・公園・消防署は「普請」で段を上げると効き目が増えます。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div><button class="backb" onclick="home()">← ホームへもどる</button>`}
