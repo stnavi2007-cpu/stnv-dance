@@ -6,101 +6,249 @@
 <meta name="robots" content="noindex">
 <title>百万石バトル（試作）</title>
 <style>
-:root{--bg:#0f0d0a;--panel:#1b1711;--gold:#d8b45a;--gold2:#f3dc9a;--red:#b8352b;--ink:#f3ede0;--mute:#a79c86;--green:#3f9a5a;--blue:#3b7fd1}
+:root{--bg:#0f0d0a;--panel:#1b1711;--line:#3a3020;--gold:#d8b45a;--gold2:#f3dc9a;--red:#b8352b;--ink:#f3ede0;--mute:#a79c86;--green:#3f9a5a}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5}
-body{padding-bottom:84px;overscroll-behavior:none}
-header{position:sticky;top:0;z-index:5;background:linear-gradient(#1b1711,#0f0d0a);border-bottom:1px solid #3a3020;padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
-header h1{margin:0;font-size:18px;letter-spacing:.08em;color:var(--gold2)}
-header h1 small{display:block;font-size:11px;color:var(--mute);letter-spacing:.2em}
-.koku{font-weight:800;color:var(--gold);font-size:15px;text-align:right;line-height:1.2}
+body{padding-bottom:90px;overscroll-behavior:none}
+svg{display:block;width:100%;height:auto}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(#1b1711,#0f0d0a);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:19px;letter-spacing:.08em;color:var(--gold2)}
+header h1 small{display:block;font-size:10px;color:var(--mute);letter-spacing:.2em}
+.koku{font-weight:800;color:var(--gold);font-size:16px;text-align:right;line-height:1.2}
 .koku small{display:block;color:var(--mute);font-weight:400;font-size:11px}
-main{padding:14px;max-width:520px;margin:0 auto}
-.card{background:var(--panel);border:1px solid #3a3020;border-radius:14px;padding:14px;margin-bottom:12px}
+main{padding:12px;max-width:520px;margin:0 auto}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
 .card h2{margin:0 0 8px;font-size:16px;color:var(--gold2)}
 .row{display:flex;gap:8px;flex-wrap:wrap}
-button{font:inherit;border:0;border-radius:12px;padding:12px 14px;background:#2a2318;color:var(--ink);font-weight:700;cursor:pointer}
+button{font:inherit;border:0;border-radius:12px;padding:11px 13px;background:#2a2318;color:var(--ink);font-weight:700;cursor:pointer}
 button.pri{background:linear-gradient(135deg,#b8352b,#7d1f18);color:#fff;width:100%;font-size:17px;padding:14px}
 button.gold{background:linear-gradient(135deg,#d8b45a,#9c7a2a);color:#1b1711}
 button:disabled{opacity:.4}
 .mute{color:var(--mute);font-size:13px}
-.big{font-size:28px;font-weight:900;color:var(--gold)}
-input,select{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid #3a3020;background:#0f0d0a;color:var(--ink)}
-.tag{display:inline-block;background:#2a2318;border-radius:999px;padding:2px 10px;font-size:12px;color:var(--gold2);margin-right:4px}
-.flag{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;color:#fff;flex:none}
-.rank{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #2a2318}
-.rank .n{width:26px;text-align:center;font-weight:900;color:var(--gold)}
-.rank .name{flex:1}
-.rank .name small{display:block;color:var(--mute);font-size:12px}
-.rank .pt{font-weight:800;color:var(--gold2)}
-.me{background:#241d12;border-radius:10px;padding:10px 8px}
-/* quiz */
-.q{font-size:18px;font-weight:700;margin:6px 0 12px}
-.opt{display:block;width:100%;text-align:left;margin-bottom:8px;background:#241d12;border:1px solid #3a3020;font-weight:600;padding:14px}
-.opt.ok{background:#1f4a2c;border-color:var(--green)}
-.opt.ng{background:#4a1f1f;border-color:var(--red)}
-.prog{height:6px;background:#2a2318;border-radius:3px;overflow:hidden;margin-bottom:10px}
-.prog i{display:block;height:100%;background:var(--gold);width:0}
-.abar{position:fixed;left:0;right:0;bottom:0;background:#1b1711;border-top:1px solid #3a3020;padding:10px 14px;z-index:9;display:none}
-.abar.on{display:block}
-.abar .res{font-weight:800;margin-bottom:8px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.ing{background:#241d12;border:1px solid #3a3020;border-radius:12px;padding:10px 4px;text-align:center;font-weight:700;font-size:14px;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ing span{font-size:26px}
-.ing.sel{outline:2px solid var(--gold)}
-.ing.bad{background:#4a1f1f}
-.ing.good{background:#1f4a2c}
-.pot{background:#0f0d0a;border:2px dashed #3a3020;border-radius:12px;min-height:60px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.timer{font-size:22px;font-weight:900;color:var(--gold2);text-align:right}
-.timer.hot{color:#ff6a5c}
-/* veg swipe */
-.stage{position:relative;height:300px;background:#0f0d0a;border-radius:14px;border:1px solid #3a3020;overflow:hidden;margin:8px 0}
-.veg{position:absolute;left:50%;top:30%;transform:translateX(-50%);width:200px;background:#241d12;border:1px solid #3a3020;border-radius:16px;padding:16px;text-align:center;font-weight:800;font-size:20px;touch-action:none;user-select:none}
-.veg span{display:block;font-size:46px}
-.lane{position:absolute;top:8px;font-size:12px;color:var(--mute);font-weight:700}
-.lane.l{left:10px}.lane.r{right:10px}
-.flash{position:absolute;inset:0;pointer-events:none;opacity:0}
-.flash.ok{background:rgba(63,154,90,.35);opacity:1;transition:opacity .4s}
-.flash.ng{background:rgba(184,53,43,.4);opacity:1;transition:opacity .4s}
+.big{font-size:26px;font-weight:900;color:var(--gold)}.big small{font-size:13px;color:var(--mute)}
+input{font:inherit;width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0f0d0a;color:var(--ink);font-size:16px}
+.tag{display:inline-block;background:#2a2318;border-radius:999px;padding:1px 9px;font-size:11px;color:var(--gold2);margin-left:6px;vertical-align:middle;font-weight:700}
+.notice{font-size:12px;color:var(--mute);border-left:3px solid var(--line);padding-left:8px}
 .center{text-align:center}
-.toast{position:fixed;left:50%;bottom:100px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;font-size:15px;transform:translateX(-50%);background:#d8b45a;color:#1b1711;font-weight:800;padding:10px 16px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;z-index:20}
-.toast.on{opacity:1}
 hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
-.notice{font-size:12px;color:var(--mute);border-left:3px solid #3a3020;padding-left:8px}
-canvas{display:none}
-.evb{margin-top:8px;border-radius:10px;padding:8px 10px;font-weight:700;font-size:14px}
-.evb.ng{background:#2b3a4f;color:#cfe3ff}.evb.ok{background:#3a2a12;color:#ffd98a}
-.town{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;background:#16130d;border-radius:12px;padding:8px}
-.lot{background:#211b12;border-radius:10px;text-align:center;padding:8px 2px;font-size:12px;color:var(--mute)}
-.lot span{display:block;font-size:26px}.lot.on{background:#2c3a1e;color:var(--ink);font-weight:700}
-.shop{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #2a2318}
-.shop button{padding:8px 10px;font-size:14px}
-.hg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:30;display:flex;align-items:center;justify-content:center;padding:16px}
-.hgbox{background:var(--panel);border:2px solid #ff6a5c;border-radius:16px;padding:14px;width:100%;max-width:480px;animation:shake .4s}
-.hgt{font-size:20px;font-weight:900;color:#ff9a8f}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-img.share{width:100%;border-radius:12px;margin-top:8px}
+.prog{height:6px;background:#2a2318;border-radius:4px;overflow:hidden;margin:6px 0}
+.prog i{display:block;height:100%;background:linear-gradient(90deg,#9c7a2a,#f3dc9a);width:0;transition:width .3s}
+/* 登録 */
+.avbig{width:150px;margin:0 auto 12px}
+.seg{display:flex;gap:6px;margin-top:4px}.seg button{flex:1;padding:12px 4px}.seg button.on{background:linear-gradient(135deg,#d8b45a,#9c7a2a);color:#1b1711}
+.seg.sm button{padding:8px 4px;font-size:13px}
+.okbox{display:flex;align-items:center;gap:10px;background:#241d12;border-radius:12px;padding:10px;margin-top:12px}.okbox svg{width:48px;flex:none}
+.klist{display:flex;flex-direction:column;gap:6px;max-height:52vh;overflow:auto;margin-top:6px}
+.kitem{display:flex;align-items:center;gap:10px;text-align:left;background:#211b12;padding:8px 10px}
+.kf{width:38px;flex:none}.kf.sm{width:26px;display:inline-block;vertical-align:middle}
+.kn{flex:1;font-weight:800}.kn small{display:block;color:var(--mute);font-weight:400;font-size:12px}
+.km{font-weight:800;color:var(--gold2)}.first{color:#9fd48a;font-size:12px}
+/* プロフィール */
+.prof{display:flex;gap:12px;align-items:center}
+.av{width:92px;flex:none}
+.pname{font-size:19px;font-weight:900}.pk{font-weight:700;margin:2px 0;display:flex;align-items:center;gap:4px}
+.sg{font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px;background:#2a2318;color:var(--gold2)}.sg.up{background:#2c3a1e;color:#bfe6a0}.sg.dn{background:#2b3a4f;color:#cfe3ff}
+.evb{margin-top:8px;border-radius:10px;padding:8px 10px;font-weight:700;font-size:14px}.evb.ng{background:#2b3a4f;color:#cfe3ff}.evb.ok{background:#3a2a12;color:#ffd98a}
+.rank{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #2a2318}.rank.me{background:#241d12;border-radius:10px;padding:8px 6px}
+.bz{width:62px;font-size:12px;font-weight:900;color:var(--gold)}.rank .name{flex:1;font-weight:700}.rank .name small{display:block;color:var(--mute);font-size:11px;font-weight:400}.rank .pt{font-weight:800;color:var(--gold2);font-size:14px}
+/* ミニゲーム */
+.games{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.gm{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;background:#241d12}.gm small{color:var(--mute);font-weight:400}
+.gi{width:100%;max-width:120px;height:62px;display:flex;align-items:center;justify-content:center}.gi svg{max-height:62px;width:auto}
+.gimg{max-width:260px;margin:0 auto 6px}.gimg svg{max-height:90px;width:auto;margin:0 auto}
+.potw{position:relative;margin:4px auto 8px;max-width:320px}.pot{position:absolute;left:14%;right:14%;top:6%;display:flex;justify-content:center;gap:2px}.pot span{width:15%}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.ing{background:#241d12;border:1px solid var(--line);padding:4px 2px 6px;display:flex;flex-direction:column;align-items:center;font-size:13px}.ing svg{width:72%}
+.ing.sel{outline:2px solid var(--gold);background:#3a2e18}.ing.good{background:#1f4a2c}.ing.bad{background:#4a1f1f}.ing.miss{outline:2px dashed #9fd48a}
+.timer{font-size:22px;font-weight:900;color:var(--gold2)}.timer.hot{color:#ff6a5c}
+.stage{position:relative;height:300px;background:#0f0d0a;border-radius:14px;border:1px solid var(--line);overflow:hidden;margin:8px 0}
+.veg{position:absolute;left:50%;top:14%;transform:translateX(-50%);width:210px;background:#241d12;border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;font-weight:800;font-size:17px;touch-action:none;user-select:none}
+.vimg{width:130px;margin:0 auto}
+.lane{position:absolute;top:8px;font-size:12px;color:var(--mute);font-weight:700}.lane.l{left:10px}.lane.r{right:10px}
+.flash{position:absolute;inset:0;pointer-events:none;opacity:0}.flash.ok{background:rgba(63,154,90,.35);opacity:1;transition:opacity .4s}.flash.ng{background:rgba(184,53,43,.4);opacity:1;transition:opacity .4s}
+/* クイズ */
+.q{font-size:18px;font-weight:700;margin:6px 0 12px}
+.opt{display:block;width:100%;text-align:left;margin-bottom:8px;background:#241d12;border:1px solid var(--line);font-weight:600;padding:14px}
+.opt.ok{background:#1f4a2c;border-color:var(--green)}.opt.ng{background:#4a1f1f;border-color:var(--red)}
 .ox{letter-spacing:.1em;font-size:20px}
+.abar{position:fixed;left:0;right:0;bottom:0;background:#1b1711;border-top:1px solid var(--line);padding:10px 14px;z-index:9;display:none}.abar.on{display:block}.abar .res{font-weight:800;margin-bottom:6px}
+/* 城下町 */
+.town{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;background:linear-gradient(#1d2a16,#16130d);border-radius:12px;padding:8px}
+.town.mini{grid-template-columns:repeat(auto-fill,minmax(70px,1fr))}
+.town .lot{background:transparent;padding:0;display:flex;flex-direction:column;align-items:center;font-size:11px;color:var(--ink);font-weight:700;line-height:1.25}
+.town .lot span{text-align:center;padding:0 2px 4px}.town .lot.old svg{filter:grayscale(.85) brightness(.75)}
+.cbs{display:grid;grid-template-columns:1fr 1fr;gap:6px}.cb{background:#241d12;border-radius:10px;padding:8px;font-size:12px;display:flex;flex-direction:column}.cb b{color:var(--gold2)}.cb span{color:var(--mute)}.cb em{font-style:normal;font-weight:900;font-size:15px}.cb em small{font-weight:400;color:var(--mute);font-size:11px}
+.bl{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #2a2318}.bl.done{opacity:.5}.bt{width:68px;flex:none}.bl button{padding:9px 10px;font-size:14px;flex:none}
+.bimg{width:180px;margin:0 auto}
+.items{display:grid;grid-template-columns:1fr 1fr;gap:6px}.item{background:#211b12;border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;text-align:center;opacity:.55}.item.on{opacity:1;outline:1px solid var(--gold)}.item small{font-size:11px}.ii{width:70px}
+/* はぐれ */
+.hg{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:30;display:flex;align-items:center;justify-content:center;padding:16px}
+.hgbox{background:var(--panel);border:2px solid #ff6a5c;border-radius:16px;padding:14px;width:100%;max-width:480px;animation:shake .4s}
+.hgm{width:96px;margin:0 auto;animation:bob 1s infinite alternate}.hgt{font-size:19px;font-weight:900;color:#ff9a8f;text-align:center}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@keyframes bob{to{transform:translateY(-6px)}}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#d8b45a;color:#1b1711;font-weight:800;padding:10px 16px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;z-index:40;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;font-size:15px}.toast.on{opacity:1}
+canvas{display:none}img.share{width:100%;border-radius:12px;margin-top:8px}
 </style>
 </head>
 <body>
-<header>
-  <h1>百万石バトル<small>HYAKUMANGOKU BATTLE ・ 試作</small></h1>
-  <div class="koku" id="hdKoku">0石<small>蔵の石</small></div>
-</header>
+<header><h1>百万石バトル<small>HYAKUMANGOKU BATTLE ・ 試作</small></h1><div class="koku" id="hdKoku">0石<small>蔵の石</small></div></header>
 <main id="app"></main>
 <div class="abar" id="abar"></div>
 <div class="toast" id="toast"></div>
 <canvas id="cv" width="1080" height="1080"></canvas>
-
 <script>
-/* ========= データ ========= */
-// 校下リスト（試作用の暫定一覧。正式な61校下一覧と郵便番号の対応表は未装填＝資料待ち）
-const KOUKA=["米丸","泉野","長田町","諸江町","西南部","大徳","鞍月","木曳野","緑","伏見台","十一屋","弥生","長坂台","三馬","額","四十万","富樫","米泉","新竪町","中央","小立野","兼六","馬場","浅野町","森山町","千坂","夕日寺","田上","杜の里","大浦","鳴和台","浅野川","粟崎","大野町","金石町","戸板","押野","西","明成","犀桜","菫台","扇台","泉","安原","湯涌","内川","医王山","不動寺","花園"];
-// 郵便番号→校下（試作ではこの数件だけ。921-8001=高畠は米丸校下）
-const ZIP2K={"9218001":"米丸","9218002":"米丸","9218011":"米丸","9218013":"米丸"};
+/* ===== 百万石バトル：オリジナル挿絵（すべて自作SVG） ===== */
+const ART={};
+const SK="#f2d2b4",SK2="#e3b892",INK="#2a1f14";
 
-// 今日の十問（試作用。公開前は「掟と関所」で一次資料と照合すること）
+/* ---------- 人物（性別×年代×位） ---------- */
+// rank: 0足軽 1組頭 2侍大将 3家老 4大名
+const RANKCOL=["#7a6646","#38597a","#8a2f2a","#4e3d78","#b8902e"];
+function avatar(g,a,rank=0,bg="#3a3020",gold=false){
+  const kid=a==="kodomo",old=a==="nenpai",f=g==="f";
+  const hy=kid?60:54, hr=kid?27:24;              // 顔の位置・大きさ
+  const hair=old?"#cfcac2":"#1d1712";
+  const kc=RANKCOL[rank]||RANKCOL[0];
+  const under=f?(kid?"#d65a7a":"#a8324a"):"#e9e2d0";
+  let s=`<svg viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+  <defs><radialGradient id="bgr${g}${a}${rank}" cx=".5" cy=".35" r=".75"><stop offset="0" stop-color="#5a4a30"/><stop offset="1" stop-color="${bg}"/></radialGradient>
+  <linearGradient id="kim${g}${a}${rank}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${kc}"/><stop offset="1" stop-color="#1a140d"/></linearGradient></defs>
+  <rect width="120" height="140" rx="16" fill="url(#bgr${g}${a}${rank})"/>`;
+  // 髪（後ろ）
+  if(f&&!kid)s+=`<ellipse cx="60" cy="${hy-2}" rx="${hr+5}" ry="${hr+6}" fill="${hair}"/>`;
+  if(f&&kid)s+=`<path d="M${60-hr-3} ${hy-4} Q60 ${hy-hr-14} ${60+hr+3} ${hy-4} L${60+hr+3} ${hy+12} L${60-hr-3} ${hy+12}Z" fill="${hair}"/>`;
+  // 体（着物＋羽織）
+  const sw=kid?38:46, top=kid?hy+hr-2:hy+hr-4;
+  s+=`<path d="M${60-sw} 140 Q${60-sw} ${top+14} ${60-14} ${top} L${60+14} ${top} Q${60+sw} ${top+14} ${60+sw} 140Z" fill="url(#kim${g}${a}${rank})"/>`;
+  s+=`<path d="M48 ${top} L60 ${top+26} L72 ${top}" fill="${under}"/><path d="M50 ${top} L60 ${top+22} L70 ${top}" fill="none" stroke="#f6f0e2" stroke-width="2.2"/>`;
+  if(rank>=1)s+=`<path d="M${60-sw+6} 140 L${60-16} ${top+6}M${60+sw-6} 140 L${60+16} ${top+6}" stroke="#d9c58a" stroke-width="1.6" opacity=".7"/>`;
+  if(rank>=3)s+=`<circle cx="${60-sw/2-2}" cy="${top+22}" r="5.5" fill="none" stroke="#f3dc9a" stroke-width="1.6"/><circle cx="${60+sw/2+2}" cy="${top+22}" r="5.5" fill="none" stroke="#f3dc9a" stroke-width="1.6"/>`;
+  if(rank>=4)s+=`<path d="M${60-sw} 140 Q${60-sw} ${top+14} ${60-14} ${top}" fill="none" stroke="#f3dc9a" stroke-width="2.5"/><path d="M${60+sw} 140 Q${60+sw} ${top+14} ${60+14} ${top}" fill="none" stroke="#f3dc9a" stroke-width="2.5"/>`;
+  // 首・顔
+  s+=`<rect x="54" y="${hy+hr-10}" width="12" height="12" fill="${SK2}"/>`;
+  s+=`<ellipse cx="60" cy="${hy}" rx="${hr}" ry="${hr+2}" fill="${SK}"/>`;
+  s+=`<ellipse cx="${60-hr}" cy="${hy+2}" rx="4" ry="6" fill="${SK2}"/><ellipse cx="${60+hr}" cy="${hy+2}" rx="4" ry="6" fill="${SK2}"/>`;
+  // 目・眉・口
+  const ey=hy+(kid?2:0), ex=kid?10:9;
+  s+=old?`<path d="M${60-ex-4} ${ey} q4 3 8 0M${60+ex-4} ${ey} q4 3 8 0" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/>`
+        :`<ellipse cx="${60-ex}" cy="${ey}" rx="${kid?3.4:2.8}" ry="${kid?4:3.4}" fill="${INK}"/><ellipse cx="${60+ex}" cy="${ey}" rx="${kid?3.4:2.8}" ry="${kid?4:3.4}" fill="${INK}"/><circle cx="${60-ex+1}" cy="${ey-1.2}" r="1" fill="#fff"/><circle cx="${60+ex+1}" cy="${ey-1.2}" r="1" fill="#fff"/>`;
+  s+=`<path d="M${60-ex-5} ${ey-8} q5 ${f?-2:-3} 10 0M${60+ex-5} ${ey-8} q5 ${f?-2:-3} 10 0" stroke="${old?"#bdb6aa":hair}" stroke-width="${f?1.6:2.6}" fill="none" stroke-linecap="round"/>`;
+  s+=`<path d="M55 ${hy+12} q5 ${kid?5:3.5} 10 0" stroke="#8a3b2e" stroke-width="2" fill="${kid?"#c24d4d":"none"}" stroke-linecap="round"/>`;
+  if(kid||f)s+=`<ellipse cx="${60-ex-5}" cy="${ey+8}" rx="4.5" ry="2.6" fill="#f0a0a0" opacity=".55"/><ellipse cx="${60+ex+5}" cy="${ey+8}" rx="4.5" ry="2.6" fill="#f0a0a0" opacity=".55"/>`;
+  if(old)s+=`<path d="M${60-hr+6} ${hy-11} q6 -2 12 0M${60+hr-18} ${hy-11} q6 -2 12 0" stroke="#c9a888" stroke-width="1.2" fill="none"/><path d="M${60-ex-6} ${ey+6} q3 2 6 0M${60+ex} ${ey+6} q3 2 6 0" stroke="#c9a888" stroke-width="1.1" fill="none"/>`;
+  // 髪（前）
+  if(!f&&!kid){ // 髷（ちょんまげ）
+    s+=`<path d="M${60-hr} ${hy-6} Q${60-hr} ${hy-hr-4} 60 ${hy-hr-3} Q${60+hr} ${hy-hr-4} ${60+hr} ${hy-6} Q${60+hr-4} ${hy-hr+6} 60 ${hy-hr+5} Q${60-hr+4} ${hy-hr+6} ${60-hr} ${hy-6}Z" fill="${hair}"/>`;
+    s+=`<ellipse cx="60" cy="${hy-hr+2}" rx="${hr-8}" ry="7" fill="${SK}"/>`; // 月代
+    s+=`<rect x="54" y="${hy-hr-10}" width="12" height="7" rx="3" fill="${hair}"/><rect x="57" y="${hy-hr-18}" width="6" height="12" rx="3" fill="${hair}" transform="rotate(-10 60 ${hy-hr-12})"/>`;
+    if(old)s+=`<path d="M${60-12} ${hy+14} Q60 ${hy+34} ${60+12} ${hy+14} Q60 ${hy+22} ${60-12} ${hy+14}Z" fill="#e6e2da"/>`;
+  }else if(!f&&kid){ // 子ども（前髪）
+    s+=`<path d="M${60-hr-1} ${hy+2} Q${60-hr-2} ${hy-hr-8} 60 ${hy-hr-6} Q${60+hr+2} ${hy-hr-8} ${60+hr+1} ${hy+2} Q${60+hr-6} ${hy-12} ${60+6} ${hy-10} L60 ${hy-14} L${60-8} ${hy-10} Q${60-hr+6} ${hy-12} ${60-hr-1} ${hy+2}Z" fill="${hair}"/>`;
+    s+=`<rect x="56" y="${hy-hr-12}" width="8" height="8" rx="4" fill="${hair}"/>`;
+  }else if(f&&kid){ // おかっぱ
+    s+=`<path d="M${60-hr-3} ${hy+4} Q${60-hr-4} ${hy-hr-8} 60 ${hy-hr-7} Q${60+hr+4} ${hy-hr-8} ${60+hr+3} ${hy+4} L${60+hr-2} ${hy-8} L${60-hr+2} ${hy-8}Z" fill="${hair}"/>`;
+    s+=`<rect x="${60-hr+2}" y="${hy-14}" width="${2*hr-4}" height="7" fill="${hair}"/>`;
+    s+=`<circle cx="${60+hr-4}" cy="${hy-hr+2}" r="4.5" fill="#e7577a"/><circle cx="${60+hr-4}" cy="${hy-hr+2}" r="1.6" fill="#ffd6e0"/>`;
+  }else{ // 日本髪（島田）＋かんざし
+    s+=`<path d="M${60-hr-2} ${hy+2} Q${60-hr-3} ${hy-hr-6} 60 ${hy-hr-5} Q${60+hr+3} ${hy-hr-6} ${60+hr+2} ${hy+2} Q${60+hr-3} ${hy-hr+4} 60 ${hy-hr+6} Q${60-hr+3} ${hy-hr+4} ${60-hr-2} ${hy+2}Z" fill="${hair}"/>`;
+    s+=`<ellipse cx="60" cy="${hy-hr-10}" rx="15" ry="9" fill="${hair}"/><ellipse cx="60" cy="${hy-hr-10}" rx="7" ry="4" fill="${old?"#9a948c":"#3a2c22"}"/>`;
+    s+=`<rect x="44" y="${hy-hr-7}" width="32" height="3" rx="1.5" fill="${old?"#8a7a5a":"#c9a14a"}"/>`;
+    if(!old)s+=`<circle cx="77" cy="${hy-hr-6}" r="4" fill="#e7577a"/><path d="M77 ${hy-hr-2} l2 9" stroke="#c9a14a" stroke-width="1.4"/>`;
+  }
+  if(gold)s+=`<path d="M${60-sw} 140 Q${60-sw} ${top+14} ${60-14} ${top} L${60+14} ${top} Q${60+sw} ${top+14} ${60+sw} 140" fill="none" stroke="#ffd76a" stroke-width="4"/><rect x="2" y="2" width="116" height="136" rx="15" fill="none" stroke="#ffd76a" stroke-width="3"/>`;
+  return s+`</svg>`;
+}
+
+/* ---------- 校下の旗 ---------- */
+function flagSvg(name,col){return `<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="4" width="3" height="54" rx="1.5" fill="#8a6a3a"/><path d="M11 6 H54 V40 H11Z" fill="${col}"/><path d="M11 6 H54 V12 H11Z" fill="#000" opacity=".18"/><circle cx="32" cy="24" r="11" fill="#fff" opacity=".92"/><text x="32" y="29.5" font-size="15" font-weight="900" text-anchor="middle" fill="${col}" font-family="sans-serif">${name[0]}</text><circle cx="9.5" cy="4" r="3" fill="#d8b45a"/></svg>`}
+
+/* ---------- 城下町：土地と建物 ---------- */
+const GROUND=`<ellipse cx="50" cy="86" rx="44" ry="10" fill="#000" opacity=".25"/><path d="M6 80 L50 62 L94 80 L50 98Z" fill="#6b5233"/><path d="M6 80 L50 98 L50 100 L6 82Z" fill="#4a3822"/><path d="M94 80 L50 98 L50 100 L94 82Z" fill="#3c2d1b"/>`;
+const GRASS=`<path d="M6 80 L50 62 L94 80 L50 98Z" fill="#4f7a3a"/><path d="M6 80 L50 98 L50 100 L6 82Z" fill="#3a5a2a"/><path d="M94 80 L50 98 L50 100 L94 82Z" fill="#2e4a22"/>`;
+function B(inner,grass){return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">${GROUND}${grass?GRASS:""}${inner}</svg>`}
+const tuft=(x,y)=>`<path d="M${x} ${y} l2 -5 l1 5 l2 -6 l1 6" stroke="#6f9a4a" stroke-width="1.3" fill="none"/>`;
+const pine=(x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-2" y="-4" width="4" height="12" fill="#5a3a22"/><path d="M-16 -2 Q0 -12 16 -2 Q0 -6 -16 -2Z" fill="#2f5a2a"/><path d="M-13 -10 Q0 -20 13 -10 Q0 -14 -13 -10Z" fill="#3a6a32"/><path d="M-9 -18 Q0 -27 9 -18 Q0 -21 -9 -18Z" fill="#45783a"/></g>`;
+const tree=(x,y,c="#4f8a3a")=>`<g><rect x="${x-2}" y="${y}" width="4" height="12" fill="#5a3a22"/><circle cx="${x}" cy="${y-4}" r="10" fill="${c}"/><circle cx="${x-5}" cy="${y-8}" r="5" fill="#fff" opacity=".12"/></g>`;
+const winRow=(x,y,n,w,gap,c="#9cc4e4")=>Array.from({length:n},(_,i)=>`<rect x="${x+i*(w+gap)}" y="${y}" width="${w}" height="${w}" fill="${c}"/>`).join("");
+
+ART.lot_empty=B(`<path d="M14 80 L50 66 L86 80 L50 94Z" fill="#7d6040" opacity=".6"/>${tuft(24,82)}${tuft(66,86)}${tuft(48,74)}<g transform="translate(50 64)"><rect x="-1.2" y="-4" width="2.4" height="20" fill="#c9b48a"/><path d="M-1 -4 L14 -1 L-1 2Z" fill="#d8b45a"/></g><text x="50" y="52" font-size="9" text-anchor="middle" fill="#d8c8a0" font-family="sans-serif" font-weight="700">空き地</text>`);
+ART.lot_buy=`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="86" rx="44" ry="10" fill="#000" opacity=".2"/><path d="M6 80 L50 62 L94 80 L50 98Z" fill="#3a2d1d" stroke="#d8b45a" stroke-width="1.2" stroke-dasharray="4 3"/><g transform="translate(50 48)"><rect x="-2" y="0" width="4" height="30" fill="#8a6a3a"/><rect x="-20" y="-16" width="40" height="22" rx="2" fill="#f3ede0" stroke="#8a6a3a" stroke-width="1.5"/><text x="0" y="-1" font-size="11" font-weight="900" text-anchor="middle" fill="#8a2f2a" font-family="sans-serif">売地</text></g></svg>`;
+
+ART.shogakko=B(`${GRASS}<path d="M18 74 L18 50 L58 36 L58 60Z" fill="#efe8da"/><path d="M58 36 L84 46 L84 70 L58 60Z" fill="#d6cdbb"/><path d="M16 50 L58 34 L60 36 L18 52Z" fill="#8a3f30"/><path d="M58 34 L86 45 L84 47 L58 36Z" fill="#6e3226"/><g fill="#8fb9d8">${[0,1,2].map(i=>`<path d="M${22+i*12} ${54-i*4.3} l8 -2.9 v7 l-8 2.9Z"/><path d="M${22+i*12} ${66-i*4.3} l8 -2.9 v7 l-8 2.9Z"/>`).join("")}</g><circle cx="38" cy="40" r="4" fill="#fff" stroke="#6e3226" stroke-width="1.2"/><path d="M38 38 v2 h1.6" stroke="#2a1f14" stroke-width=".9" fill="none"/>${tree(78,76,"#5a9a42")}`);
+ART.koen=B(`${GRASS}${tree(28,70)}${tree(70,78,"#5f9a46")}<path d="M44 74 l10 -12 l4 2 l-10 12Z" fill="#d8503a"/><path d="M58 62 v14" stroke="#9aa0a6" stroke-width="2"/><path d="M48 76 v4M62 72 v6" stroke="#9aa0a6" stroke-width="1.6"/><rect x="36" y="84" width="16" height="3" fill="#8a5a32" transform="skewY(-20) translate(0 20)"/><circle cx="56" cy="86" r="2" fill="#e8d36a"/>${tuft(20,84)}${tuft(80,86)}`);
+ART.shobo=B(`<path d="M20 76 L20 48 L54 36 L54 64Z" fill="#c8382c"/><path d="M54 36 L80 46 L80 74 L54 64Z" fill="#9c2a20"/><path d="M18 48 L54 34 L56 36 L20 50Z" fill="#5a1a14"/><path d="M54 34 L82 45 L80 47 L54 36Z" fill="#4a1410"/><path d="M24 74 L24 60 L36 55.5 L36 69.5Z" fill="#e9e2d0"/><path d="M38 68.8 L38 54.8 L50 50.3 L50 64.3Z" fill="#e9e2d0"/>${[0,1,2,3].map(i=>`<path d="M24 ${62+i*3} L36 ${57.5+i*3}M38 ${56.8+i*3} L50 ${52.3+i*3}" stroke="#b9b0a0" stroke-width=".8"/>`).join("")}<rect x="62" y="24" width="10" height="34" fill="#9c2a20"/><path d="M60 24 h14 l-7 -8Z" fill="#5a1a14"/><circle cx="67" cy="32" r="2.4" fill="#ffd36a"/><path d="M26 44 l6 -2" stroke="#fff" stroke-width="2"/>`);
+ART.toshokan=B(`<path d="M16 76 L16 52 L56 38 L56 62Z" fill="#e2d4b8"/><path d="M56 38 L84 48 L84 72 L56 62Z" fill="#c4b494"/><path d="M12 52 L56 34 L60 37 L16 54Z" fill="#4a5a6a"/><path d="M56 34 L88 47 L84 49 L56 37Z" fill="#3a4856"/>${[0,1,2,3].map(i=>`<rect x="${20+i*9}" y="${52-i*3.2}" width="3" height="${22}" fill="#f4ecdc" transform="skewY(-19) translate(0 ${7+i*0})"/>`).join("")}<g transform="translate(66 56)"><path d="M-8 -6 Q0 -9 0 -4 Q0 -9 8 -6 V6 Q0 3 0 8 Q0 3 -8 6Z" fill="#fff"/><path d="M0 -4 V8" stroke="#8a6a3a" stroke-width="1"/></g>`);
+ART.ichiba=B(`<path d="M14 78 L14 58 L54 44 L54 64Z" fill="#7a5a3a"/><path d="M54 44 L86 56 L86 76 L54 64Z" fill="#5e4428"/>${[0,1,2,3,4].map(i=>`<path d="M${12+i*8.4} ${58-i*2.9} l8.4 -2.9 l2 6 l-8.4 2.9Z" fill="${i%2?"#f3ede0":"#c8382c"}"/>`).join("")}${[0,1,2,3].map(i=>`<path d="M${54+i*8} ${44+i*3} l8 3 l-1 6 l-8 -3Z" fill="${i%2?"#f3ede0":"#2f6aa0"}"/>`).join("")}<ellipse cx="28" cy="70" rx="6" ry="2.4" fill="#9cc4e4"/><path d="M22 70 l-3 -2 v4Z" fill="#9cc4e4"/><circle cx="40" cy="66" r="3" fill="#e0703a"/><circle cx="45" cy="65" r="3" fill="#e0703a"/><circle cx="66" cy="66" r="3.4" fill="#c84a3a"/><path d="M72 66 q4 -4 8 0 q-4 3 -8 0" fill="#b0603a"/>`);
+ART.eki=B(`<path d="M10 80 L10 64 L54 48 L54 64Z" fill="#c9ccd2"/><path d="M54 48 L90 62 L90 78 L54 64Z" fill="#a7abb3"/><path d="M8 64 L54 46 L56 48 L10 66Z" fill="#7a808a"/>${winRow(14,64,0,0,0)}<g fill="#7fb0d0">${[0,1,2,3].map(i=>`<path d="M${14+i*10} ${66-i*3.6} l7 -2.5 v9 l-7 2.5Z"/>`).join("")}</g><g transform="translate(64 40)"><path d="M-6 30 Q-12 14 -8 -2 Q-4 -10 0 -12" stroke="#8a5a32" stroke-width="5" fill="none"/><path d="M14 36 Q20 18 16 2 Q12 -8 6 -12" stroke="#8a5a32" stroke-width="5" fill="none"/><path d="M-6 -14 Q4 -22 14 -14 L12 -8 Q4 -14 -4 -8Z" fill="#9aa0a6"/>${[0,1,2,3,4].map(i=>`<path d="M${-9+i*0.6} ${26-i*7} l2 0M${16-i*0.6} ${30-i*7} l2 0" stroke="#d8b45a" stroke-width="1.2"/>`).join("")}</g>`);
+ART.bijutsukan=B(`${GRASS}<ellipse cx="50" cy="74" rx="34" ry="12" fill="#f4f6f8"/><path d="M16 74 v-14 a34 12 0 0 0 68 0 v14 a34 12 0 0 1 -68 0Z" fill="#e3e7ec"/><ellipse cx="50" cy="60" rx="34" ry="12" fill="#ffffff"/><ellipse cx="50" cy="60" rx="34" ry="12" fill="none" stroke="#b7c2cc" stroke-width="1"/><path d="M18 64 a34 12 0 0 0 64 0" stroke="#9cc4e4" stroke-width="5" fill="none" opacity=".75"/><rect x="40" y="44" width="8" height="12" fill="#f4f6f8" stroke="#b7c2cc" stroke-width=".8"/><rect x="54" y="47" width="10" height="9" fill="#f4f6f8" stroke="#b7c2cc" stroke-width=".8"/><circle cx="74" cy="82" r="3" fill="#e7c64a"/>`);
+ART.kageki=B(`<path d="M14 78 L14 50 L56 34 L56 62Z" fill="#b9a68a"/><path d="M56 34 L86 46 L86 74 L56 62Z" fill="#95836a"/><path d="M12 50 L56 32 L58 34 L14 52Z" fill="#5a4a38"/><path d="M56 32 L88 45 L86 47 L56 34Z" fill="#483a2c"/><path d="M22 74 L22 58 L48 48.5 L48 64.5Z" fill="#3a3028"/>${[0,1,2,3,4,5].map(i=>`<path d="M${23+i*4.4} ${57.6-i*1.6} v16" stroke="#e3d2a8" stroke-width="1.4"/>`).join("")}<path d="M60 46 l20 7.5 v6 l-20 -7.5Z" fill="#c8382c"/><path d="M62 49 l16 6" stroke="#f3dc9a" stroke-width="1"/>`);
+ART.shiro=B(`<path d="M10 82 L10 66 L52 52 L52 68Z" fill="#8a8476"/><path d="M52 52 L90 64 L90 80 L52 68Z" fill="#6e695e"/>${[0,1,2].map(r=>[0,1,2,3,4].map(c=>`<path d="M${11+c*8.2} ${80-r*5-c*2.8} l7 -2.4" stroke="#5e594f" stroke-width=".7"/>`).join("")).join("")}<path d="M18 66 L18 50 L48 40 L48 56Z" fill="#f4f1ea"/><path d="M48 40 L74 48 L74 64 L48 56Z" fill="#dcd8ce"/><path d="M12 51 L48 37 L54 40 L18 53Z" fill="#7d8e8a"/><path d="M48 37 L80 47 L74 50 L48 40Z" fill="#6a7a76"/><path d="M24 44 L48 34 L66 40 L42 50Z" fill="#8a9a96"/><path d="M30 38 L48 28 L60 32 L42 42Z" fill="#7d8e8a"/><path d="M28 39 Q26 35 22 36" stroke="#d8b45a" stroke-width="1.4" fill="none"/><path d="M60 33 Q63 29 66 31" stroke="#d8b45a" stroke-width="1.4" fill="none"/>${[0,1,2].map(i=>`<rect x="${22+i*8}" y="${52-i*2.7}" width="3" height="5" fill="#2a2a2a" transform="skewY(-18) translate(0 ${8})"/>`).join("")}<path d="M56 58 l8 2.6 v-4 l-8 -2.6Z" fill="#2a2a2a"/>`);
+ART.kenroku=B(`${GRASS}<ellipse cx="44" cy="80" rx="26" ry="8" fill="#5a8ab0"/><ellipse cx="44" cy="79" rx="22" ry="6" fill="#7aaad0"/>${pine(70,64,1.3)}<path d="M70 38 L60 62M70 38 L66 62M70 38 L74 62M70 38 L80 62" stroke="#d8c08a" stroke-width=".7"/><rect x="69" y="30" width="2" height="9" fill="#8a6a3a"/><g transform="translate(36 70)"><path d="M-2 10 L0 -6M6 12 L4 -6" stroke="#7a7466" stroke-width="2.2"/><rect x="-6" y="-14" width="14" height="9" fill="#9a9488"/><path d="M-9 -14 L1 -20 L11 -14Z" fill="#6e695e"/><rect x="-3" y="-12" width="8" height="5" fill="#ffd36a" opacity=".7"/></g>${tuft(20,86)}${tuft(80,88)}`);
+ART.chaya=B(`<path d="M12 80 L12 54 L54 40 L54 66Z" fill="#7a3a26"/><path d="M54 40 L88 52 L88 78 L54 66Z" fill="#5e2c1c"/><path d="M10 54 L54 38 L56 40 L12 56Z" fill="#3a2a22"/><path d="M8 66 L54 50 L56 52 L10 68Z" fill="#3a2a22"/>${Array.from({length:14},(_,i)=>`<path d="M${15+i*2.8} ${78-i*0.98} v-10" stroke="#c98a5a" stroke-width=".9"/>`).join("")}${Array.from({length:12},(_,i)=>`<path d="M${15+i*3.1} ${64-i*1.08} v-8" stroke="#c98a5a" stroke-width=".8"/>`).join("")}<g transform="translate(70 62)"><rect x="-2" y="-6" width="4" height="10" rx="2" fill="#e8402c"/><path d="M0 -6 v-3" stroke="#2a1f14" stroke-width="1"/><circle cx="0" cy="-1" r="1.2" fill="#ffd36a"/></g><path d="M58 50 l26 9 l-2 4 l-26 -9Z" fill="#f3ede0" opacity=".85"/>`);
+ART.yosui=B(`${GRASS}<path d="M10 76 L52 60 L60 63 L18 79Z" fill="#7aaad0"/><path d="M10 76 L52 60" stroke="#8a8476" stroke-width="3"/><path d="M18 79 L60 63" stroke="#8a8476" stroke-width="3"/><path d="M20 74 q4 -2 8 0 M36 68 q4 -2 8 0" stroke="#fff" stroke-width="1" fill="none" opacity=".8"/>${tree(74,74,"#5f9a46")}<path d="M60 63 L90 74" stroke="#7aaad0" stroke-width="4" opacity=".7"/>${tuft(30,88)}`);
+ART.kinpaku=B(`<path d="M16 78 L16 56 L52 44 L52 66Z" fill="#6a4a30"/><path d="M52 44 L84 54 L84 76 L52 66Z" fill="#523a24"/><path d="M12 56 L52 40 L58 43 L16 58Z" fill="#2e2a26"/><path d="M52 40 L88 52 L84 55 L52 43Z" fill="#24201c"/><path d="M24 74 L24 62 L42 56 L42 68Z" fill="#2a1f14"/><g transform="translate(66 60)"><rect x="-10" y="-8" width="20" height="16" fill="#f0d070" transform="skewY(17)"/><rect x="-10" y="-8" width="20" height="16" fill="url(#gl)" opacity=".7" transform="skewY(17)"/></g><defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff8c8"/><stop offset=".5" stop-color="#d8a830"/><stop offset="1" stop-color="#fff0a0"/></linearGradient></defs><path d="M30 50 l3 -6 l3 6 l-3 2Z" fill="#f3dc9a"/>`);
+ART.banjo=B(`<path d="M24 78 L24 60 L50 50 L50 68Z" fill="#a8845a"/><path d="M50 50 L72 58 L72 76 L50 68Z" fill="#86663f"/><path d="M20 60 L50 46 L54 49 L24 62Z" fill="#3a2a1a"/><path d="M50 46 L76 57 L72 60 L50 49Z" fill="#2c2014"/><path d="M30 72 L30 62 L44 57 L44 67Z" fill="#2a1f14"/><g transform="translate(80 52)"><rect x="-1" y="0" width="2" height="30" fill="#5a3a22"/><path d="M1 2 h12 v18 h-12Z" fill="#f3ede0"/><text x="7" y="15" font-size="8" text-anchor="middle" font-weight="900" fill="#8a2f2a" font-family="sans-serif">援</text></g>`);
+ART.yagura=B(`<path d="M36 82 L40 40 L60 40 L64 82Z" fill="none" stroke="#7a5a36" stroke-width="3"/><path d="M38 70 L62 52 M62 70 L38 52" stroke="#7a5a36" stroke-width="2"/><rect x="32" y="30" width="36" height="12" fill="#a8845a"/><path d="M28 30 L50 18 L72 30Z" fill="#3a2a1a"/><rect x="40" y="33" width="20" height="5" fill="#2a1f14"/><circle cx="50" cy="12" r="2" fill="#d8b45a"/>`);
+ART.honjin=B(`<path d="M10 78 L10 58 L50 44 L50 64Z" fill="#f3ede0"/><path d="M50 44 L90 58 L90 78 L50 64Z" fill="#e0d8c6"/>${[0,1,2,3,4].map(i=>`<path d="M${12+i*8} ${60-i*2.8} v16" stroke="#2a1f14" stroke-width="1.2"/>`).join("")}<g transform="translate(30 62)"><circle r="7" fill="none" stroke="#2a1f14" stroke-width="1.6"/><path d="M-4 0 h8 M0 -4 v8" stroke="#2a1f14" stroke-width="1.4"/></g><rect x="70" y="20" width="2" height="40" fill="#5a3a22"/><path d="M72 22 h14 v22 h-14Z" fill="#8a2f2a"/><circle cx="79" cy="33" r="4" fill="none" stroke="#f3dc9a" stroke-width="1.4"/>`);
+
+/* ---------- はぐれ問題のモンスター ---------- */
+ART.hagure=`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="hgg" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#cfe0f0"/><stop offset="1" stop-color="#8fb0cc"/></radialGradient></defs><ellipse cx="50" cy="90" rx="30" ry="6" fill="#000" opacity=".3"/><path d="M18 82 Q14 40 50 26 Q86 40 82 82 Q66 90 50 86 Q34 90 18 82Z" fill="url(#hgg)"/><path d="M38 28 Q50 6 62 28" fill="#cfe0f0"/><circle cx="50" cy="12" r="5" fill="#d8b45a"/><ellipse cx="38" cy="56" rx="6" ry="8" fill="#1a2430"/><ellipse cx="62" cy="56" rx="6" ry="8" fill="#1a2430"/><circle cx="40" cy="53" r="2.2" fill="#fff"/><circle cx="64" cy="53" r="2.2" fill="#fff"/><path d="M40 70 Q50 78 60 70" stroke="#1a2430" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M14 64 l-8 -4 M86 64 l8 -4" stroke="#8fb0cc" stroke-width="4" stroke-linecap="round"/></svg>`;
+
+/* ---------- 治部煮の具材 ---------- */
+const P=(inner)=>`<svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><ellipse cx="40" cy="70" rx="26" ry="5" fill="#000" opacity=".25"/>${inner}</svg>`;
+ART.ing={
+ "鴨肉":P(`<path d="M14 52 Q12 34 32 30 L62 34 Q70 48 60 58 L22 60Z" fill="#b8504a"/><path d="M16 50 Q16 38 32 34 L60 37" stroke="#f0d8c8" stroke-width="4" fill="none"/>${[0,1,2,3].map(i=>`<path d="M${26+i*9} 34 L${24+i*9} 59" stroke="#8a3530" stroke-width="1.4"/>`).join("")}`),
+ "すだれ麩":P(`<rect x="14" y="26" width="52" height="34" rx="4" fill="#d9b88a"/>${[0,1,2,3,4,5].map(i=>`<path d="M14 ${30+i*5.4} Q40 ${27+i*5.4} 66 ${30+i*5.4}" stroke="#a6834f" stroke-width="1.6" fill="none"/>`).join("")}<path d="M14 28 h52" stroke="#efd8b0" stroke-width="2"/>`),
+ "せり":P(`${[0,1,2,3,4].map(i=>`<path d="M${30+i*4} 66 Q${28+i*5} 40 ${20+i*10} 18" stroke="#5a9a42" stroke-width="2.4" fill="none"/><ellipse cx="${20+i*10}" cy="18" rx="5" ry="3" fill="#6fae4a" transform="rotate(-30 ${20+i*10} 18)"/>`).join("")}<path d="M28 64 h24" stroke="#e8e0c8" stroke-width="4" stroke-linecap="round"/>`),
+ "しいたけ":P(`<path d="M12 40 Q40 10 68 40 Q40 48 12 40Z" fill="#7a4a2a"/><path d="M22 34 l6 -4 M40 24 l0 6 M54 30 l6 4" stroke="#e8d0b0" stroke-width="2" stroke-linecap="round"/><path d="M32 42 Q30 60 36 66 L46 66 Q50 60 48 42Z" fill="#efe2c8"/>`),
+ "わさび":P(`<path d="M30 66 Q24 40 34 22 Q40 14 46 22 Q56 40 50 66Z" fill="#7fb86a"/>${[0,1,2,3,4].map(i=>`<path d="M${32+i*0.5} ${30+i*7} q8 2 16 0" stroke="#5a8a4a" stroke-width="1.2" fill="none"/>`).join("")}<path d="M36 22 Q30 6 22 4 M42 20 Q46 4 56 2" stroke="#4a8a3a" stroke-width="2.2" fill="none"/><ellipse cx="20" cy="6" rx="6" ry="4" fill="#5a9a42"/><ellipse cx="58" cy="4" rx="6" ry="4" fill="#5a9a42"/>`),
+ "小麦粉":P(`<path d="M18 66 L22 24 Q40 16 58 24 L62 66Z" fill="#efe8da"/><path d="M22 24 Q40 32 58 24" stroke="#c9bca0" stroke-width="2" fill="none"/><path d="M24 20 Q40 10 56 20" stroke="#c9bca0" stroke-width="3" fill="none"/><text x="40" y="52" font-size="12" font-weight="900" text-anchor="middle" fill="#8a6a3a" font-family="sans-serif">粉</text>`),
+ "豆腐":P(`<path d="M16 40 L40 30 L64 40 L40 50Z" fill="#ffffff"/><path d="M16 40 L40 50 L40 66 L16 56Z" fill="#ece8e0"/><path d="M64 40 L40 50 L40 66 L64 56Z" fill="#dcd6cc"/>`),
+ "ねぎ":P(`<path d="M18 60 L58 22" stroke="#f3f0e6" stroke-width="10" stroke-linecap="round"/><path d="M44 36 L62 18" stroke="#5a9a42" stroke-width="10" stroke-linecap="round"/><path d="M14 64 l-4 4 M16 66 l-2 6 M18 64 l2 6" stroke="#e0d8c0" stroke-width="1.2"/>`),
+ "かまぼこ":P(`<rect x="14" y="54" width="52" height="8" rx="2" fill="#c9a06a"/><path d="M16 54 Q40 16 64 54Z" fill="#f6f2ec"/><path d="M16 54 Q40 16 64 54" stroke="#e86a88" stroke-width="5" fill="none"/>`),
+ "たまご":P(`<ellipse cx="40" cy="42" rx="20" ry="25" fill="#f6ead2"/><ellipse cx="34" cy="32" rx="6" ry="9" fill="#fff" opacity=".6"/>`),
+ "ちくわ":P(`<path d="M14 48 L56 26" stroke="#c98a4a" stroke-width="18" stroke-linecap="round"/><path d="M14 48 L56 26" stroke="#e8c890" stroke-width="10" stroke-linecap="round" opacity=".6"/><ellipse cx="60" cy="24" rx="7" ry="9" fill="#efe2c8" transform="rotate(-28 60 24)"/><ellipse cx="60" cy="24" rx="3" ry="4" fill="#7a5a3a" transform="rotate(-28 60 24)"/>`),
+ "牛乳":P(`<path d="M24 66 L24 26 L40 16 L56 26 L56 66Z" fill="#f4f6f8"/><path d="M24 26 L40 16 L56 26" fill="#d6dde4"/><rect x="24" y="38" width="32" height="16" fill="#3a7ac8"/><text x="40" y="50" font-size="10" font-weight="900" text-anchor="middle" fill="#fff" font-family="sans-serif">牛乳</text>`),
+};
+ART.nabe=`<svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg"><ellipse cx="100" cy="82" rx="80" ry="7" fill="#000" opacity=".3"/><path d="M20 30 Q100 18 180 30 L170 70 Q100 86 30 70Z" fill="#3a3430"/><ellipse cx="100" cy="30" rx="80" ry="12" fill="#5a4e46"/><ellipse cx="100" cy="31" rx="72" ry="9" fill="#8a5a30"/><path d="M8 34 h14 M178 34 h14" stroke="#2a2420" stroke-width="7" stroke-linecap="round"/></svg>`;
+
+/* ---------- 野菜（形×色） ---------- */
+function veg(type,col,col2){
+  const V=(i)=>`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><ellipse cx="50" cy="90" rx="30" ry="5" fill="#000" opacity=".25"/>${i}</svg>`;
+  switch(type){
+   case"daikon":return V(`<path d="M38 30 Q36 60 46 86 Q50 92 54 86 Q64 60 62 30Z" fill="${col}"/><path d="M40 36 Q50 40 60 36" stroke="#d8d0c0" stroke-width="1" fill="none"/>${[0,1,2,3].map(i=>`<path d="M${44+i*4} 30 Q${36+i*9} 12 ${32+i*12} 6" stroke="#4a8a3a" stroke-width="4" fill="none" stroke-linecap="round"/>`).join("")}<path d="M38 30 Q50 22 62 30" fill="${col2||"#cfe0a0"}"/>`);
+   case"thick":return V(`<path d="M34 28 Q30 60 42 84 Q50 90 58 84 Q70 60 66 28Z" fill="${col}"/>${[0,1,2,3].map(i=>`<path d="M${42+i*5} 28 Q${36+i*9} 12 ${32+i*12} 6" stroke="#4a8a3a" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}<path d="M34 28 Q50 20 66 28" fill="${col2||"#cfe0a0"}"/>`);
+   case"kyuri":return V(`<path d="M18 70 Q40 30 82 26 Q86 30 82 36 Q50 50 26 80 Q18 80 18 70Z" fill="${col}"/>${[0,1,2,3,4].map(i=>`<circle cx="${30+i*11}" cy="${64-i*7}" r="1.4" fill="#e8f0c0"/>`).join("")}<path d="M82 26 l6 -6" stroke="#6a8a3a" stroke-width="3"/>`);
+   case"nasu":return V(`<path d="M34 40 Q20 70 40 86 Q60 96 70 74 Q74 52 58 34Z" fill="${col}"/><ellipse cx="44" cy="58" rx="5" ry="10" fill="#fff" opacity=".18"/><path d="M50 30 Q38 36 34 44 Q46 40 50 38 Q56 42 64 42 Q60 34 50 30Z" fill="${col2||"#4a2a5a"}"/><path d="M50 30 l2 -12" stroke="#4a6a3a" stroke-width="3"/>`);
+   case"renkon":return V(`<path d="M10 56 Q30 40 60 46 L60 76 Q30 70 10 80Z" fill="${col}"/><ellipse cx="66" cy="61" rx="18" ry="16" fill="#f3e6cc"/>${[[60,54],[70,52],[76,62],[68,70],[58,66],[66,61]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.6" fill="#b89a70"/>`).join("")}`);
+   case"kabocha":return V(`<ellipse cx="50" cy="62" rx="34" ry="26" fill="${col}"/>${[-20,-8,8,20].map(x=>`<path d="M${50+x} 38 Q${50+x*1.5} 62 ${50+x} 86" stroke="${col2||"#a0401a"}" stroke-width="2" fill="none"/>`).join("")}<path d="M50 38 q2 -10 8 -12" stroke="#5a6a2a" stroke-width="5" fill="none" stroke-linecap="round"/>`);
+   case"imo":return V(`<path d="M14 62 Q20 40 50 42 Q82 44 88 60 Q80 80 50 78 Q22 78 14 62Z" fill="${col}"/><path d="M30 52 q4 2 8 0 M56 50 q4 2 8 0 M44 66 q4 2 8 0" stroke="${col2||"#6a2a3a"}" stroke-width="1.4" fill="none"/>`);
+   case"take":return V(`<path d="M30 86 Q30 40 50 12 Q70 40 70 86Z" fill="${col}"/>${[0,1,2,3].map(i=>`<path d="M${30+i*2} ${82-i*16} Q50 ${70-i*16} ${70-i*2} ${82-i*16}" stroke="${col2||"#6a4a2a"}" stroke-width="2" fill="none"/>`).join("")}<path d="M44 20 Q50 8 56 20" fill="#c9a050"/>`);
+   case"mame":return V(`<path d="M14 70 Q40 30 86 30 Q84 40 76 42 Q44 48 22 78Z" fill="${col}"/>${[0,1,2,3].map(i=>`<ellipse cx="${30+i*14}" cy="${62-i*7}" rx="5" ry="4" fill="${col2||"#7a9a3a"}" opacity=".5"/>`).join("")}`);
+   case"leaf":return V(`${[[-18,-20],[0,-30],[18,-20],[-10,-6],[10,-6]].map(([x,y])=>`<path d="M50 86 Q${50+x} ${70+y/2} ${50+x*1.6} ${56+y}" stroke="#4a7a3a" stroke-width="2.4" fill="none"/><ellipse cx="${50+x*1.6}" cy="${56+y}" rx="12" ry="8" fill="${col}" transform="rotate(${x*2} ${50+x*1.6} ${56+y})"/>`).join("")}${col2?`<ellipse cx="38" cy="46" rx="6" ry="4" fill="${col2}" opacity=".9"/><ellipse cx="62" cy="46" rx="6" ry="4" fill="${col2}" opacity=".9"/>`:""}`);
+   case"negi":return V(`<path d="M50 88 V28" stroke="${col}" stroke-width="14" stroke-linecap="round"/><path d="M50 40 Q40 20 30 8 M50 40 Q60 20 70 8 M50 40 V6" stroke="#4a8a3a" stroke-width="8" fill="none" stroke-linecap="round"/><path d="M44 90 l-4 6 M50 90 v6 M56 90 l4 6" stroke="#d8d0b8" stroke-width="1.4"/>`);
+   case"zuiki":return V(`${[-12,0,12].map(x=>`<path d="M${50+x} 88 Q${50+x*1.2} 50 ${50+x*2} 14" stroke="${col}" stroke-width="7" fill="none" stroke-linecap="round"/>`).join("")}<ellipse cx="74" cy="12" rx="10" ry="6" fill="#4a8a3a"/><ellipse cx="26" cy="12" rx="10" ry="6" fill="#4a8a3a"/>`);
+   case"kuwai":return V(`<ellipse cx="50" cy="66" rx="22" ry="20" fill="${col}"/>${[0,1].map(i=>`<path d="M30 ${62+i*8} Q50 ${56+i*8} 70 ${62+i*8}" stroke="${col2||"#5a4a6a"}" stroke-width="1.6" fill="none"/>`).join("")}<path d="M50 46 Q48 26 58 12" stroke="#e8d8a0" stroke-width="5" fill="none" stroke-linecap="round"/>`);
+   case"kabu":return V(`<circle cx="50" cy="64" r="22" fill="${col}"/><path d="M50 86 v8" stroke="#e8e0d0" stroke-width="2"/>${[0,1,2].map(i=>`<path d="M${44+i*6} 44 Q${36+i*12} 24 ${32+i*18} 12" stroke="#4a8a3a" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}`);
+   case"pepper":return V(`<path d="M20 30 Q30 26 40 34 Q60 52 82 80 Q84 86 78 84 Q50 64 26 42Z" fill="${col}"/><path d="M20 30 l-8 -8" stroke="#4a6a2a" stroke-width="4"/>`);
+   case"suika":return V(`<ellipse cx="50" cy="60" rx="34" ry="28" fill="${col}"/>${[-20,-8,4,16].map(x=>`<path d="M${50+x} 33 Q${50+x+8} 60 ${50+x} 87" stroke="${col2||"#1f4a1a"}" stroke-width="4" fill="none"/>`).join("")}`);
+  }
+}
+
+</script>
+<script>
+/* ===== 百万石バトル v0.3 ===== */
+const VER="v0.3";
+const SEASON_ID="S1", SEASON_START="2026-11-01";       // 試作：第1シーズン（日曜開幕）
+const GOAL=1000000, TARGET_DAYS=14, AVG_DAY=1150, ACTIVE=0.6;
+
+/* ---------- 校下（仮一覧：正式な61校下は金沢まるっとの一覧に差し替え予定） ---------- */
+const KOUKA=["米丸","泉野","長田町","諸江町","西南部","大徳","鞍月","木曳野","緑","伏見台","十一屋","弥生","長坂台","三馬","額","四十万","富樫","米泉","新竪町","中央","小立野","兼六","馬場","浅野町","森山町","千坂","夕日寺","田上","杜の里","大浦","鳴和台","浅野川","粟崎","大野町","金石町","戸板","押野","西","明成","犀桜","菫台","扇台","泉","安原","湯涌","内川","医王山","不動寺","花園"];
+const ZIP2K={"9218001":"米丸","9218002":"米丸","9218011":"米丸","9218013":"米丸"};
+const KANAZAWA_ZIP=z=>/^92[01]\d{4}$/.test(z);
+
+/* ---------- 問題（試作用：公開前に「掟と関所」で一次資料と照合） ---------- */
 const QUIZ=[
  {q:"加賀藩の藩祖は？",o:["前田利家","前田利長","前田利常","前田綱紀"],a:0,e:"藩祖は前田利家。2代は利長。"},
  {q:"金沢の三文豪にふくまれないのは？",o:["泉鏡花","室生犀星","徳田秋声","井上靖"],a:3,e:"三文豪は泉鏡花・室生犀星・徳田秋声。"},
@@ -113,283 +261,381 @@ const QUIZ=[
  {q:"兼六園の「六勝」にふくまれないのは？",o:["宏大","幽邃","蒼古","豪華"],a:3,e:"六勝は宏大・幽邃・人力・蒼古・水泉・眺望。"},
  {q:"金沢城公園で2020年に復元された門は？",o:["石川門","河北門","鼠多門","橋爪門"],a:2,e:"鼠多門と鼠多門橋は2020年7月に復元。"},
 ];
-
-// 治部煮
-const JIBU_OK=[["鴨肉","🦆"],["すだれ麩","🟫"],["せり","🌿"],["しいたけ","🍄"],["わさび","🟢"],["小麦粉","🌾"]];
-const JIBU_NG=[["豆腐","⬜"],["ねぎ","🥬"],["かまぼこ","🍥"],["たまご","🥚"],["ちくわ","🍢"],["牛乳","🥛"]];
-
-// 加賀野菜仕分け（15品目は公式ブランドの一覧どおり）
-const KAGA=["さつまいも（五郎島金時）","加賀れんこん","たけのこ","加賀太きゅうり","金時草","加賀つるまめ","ヘタ紫なす","源助だいこん","金沢せり","打木赤皮甘栗かぼちゃ","金沢一本太ねぎ","二塚からしな","赤ずいき","くわい","金沢春菊"];
-const NOTKAGA=["青首だいこん","九条ねぎ","聖護院かぶ","下仁田ねぎ","京みず菜","賀茂なす","桜島だいこん","万願寺とうがらし","三浦だいこん","谺（こだま）すいか"];
-const VEGICON={"さつまいも（五郎島金時）":"🍠","加賀れんこん":"🪷","たけのこ":"🎍","加賀太きゅうり":"🥒","金時草":"🌿","加賀つるまめ":"🫛","ヘタ紫なす":"🍆","源助だいこん":"🥕","金沢せり":"🌱","打木赤皮甘栗かぼちゃ":"🎃","金沢一本太ねぎ":"🥬","二塚からしな":"🥬","赤ずいき":"🌿","くわい":"🫘","金沢春菊":"🌿"};
-
-// 城下町の建物（蔵の石で建てる→以後の獲得が増える）
-const BUILD=[
- {id:"oumi",n:"近江町市場",i:"🐟",cost:300,k:"game",v:.10,d:"ミニゲームの石 +10%"},
- {id:"tatsumi",n:"辰巳用水",i:"💧",cost:600,k:"game",v:.10,d:"ミニゲームの石 +10%"},
- {id:"kenroku",n:"兼六園",i:"🌳",cost:1000,k:"quiz",v:.10,d:"今日の十問の石 +10%"},
- {id:"chaya",n:"ひがし茶屋街",i:"🏮",cost:800,k:"quiz",v:.05,d:"今日の十問の石 +5%"},
- {id:"kinpaku",n:"金箔工房",i:"✨",cost:500,k:"nyukon",v:.20,d:"一問入魂の石 +20%"},
- {id:"shiro",n:"金沢城",i:"🏯",cost:2500,k:"all",v:.10,d:"すべての石 +10%"},
-];
-// 一問入魂（1日1問の難問・日替わり。試作用＝公開前に一次資料と照合）
 const NYUKON=[
  {q:"積み方の違う石垣がいくつも見られることから、金沢城は何と呼ばれる？",o:["石垣の博物館","石垣の迷宮","石垣の城下町","石垣の宝庫"],a:0,e:"自然石を積む野面積みから、石を切りそろえた切込接ぎまで、時代ごとの積み方が見られることから「石垣の博物館」と呼ばれる。"},
  {q:"兼六園の名付け親とされる人物は？",o:["松平定信","前田斉広","前田綱紀","小堀遠州"],a:0,e:"白河藩主・松平定信が、宋の『洛陽名園記』にちなんで名付けたとされる。"},
  {q:"前田利家の正室で、のちに芳春院と呼ばれた人物は？",o:["まつ","ねね","お市","千代"],a:0,e:"利家の正室はまつ（芳春院）。"},
  {q:"日本三名園にふくまれないのは？",o:["栗林公園","偕楽園","後楽園","兼六園"],a:0,e:"日本三名園は兼六園（金沢）・偕楽園（水戸）・後楽園（岡山）。"},
 ];
-// はぐれ問題（メタルスライム方式：ランダム出現・5秒で逃げる）
 const HAGURE=[
  {q:"加賀藩は「加賀◯◯万石」？",o:["百","五十","八十","二百"],a:0},
  {q:"犀川は「男川」。では浅野川は？",o:["女川","子川","姫川","母川"],a:0},
  {q:"兼六園があるのは何市？",o:["金沢市","白山市","小松市","七尾市"],a:0},
  {q:"金沢の三文豪は泉鏡花・徳田秋声と、もう1人は？",o:["室生犀星","夏目漱石","井上靖","森鴎外"],a:0},
 ];
+const JIBU_OK=["鴨肉","すだれ麩","せり","しいたけ","わさび","小麦粉"];
+const JIBU_NG=["豆腐","ねぎ","かまぼこ","たまご","ちくわ","牛乳"];
+const KAGA=[["さつまいも（五郎島金時）","imo","#a8324a"],["加賀れんこん","renkon","#d8b88a"],["たけのこ","take","#a8804a"],["加賀太きゅうり","kyuri","#5a8a3a"],["金時草","leaf","#4f8a3a","#7a3a8a"],["加賀つるまめ","mame","#6fae4a"],["ヘタ紫なす","nasu","#3a1f4a","#6a2a7a"],["源助だいこん","thick","#f4f0e6"],["金沢せり","leaf","#6fae4a"],["打木赤皮甘栗かぼちゃ","kabocha","#d8582a"],["金沢一本太ねぎ","negi","#f4f0e6"],["二塚からしな","leaf","#5a8a3a"],["赤ずいき","zuiki","#b8404a"],["くわい","kuwai","#7a6a9a"],["金沢春菊","leaf","#4f9a3a"]];
+const NOTKAGA=[["青首だいこん","daikon","#f4f0e6","#9ac46a"],["九条ねぎ","negi","#cfe8b0"],["聖護院かぶ","kabu","#f4f0e6"],["下仁田ねぎ","negi","#f4f0e6"],["京みず菜","leaf","#7ab85a"],["賀茂なす","nasu","#3a1f4a"],["桜島だいこん","kabu","#efe9dc"],["万願寺とうがらし","pepper","#4f8a3a"],["三浦だいこん","daikon","#f4f0e6"],["小松菜","leaf","#3f7a32"]];
 
-/* ========= 状態 ========= */
-const KEY="hmg_v1";
-let S=JSON.parse(localStorage.getItem(KEY)||"null")||{name:"",kouka:"",zip:"",koku:0,days:{},streak:0,last:"",games:{}};
-S.kura??=S.koku;S.builds??={};
+/* ---------- 城下町：分野と建物（914施設を見すえて「何棟でも建てられるが、効き目はゆるやかに頭打ち」） ---------- */
+const CATS={
+ manabi:{n:"学び",eff:"今日の十問",max:.60},
+ bunka:{n:"文化",eff:"一問入魂",max:1.5},
+ sangyo:{n:"産業",eff:"ミニゲーム",max:.60},
+ midori:{n:"みどり",eff:"毎朝の収穫"},
+ bousai:{n:"防災",eff:"大雪の被害をへらす",max:.90},
+ kotsu:{n:"交通",eff:"援軍ボーナス",max:1.5},
+ meisho:{n:"名所",eff:"すべての獲得",max:.40},
+};
+// rep=何棟でも建てられる（建てるほど次が高くなる）／uniq=1つだけの名所（効き目3棟分）
+const BLD=[
+ {id:"shogakko",n:"小学校",c:"manabi",cost:250,rep:1,d:"地区の学び舎。十問の石が増える"},
+ {id:"toshokan",n:"図書館",c:"manabi",cost:450,rep:1,w:1.5,d:"本は知恵の蔵。十問の石が大きく増える"},
+ {id:"kageki",n:"文化ホール",c:"bunka",cost:200,rep:1,d:"芸どころ金沢。一問入魂の石が増える"},
+ {id:"ichiba",n:"市場",c:"sangyo",cost:300,rep:1,d:"台所をささえる。ミニゲームの石が増える"},
+ {id:"koen",n:"公園",c:"midori",cost:300,rep:1,hv:40,d:"毎朝、蔵に石が入る"},
+ {id:"shobo",n:"消防署",c:"bousai",cost:300,rep:1,d:"加賀鳶の心意気。大雪の被害をへらす"},
+ {id:"bijutsukan",n:"金沢21世紀美術館",c:"bunka",cost:2000,uniq:1,d:"2004年開館の円い美術館"},
+ {id:"eki",n:"金沢駅",c:"kotsu",cost:2000,uniq:1,d:"援軍を呼んだときの石が増える"},
+ {id:"kinpaku",n:"金箔工房",c:"sangyo",cost:1500,uniq:1,d:"金箔の町の誇り"},
+ {id:"yosui",n:"辰巳用水",c:"midori",cost:2000,uniq:1,hv:120,d:"1632年の用水。毎朝の収穫が大きい"},
+ {id:"chaya",n:"ひがし茶屋街",c:"meisho",cost:2500,uniq:1,d:"格子戸の町並み"},
+ {id:"kenroku",n:"兼六園",c:"meisho",cost:3000,uniq:1,hv:60,d:"日本三名園。収穫もつく"},
+ {id:"shiro",n:"金沢城",c:"meisho",cost:3000,uniq:1,d:"石垣の博物館"},
+];
+// 援軍を呼んだ人だけの品（建物は維持費なし）
+const INV_ITEMS=[
+ {need:1,id:"banjo",n:"番所",kind:"bld",d:"毎朝 +50石（逓減なし・維持費なし）"},
+ {need:3,id:"yagura",n:"物見櫓",kind:"bld",d:"はぐれ問題の出現率 35%→60%"},
+ {need:5,id:"jinbaori",n:"金の陣羽織",kind:"look",d:"人物の着物に金の縁どり"},
+ {need:10,id:"honjin",n:"本陣",kind:"bld",d:"すべての獲得 +5%（頭打ちなし・維持費なし）"},
+];
+const UPKEEP=.01, REPAIR=.30, DECAY=.85, GROW=1.3, UW=3;
+const lotCost=n=>Math.round(300*Math.pow(1.4,n-3));
+
+/* ---------- 状態 ---------- */
+const KEY="hmg_v3";
+const S0={name:"",g:"m",a:"seijin",kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null};
+let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
-const $=s=>document.querySelector(s);
-const app=$("#app"),abar=$("#abar");
-const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1800)};
+const $=s=>document.querySelector(s),app=$("#app"),abar=$("#abar");
+const Q_=new URLSearchParams(location.search), ADMIN=Q_.get("admin")==="1";
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),1900)};
+const fmt=n=>Math.round(n).toLocaleString();
 
-// JST日付・シーズン（日曜開幕〜土曜）
-function jst(){return new Date(Date.now()+9*3600e3)}
-function today(){return jst().toISOString().slice(0,10)}
-function season(){const d=jst();const dow=d.getUTCDay();const start=new Date(d);start.setUTCDate(d.getUTCDate()-dow);const end=new Date(start);end.setUTCDate(start.getUTCDate()+6);const f=x=>`${x.getUTCMonth()+1}/${x.getUTCDate()}`;return {id:start.toISOString().slice(0,10),label:`${f(start)}(日)〜${f(end)}(土)`,left:6-dow}}
-function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h}
-function color(k){return `hsl(${hash(k)%360} 55% 42%)`}
+/* ---------- 日付（JST） ---------- */
+const jst=()=>new Date(Date.now()+9*3600e3+(S.dayShift||0)*864e5);
+const today=()=>jst().toISOString().slice(0,10);
+const dBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
+const hash=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))>>>0;return h};
+const color=k=>`hsl(${hash(k)%360} 52% 40%)`;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function dayRec(){return S.days[today()]||(S.days[today()]={})}
 
-function buff(kind){let m=1;for(const b of BUILD)if(S.builds[b.id]&&(b.k===kind||b.k==="all"))m+=b.v;return m}
-function evMul(){const e=seasonEvent();return e?e.mul:1}
-function addKoku(n,why,kind){n=Math.round(n*(kind?buff(kind):1)*evMul());S.koku+=n;S.kura+=n;save();hd();toast(`+${n.toLocaleString()}石 ${why||""}`);return n}
-function hd(){$("#hdKoku").firstChild.textContent=S.kura.toLocaleString()+"石"}
-function dayRec(){return S.days[today()]||(S.days[today()]={quiz:null,jibu:null,kaga:null,nyukon:null,hagure:null})}
-
-/* ========= 校下ランキング（試作用の仮データ＝デモ） ========= */
-function demoRank(){
-  const sid=season().id;
-  const list=KOUKA.map(k=>{const h=hash(k+sid);return {k,members:40+h%260,koku:300000+(h%600000)}});
-  const mine=list.find(x=>x.k===S.kouka);
-  if(mine){mine.koku+=S.koku;mine.members+=1}
-  list.sort((a,b)=>b.koku-a.koku);
+/* ---------- デモ用の参加状況（本番はFirebase） ---------- */
+function demo(){
+  const elapsed=Math.max(1,dBetween(SEASON_START,today())+1);
+  const list=KOUKA.map(k=>{const h=hash(k+SEASON_ID);const m=[0,0,0,0,1,1,1,2][h%8];return {k,m,koku:Math.round(m*AVG_DAY*ACTIVE*elapsed*(.6+(h%80)/100))}});
+  const me=list.find(x=>x.k===S.kouka);if(me&&S.lock){me.m+=1;me.koku+=S.koku}
   return list;
 }
+function ranking(){return demo().slice().sort((a,b)=>b.koku-a.koku)}
+function totals(){const d=demo();return {koku:d.reduce((s,x)=>s+x.koku,0),m:d.reduce((s,x)=>s+x.m,0)}}
+// 今日の作柄：参加者が少なければ豊作、多ければ凶作 → 何人でも約2週間で百万石
+function sakugara(){const t=totals();const need=Math.max(1,(GOAL-t.koku))/Math.max(1,TARGET_DAYS-dBetween(SEASON_START,today()));
+  const m=Math.min(10,Math.max(.3,need/(Math.max(1,t.m*ACTIVE)*AVG_DAY)));
+  const n=m>=1.5?"大豊作":m>=1.1?"豊作":m>=.9?"平年作":m>=.6?"やや凶作":"凶作";return {m:Math.round(m*10)/10,n}}
+const BANZUKE=i=>["横綱","大関","関脇","小結"][i]||`前頭${i-3}枚目`;
+const TITLES=[[0,"足軽"],[2000,"組頭"],[10000,"侍大将"],[30000,"家老"],[100000,"大名"]];
+const rankLv=k=>TITLES.filter(t=>k>=t[0]).length-1;
+const title=k=>TITLES[rankLv(k)][1];
 
-/* ========= 画面 ========= */
-function home(){
-  abar.className="abar";
-  if(!S.kouka){return register()}
-  const r=dayRec(),se=season();
-  const rank=demoRank();const myI=rank.findIndex(x=>x.k===S.kouka);const my=rank[myI];
-  const rival=rank[myI>0?myI-1:myI+1];const ev=seasonEvent();const nk=NYUKON[hash(today())%NYUKON.length];
+/* ---------- 城下町の計算 ---------- */
+const built=()=>S.town.filter(Boolean);
+const owned=id=>built().filter(b=>b.id===id).length;
+const bdef=id=>BLD.find(b=>b.id===id);
+const nextCost=d=>d.rep?Math.round(d.cost*Math.pow(GROW,owned(d.id))):d.cost;
+function units(cat){return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat)return s;return s+(d.uniq?UW:(d.w||1))*(b.old?.5:1)},0)}
+function catBonus(cat){const c=CATS[cat];return c.max?c.max*(1-Math.pow(DECAY,units(cat))):0}
+function harvest(){let sum=0,i=0;built().filter(b=>bdef(b.id)?.hv).sort((a,b)=>bdef(b.id).hv-bdef(a.id).hv).forEach(b=>{sum+=bdef(b.id).hv*Math.pow(.85,i++)*(b.old?.5:1)});
+  if(S.invites>=1)sum+=50;return Math.round(sum)}
+function upkeep(){return built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:Math.round(b.paid*UPKEEP)),0)}
+function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
+function seasonEvent(){if(!S.lock)return null;const r=ranking();const i=r.findIndex(x=>x.k===S.kouka);const bs=catBonus("bousai");
+  if(i===0){const p=Math.round(20*(1-bs));return {cls:"ng",t:`❄️ 大雪：首位の校下は獲得 −${p}%`+(bs>0?`（防災で軽減中）`:""),mul:1-p/100}}
+  if(i===r.length-1)return {cls:"ok",t:"⚔️ 一揆の大将：最下位の校下は獲得 +50%",mul:1.5};
+  if(i>=r.length-6)return {cls:"ok",t:"🐎 援軍到着：下位の校下は獲得 +30%",mul:1.3};
+  return null}
+function addKoku(n,why,kind){const e=seasonEvent();n=Math.round(n*(kind?mult(kind):1)*sakugara().m*(e?e.mul:1));S.koku+=n;S.kura+=n;save();hd();if(why)toast(`+${fmt(n)}石 ${why}`);return n}
+function hd(){$("#hdKoku").firstChild.textContent=fmt(S.kura)+"石"}
+
+// 毎朝の決算（収穫と維持費。払えなければ老朽化）
+function dailyTick(){if(!S.lock)return;const t=today();if(!S.tick){S.tick=t;save();return}
+  const days=Math.min(7,dBetween(S.tick,t));if(days<=0)return;
+  let hv=0,up=0,aged=0;
+  for(let d=0;d<days;d++){const h=harvest();if(h){hv+=addKoku(h,"")}
+    let u=upkeep();
+    while(u>S.kura){const cand=built().filter(b=>!b.old&&bdef(b.id)).sort((a,b)=>b.paid-a.paid)[0];if(!cand)break;cand.old=1;aged++;u=upkeep()}
+    S.kura-=u;up+=u}
+  S.tick=t;S.report={hv,up,aged,days};save()}
+
+/* ---------- 画面：登録 ---------- */
+let REG={step:1};
+function register(){abar.className="abar";
+  if(REG.step===1){
+    app.innerHTML=`<div class="card"><h2>⚔️ 参戦する（1/2）</h2>
+    <div class="avbig" id="avPrev">${avatar(S.g,S.a,0)}</div>
+    <label class="mute">なまえ（ランキングに出ます）</label><input id="nm" maxlength="10" placeholder="例：たけ" value="${S.name||""}">
+    <div class="mute" style="margin-top:10px">せいべつ</div>
+    <div class="seg">${[["m","おとこ"],["f","おんな"]].map(([v,l])=>`<button class="${S.g===v?"on":""}" onclick="S.g='${v}';register()">${l}</button>`).join("")}</div>
+    <div class="mute" style="margin-top:10px">ねんだい</div>
+    <div class="seg">${[["kodomo","こども"],["seijin","せいじん"],["nenpai","年配"]].map(([v,l])=>`<button class="${S.a===v?"on":""}" onclick="S.a='${v}';register()">${l}</button>`).join("")}</div>
+    <button class="pri" style="margin-top:14px" onclick="S.name=$('#nm').value.trim();if(!S.name)return toast('なまえを入れてください');REG.step=2;register()">つぎへ</button></div>`;
+    $("#nm").addEventListener("input",e=>S.name=e.target.value);return}
+  if(REG.step===2){
+    const inv=Q_.get("k");
+    app.innerHTML=`<div class="card"><h2>🏯 陣地をきめる（2/2）</h2>
+    <label class="mute">郵便番号（ハイフンなし7桁）</label><input id="zip" inputmode="numeric" maxlength="7" placeholder="9218001" value="${REG.zip||""}">
+    <button class="gold" style="width:100%;margin-top:8px" onclick="zipGo()">この郵便番号できめる</button>
+    <div class="mute" style="margin-top:8px">金沢市内は自動で自分の校下に。金沢市外の方は「援軍」として、好きな校下をえらべます。</div>
+    ${inv?`<div class="notice" style="margin-top:8px">🤝 ${inv}校下の${Q_.get("from")||"仲間"}さんから援軍のお願いがきています</div>`:""}
+    <div id="pick"></div></div>`;
+    if(REG.zip)zipGo(true);return}
+}
+function zipGo(silent){const z=($("#zip").value||"").replace(/\D/g,"");REG.zip=z;
+  if(z.length!==7){if(!silent)toast("7桁で入れてください");return}
+  const k=ZIP2K[z];
+  if(k){$("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>の住民として参戦します</div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',true)">${k}校下で参戦する</button>`;return}
+  REG.mode=KANAZAWA_ZIP(z)?"kz":"out";REG.sort=REG.sort||"many";pickList()}
+function pickList(){const d=demo();const s=REG.sort;
+  const L=d.slice().sort((a,b)=>s==="many"?b.m-a.m:s==="few"?a.m-b.m:a.k.localeCompare(b.k,"ja"));
+  $("#pick").innerHTML=`<div class="notice" style="margin:10px 0">${REG.mode==="kz"?"金沢市内ですが、この郵便番号の校下はまだ登録がありません。下からえらんでください。":"金沢市外の郵便番号です。<b>援軍</b>として、好きな校下をえらんでください。"}</div>
+  <div class="seg sm">${[["many","人が多い順"],["few","少ない順"],["name","名前順"]].map(([v,l])=>`<button class="${s===v?"on":""}" onclick="REG.sort='${v}';pickList()">${l}</button>`).join("")}</div>
+  <div class="mute" style="margin:6px 0">人数は<b>デモ用の仮の数字</b>です</div>
+  <div class="klist">${L.map(x=>`<button class="kitem" onclick="pickK('${x.k}')"><span class="kf">${flagSvg(x.k,color(x.k))}</span><span class="kn">${x.k}<small>${fmt(x.koku)}石</small></span><span class="km">${x.m?`${x.m}人`:`<b class="first">0人・一番乗り</b>`}</span></button>`).join("")}</div>`}
+function pickK(k){const m=demo().find(x=>x.k===k).m;
+  $("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>に援軍として参戦します<div class="mute">いま ${m}人</div></div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',false)">${k}校下で参戦する</button><button style="width:100%;margin-top:8px" onclick="pickList()">えらびなおす</button>`}
+const lockNote=()=>`<div class="notice" style="margin:10px 0">⚠️ <b>このシーズンが終わるまで、校下は変えられません。</b></div>`;
+function doReg(k,resident){S.kouka=k;S.zip=resident?REG.zip:"";S.lock=SEASON_ID;S.tick=today();save();
+  if(Q_.get("k")){S.from=Q_.get("from")||"";addKoku(100,"援軍として参戦")}
+  home()}
+
+/* ---------- 画面：ホーム ---------- */
+function home(){abar.className="abar";if(!S.lock)return register();
+  dailyTick();
+  const r=dayRec(),rk=ranking(),myI=rk.findIndex(x=>x.k===S.kouka),my=rk[myI],t=totals(),sg=sakugara(),ev=seasonEvent();
+  const nk=NYUKON[hash(today())%NYUKON.length];
+  const pct=Math.min(100,t.koku/GOAL*100);
+  const rep=S.report;
   app.innerHTML=`
-  <div class="card">
-    <div class="row" style="align-items:center">
-      <div class="flag" style="background:${color(S.kouka)}">${S.kouka[0]}</div>
-      <div style="flex:1"><div style="font-weight:800;font-size:18px">${S.kouka}校下 <span class="tag">${S.zip?'住民':'援軍'}</span></div>
-      <div class="mute">${S.name}さん ・ ${title(S.koku)}</div></div>
+  <div class="card prof">
+    <div class="av">${avatar(S.g,S.a,rankLv(S.koku),undefined,S.invites>=5)}</div>
+    <div style="flex:1;min-width:0">
+      <div class="pname">${S.name}<span class="tag">${title(S.koku)}</span></div>
+      <div class="pk"><span class="kf sm">${flagSvg(S.kouka,color(S.kouka))}</span>${S.kouka}校下 <span class="tag">${S.zip?"住民":"援軍"}</span></div>
+      <div class="mute">今シーズンの手柄 <b style="color:var(--gold2)">${fmt(S.koku)}石</b></div>
+      <div class="mute" style="font-size:11px">🔒 校下は次のシーズンまで変更できません</div>
     </div>
-    <hr>
-    <div class="row" style="justify-content:space-between">
-      <div><div class="mute">校下の石高</div><div class="big">${my.koku.toLocaleString()}石</div><div class="mute">${my.members}人が参戦 ・ 現在 <b style="color:var(--gold2)">${myI+1}位</b>/${rank.length}</div></div>
-      <div style="text-align:right"><div class="mute">今週 ${se.label}</div><div style="font-weight:800">あと${se.left}日</div><div class="mute">土曜20時 決着</div></div>
-    </div>
-    <div style="margin-top:10px"><div class="row" style="justify-content:space-between"><span class="mute">百万石まで</span><span class="mute">${Math.min(100,my.koku/1e4).toFixed(1)}%</span></div>
-      <div class="prog" style="height:10px;margin:4px 0 0"><i style="width:${Math.min(100,my.koku/1e4)}%"></i></div>
-      <div class="mute">先に<b style="color:var(--gold2)">100万石</b>に届いた校下が今週の勝ち</div></div>
-    ${rival?`<div class="notice" style="margin-top:8px">🔥 ${myI>0?'上':'下'}の<b>${rival.k}校下</b>まで ${Math.abs(rival.koku-my.koku).toLocaleString()}石</div>`:''}
-    ${ev?`<div class="evb ${ev.cls}">${ev.t}</div>`:''}
   </div>
 
   <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:baseline"><h2 style="margin:0">🌾 みんなで百万石</h2><span class="sg ${sg.m>=1.1?"up":sg.m<.9?"dn":""}">今日の作柄 ${sg.n} ×${sg.m}</span></div>
+    <div class="big">${fmt(t.koku)}<small> / 1,000,000石</small></div>
+    <div class="prog" style="height:12px"><i style="width:${pct}%"></i></div>
+    <div class="mute">参加 ${fmt(t.m)}人（デモ）・全員の石が<b>100万石</b>に届いた瞬間にシーズン終了。そのとき一番の校下が優勝。</div>
+    <div class="notice" style="margin-top:6px">作柄＝参加者が少ない日は豊作（石が増える）、多い日は凶作。何人参加しても約2週間で決着します。</div>
+    <hr>
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div><div class="mute">${S.kouka}校下</div><div style="font-weight:900;font-size:20px;color:var(--gold2)">${BANZUKE(myI)}<small class="mute"> ・ ${myI+1}位/${rk.length}</small></div></div>
+      <div style="text-align:right"><div class="mute">校下の石高</div><div style="font-weight:800">${fmt(my.koku)}石</div><div class="mute">${my.m}人</div></div>
+    </div>
+    ${myI>0?`<div class="notice" style="margin-top:8px">🔥 上の<b>${rk[myI-1].k}校下</b>まで ${fmt(rk[myI-1].koku-my.koku)}石</div>`:""}
+    ${ev?`<div class="evb ${ev.cls}">${ev.t}</div>`:""}
+  </div>
+
+  ${rep?`<div class="card"><h2>📜 けさの決算${rep.days>1?`（${rep.days}日分）`:""}</h2>
+    <div class="row" style="justify-content:space-around;text-align:center">
+      <div><div class="mute">収穫</div><b style="color:#9fd48a">+${fmt(rep.hv)}</b></div>
+      <div><div class="mute">維持費</div><b style="color:#ff9a8f">−${fmt(rep.up)}</b></div>
+      <div><div class="mute">老朽化</div><b>${rep.aged}棟</b></div></div>
+    ${rep.aged?`<div class="notice" style="margin-top:6px">蔵の石が足りず、建物が老朽化しました（効き目半分）。城下町で修繕できます。</div>`:""}
+    <button style="width:100%;margin-top:8px" onclick="S.report=null;save();home()">とじる</button></div>`:""}
+
+  <div class="card">
     <h2>🧠 今日の十問</h2>
-    ${r.quiz?`<div class="ox">${r.quiz.ox}</div><div class="mute">${r.quiz.n}/10問正解 ・ +${r.quiz.koku}石（明日また出ます）</div><button class="gold" style="margin-top:8px" onclick="share()">📸 結果を画像にして共有</button><div id="shareBox"></div>`
-    :`<div class="mute">全員おなじ10問。1日1回。正解1問=50石、全問正解で+250石。</div><button class="pri" style="margin-top:8px" onclick="quiz()">はじめる</button>`}
+    ${r.quiz?`<div class="ox">${r.quiz.ox}</div><div class="mute">${r.quiz.n}/10問正解 ・ +${fmt(r.quiz.koku)}石（あしたまた出ます）</div><button class="gold" style="margin-top:8px;width:100%" onclick="share()">📸 結果を画像にして共有</button><div id="shareBox"></div>`
+      :`<div class="mute">全員おなじ10問・1日1回。正解1問 50石、全問正解で+250石（作柄・建物で増減）</div><button class="pri" style="margin-top:8px" onclick="quiz()">はじめる</button>`}
   </div>
 
   <div class="card">
     <h2>🎯 一問入魂</h2>
-    <div class="mute">1日1問だけの難問。正解で<b style="color:var(--gold2)">300石</b>。1回きり・やり直しなし。</div>
-    ${r.nyukon?`<div style="margin-top:8px;font-weight:800">${r.nyukon.ok?'🎉 正解 +'+r.nyukon.koku.toLocaleString()+'石':'⚫ 不正解'}</div><div class="mute">${nk.e}</div>`
-      :`<button class="pri" style="margin-top:8px" onclick="nyukon()">一問に入魂する</button>`}
-    <div class="notice" style="margin-top:8px">昨日の正答率 ${20+hash(today()+'y')%35}%（デモ）</div>
+    <div class="mute">1日1問の難問・1回きり。正解で<b style="color:var(--gold2)">300石</b>。</div>
+    ${r.ny?`<div style="margin-top:8px;font-weight:800">${r.ny.ok?"🎉 正解 +"+fmt(r.ny.koku)+"石":"⚫ 不正解"}</div><div class="mute">${nk.e}</div>`:`<button class="pri" style="margin-top:8px" onclick="nyukon()">一問に入魂する</button>`}
+    <div class="notice" style="margin-top:8px">きのうの正答率 ${20+hash(today()+"y")%35}%（デモ）</div>
   </div>
 
   <div class="card">
-    <h2>🎲 ミニゲーム札</h2>
+    <h2>🎲 ミニゲーム</h2>
     <div class="mute">知らないと勝てない。勝つと覚えている。1日1回ずつ。</div>
-    <div class="row" style="margin-top:8px">
-      <button style="flex:1" ${r.jibu!=null?'disabled':''} onclick="jibu()">🍲 治部煮をつくれ<br><small class="mute">${r.jibu!=null?'本日 +'+r.jibu+'石':'60秒'}</small></button>
-      <button style="flex:1" ${r.kaga!=null?'disabled':''} onclick="kaga()">🥬 加賀野菜 仕分け<br><small class="mute">${r.kaga!=null?'本日 +'+r.kaga+'石':'45秒'}</small></button>
+    <div class="games">
+      <button class="gm" ${r.jibu!=null?"disabled":""} onclick="jibu()"><span class="gi">${ART.nabe}</span><b>治部煮をつくれ</b><small>${r.jibu!=null?"本日 +"+fmt(r.jibu)+"石":"60秒"}</small></button>
+      <button class="gm" ${r.kaga!=null?"disabled":""} onclick="kaga()"><span class="gi">${veg("thick","#f4f0e6")}</span><b>加賀野菜 仕分け</b><small>${r.kaga!=null?"本日 +"+fmt(r.kaga)+"石":"45秒"}</small></button>
     </div>
-    <div class="row" style="margin-top:8px"><button style="flex:1" disabled>🪙 金箔を打て<br><small class="mute">じゅんび中</small></button><button style="flex:1" disabled>🏛️ 予算テトリス<br><small class="mute">じゅんび中</small></button></div>
   </div>
 
   <div class="card">
-    <h2>🏘️ わたしの城下町</h2>
-    <div class="mute">蔵の石で建物を建てると、以後の獲得が増えます。使っても校下の石高は減りません。</div>
-    <div class="town">${BUILD.map(b=>`<div class="lot ${S.builds[b.id]?'on':''}"><span>${S.builds[b.id]?b.i:'🟫'}</span>${S.builds[b.id]?b.n:'空き地'}</div>`).join("")}</div>
-    <div class="mute" style="margin:8px 0 4px">蔵：<b style="color:var(--gold2)">${S.kura.toLocaleString()}石</b></div>
-    ${BUILD.filter(b=>!S.builds[b.id]).map(b=>`<div class="shop"><span style="font-size:24px">${b.i}</span><div style="flex:1"><b>${b.n}</b><div class="mute">${b.d}</div></div><button class="gold" ${S.kura<b.cost?'disabled':''} onclick="build('${b.id}')">${b.cost.toLocaleString()}石</button></div>`).join("")||'<div class="mute">ぜんぶ建てました 🎉</div>'}
+    <div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><span class="mute">${built().length}棟 / ${S.lots}区画</span></div>
+    <div class="town mini">${S.town.map(b=>`<div class="lot">${b?ART[b.id]:ART.lot_empty}</div>`).join("")}</div>
+    <button class="gold" style="width:100%;margin-top:8px" onclick="town()">城下町をひらく</button>
   </div>
 
   <div class="card">
-    <h2>🏯 校下ランキング <span class="tag">デモ用の仮データ</span></h2>
-    ${rank.slice(0,8).map((x,i)=>row(x,i,x.k===S.kouka)).join("")}
-    ${myI>=8?`<div class="mute center">…</div>${row(my,myI,true)}`:''}
-    <div class="notice" style="margin-top:8px">※ 他校下の数字は試作の仮データです。本番はFirebaseで全員の石高を合算します。</div>
+    <h2>🏯 校下番付 <span class="tag">デモ</span></h2>
+    ${rk.slice(0,8).map((x,i)=>row(x,i)).join("")}${myI>=8?`<div class="mute center">…</div>${row(my,myI)}`:""}
   </div>
 
   <div class="card">
     <h2>🤝 援軍をよぶ</h2>
-    <div class="mute">このURLから登録した人1人につき、${S.kouka}校下に+100石。</div>
-    <button class="gold" style="margin-top:8px" onclick="invite()">🔗 招待リンクをコピー</button>
-    <hr>
-    <button onclick="if(confirm('登録をやり直しますか？（石高は残ります）')){S.kouka='';save();home()}">校下を変える</button>
-  </div>`;
-  hd();
-  maybeHagure();
+    <div class="mute">あなたのURLから1人参戦するごとに、<b>あなたに+300石</b>（${S.kouka}校下の石高にも入ります）。さらに呼んだ人数で、<b>援軍を呼んだ人しか手に入らない品</b>がもらえます。</div>
+    <div style="margin:8px 0;font-weight:800">呼んだ援軍：${S.invites}人</div>
+    <div class="items">${INV_ITEMS.map(it=>`<div class="item ${S.invites>=it.need?"on":""}"><div class="ii">${it.kind==="bld"?ART[it.id]:avatar(S.g,S.a,rankLv(S.koku),undefined,true)}</div><b>${it.n}</b><small>${S.invites>=it.need?"✅ 入手":`援軍${it.need}人`}</small><small class="mute">${it.d}</small></div>`).join("")}</div>
+    <button class="gold" style="width:100%;margin-top:8px" onclick="invite()">🔗 援軍を呼ぶURLを送る</button>
+    <div class="notice" style="margin-top:6px">※ 呼んだ人数の集計は本番のサーバー接続後に動きます。</div>
+  </div>
+  ${ADMIN?adminPanel():""}`;
+  hd();maybeHagure();
 }
-function row(x,i,me){return `<div class="rank ${me?'me':''}"><div class="n">${i+1}</div><div class="flag" style="width:34px;height:34px;font-size:14px;background:${color(x.k)}">${x.k[0]}</div><div class="name">${x.k}校下<small>${x.members}人</small></div><div class="pt">${x.koku.toLocaleString()}石</div></div>`}
-function title(k){return k>=100000?"大名":k>=30000?"家老":k>=10000?"侍大将":k>=2000?"組頭":"足軽"}
-// シーズンの揺さぶり：首位に大雪・下位に援軍・最下位は一揆の大将
-function seasonEvent(){if(!S.kouka)return null;const r=demoRank();const i=r.findIndex(x=>x.k===S.kouka);
-  if(i===0)return {cls:"ng",t:"❄️ 大雪：首位の校下は今日の獲得 −20%",mul:.8};
-  if(i===r.length-1)return {cls:"ok",t:"⚔️ 一揆の大将：最下位の校下は今日の獲得 +50%（首位から石を奪う権利はじゅんび中）",mul:1.5};
-  if(i>=r.length-6)return {cls:"ok",t:"🐎 援軍到着：下位の校下は今日の獲得 +30%",mul:1.3};
-  return null}
+function row(x,i){const me=x.k===S.kouka;return `<div class="rank ${me?"me":""}"><div class="bz">${BANZUKE(i)}</div><span class="kf sm">${flagSvg(x.k,color(x.k))}</span><div class="name">${x.k}<small>${x.m}人</small></div><div class="pt">${fmt(x.koku)}石</div></div>`}
+function invite(){const u=location.origin+location.pathname+"?k="+encodeURIComponent(S.kouka)+"&from="+encodeURIComponent(S.name);
+  const txt=`【百万石バトル】${S.kouka}校下に援軍たのむ！ ${u}`;if(navigator.share)navigator.share({text:txt}).catch(()=>{});else{navigator.clipboard?.writeText(txt);toast("コピーしました")}}
+function inviteArrived(){S.invites++;const got=addKoku(300,"援軍が参戦！","invite");const it=INV_ITEMS.find(i=>i.need===S.invites);
+  if(it&&it.kind==="bld"){if(!S.town.includes(null)){S.lots++;S.town.push(null)}S.town[S.town.indexOf(null)]={id:it.id,paid:0,inv:1}}
+  if(it)toast(`🎁 ${it.n} を手に入れた！`);save();home()}
 
-function register(){
-  const inv=new URLSearchParams(location.search).get("k");
-  app.innerHTML=`
-  <div class="card">
-    <h2>⚔️ 参戦する</h2>
-    <div class="mute">郵便番号で自分の陣地（校下）が決まります。金沢市外の方は「援軍」として好きな校下へ。</div>
-    <div style="margin-top:10px"><label class="mute">なまえ（ランキング表示用）</label><input id="nm" maxlength="10" placeholder="例：たけ" value="${S.name||''}"></div>
-    <div style="margin-top:10px"><label class="mute">郵便番号（ハイフンなし・7桁）</label><input id="zip" inputmode="numeric" maxlength="7" placeholder="9218001" oninput="zipCheck()"></div>
-    <div id="zipRes" class="mute" style="margin-top:6px"></div>
-    <div style="margin-top:10px"><label class="mute">校下をえらぶ（郵便番号で決まらないとき・援軍のとき）</label>
-      <select id="kk"><option value="">— えらぶ —</option>${KOUKA.map(k=>`<option ${inv===k?'selected':''}>${k}</option>`).join("")}</select></div>
-    ${inv?`<div class="notice" style="margin-top:8px">🤝 ${inv}校下から招待されています</div>`:''}
-    <button class="pri" style="margin-top:12px" onclick="doReg()">この校下で参戦</button>
-    <div class="notice" style="margin-top:10px">試作メモ：郵便番号→校下の自動判定は、いま米丸校下の一部（921-8001など）だけ入っています。正式な61校下の区域表を装填すれば全域で自動になります。</div>
-  </div>`;
-}
-function zipCheck(){const z=$("#zip").value.replace(/\D/g,"");const r=$("#zipRes");if(z.length<7){r.textContent="";return}
-  const k=ZIP2K[z];if(k){r.innerHTML=`✅ <b>${k}校下</b> の住民として参戦できます`;$("#kk").value=k}
-  else if(z.startsWith("920")||z.startsWith("921")){r.textContent="金沢市内のようですが、この郵便番号の校下はまだ登録がありません。下から校下をえらんでください。"}
-  else r.textContent="金沢市外の郵便番号です。援軍として好きな校下をえらんでください。"}
-function doReg(){const nm=$("#nm").value.trim(),z=$("#zip").value.replace(/\D/g,""),k=$("#kk").value;
-  if(!nm)return toast("なまえを入れてください");if(!k)return toast("校下をえらんでください");
-  S.name=nm;S.kouka=k;S.zip=ZIP2K[z]===k?z:"";save();
-  if(new URLSearchParams(location.search).get("k")){addKoku(100,"招待ボーナス")}
-  home()}
-function invite(){const u=location.origin+location.pathname+"?k="+encodeURIComponent(S.kouka);
-  const txt=`【百万石バトル】${S.kouka}校下に援軍たのむ！ ${u}`;
-  if(navigator.share){navigator.share({text:txt}).catch(()=>{})}else{navigator.clipboard?.writeText(txt);toast("コピーしました")}}
+/* ---------- 画面：城下町 ---------- */
+function town(){abar.className="abar";
+  const cats=Object.entries(CATS).map(([k,c])=>{const v=k==="midori"?`毎朝+${harvest()}石`:`+${Math.round(catBonus(k)*100)}%`;return `<div class="cb"><b>${c.n}</b><span>${c.eff}</span><em>${v}${c.max?`<small> / 上限${Math.round(c.max*100)}%</small>`:""}</em></div>`}).join("");
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
+  <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${fmt(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${fmt(upkeep())}石</b></div>
+  <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?(bdef(b.id)?ART[b.id]:ART[b.id]):ART.lot_empty}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
+    <button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button></div>
+  </div>
+  <div class="card"><h2>📊 城下町の効き目</h2><div class="cbs">${cats}</div>
+  <div class="notice" style="margin-top:8px">同じ分野の建物は、建てるほど効き目の伸びがゆるやかになり、上限に近づきます。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div>`}
+function buyLot(){const c=lotCost(S.lots);if(S.kura<c)return toast(`蔵の石が足りません（あと${fmt(c-S.kura)}石）`);S.kura-=c;S.lots++;S.town.push(null);save();toast("区画が増えました");town()}
+function lotTap(i){const b=S.town[i];if(!b)return buildMenu(i);
+  const d=bdef(b.id),inv=!d;const name=inv?INV_ITEMS.find(x=>x.id===b.id).n:d.n;
+  app.innerHTML=`<div class="card center"><div class="bimg">${ART[b.id]}</div><h2>${name}${b.old?"（老朽化）":""}</h2>
+  <div class="mute">${inv?INV_ITEMS.find(x=>x.id===b.id).d:`${CATS[d.c].n}：${d.d}`}</div>
+  ${inv?"":`<div class="mute" style="margin-top:6px">毎朝の維持費 ${b.old?0:fmt(b.paid*UPKEEP)}石</div>`}
+  ${b.old?`<button class="pri" style="margin-top:10px" onclick="repair(${i})">修繕する（${fmt(b.paid*REPAIR)}石）</button>`:""}
+  ${inv?"":`<button style="width:100%;margin-top:8px" onclick="if(confirm('取り壊しますか？（石はもどりません）')){S.town[${i}]=null;save();town()}">取り壊す</button>`}
+  <button style="width:100%;margin-top:8px" onclick="town()">もどる</button></div>`}
+function repair(i){const b=S.town[i],c=Math.round(b.paid*REPAIR);if(S.kura<c)return toast("蔵の石が足りません");S.kura-=c;b.old=0;save();toast("修繕しました");town()}
+function buildMenu(i){
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🔨 何を建てる？</h2><button onclick="town()">もどる</button></div>
+  <div class="mute">蔵 <b style="color:var(--gold2)">${fmt(S.kura)}石</b></div>
+  ${BLD.map(d=>{const done=d.uniq&&owned(d.id),c=nextCost(d);const gain=d.c==="midori"?`毎朝+${Math.round(d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length))}石`:`${CATS[d.c].eff} +${Math.round((CATS[d.c].max*(1-Math.pow(DECAY,units(d.c)+(d.uniq?UW:(d.w||1))))-catBonus(d.c))*1000)/10}%`;
+    return `<div class="bl ${done?"done":""}"><div class="bt">${ART[d.id]}</div><div style="flex:1;min-width:0"><b>${d.n}</b>${d.uniq?'<span class="tag">名所・1つだけ</span>':owned(d.id)?`<span class="tag">${owned(d.id)}棟目</span>`:""}<div class="mute">${d.d}</div><div class="mute">建てると：${gain}・維持費 毎朝${fmt(c*UPKEEP)}石</div></div>
+    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${done?"建設済":fmt(c)+"石"}</button></div>`}).join("")}</div>`}
+function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c)return;S.kura-=c;S.town[i]={id,paid:c};save();toast(`${d.n} が建ちました！`);town()}
 
-/* ========= 今日の十問 ========= */
+/* ---------- 今日の十問 ---------- */
 let Q;
 function quiz(){Q={i:0,ox:"",n:0,order:shuffle(QUIZ.map((_,i)=>i))};qShow()}
-function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function qShow(){abar.className="abar";const q=QUIZ[Q.order[Q.i]];const ord=shuffle([0,1,2,3]);
-  app.innerHTML=`<div class="card"><div class="prog"><i style="width:${Q.i*10}%"></i></div><div class="mute">第${Q.i+1}問 / 10</div><div class="q">${q.q}</div>
-  ${ord.map(j=>`<button class="opt" data-j="${j}" onclick="qAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
-function qAns(j){const q=QUIZ[Q.order[Q.i]];const ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
+function qShow(){abar.className="abar";const q=QUIZ[Q.order[Q.i]],ord=shuffle([0,1,2,3]);
+  app.innerHTML=`<div class="card"><div class="prog"><i style="width:${Q.i*10}%"></i></div><div class="mute">第${Q.i+1}問 / 10</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="qAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
+function qAns(j){const q=QUIZ[Q.order[Q.i]],ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
   Q.ox+=ok?"🟡":"⚫";if(ok)Q.n++;
   abar.className="abar on";abar.innerHTML=`<div class="res">${ok?"🟡 正解！":"⚫ 不正解"} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:8px">${q.e}</div><button class="pri" onclick="qNext()">${Q.i<9?"次の問題へ":"結果を見る"}</button>`}
 function qNext(){Q.i++;if(Q.i<10)return qShow();
-  let koku=Q.n*50+(Q.n===10?250:0);const r=dayRec();r.quiz={ox:Q.ox,n:Q.n,koku};
-  S.streak=(S.last&&daysBetween(S.last,today())===1)?S.streak+1:1;S.last=today();save();koku=addKoku(koku,"今日の十問","quiz");r.quiz.koku=koku;save();
-  abar.className="abar";app.innerHTML=`<div class="card center"><div class="mute">今日の十問</div><div class="big">${Q.n}/10</div><div class="ox">${Q.ox}</div><div style="margin:8px 0;font-weight:800">+${koku}石 ${Q.n===10?"🎉 全問正解ボーナス込み":""}</div><div class="mute">連続 ${S.streak}日</div>
+  const got=addKoku(Q.n*50+(Q.n===10?250:0),"今日の十問","quiz");dayRec().quiz={ox:Q.ox,n:Q.n,koku:got};
+  S.streak=(S.last&&dBetween(S.last,today())===1)?S.streak+1:1;S.last=today();save();
+  abar.className="abar";app.innerHTML=`<div class="card center"><div class="mute">今日の十問</div><div class="big">${Q.n}/10</div><div class="ox">${Q.ox}</div><div style="margin:8px 0;font-weight:800">+${fmt(got)}石</div><div class="mute">連続 ${S.streak}日</div>
   <button class="gold" style="margin-top:10px;width:100%" onclick="share()">📸 結果を画像にして共有</button><div id="shareBox"></div><button style="margin-top:8px;width:100%" onclick="home()">ホームへ</button></div>`}
-function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/864e5)}
 
-/* ========= 共有画像 ========= */
-function share(){const r=dayRec().quiz;if(!r)return;const c=$("#cv"),x=c.getContext("2d");
-  x.fillStyle="#0f0d0a";x.fillRect(0,0,1080,1080);
-  x.fillStyle=color(S.kouka);x.fillRect(0,0,1080,260);
-  x.fillStyle="#fff";x.font="900 120px sans-serif";x.textAlign="center";x.fillText(S.kouka+"校下",540,170);
-  x.fillStyle="#f3dc9a";x.font="900 72px sans-serif";x.fillText("百万石バトル・今日の十問",540,380);
-  x.fillStyle="#f3ede0";x.font="900 200px sans-serif";x.fillText(`${r.n}/10`,540,620);
-  x.font="110px sans-serif";x.fillText(r.ox,540,780);
-  x.fillStyle="#d8b45a";x.font="700 56px sans-serif";x.fillText(`+${r.koku}石　${S.name}（${title(S.koku)}）`,540,900);
-  x.fillStyle="#a79c86";x.font="40px sans-serif";x.fillText(today().replace(/-/g,".")+"　#百万石バトル #金沢まるっと",540,1000);
-  const url=c.toDataURL("image/png");const box=$("#shareBox");box.innerHTML=`<img class="share" src="${url}"><div class="mute center">長押しで保存 → インスタのストーリーへ</div>`;
-  c.toBlob(b=>{const f=new File([b],"hyakumangoku.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:"#百万石バトル"}).catch(()=>{})})}
+/* ---------- 一問入魂 ---------- */
+function nyukon(){const q=NYUKON[hash(today())%NYUKON.length],ord=shuffle([0,1,2,3]);abar.className="abar";
+  app.innerHTML=`<div class="card"><h2>🎯 一問入魂</h2><div class="mute">1回きり。よく考えて。</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="nyAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
+function nyAns(j){const q=NYUKON[hash(today())%NYUKON.length],ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
+  const got=ok?addKoku(300,"一問入魂","nyukon"):0;dayRec().ny={ok,koku:got};save();
+  abar.className="abar on";abar.innerHTML=`<div class="res">${ok?"🎉 正解！ +"+fmt(got)+"石":"⚫ 不正解"} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:8px">${q.e}</div><button class="pri" onclick="home()">ホームへ</button>`}
 
-/* ========= 治部煮 ========= */
+/* ---------- はぐれ問題 ---------- */
+let HG=null,HGP=false;
+function maybeHagure(){const r=dayRec();if(r.hagure!=null||HG||HGP)return;const rate=S.invites>=3?.6:.35;if(Math.random()>rate){r.hagure=false;save();return}
+  HGP=true;setTimeout(()=>{HGP=false;if(HG||dayRec().hagure!=null||abar.classList.contains("on"))return;showHagure()},1500)}
+function showHagure(){if(HG)return;const q=HAGURE[Math.floor(Math.random()*HAGURE.length)],ord=shuffle([0,1,2,3]);HG={q,t:5000,start:Date.now()};
+  const ov=document.createElement("div");ov.className="hg";ov.id="hg";
+  ov.innerHTML=`<div class="hgbox"><div class="hgm">${ART.hagure}</div><div class="hgt">はぐれ雪坊が あらわれた！</div><div class="mute">5秒で逃げる・正解で150石</div><div class="prog" style="height:8px;margin:8px 0"><i id="hgbar" style="width:100%;background:#ff6a5c"></i></div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" onclick="hgAns(${j})">${q.o[j]}</button>`).join("")}</div>`;
+  document.body.appendChild(ov);
+  HG.timer=setInterval(()=>{const left=HG.t-(Date.now()-HG.start),b=$("#hgbar");if(b)b.style.width=Math.max(0,left/HG.t*100)+"%";if(left<=0)hgEnd(null)},50)}
+function hgAns(j){hgEnd(j===HG.q.a)}
+function hgEnd(ok){clearInterval(HG.timer);$("#hg")?.remove();const r=dayRec();
+  if(ok)r.hagure=addKoku(150,"はぐれ雪坊をたおした");else{r.hagure=0;toast("はぐれ雪坊は 逃げ出した…")}save();HG=null;home()}
+
+/* ---------- 治部煮をつくれ ---------- */
 let J;
-function jibu(){abar.className="abar";
-  app.innerHTML=`<div class="card"><h2>🍲 治部煮をつくれ</h2><div class="mute">12の具材から、治部煮に入れる<b>6つ</b>を選んで鍋へ。にせ具材を入れると減点。制限時間60秒。</div>
-  <div class="notice" style="margin-top:8px">ヒント：鴨肉に粉をまぶして、だしで煮る。仕上げにわさび。</div><button class="pri" style="margin-top:12px" onclick="jibuStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
-function jibuStart(){J={t:60,sel:[],done:false};const items=shuffle([...JIBU_OK.map(x=>({n:x[0],i:x[1],ok:true})),...JIBU_NG.map(x=>({n:x[0],i:x[1],ok:false}))]);J.items=items;
+function jibu(){abar.className="abar";app.innerHTML=`<div class="card"><div class="gimg">${ART.nabe}</div><h2>🍲 治部煮をつくれ</h2><div class="mute">12の具材から、治部煮に入れる<b>6つ</b>を選んで鍋へ。にせ具材は減点。制限時間60秒。</div><div class="notice" style="margin-top:8px">ヒント：鴨肉に粉をまぶして、だしで煮る。仕上げにわさび。</div><button class="pri" style="margin-top:12px" onclick="jibuStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
+function jibuStart(){J={t:60,sel:[],done:false,items:shuffle([...JIBU_OK.map(n=>({n,ok:true})),...JIBU_NG.map(n=>({n,ok:false}))])};
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🍲 治部煮</h2><div class="timer" id="tm">60</div></div>
-  <div class="pot" id="pot"><span class="mute">鍋はからっぽ</span></div>
-  <div class="grid">${items.map((it,k)=>`<div class="ing" id="ing${k}" onclick="jibuPick(${k})"><span>${it.i}</span>${it.n}</div>`).join("")}</div>
+  <div class="potw">${ART.nabe}<div class="pot" id="pot"></div></div>
+  <div class="grid">${J.items.map((it,k)=>`<button class="ing" id="ing${k}" onclick="jibuPick(${k})">${ART.ing[it.n]}<span>${it.n}</span></button>`).join("")}</div>
   <button class="pri" style="margin-top:12px" id="jibuGo" onclick="jibuFinish()" disabled>できあがり！（6つ選ぶと押せます）</button></div>`;
   J.timer=setInterval(()=>{J.t--;const tm=$("#tm");if(!tm)return clearInterval(J.timer);tm.textContent=J.t;if(J.t<=10)tm.classList.add("hot");if(J.t<=0)jibuFinish()},1000)}
-function jibuPick(k){if(J.done)return;const el=$("#ing"+k);const i=J.sel.indexOf(k);if(i>=0){J.sel.splice(i,1);el.classList.remove("sel")}else{if(J.sel.length>=6)return toast("鍋は6つまで");J.sel.push(k);el.classList.add("sel")}
-  $("#pot").innerHTML=J.sel.length?J.sel.map(k=>`<span style="font-size:28px">${J.items[k].i}</span>`).join(""):'<span class="mute">鍋はからっぽ</span>';$("#jibuGo").disabled=J.sel.length!==6}
-function jibuFinish(){if(J.done)return;J.done=true;clearInterval(J.timer);
-  let good=0,bad=0;J.items.forEach((it,k)=>{const el=$("#ing"+k);const picked=J.sel.includes(k);if(picked&&it.ok){good++;el.classList.add("good")}if(picked&&!it.ok){bad++;el.classList.add("bad")}if(!picked&&it.ok)el.classList.add("sel")});
-  const koku=Math.max(0,good*30-bad*30+(good===6&&bad===0?60:0)+(good===6&&bad===0?Math.round(J.t*1.5):0));
-  const got=addKoku(koku,"治部煮","game");dayRec().jibu=got;save();
-  abar.className="abar on";abar.innerHTML=`<div class="res">${good===6&&bad===0?"🎉 完璧な治部煮！":`正しい具材 ${good}/6 ・ にせ具材 ${bad}`}</div><div class="mute" style="margin-bottom:8px">治部煮＝鴨肉（または鶏肉）に小麦粉をまぶし、だしで煮て、すだれ麩・しいたけ・せりを合わせ、わさびを添える。${good===6&&bad===0?"残り時間ボーナス+"+Math.round(J.t*1.5)+"石":""}</div><button class="pri" onclick="home()">+${got}石 ・ ホームへ</button>`}
+function jibuPick(k){if(J.done)return;const el=$("#ing"+k),i=J.sel.indexOf(k);if(i>=0){J.sel.splice(i,1);el.classList.remove("sel")}else{if(J.sel.length>=6)return toast("鍋は6つまで");J.sel.push(k);el.classList.add("sel")}
+  $("#pot").innerHTML=J.sel.map(k=>`<span>${ART.ing[J.items[k].n]}</span>`).join("");$("#jibuGo").disabled=J.sel.length!==6}
+function jibuFinish(){if(J.done)return;J.done=true;clearInterval(J.timer);let good=0,bad=0;
+  J.items.forEach((it,k)=>{const el=$("#ing"+k),p=J.sel.includes(k);if(p&&it.ok){good++;el.classList.add("good")}if(p&&!it.ok){bad++;el.classList.add("bad")}if(!p&&it.ok)el.classList.add("miss")});
+  const perfect=good===6&&bad===0;const got=addKoku(Math.max(0,good*30-bad*30+(perfect?60+Math.round(J.t*1.5):0)),"治部煮","game");dayRec().jibu=got;save();
+  abar.className="abar on";abar.innerHTML=`<div class="res">${perfect?"🎉 完璧な治部煮！":`正しい具材 ${good}/6 ・ にせ具材 ${bad}`}</div><div class="mute" style="margin-bottom:8px">治部煮＝鴨肉（または鶏肉）に小麦粉をまぶし、だしで煮て、すだれ麩・しいたけ・せりを合わせ、わさびを添える。</div><button class="pri" onclick="home()">+${fmt(got)}石 ・ ホームへ</button>`}
 
-/* ========= 加賀野菜 仕分け ========= */
+/* ---------- 加賀野菜 仕分け ---------- */
 let K;
-function kaga(){abar.className="abar";
-  app.innerHTML=`<div class="card"><h2>🥬 加賀野菜 仕分け</h2><div class="mute">出てきた野菜が<b>加賀野菜15品目</b>なら<b>右</b>へ、ちがう野菜なら<b>左</b>へスワイプ（またはボタン）。45秒で何枚さばける？</div><button class="pri" style="margin-top:12px" onclick="kagaStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
-function kagaStart(){K={t:45,ok:0,ng:0,done:false,deck:shuffle([...KAGA.map(n=>({n,ok:true})),...NOTKAGA.map(n=>({n,ok:false}))])};
+const deck=()=>shuffle([...KAGA.map(v=>({v,ok:true})),...NOTKAGA.map(v=>({v,ok:false}))]);
+function kaga(){abar.className="abar";app.innerHTML=`<div class="card"><div class="gimg row" style="justify-content:center">${veg("thick","#f4f0e6")}${veg("kabocha","#d8582a")}${veg("nasu","#3a1f4a","#6a2a7a")}</div><h2>🥬 加賀野菜 仕分け</h2><div class="mute">出てきた野菜が<b>加賀野菜15品目</b>なら<b>右</b>へ、ちがえば<b>左</b>へスワイプ（ボタンでもOK）。45秒で何枚さばける？</div><button class="pri" style="margin-top:12px" onclick="kagaStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
+function kagaStart(){K={t:45,ok:0,ng:0,done:false,deck:deck()};
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🥬 仕分け</h2><div class="timer" id="tm">45</div></div>
   <div class="stage" id="stage"><div class="lane l">← ちがう</div><div class="lane r">加賀野菜 →</div><div class="flash" id="flash"></div><div class="veg" id="veg"></div></div>
   <div class="row"><button style="flex:1" onclick="kagaJudge(false)">← ちがう</button><button class="gold" style="flex:1" onclick="kagaJudge(true)">加賀野菜 →</button></div>
   <div class="mute center" style="margin-top:6px">正解 <b id="kok">0</b> ・ ミス <b id="kng">0</b></div></div>`;
   kagaNext();swipe($("#veg"));
   K.timer=setInterval(()=>{K.t--;const tm=$("#tm");if(!tm)return clearInterval(K.timer);tm.textContent=K.t;if(K.t<=10)tm.classList.add("hot");if(K.t<=0)kagaFinish()},1000)}
-function kagaNext(){if(K.done||!$("#veg"))return;if(!K.deck.length)K.deck=shuffle([...KAGA.map(n=>({n,ok:true})),...NOTKAGA.map(n=>({n,ok:false}))]);K.cur=K.deck.pop();const v=$("#veg");v.innerHTML=`<span>${VEGICON[K.cur.n]||"🥬"}</span>${K.cur.n}`;v.style.transition="none";v.style.transform="translateX(-50%)"}
-function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok;const f=$("#flash");f.className="flash "+(ok?"ok":"ng");setTimeout(()=>f.className="flash",300);
-  if(ok)K.ok++;else K.ng++;$("#kok").textContent=K.ok;$("#kng").textContent=K.ng;
-  if(!ok)toast(`${K.cur.n} は ${K.cur.ok?"加賀野菜です":"加賀野菜ではありません"}`);
+function kagaNext(){if(K.done||!$("#veg"))return;if(!K.deck.length)K.deck=deck();K.cur=K.deck.pop();const v=$("#veg");const [n,ty,c1,c2]=K.cur.v;v.innerHTML=`<div class="vimg">${veg(ty,c1,c2)}</div>${n}`;v.style.transition="none";v.style.transform="translateX(-50%)"}
+function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok,f=$("#flash");f.className="flash "+(ok?"ok":"ng");setTimeout(()=>f.className="flash",300);
+  ok?K.ok++:K.ng++;$("#kok").textContent=K.ok;$("#kng").textContent=K.ng;if(!ok)toast(`${K.cur.v[0]} は ${K.cur.ok?"加賀野菜です":"加賀野菜ではありません"}`);
   const v=$("#veg");v.style.transition="transform .18s";v.style.transform=`translateX(${right?"120%":"-320%"})`;setTimeout(kagaNext,180)}
 function swipe(el){let sx=0,dx=0;el.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;dx=0},{passive:true});
   el.addEventListener("touchmove",e=>{dx=e.touches[0].clientX-sx;el.style.transition="none";el.style.transform=`translateX(calc(-50% + ${dx}px)) rotate(${dx/15}deg)`},{passive:true});
   el.addEventListener("touchend",()=>{if(Math.abs(dx)>70)kagaJudge(dx>0);else{el.style.transition="transform .15s";el.style.transform="translateX(-50%)"}})}
 function kagaFinish(){if(K.done)return;K.done=true;clearInterval(K.timer);const got=addKoku(Math.min(400,Math.max(0,K.ok*20-K.ng*15)),"加賀野菜","game");dayRec().kaga=got;save();
-  abar.className="abar on";abar.innerHTML=`<div class="res">正解 ${K.ok} ・ ミス ${K.ng}</div><div class="mute" style="margin-bottom:8px">加賀野菜15品目：${KAGA.join("・")}</div><button class="pri" onclick="home()">+${got}石 ・ ホームへ</button>`}
+  abar.className="abar on";abar.innerHTML=`<div class="res">正解 ${K.ok} ・ ミス ${K.ng}</div><div class="mute" style="margin-bottom:8px">加賀野菜15品目：${KAGA.map(v=>v[0]).join("・")}</div><button class="pri" onclick="home()">+${fmt(got)}石 ・ ホームへ</button>`}
 
-/* ========= 普請（建物） ========= */
-function build(id){const b=BUILD.find(x=>x.id===id);if(S.kura<b.cost)return;S.kura-=b.cost;S.builds[id]=today();save();toast(`${b.i} ${b.n} が建ちました！`);home()}
+/* ---------- 共有画像（人物の絵入り） ---------- */
+function svgImg(svg){return new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)})}
+async function share(){const r=dayRec().quiz;if(!r)return;const c=$("#cv"),x=c.getContext("2d");
+  x.fillStyle="#0f0d0a";x.fillRect(0,0,1080,1080);x.fillStyle=color(S.kouka);x.fillRect(0,0,1080,230);
+  const av=await svgImg(avatar(S.g,S.a,rankLv(S.koku),undefined,S.invites>=5));if(av)x.drawImage(av,60,270,300,350);
+  x.fillStyle="#fff";x.font="900 110px sans-serif";x.textAlign="center";x.fillText(S.kouka+"校下",540,160);
+  x.textAlign="left";x.fillStyle="#f3dc9a";x.font="900 60px sans-serif";x.fillText("今日の十問",400,340);
+  x.fillStyle="#f3ede0";x.font="900 190px sans-serif";x.fillText(`${r.n}/10`,400,540);
+  x.font="56px sans-serif";x.fillText(r.ox,400,630);
+  x.textAlign="center";x.fillStyle="#d8b45a";x.font="700 54px sans-serif";x.fillText(`+${fmt(r.koku)}石　${S.name}（${title(S.koku)}）`,540,790);
+  x.fillStyle="#a79c86";x.font="38px sans-serif";x.fillText("みんなで百万石　#百万石バトル",540,900);x.fillText(today().replace(/-/g,"."),540,960);
+  const url=c.toDataURL("image/png");$("#shareBox").innerHTML=`<img class="share" src="${url}"><div class="mute center">長押しで保存 → インスタのストーリーへ</div>`;
+  c.toBlob(b=>{if(!b)return;const f=new File([b],"hyakumangoku.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:"#百万石バトル"}).catch(()=>{})})}
 
-/* ========= 一問入魂 ========= */
-function nyukon(){const q=NYUKON[hash(today())%NYUKON.length];const ord=shuffle([0,1,2,3]);abar.className="abar";
-  app.innerHTML=`<div class="card"><h2>🎯 一問入魂</h2><div class="mute">1回きり。よく考えて。</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="nyAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
-function nyAns(j){const q=NYUKON[hash(today())%NYUKON.length];const ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
-  const got=ok?addKoku(300,"一問入魂","nyukon"):0;dayRec().nyukon={ok,koku:got};save();
-  abar.className="abar on";abar.innerHTML=`<div class="res">${ok?'🎉 正解！ +'+got.toLocaleString()+'石':'⚫ 不正解'} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:8px">${q.e}</div><button class="pri" onclick="home()">ホームへ</button>`}
+/* ---------- 運営テスト用（?admin=1） ---------- */
+function adminPanel(){return `<div class="card"><h2>🛠 テスト用（?admin=1 のときだけ）</h2><div class="row">
+ <button onclick="S.kura+=5000;S.koku+=5000;save();home()">蔵+5000石</button>
+ <button onclick="inviteArrived()">援軍が1人来た</button>
+ <button onclick="S.dayShift=(S.dayShift||0)+1;save();home()">1日すすめる</button>
+ <button onclick="if(confirm('全部消して最初から？'))localStorage.removeItem(KEY),location.reload()">リセット</button></div></div>`}
 
-/* ========= はぐれ問題（5秒で逃げる） ========= */
-let HG,HGP=false;
-function maybeHagure(){const r=dayRec();if(r.hagure!=null||HG||HGP)return;if(Math.random()>.35){r.hagure=false;save();return}
-  HGP=true;setTimeout(()=>{HGP=false;if(HG||dayRec().hagure!=null||abar.classList.contains("on"))return;showHagure()},1500)}
-function showHagure(){if(HG)return;const q=HAGURE[Math.floor(Math.random()*HAGURE.length)];const ord=shuffle([0,1,2,3]);HG={q,t:5000,start:Date.now()};
-  const ov=document.createElement("div");ov.className="hg";ov.id="hg";
-  ov.innerHTML=`<div class="hgbox"><div class="hgt">⚡ はぐれ問題が あらわれた！</div><div class="mute">5秒で逃げる・正解で150石</div><div class="prog" style="height:8px;margin:8px 0"><i id="hgbar" style="width:100%;background:#ff6a5c"></i></div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" onclick="hgAns(${j})">${q.o[j]}</button>`).join("")}</div>`;
-  document.body.appendChild(ov);
-  HG.timer=setInterval(()=>{const left=HG.t-(Date.now()-HG.start);const b=$("#hgbar");if(b)b.style.width=Math.max(0,left/HG.t*100)+"%";if(left<=0)hgEnd(null)},50)}
-function hgAns(j){hgEnd(j===HG.q.a)}
-function hgEnd(ok){clearInterval(HG.timer);const ov=$("#hg");if(ov)ov.remove();const r=dayRec();
-  if(ok){r.hagure=addKoku(150,"はぐれ問題 撃破")}else{r.hagure=0;toast(ok===null?"はぐれ問題は 逃げ出した…":"はぐれ問題は 逃げ出した…（不正解）")}
-  save();HG=null;home()}
-
-/* ========= 起動 ========= */
 document.addEventListener("gesturestart",e=>e.preventDefault());
 home();
+
 </script>
 </body>
 </html>
