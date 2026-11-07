@@ -139,9 +139,9 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 canvas{display:none}img.share{width:100%;border-radius:12px;margin-top:8px}
 
 /* ふりがな：読みは字の上に浮かせる（字の幅・並びは変えない）。漢字のある行だけ上に余白 */
-.fg{display:inline-block;position:relative;padding-top:.72em;text-indent:0;line-height:inherit;vertical-align:baseline}
-.fg .frt{position:absolute;top:0;left:0;right:0;margin:0 -3em;text-align:center;transform:scaleX(var(--sx,1));transform-origin:center;white-space:nowrap;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;font-weight:700;font-size:max(.6em,9px);line-height:1;letter-spacing:0;opacity:.95;user-select:none;-webkit-user-select:none;pointer-events:none;text-transform:none}
-body:not(.furi) .fg{padding-top:0}body:not(.furi) .fg .frt{display:none}
+.fg{display:inline-block;position:relative;padding-top:.6em;text-indent:0;line-height:inherit;vertical-align:baseline}
+.fg .frt{position:absolute;top:0;left:0;right:0;margin:0 -3em;text-align:center;transform:scaleX(var(--sx,1));transform-origin:center;white-space:nowrap;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;font-weight:700;font-size:.5em;line-height:1;letter-spacing:0;opacity:.95;user-select:none;-webkit-user-select:none;pointer-events:none;text-transform:none}
+body:not(.furi) .fg{padding:0!important}body:not(.furi) .fg .frt{display:none}
 .admlv{display:flex;flex-direction:column;gap:4px;padding:6px 0;border-top:1px solid var(--line)}.admlv>span:first-child{font-weight:700}.admlv>span:last-child{display:flex;gap:4px;flex-wrap:wrap}.admlv button{padding:6px 4px;font-size:11px;flex:1;min-width:0;letter-spacing:-1px;color:#d8b45a}.admlv button.on{background:#d8b45a;color:#1b1711}
 .kgo{border:2px solid #d8b45a!important}.kgob{background:#d8b45a;color:#1b1711;border-radius:999px;padding:8px 12px;font-weight:900;white-space:nowrap;font-size:14px}
 .furiBtn{margin-left:auto;margin-right:8px;font:inherit;font-size:12px;padding:5px 9px;border-radius:999px;border:1px solid var(--line);background:transparent;color:inherit;opacity:.75;white-space:nowrap}
@@ -354,10 +354,15 @@ let FURI=false,FURI_BUSY=false;
 function furiPref(){const v=localStorage.getItem(FURI_KEY);if(v!==null)return v==="1";
   try{const s=JSON.parse(localStorage.getItem("hmg_v5")||"null");if(s&&s.lock&&s.age>=15)return false}catch(e){}return true}
 // 1語ぶんのruby（漢字のかたまりごと。送り仮名はそのまま）
+// 読みが字の幅をこえないようにする：まず横に縮め（0.65倍まで）、それでも足りなければ字の左右に少しだけすき間をあける
+// → となりの読みと重ならない
+const RT=0.5; // 読みの大きさ（字の半分）
+function fitStyle(w,n){const r=n*RT;if(r<=w)return "";const s=w/r;if(s>=.65)return ` style="--sx:${s.toFixed(2)}"`;
+  const pad=((r*.65-w)/2).toFixed(2);return ` style="--sx:.65;padding-left:${pad}em;padding-right:${pad}em"`}
 function rubyWord(k,r){const rs=r.split("|");let j=0,h="";
   for(const p of k.match(KRUN)){if(KANJI.test(p[0])){const y=rs[j++]||"";
       // 読みが長いときは横に縮めて、となりの字にかぶらないようにする
-      const w=p.length,n=y.length,sc=n*0.6>w*1.1?` style="--sx:${(w*1.1/(n*0.6)).toFixed(2)}"`:"";
+      const sc=fitStyle(p.length,y.length);
       h+=`<span class="fg"${sc}>${p}<span class="frt">${y}</span></span>`}else h+=p}
   return h}
 // すでに「卯辰山（うたつやま）」のように読みが書いてある語は二重にしない
@@ -382,7 +387,7 @@ function rubyText(t,pre=""){if(!KANJI.test(t))return null;let h="",i=0,hit=false
           else h+=hasParen(t,i+n)?esc(k):rubyWord(k,cy?(cy.wrap?"にん":cy.y):RUBY[k]);i+=n;done=hit=true;break}}
       if(!done){h+=esc(c);i++}}else{h+=esc(c);i++}}
   return hit?h:null}
-function rubyWord2(b,y){const w=b.replace(/[0-9]/g,"").length+b.replace(/[^0-9]/g,"").length*.55,n=y.length,sc=n*0.6>w*1.1?` style="--sx:${(w*1.1/(n*0.6)).toFixed(2)}"`:"";return `<span class="fg"${sc}>${b}<span class="frt">${y}</span></span>`}
+function rubyWord2(b,y){const sc=fitStyle(b.replace(/[0-9]/g,"").length+b.replace(/[^0-9]/g,"").length*.55,y.length);return `<span class="fg"${sc}>${b}<span class="frt">${y}</span></span>`}
 // 直前の文字（となりの要素の終わり）を取る：「<b>605</b>石」のような場合に数を見るため
 function prevText(node){let p=node.previousSibling;if(!p)return "";if(p.nodeType===3)return p.nodeValue.slice(-14);if(p.nodeType===1){if(p.classList&&p.classList.contains("fg"))return (p.firstChild&&p.firstChild.nodeValue)||"";return (p.textContent||"").slice(-14)}return ""}
 function rubyNode(root){if(!FURI||!root)return;
