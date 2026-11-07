@@ -111,6 +111,16 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .mapz{overflow:auto;border-radius:12px;background:#141a10;max-height:62vh;margin:0 -6px;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}.mapin{min-width:100%}
 .mrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border-bottom:1px solid #2a2318;border-radius:0;padding:8px 2px}.mrow .name{flex:1;font-weight:700}.mrow .name small{display:block;color:var(--mute);font-weight:400;font-size:11px}.mrow .pt{font-weight:800;color:var(--gold2);font-size:14px}.mrow.me{background:#241d12}.mrow.sel{outline:1px solid var(--gold)}
 .nowfx{color:#9fd48a;font-weight:800;font-size:13px;margin-top:2px}.rk{margin:4px 0}.promo{background:linear-gradient(#3a2e12,#241d12);border-color:#d8b45a}.cb small{font-size:11px;line-height:1.35;margin-top:2px}
+.master{background:#241d12;border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:10px 0;text-align:left;font-size:15px}.master.big2{font-size:19px;text-align:center;border-left:0;border-top:4px solid var(--gold)}
+.lvup{background:linear-gradient(#5a4210,#3a2a0a);color:#ffe08a;border-radius:10px;padding:10px;font-weight:900;font-size:17px;margin-top:8px}.dan{font-family:"DotGothic16",sans-serif;color:var(--gold2);font-size:15px;background:#2a2318;border-radius:8px;padding:1px 8px}
+.sanT,.sanS{text-align:center;font-size:20px;margin:6px 0}.sanT b{font-family:"DotGothic16",sans-serif;font-size:40px;color:var(--gold2)}.sanS.over{color:#ff6a5c}
+.sanG{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:8px 0}.sanb{font-size:22px;padding:14px 0;background:#241d12;border:1px solid var(--line)}.sanb.on{background:#5a4210;border-color:var(--gold)}
+.nenG{display:flex;flex-direction:column;gap:6px;margin:8px 0}.nenb{background:#241d12;border:1px solid var(--line);text-align:left}.nenb.ok{background:#1f4a2c;opacity:.6}.nenb.ng{background:#4a1f1f}.nenL{font-size:12px;color:var(--mute);display:flex;flex-direction:column}
+.tkLane{position:relative;height:240px;background:#0f0d0a;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:8px 0}.tkLine{position:absolute;left:0;right:0;top:80%;height:4px;background:var(--gold)}.tkN{position:absolute;left:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:radial-gradient(#ff8a5c,#b8352b);border:3px solid #ffd76a}
+.tkDrum{width:100%;height:110px;font-size:32px;border-radius:60px;background:radial-gradient(#e9d8b0,#a8845a);color:#3a2a1a;font-family:"DotGothic16",sans-serif;touch-action:manipulation}
+.akQ{background:#241d12;border-radius:10px;padding:10px;margin:8px 0;font-size:15px}.akPay{margin-top:6px;color:var(--gold2);font-weight:800}
+.awG{display:grid;gap:5px;margin:8px 0}.awC{padding:0;aspect-ratio:3/4;background:#5a2a1a;border:1px solid #8a5a3a;position:relative;overflow:hidden}.awC .back{font-family:"DotGothic16",sans-serif;color:#f3dc9a;font-size:20px}.awC .face{display:none;flex-direction:column;align-items:center;font-size:9px;line-height:1.1}.awC.up,.awC.done{background:#efe4c8;color:#2a1f14}.awC.up .back,.awC.done .back{display:none}.awC.up .face,.awC.done .face{display:flex}.awC.done{opacity:.5}
+.hkG{display:grid;gap:6px;margin:8px 0}.hkC{font-size:34px;aspect-ratio:1/1;background:#241d12;border:1px solid var(--line)}.hkC.fire{background:#5a1a10;animation:shake .3s infinite}
 .backb{display:block;width:100%;margin:4px 0 12px;background:#2a2318;border:1px solid #4a3c24}
 .testp{border-color:#3a7ac8!important;background:#141c26}.testp h2{color:#9cc8ec!important}.testp button{background:#1f3a5a}
 .irr{border-color:#5a7a3a}.irr.bad{border-color:#8a3a2a}.irt{font-family:"DotGothic16",sans-serif;font-size:19px;margin:2px 0 4px}.irres{margin-top:8px;background:#241d12;border-radius:8px;padding:8px 10px;font-weight:800;color:var(--gold2)}.irr button{margin-top:8px}
@@ -365,6 +375,7 @@ const INV_ITEMS=[
 ];
 const DAYMAX={quiz:19,nyukon:8,game:22,invite:15,all:19+8+22+4};  // 満点の日：十問19・入魂8・ミニゲーム22（治部煮11＋野菜11）・はぐれ4
 const UPKEEP=.01, REPAIR=.30, DECAY=.85, GROW=1.3, UW=3;
+const MAXLOT=13+3;  // 建物13種＋援軍の品の建物3つ
 const lotCost=n=>Math.round(15*Math.pow(n-2,1.5)*(typeof disc==="function"&&S.lock?disc():1));
 
 /* ---------- 年代（昔の言い回しで覚える） ---------- */
@@ -427,7 +438,7 @@ const pic=id=>PHOTO[id]?`<img src="${PHOTO[id]}" alt="" onerror="this.outerHTML=
 /* ---------- 状態 ---------- */
 const KEY="hmg_v5";
 const S0={name:"",g:"m",a:"seijin",age:0,seen:{},kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null,inv:{},kouken:0,mapSel:""};
-let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};S.seen=S.seen||{};S.total=S.total??S.koku;if(S.age)S.a=ageArt(S.age);
+let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};(()=>{const keep={};(S.town||[]).forEach((b,i)=>{if(!b)return;if(keep[b.id]!=null){const k=S.town[keep[b.id]];k.lv=(k.lv||1)+1;k.paid=(k.paid||0)+(b.paid||0);S.town[i]=null}else{keep[b.id]=i;b.lv=b.lv||1;b.exp=b.exp||0}})})();S.seen=S.seen||{};S.total=S.total??S.koku;if(S.age)S.a=ageArt(S.age);
 if(S.lock&&S.lock!==SEASON_ID){S.past=(S.past||[]).concat([{season:S.lock,kouka:S.kouka,koku:S.koku}]);S.koku=0;S.lock="";S.days={};REG={step:2,carry:1}}  // 城下町・内政・蔵・位は引き継ぎ
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s),app=$("#app"),abar=$("#abar");
@@ -468,11 +479,11 @@ const built=()=>S.town.filter(Boolean);
 const owned=id=>built().filter(b=>b.id===id).length;
 const bdef=id=>BLD.find(b=>b.id===id);
 const disc=()=>(1-.05*myLv("kogyo"))*((storyToday()||{fx:{}}).fx.cost||1);
-const nextCost=d=>Math.round((d.rep?d.cost*Math.pow(GROW,owned(d.id)):d.cost)*disc());
-function units(cat){const seen={};return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat)return s;seen[d.id]=(seen[d.id]||0)+1;if(d.lim&&seen[d.id]>d.lim)return s;if(d.uniq&&seen[d.id]>1)return s;return s+(d.uniq?UW:(d.w||1))*(b.old?.5:1)},0)}
+const nextCost=d=>Math.round(d.cost*disc()*10)/10;
+function units(cat){const seen={};return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat||seen[d.id])return s;seen[d.id]=1;const n=d.rep?Math.min(b.lv||1,d.lim):1;return s+(d.uniq?UW:(d.w||1)*n)*(b.old?.5:1)},0)}
 function umax(cat){return BLD.filter(d=>d.c===cat).reduce((s,d)=>s+(d.uniq?UW:(d.w||1)*(d.lim||1)),0)}
 function catBonus(cat,u){const c=CATS[cat];if(!c.max)return 0;const m=umax(cat);return m?Math.min(c.max,c.max*(1-Math.pow(DECAY,u??units(cat)))/(1-Math.pow(DECAY,m))):0}
-function harvest(){let sum=0,i=0;built().filter(b=>bdef(b.id)?.hv).sort((a,b)=>bdef(b.id).hv-bdef(a.id).hv).forEach(b=>{sum+=bdef(b.id).hv*Math.pow(.85,i++)*(b.old?.5:1)});
+function harvest(){const L=[],seen={};built().forEach(b=>{const d=bdef(b.id);if(!d||!d.hv||seen[d.id])return;seen[d.id]=1;for(let k=0;k<(d.rep?Math.min(b.lv||1,d.lim):1);k++)L.push(d.hv*(b.old?.5:1))});L.sort((a,b)=>b-a);let sum=L.reduce((s,v,i)=>s+v*Math.pow(.85,i),0);
   if(S.invites>=1)sum+=3;sum+=1.2*myLv("nogyo")+.5*myLv("chisui");return Math.round(sum*10)/10}
 function upkeep(){return Math.round(built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:b.paid*UPKEEP),0)*100)/100}
 function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);if(kind==="invite")m*=((storyToday()||{fx:{}}).fx.invite||1);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
@@ -798,32 +809,34 @@ function town(){abar.className="abar";hd();
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
   <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${f1(upkeep())}石</b></div>
   <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?(bdef(b.id)?ART[b.id]:ART[b.id]):ART.lot_empty}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
-    <button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button></div>
+    ${S.lots<MAXLOT?`<button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button>`:""}</div>
   </div>
   <div class="card"><h2>📊 城下町の効き目</h2><div class="cbs">${cats}</div>
-  <div class="notice" style="margin-top:8px">「最大」は、その分野の建物を上限まで全部建てたときの効き目です。同じ種類の建物は建てられる数に上限があり、建てるほど1棟あたりの伸びは小さくなります。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div><button class="backb" onclick="home()">← ホームへもどる</button>`}
-function buyLot(){const c=lotCost(S.lots);if(S.kura<c)return toast(`蔵の石が足りません（あと${fmt(c-S.kura)}石）`);S.kura-=c;S.lots++;S.town.push(null);save();toast("区画が増えました");town()}
+  <div class="notice" style="margin-top:8px">「最大」は、その分野の建物を全部建て、普請で最高の段まで上げたときの効き目です。同じ建物は1つだけ。小学校・図書館・文化ホール・市場・公園・消防署は「普請」で段を上げると効き目が増えます。かわりに<b>毎朝の維持費</b>がかかり、払えないと老朽化します。「建てるのは一瞬、持つのは何十年」——金沢市の公共施設914の悩みそのものです。</div></div><button class="backb" onclick="home()">← ホームへもどる</button>`}
+function buyLot(){if(S.lots>=MAXLOT)return toast("これ以上の区画は要らぬ（建てられる建物の数まで）");const c=lotCost(S.lots);if(S.kura<c)return toast(`蔵の石が足りません（あと${fmt(c-S.kura)}石）`);S.kura-=c;S.lots++;S.town.push(null);save();toast("区画が増えました");town()}
 function lotTap(i){const b=S.town[i];if(!b)return buildMenu(i);
   const d=bdef(b.id),inv=!d;const name=inv?INV_ITEMS.find(x=>x.id===b.id).n:d.n;
-  app.innerHTML=`<div class="card center"><div class="bcard big ${d&&d.uniq?"rare":""}"><div class="bph">${pic(b.id)}${d?`<span class="chip">${CATS[d.c].n}</span>`:'<span class="chip r">援軍の品</span>'}</div></div><h2>${name}${b.old?"（老朽化）":""}</h2>
+  app.innerHTML=`<div class="card center"><div class="bcard big ${d&&d.uniq?"rare":""}"><div class="bph">${pic(b.id)}${d?`<span class="chip">${CATS[d.c].n}</span>`:'<span class="chip r">援軍の品</span>'}</div></div><h2>${name}${d&&d.rep?` <span class="dan">${DAN[b.lv||1]}</span>`:""}${b.old?"（老朽化）":""}</h2>
   <div class="mute">${inv?INV_ITEMS.find(x=>x.id===b.id).d:`${CATS[d.c].n}：${d.d}`}</div>
+  ${d?`<div class="nowfx" style="margin-top:4px">${fxLine(d)}</div>`:""}
+  ${d&&d.rep?((b.lv||1)<d.lim?`<button class="gold" style="width:100%;margin-top:10px" onclick="fushin(${i})">🔨 普請する（${f1(fushinCost(b))}石・きょうあと${fushinLeft()}回）</button><div class="mute" style="font-size:12px;margin-top:4px">${MASTER[b.id].who}のもとで「${MASTER[b.id].g}」の修練。出来がよいと、いつか段が上がる。</div>`:`<div class="lvup" style="margin-top:8px">最高の${DAN[b.lv]}に達している</div>`):""}
   ${inv?"":`<div class="mute" style="margin-top:6px">毎朝の維持費 ${b.old?0:f1(b.paid*UPKEEP)}石</div>`}
   ${b.old?`<button class="pri" style="margin-top:10px" onclick="repair(${i})">修繕する（${fmt(b.paid*REPAIR)}石）</button>`:""}
   ${inv?"":`<button style="width:100%;margin-top:8px" onclick="if(confirm('取り壊しますか？（石はもどりません）')){S.town[${i}]=null;save();town()}">取り壊す</button>`}
-  <button style="width:100%;margin-top:8px" onclick="town()">もどる</button></div>`}
+  <button class="backb" onclick="town()">← 城下町へもどる</button></div>`}
 function repair(i){const b=S.town[i],c=Math.round(b.paid*REPAIR);if(S.kura<c)return toast("蔵の石が足りません");S.kura-=c;b.old=0;save();toast("修繕しました");town()}
 function buildMenu(i){
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🔨 何を建てる？</h2><button onclick="town()">もどる</button></div>
   <div class="mute">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b></div>
-  <div class="bcards">${BLD.map(d=>{const full=d.lim&&owned(d.id)>=d.lim,done=(d.uniq&&owned(d.id))||full,c=nextCost(d);let per,gain;if(d.c==="midori"){per=d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length);gain=`毎朝 +${f1(per)}石`}
+  <div class="bcards">${BLD.map(d=>{const full=false,done=owned(d.id)>0,c=nextCost(d);let per,gain;if(d.c==="midori"){per=d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length);gain=`毎朝 +${f1(per)}石`}
     else if(d.c==="bousai"){per=0;const db=catBonus(d.c,units(d.c)+(d.uniq?UW:(d.w||1)))-catBonus(d.c);gain=`災いの被害 −${Math.round(db*100)}%`}
     else if(d.c==="kotsu"){per=0;const db=catBonus(d.c,units(d.c)+(d.uniq?UW:(d.w||1)))-catBonus(d.c);gain=`援軍ボーナス +${Math.round(db*100)}%（援軍1人ごと +${f1(PT.invite*db)}石）`}
     else{const db=catBonus(d.c,units(d.c)+(d.uniq?UW:(d.w||1)))-catBonus(d.c);per=db*DAYMAX[CATS[d.c].base];gain=`${CATS[d.c].eff} +${Math.round(db*1000)/10}%（満点の日 +${f1(per)}石）`}
     const net=per-c*UPKEEP,pay=net>0?Math.ceil(c/net):0;
     return `<div class="bcard ${done?"done":""} ${d.uniq?"rare":""}"><div class="bph">${pic(d.id)}<span class="chip">${CATS[d.c].n}</span>${d.uniq?'<span class="chip r">名所</span>':""}</div>
-    <div class="bbody"><b>${d.n}</b>${!d.uniq?`<small class="mute"> ${owned(d.id)}/${d.lim}棟</small>`:""}<div class="mute">${d.d}</div><div class="eff">${gain}</div><div class="mute" style="font-size:11px">維持費 毎朝${f1(c*UPKEEP)}石${pay?`・毎日満点なら約${pay}日で元が取れる`:d.c==="bousai"?"・守りの建物":d.c==="kotsu"?"・援軍を呼ぶ人向け":""}</div>
-    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${full?`上限${d.lim}棟`:done?"建設済":f1(c)+"石で建てる"}</button></div></div>`}).join("")}</div></div><button class="backb" onclick="town()">← 城下町へもどる</button>`}
-function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c||(d.lim&&owned(id)>=d.lim)||(d.uniq&&owned(id)))return;S.kura-=c;S.town[i]={id,paid:c};save();toast(`${d.n} が建ちました！`);town()}
+    <div class="bbody"><b>${d.n}</b>${d.rep?`<small class="mute"> 普請で${DAN[d.lim]}まで</small>`:""}<div class="mute">${d.d}</div><div class="eff">${gain}</div><div class="mute" style="font-size:11px">維持費 毎朝${f1(c*UPKEEP)}石${pay?`・毎日満点なら約${pay}日で元が取れる`:d.c==="bousai"?"・守りの建物":d.c==="kotsu"?"・援軍を呼ぶ人向け":""}</div>
+    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${done?(d.rep?"建設済（普請で段を上げる）":"建設済"):f1(c)+"石で建てる"}</button></div></div>`}).join("")}</div></div><button class="backb" onclick="town()">← 城下町へもどる</button>`}
+function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c||owned(id))return;S.kura-=c;S.town[i]={id,paid:c,lv:1,exp:0};save();toast(`${d.n} が建ちました！`);town()}
 
 /* ---------- 今日の十問 ---------- */
 let Q;
@@ -914,18 +927,128 @@ async function share(){const r=dayRec().quiz;if(!r)return;const c=$("#cv"),x=c.g
 let CUR="",HOME_Y=0;
 function screen(name,fn){return function(...a){const same=CUR===name&&["town","buildMenu","naisei","mapView","home"].includes(name),y=window.scrollY;if(CUR==="home"&&name!=="home")HOME_Y=y;const r=fn.apply(this,a);CUR=name;
   if(same)requestAnimationFrame(()=>window.scrollTo(0,y));else if(name==="home")requestAnimationFrame(()=>window.scrollTo(0,HOME_Y));else window.scrollTo(0,0);return r}}
-["town","buildMenu","lotTap","naisei","mapView","quiz","qShow","nyukon","jibu","jibuStart","kaga","kagaStart","irrQuiz","register"].forEach(n=>{window[n]=screen(n,window[n])});
+["town","buildMenu","lotTap","fushin","fushinGo","naisei","mapView","quiz","qShow","nyukon","jibu","jibuStart","kaga","kagaStart","irrQuiz","register"].forEach(n=>{window[n]=screen(n,window[n])});
 home=screen("home",home);
 
 /* ---------- 運営テスト用（?admin=1） ---------- */
 function adminPanel(){return `<div class="card testp"><h2>🧪 テストプレイ用（公開前に消します）</h2><div class="mute">いまの日付：${today()}（${S.dayShift?`${S.dayShift>0?"+":""}${S.dayShift}日ずらし中`:"本日"}）</div><div class="row" style="margin-top:6px">
  <button onclick="S.kura+=100000;S.koku+=100000;S.total=(S.total||0)+100000;save();home();toast('+10万石')">石高 +10万</button>
  <button onclick="S.dayShift=(S.dayShift||0)-1;save();home()">1日もどす</button>
+ <button onclick="dayRec().fushin=0;save();toast('普請の回数をもどした')">普請の回数をもどす</button>
  <button onclick="inviteArrived()">援軍が1人来た</button>
  <button onclick="S.dayShift=(S.dayShift||0)+1;save();home()">1日すすめる</button>
  <button onclick="if(confirm('全部消して最初から？'))localStorage.removeItem(KEY),location.reload()">リセット</button></div></div>`}
 
 document.addEventListener("gesturestart",e=>e.preventDefault());
+
+// 起動は fushin.js の最後で
+
+/* ===== 普請（ふしん）：建物ごとの修練ミニゲームで段を上げる（太閤立志伝Vの技能師事にならう） =====
+   ・同じ建物は1つだけ。普請（石がかかる）→その建物のミニゲーム→師範のひとこと
+   ・出来に応じて見えない「腕前」がたまり、たまると段が上がる（進み具合は表示しない）
+   ・段が上がるほどミニゲームはむずかしくなる／普請は1日3回まで */
+const DAN=["","一の段","二の段","三の段","四の段","五の段","六の段"];
+const FUSHIN_PER_DAY=3, EXP_NEED=100;
+const MASTER={shogakko:{who:"寺子屋の師匠",g:"算術",d:"そろばん勘定じゃ。札を選んで、ちょうど示された数にせよ。"},
+ toshokan:{who:"書物奉行",g:"年表ならべ",d:"金沢の出来事を、古い順に選んでいけ。"},
+ kageki:{who:"囃子方の師匠",g:"太鼓",d:"落ちてくる音に合わせて太鼓を打て。"},
+ ichiba:{who:"商人頭",g:"商い",d:"客の買い物の釣り銭を、すばやく正しく渡せ。"},
+ koen:{who:"庭師の親方",g:"加賀野菜あわせ",d:"伏せた札をめくり、同じ加賀野菜の組をそろえよ。"},
+ shobo:{who:"加賀鳶の頭",g:"火消し",d:"町に上がる火の手を、広がる前に消してまわれ。"}};
+const PRAISE=[[.9,"見事",["見事であった！","天晴れじゃ。","申し分のない腕前よ。"]],[.7,"上々",["上々じゃな。","なかなかやるのう。","筋がよい。"]],[.5,"まずまず",["まずまずといったところか。","悪くはないが、まだ伸びるはずじゃ。","もうひと踏ん張りじゃな。"]],[.3,"まだまだ",["まだまだじゃのう。","精進が足らぬ。","出直してまいれ。"]],[0,"未熟",["話にならぬ！","なんじゃ、その体たらくは。"]]];
+const EXPG=[[.9,32,42],[.7,20,28],[.5,10,16],[.3,4,8],[0,0,2]];
+const fushinLeft=()=>FUSHIN_PER_DAY-(dayRec().fushin||0);
+const fushinCost=b=>{const d=bdef(b.id);return Math.max(1,Math.round(d.cost*Math.pow(GROW,(b.lv||1)-1)/3*disc()*10)/10)};
+const isRep=id=>{const d=bdef(id);return d&&d.rep};
+let MG=null;
+function fushin(i){const b=S.town[i],d=bdef(b.id),m=MASTER[b.id];if(!m)return;
+  if((b.lv||1)>=d.lim)return toast("これ以上は上がらぬ（最高の段）");
+  const c=fushinCost(b);abar.className="abar";
+  app.innerHTML=`<div class="card center"><div class="bimg">${pic(b.id)}</div><h2>🔨 ${d.n}の普請</h2><div class="mute">いま ${DAN[b.lv||1]}</div>
+  <div class="master"><b>${m.who}</b>「${m.d}」</div>
+  <div class="mute">修練：${m.g}・普請代 ${f1(c)}石・きょうの普請 あと${fushinLeft()}回</div>
+  <button class="pri" style="margin-top:10px" ${S.kura<c||fushinLeft()<=0?"disabled":""} onclick="fushinGo(${i})">${fushinLeft()<=0?"きょうはもう休め（あすまた）":S.kura<c?"蔵の石が足りぬ":"普請をはじめる"}</button>
+  <button class="backb" onclick="lotTap(${i})">← もどる</button></div>`}
+function fushinGo(i){const b=S.town[i],c=fushinCost(b);if(S.kura<c||fushinLeft()<=0)return;S.kura-=c;b.paid=(b.paid||0)+c;dayRec().fushin=(dayRec().fushin||0)+1;save();hd();
+  MG={i,id:b.id,lv:b.lv||1,score:0,t:0,timers:[]};mgStart()}
+function mgClear(){if(!MG)return;MG.timers.forEach(t=>{clearInterval(t);clearTimeout(t)});MG.timers=[];if(MG.raf)cancelAnimationFrame(MG.raf)}
+function mgHead(title,sec){return `<div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">${title}</h2><div class="timer" id="tm">${sec}</div></div>`}
+function mgTimer(sec,onEnd){MG.t=sec;MG.timers.push(setInterval(()=>{MG.t--;const tm=$("#tm");if(!tm){mgClear();return}tm.textContent=MG.t;if(MG.t<=5)tm.classList.add("hot");if(MG.t<=0){mgClear();onEnd()}},1000))}
+function mgStart(){({shogakko:mgSan,toshokan:mgNen,kageki:mgTaiko,ichiba:mgAkinai,koen:mgAwase,shobo:mgHikeshi})[MG.id]()}
+function mgEnd(ratio){mgClear();ratio=Math.max(0,Math.min(1,ratio));const b=S.town[MG.i],d=bdef(MG.id);
+  const p=PRAISE.find(x=>ratio>=x[0]),eg=EXPG.find(x=>ratio>=x[0]);const gain=eg[1]+Math.floor(Math.random()*(eg[2]-eg[1]+1));
+  b.exp=(b.exp||0)+gain;let up=false;if(b.exp>=EXP_NEED&&(b.lv||1)<d.lim){b.lv=(b.lv||1)+1;b.exp=0;up=true}save();
+  const word=p[2][Math.floor(Math.random()*p[2].length)];
+  app.innerHTML=`<div class="card center"><div class="bimg">${pic(MG.id)}</div><div class="master big2"><b>${MASTER[MG.id].who}</b><br>「${word}」</div>
+  ${up?`<div class="lvup">🎉 ${d.n}は一段と立派になった！<br><b>${DAN[b.lv]}</b> に上がった！</div><div class="mute">${fxLine(d)}</div>`:""}
+  <button class="pri" style="margin-top:10px" onclick="lotTap(${MG.i})">${d.n}へもどる</button><button class="backb" onclick="home()">← ホームへもどる</button></div>`;MG=null}
+function fxLine(d){if(d.c==="midori")return `毎朝の収穫 いま +${f1(harvest())}石`;if(d.c==="bousai")return `災いの被害 いま −${Math.round(catBonus("bousai")*100)}%`;const b=catBonus(d.c);return `${CATS[d.c].eff} いま +${Math.round(b*100)}%（満点の日 +${f1(DAYMAX[CATS[d.c].base]*b)}石）`}
+
+/* --- 小学校：算術（札を選んでちょうどの数に） --- */
+function mgSan(){const lv=MG.lv,goal=6;MG.ok=0;
+  app.innerHTML=`<div class="card">${mgHead("🧮 算術",45)}<div class="mute">選んだ札の合計を、示された数ちょうどに。</div><div class="sanT">目標 <b id="sT"></b></div><div class="sanS">いま <b id="sS">0</b></div><div class="sanG" id="sG"></div><div class="mute center">そろえた数 <b id="sOk">0</b></div></div>`;
+  const round=()=>{const n=lv>=3?12:9,mx=[0,9,15,25,40,60,90][lv],k=Math.min(2+Math.floor(lv/2)+Math.floor(Math.random()*2),5);
+    const t=Array.from({length:n},()=>1+Math.floor(Math.random()*mx));const pick=shuffle(t.map((_,i)=>i)).slice(0,k);MG.T=pick.reduce((s,i)=>s+t[i],0);MG.sel=[];MG.tiles=t;
+    $("#sT").textContent=MG.T;$("#sS").textContent=0;$("#sG").innerHTML=t.map((v,i)=>`<button class="sanb" id="sb${i}" onclick="sanTap(${i})">${v}</button>`).join("")};
+  MG.round=round;round();mgTimer(45,()=>mgEnd(MG.ok/goal))}
+function sanTap(i){if(!MG)return;const k=MG.sel.indexOf(i);if(k>=0){MG.sel.splice(k,1);$("#sb"+i).classList.remove("on")}else{MG.sel.push(i);$("#sb"+i).classList.add("on")}
+  const s=MG.sel.reduce((a,j)=>a+MG.tiles[j],0);$("#sS").textContent=s;
+  if(s===MG.T){MG.ok++;$("#sOk").textContent=MG.ok;toast("よし！");MG.round()}else if(s>MG.T){$("#sS").parentNode.classList.add("over");setTimeout(()=>{const e=$("#sS");if(e)e.parentNode.classList.remove("over")},300);MG.sel.forEach(j=>$("#sb"+j).classList.remove("on"));MG.sel=[];$("#sS").textContent=0}}
+
+/* --- 図書館：年表ならべ（史実のできごとを古い順に） --- */
+function mgNen(){const lv=MG.lv,N=Math.min(3+lv,8),R=3;MG.r=0;MG.miss=0;MG.tot=N*R;
+  const deal=()=>{MG.cards=shuffle(STORY).slice(0,N);MG.next=MG.cards.slice().sort((a,b)=>parseInt(a.y)-parseInt(b.y));MG.done=[];
+    $("#nG").innerHTML=shuffle(MG.cards).map(c=>`<button class="nenb" id="nb${c.id}" onclick="nenTap('${c.id}')">${c.t}</button>`).join("");$("#nR").textContent=`${MG.r+1}/${R}`};
+  app.innerHTML=`<div class="card">${mgHead("📚 年表ならべ",60)}<div class="mute">古い順にタップ（${N}枚×3回）。まちがえると減点。</div><div class="mute">第 <b id="nR"></b> 組</div><div class="nenG" id="nG"></div><div id="nL" class="nenL"></div></div>`;
+  MG.deal=deal;deal();mgTimer(60,()=>mgEnd(MG.score/MG.tot-MG.miss*.08))}
+function nenTap(id){if(!MG)return;const want=MG.next[MG.done.length];const el=$("#nb"+id);
+  if(want.id===id){MG.done.push(id);MG.score++;el.disabled=true;el.classList.add("ok");$("#nL").innerHTML+=`<span>${want.y} ${want.t}</span>`;
+    if(MG.done.length===MG.next.length){MG.r++;if(MG.r>=3){mgEnd(MG.score/MG.tot-MG.miss*.08);return}setTimeout(()=>{$("#nL").innerHTML="";MG.deal()},500)}}
+  else{MG.miss++;el.classList.add("ng");setTimeout(()=>el.classList.remove("ng"),300)}}
+
+/* --- 文化ホール：太鼓（落ちてくる音に合わせて打つ） --- */
+let AC=null;function drum(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type="sine";o.frequency.setValueAtTime(140,AC.currentTime);o.frequency.exponentialRampToValueAtTime(50,AC.currentTime+.18);g.gain.setValueAtTime(.9,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.25);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+.26)}catch(e){}}
+function mgTaiko(){const lv=MG.lv,bpm=78+lv*10,beat=60000/bpm,N=20;const pat=[[1],[1,0,1,1],[1,1,0,1],[1,.5,1,1.5],[1,.5,1,.5,1],[.5,.5,1,.5,.5,1]][Math.min(lv-1,5)];
+  let t=1800;MG.notes=[];let k=0;while(MG.notes.length<N){t+=beat*pat[k%pat.length]*(lv===1?1:.5+.5*(pat[k%pat.length]>=1));MG.notes.push({t,hit:false});k++}
+  app.innerHTML=`<div class="card">${mgHead("🥁 太鼓",Math.ceil((MG.notes[N-1].t+1200)/1000))}<div class="mute">線に音が重なった瞬間に太鼓をたたけ（${N}打）</div>
+  <div class="tkLane" id="tkL"><div class="tkLine"></div></div><button class="tkDrum" id="tkD">ドン</button><div class="mute center">ぴったり <b id="tkP">0</b>・おしい <b id="tkG">0</b>・はずれ <b id="tkM">0</b></div></div>`;
+  MG.p=0;MG.g=0;MG.m=0;const t0=performance.now()+300,L=$("#tkL");
+  MG.notes.forEach((n,i)=>{const e=document.createElement("div");e.className="tkN";e.id="tn"+i;L.appendChild(e)});
+  const tick=()=>{if(!MG)return;const now=performance.now()-t0;MG.notes.forEach((n,i)=>{const e=$("#tn"+i);if(!e)return;const dy=(n.t-now)/1600;e.style.top=(80-dy*80)+"%";e.style.display=dy>1.05||n.hit?"none":"block";if(!n.hit&&now-n.t>180){n.hit=true;MG.m++;$("#tkM").textContent=MG.m}});
+    if(now>MG.notes[N-1].t+600){mgEnd((MG.p+MG.g*.5)/N);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+  const hit=e=>{e.preventDefault();drum();const now=performance.now()-t0;let best=null,bd=1e9;MG.notes.forEach(n=>{if(!n.hit&&Math.abs(n.t-now)<bd){bd=Math.abs(n.t-now);best=n}});
+    if(best&&bd<=180){best.hit=true;if(bd<=70){MG.p++;$("#tkP").textContent=MG.p}else{MG.g++;$("#tkG").textContent=MG.g}}};
+  $("#tkD").addEventListener("touchstart",hit,{passive:false});$("#tkD").addEventListener("mousedown",hit)}
+
+/* --- 市場：商い（釣り銭） --- */
+const GOODS=["加賀れんこん","源助だいこん","金時草","五郎島金時","くわい","打木赤皮甘栗かぼちゃ","加賀太きゅうり","金沢せり","ヘタ紫なす","二塚からしな"];
+function mgAkinai(){const lv=MG.lv,goal=7;MG.ok=0;MG.miss=0;
+  app.innerHTML=`<div class="card">${mgHead("🏪 商い",45)}<div class="mute">お代をもらったら、正しい釣り銭をすばやく渡せ。</div><div id="akQ" class="akQ"></div><div id="akO"></div><div class="mute center">さばいた客 <b id="akN">0</b></div></div>`;
+  const round=()=>{const k=Math.min(1+Math.floor(lv/2),3),unit=[0,10,10,5,1,1,1][lv];let items=shuffle(GOODS).slice(0,k).map(n=>({n,p:unit*(Math.floor(Math.random()*(lv>=3?60:30))+5)}));
+    const sum=items.reduce((s,x)=>s+x.p,0),pay=[100,500,1000,2000,5000,10000].find(v=>v>sum+(lv>=2?Math.random()*sum*.6:0))||10000,ch=pay-sum;
+    const opts=shuffle([ch,ch+unit*(1+Math.floor(Math.random()*3)),Math.max(0,ch-unit*(1+Math.floor(Math.random()*3))),ch+(Math.random()<.5?100:-100)>0?ch+(Math.random()<.5?100:-100):ch+50].filter((v,i,a)=>a.indexOf(v)===i)).slice(0,4);
+    MG.ch=ch;$("#akQ").innerHTML=items.map(x=>`<div>${x.n}　<b>${x.p}円</b></div>`).join("")+`<div class="akPay">お代 ${pay.toLocaleString()}円 を受け取った</div>`;
+    $("#akO").innerHTML=opts.map(v=>`<button class="opt" onclick="akTap(${v})">釣り銭 ${v.toLocaleString()}円</button>`).join("")};
+  MG.round=round;round();mgTimer(45,()=>mgEnd(MG.ok/goal-MG.miss*.08))}
+function akTap(v){if(!MG)return;if(v===MG.ch){MG.ok++;$("#akN").textContent=MG.ok;toast("毎度あり！")}else{MG.miss++;toast(`正しくは ${MG.ch.toLocaleString()}円`)}MG.round()}
+
+/* --- 公園：加賀野菜あわせ（神経衰弱） --- */
+function mgAwase(){const lv=MG.lv,P=Math.min(4+lv,9);const V=shuffle(KAGA).slice(0,P);MG.cards=shuffle([...V,...V].map((v,i)=>({v,i})));MG.open=[];MG.got=0;MG.miss=0;MG.P=P;MG.lock=false;
+  app.innerHTML=`<div class="card">${mgHead("🌿 加賀野菜あわせ",60)}<div class="mute">同じ加賀野菜の札を2枚そろえよ（${P}組）。</div><div class="awG" style="grid-template-columns:repeat(${P>6?6:4},1fr)">${MG.cards.map((c,k)=>`<button class="awC" id="aw${k}" onclick="awTap(${k})"><span class="back">加</span><span class="face">${veg(c.v[1],c.v[2],c.v[3])}<small>${c.v[0].replace(/（.*）/,"")}</small></span></button>`).join("")}</div></div>`;
+  mgTimer(60,()=>mgEnd(MG.got/MG.P-MG.miss*.03))}
+function awTap(k){if(!MG||MG.lock)return;const el=$("#aw"+k);if(el.classList.contains("up")||el.classList.contains("done"))return;el.classList.add("up");MG.open.push(k);
+  if(MG.open.length===2){const[a,b]=MG.open;MG.lock=true;if(MG.cards[a].v[0]===MG.cards[b].v[0]){MG.got++;setTimeout(()=>{[a,b].forEach(x=>$("#aw"+x).classList.add("done"));MG.open=[];MG.lock=false;if(MG.got===MG.P)mgEnd(1-MG.miss*.03+MG.t/200)},300)}
+    else{MG.miss++;setTimeout(()=>{[a,b].forEach(x=>$("#aw"+x)?.classList.remove("up"));MG.open=[];MG.lock=false},700)}}}
+
+/* --- 消防署：火消し --- */
+function mgHikeshi(){const lv=MG.lv,n=lv>=3?16:9,life=Math.max(650,1500-lv*160),every=Math.max(380,900-lv*90);MG.out=0;MG.spawn=0;MG.burn=0;
+  app.innerHTML=`<div class="card">${mgHead("🔥 火消し",30)}<div class="mute">火の手が上がった家を、燃え広がる前にタップして消せ。</div><div class="hkG" style="grid-template-columns:repeat(${n===16?4:3},1fr)">${Array.from({length:n},(_,k)=>`<button class="hkC" id="hk${k}" onclick="hkTap(${k})">🏠</button>`).join("")}</div><div class="mute center">消した <b id="hkO">0</b>・燃えた <b id="hkB">0</b></div></div>`;
+  MG.timers.push(setInterval(()=>{if(!MG)return;const free=[...Array(n).keys()].filter(k=>!$("#hk"+k).classList.contains("fire"));if(!free.length)return;const k=free[Math.floor(Math.random()*free.length)],el=$("#hk"+k);el.classList.add("fire");el.textContent="🔥";MG.spawn++;
+    MG.timers.push(setTimeout(()=>{if(MG&&el.classList.contains("fire")){el.classList.remove("fire");el.textContent="🏚";MG.burn++;$("#hkB").textContent=MG.burn;setTimeout(()=>{if(el.textContent==="🏚")el.textContent="🏠"},600)}},life))},every));
+  mgTimer(30,()=>mgEnd(MG.spawn?MG.out/MG.spawn:0))}
+function hkTap(k){if(!MG)return;const el=$("#hk"+k);if(!el.classList.contains("fire"))return;el.classList.remove("fire");el.textContent="💧";MG.out++;$("#hkO").textContent=MG.out;setTimeout(()=>{if(el.textContent==="💧")el.textContent="🏠"},300)}
+
+/* 起動 */
 home();
 
 </script>
