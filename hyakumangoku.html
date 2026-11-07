@@ -12,6 +12,8 @@
 html,body{touch-action:manipulation;margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;font-size:16px;line-height:1.5}
 body{padding-bottom:90px;overscroll-behavior:none}
 svg{display:block;width:100%;height:auto}
+img.paint{display:block;width:100%;height:auto}
+.bph img.paint{object-fit:contain;padding:4px}
 img.px{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
 /* 歴史ゲームの窓：ドットの見出し×読みやすい本文 */
 header h1,.card h2,.big,.bz,.lv,.timer,.pname,.koku,.sg,.chip{font-family:"DotGothic16","Hiragino Sans",sans-serif;font-weight:400;letter-spacing:.04em}
@@ -438,8 +440,9 @@ const nLv=t=>NLV.filter(x=>t>=x).length-1;
 function nTotals(k){const h=hash(k+"nai"),m=(demo().find(x=>x.k===k)||{m:0}).m;const o={};NAISEI.forEach((n,i)=>{o[n.id]=Math.round(m*((h>>>(i*3))%9)*20)+(k===S.kouka?(S.inv[n.id]||0):0)});return o}
 const myLv=id=>S.lock?nLv(nTotals(S.kouka)[id]):0;
 // 建物カードの写真（たけさん撮影の写真を入れると、イラストの代わりに写真で表示）
-const PHOTO={/* 例: shiro:"photos/shiro.jpg" */};
-const pic=id=>PHOTO[id]?`<img src="${PHOTO[id]}" alt="" onerror="this.outerHTML=ART['${id}']">`:ART[id];
+// 建物の絵（MUSE作の絵画風。届いたものから差し替え。ないものはドット絵）
+const PHOTO={shiro:"hyakumangoku_img/shiro.webp",kenroku:"hyakumangoku_img/kenroku.webp",eki:"hyakumangoku_img/eki.webp",chaya:"hyakumangoku_img/chaya.webp"};
+const pic=id=>PHOTO[id]?`<img class="paint" src="${PHOTO[id]}" alt="" onerror="this.outerHTML=ART['${id}']">`:ART[id];
 
 /* ---------- 状態 ---------- */
 const KEY="hmg_v5";
@@ -645,7 +648,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
 
   <div class="card">
     <div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><span class="mute">${built().length}棟 / ${S.lots}区画</span></div>
-    <div class="town mini">${S.town.map(b=>`<div class="lot">${b?ART[b.id]:ART.lot_empty}</div>`).join("")}</div>
+    <div class="town mini">${S.town.map(b=>`<div class="lot">${b?pic(b.id):ART.lot_empty}</div>`).join("")}</div>
     <button class="gold" style="width:100%;margin-top:8px" onclick="town()">城下町をひらく</button>
   </div>
 
@@ -814,7 +817,7 @@ function town(){abar.className="abar";hd();
     return `<div class="cb"><b>${c.n}</b><span>${c.eff}</span><em>${v}</em><small class="mute">${sub}</small></div>`}).join("");
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
   <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${f1(upkeep())}石</b></div>
-  <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?(bdef(b.id)?ART[b.id]:ART[b.id]):ART.lot_empty}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
+  <div class="town">${S.town.map((b,i)=>`<button class="lot ${b&&b.old?"old":""}" onclick="lotTap(${i})">${b?pic(b.id):ART.lot_empty}<span>${b?(bdef(b.id)?.n||INV_ITEMS.find(x=>x.id===b.id).n)+(b.old?"（老朽化）":""):"空き地"}</span></button>`).join("")}
     ${S.lots<MAXLOT?`<button class="lot" onclick="buyLot()">${ART.lot_buy}<span>${fmt(lotCost(S.lots))}石で区画を買う</span></button>`:""}</div>
   </div>
   <div class="card"><h2>📊 城下町の効き目</h2><div class="cbs">${cats}</div>
