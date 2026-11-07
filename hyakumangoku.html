@@ -88,6 +88,17 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 @keyframes bob{to{transform:translateY(-6px)}}
 .toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#d8b45a;color:#1b1711;font-weight:800;padding:10px 16px;border-radius:999px;opacity:0;transition:.3s;pointer-events:none;z-index:40;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis;font-size:15px}.toast.on{opacity:1}
+/* 内政・地図・カード */
+.nmini{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px}.nm{display:flex;flex-direction:column;align-items:center;font-size:12px}.nm svg{border-radius:10px}.nm small{color:var(--gold2);font-weight:800}
+.ncard .nimg{width:72px;flex:none}.lv{font-weight:900;color:var(--gold2);background:#2a2318;border-radius:8px;padding:1px 8px}
+.mapw{margin:8px -6px;border-radius:12px;overflow:hidden;background:#141a10}.mapw.big{margin:8px -10px}
+.bcards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.bcard{background:linear-gradient(#2a2318,#1b1711);border:1px solid #4a3c24;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}.bcard.rare{border-color:#d8b45a;box-shadow:0 0 0 1px #d8b45a55 inset}.bcard.done{opacity:.45}
+.bph{position:relative;aspect-ratio:1/1;background:radial-gradient(circle at 50% 35%,#3a3020,#16130d)}.bph img{width:100%;height:100%;object-fit:cover;display:block}
+.chip{position:absolute;left:6px;top:6px;background:#000a;color:var(--gold2);font-size:11px;font-weight:800;padding:1px 7px;border-radius:999px}.chip.r{left:auto;right:6px;background:#d8b45a;color:#1b1711}
+.bbody{padding:8px;display:flex;flex-direction:column;gap:2px;flex:1;font-size:13px}.bbody b{font-size:15px}.bbody .eff{color:#9fd48a;font-weight:800;font-size:12px}.bbody button{margin-top:auto;padding:9px 6px;font-size:13px}
+.ib{flex:1;padding:10px 2px;font-size:14px;white-space:nowrap}.gold.ib{flex:1.4}
+.bcard.big{max-width:260px;margin:0 auto}
 canvas{display:none}img.share{width:100%;border-radius:12px;margin-top:8px}
 </style>
 </head>
@@ -236,6 +247,15 @@ function veg(type,col,col2){
   }
 }
 
+/* ---------- 内政（校下のみんなで投資） ---------- */
+const N=(i)=>`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#16130d"/>${i}</svg>`;
+ART.n_chisui=N(`<path d="M0 70 Q25 62 50 70 T100 70 V100 H0Z" fill="#3f7ab0"/><path d="M0 78 Q25 70 50 78 T100 78" stroke="#9cc8ec" stroke-width="2" fill="none"/><path d="M10 64 L30 40 L70 40 L90 64Z" fill="#8a8476"/><path d="M30 40 L70 40 L74 46 L26 46Z" fill="#a8a294"/>${[0,1,2,3,4].map(i=>`<path d="M${22+i*12} 50 l8 0" stroke="#5e594f" stroke-width="2"/>`).join("")}<rect x="46" y="22" width="4" height="18" fill="#6a4a2a"/><path d="M50 22 h16 v10 h-16Z" fill="#c8382c"/>`);
+ART.n_nogyo=N(`<path d="M0 50 L100 40 V100 H0Z" fill="#6a8a32"/>${[0,1,2,3,4,5].map(i=>`<path d="M0 ${56+i*8} L100 ${46+i*9}" stroke="#4a6a22" stroke-width="2"/>`).join("")}${[0,1,2,3,4,5,6].map(i=>`<path d="M${12+i*13} 56 q-3 -12 0 -18 M${12+i*13} 56 q4 -10 6 -14" stroke="#d8c04a" stroke-width="2.2" fill="none"/>`).join("")}<circle cx="80" cy="18" r="10" fill="#f3c64a"/>`);
+ART.n_shogyo=N(`<rect x="14" y="40" width="72" height="46" fill="#7a5a3a"/><path d="M8 40 L50 18 L92 40Z" fill="#3a2a1a"/>${[0,1,2,3].map(i=>`<rect x="${16+i*18}" y="42" width="16" height="22" fill="${i%2?"#2f4a7a":"#26406a"}"/>`).join("")}<text x="50" y="58" font-size="12" font-weight="900" text-anchor="middle" fill="#f3ede0" font-family="sans-serif">商</text><rect x="22" y="70" width="56" height="12" fill="#e9d8b0"/><circle cx="34" cy="76" r="4" fill="#d8b45a"/><circle cx="46" cy="76" r="4" fill="#d8b45a"/><circle cx="58" cy="76" r="4" fill="#c84a3a"/>`);
+ART.n_kogyo=N(`<path d="M10 86 V50 L30 38 V50 L50 38 V50 L70 38 V86Z" fill="#6e7480"/><rect x="74" y="20" width="10" height="66" fill="#565c66"/><circle cx="79" cy="14" r="5" fill="#c9ccd2" opacity=".6"/><circle cx="86" cy="8" r="4" fill="#c9ccd2" opacity=".4"/>${[0,1,2].map(i=>`<rect x="${16+i*18}" y="60" width="10" height="10" fill="#f3c64a"/>`).join("")}<g transform="translate(40 80)"><circle r="9" fill="none" stroke="#d8b45a" stroke-width="4" stroke-dasharray="4 3"/><circle r="3" fill="#d8b45a"/></g>`);
+ART.n_kogei=N(`<path d="M40 86 Q22 70 30 46 Q34 36 40 32 L60 32 Q66 36 70 46 Q78 70 60 86Z" fill="#f4f1ea"/><path d="M34 54 Q50 46 66 54 Q66 66 50 70 Q34 66 34 54Z" fill="#2f6aa0"/><circle cx="44" cy="58" r="4" fill="#c8382c"/><circle cx="56" cy="60" r="3" fill="#d8b45a"/><path d="M40 32 L60 32 L58 26 L42 26Z" fill="#e3dfd6"/><rect x="66" y="64" width="22" height="22" fill="#e8c860" transform="rotate(12 77 75)"/><rect x="12" y="66" width="18" height="18" fill="#f0d878" transform="rotate(-10 21 75)"/>`);
+ART.n_gakumon=N(`<path d="M18 80 L18 40 L50 26 L82 40 L82 80Z" fill="#e2d4b8"/><path d="M12 42 L50 22 L88 42 L82 44 L50 28 L18 44Z" fill="#3a2a1a"/><rect x="40" y="56" width="20" height="24" fill="#5a3a22"/><path d="M24 50 h10 v10 h-10Z M66 50 h10 v10 h-10Z" fill="#8a6a3a"/><g transform="translate(70 70) rotate(-35)"><rect x="-2" y="-18" width="4" height="22" fill="#2a1f14"/><path d="M-2 4 L0 10 L2 4Z" fill="#1a140d"/></g>`);
+
 </script>
 <script>
 /* ===== 百万石バトル v0.3 ===== */
@@ -312,12 +332,31 @@ const INV_ITEMS=[
  {need:10,id:"honjin",n:"本陣",kind:"bld",d:"すべての獲得 +5%（頭打ちなし・維持費なし）"},
 ];
 const UPKEEP=.01, REPAIR=.30, DECAY=.85, GROW=1.3, UW=3;
-const lotCost=n=>Math.round(300*Math.pow(1.4,n-3));
+const lotCost=n=>Math.round(300*Math.pow(1.4,n-3)*(typeof disc==="function"&&S.lock?disc():1));
+
+/* ---------- 内政（信長の野望式：校下のみんなで蔵の石を投資→レベルが上がると校下全員に効く） ---------- */
+const NAISEI=[
+ {id:"chisui",n:"治水",d:"用水と堤。大雪の被害をへらし、毎朝の収穫も少し増える",per:"大雪の被害 −15%・収穫 +10石"},
+ {id:"nogyo",n:"農業",d:"加賀の米と野菜。校下全員の毎朝の収穫が増える",per:"毎朝の収穫 +25石"},
+ {id:"shogyo",n:"商業",d:"市場と商い。ミニゲームの石が増える",per:"ミニゲーム +6%"},
+ {id:"kogyo",n:"工業",d:"ものづくりの力。建物と区画が安くなる",per:"建設・区画 −5%"},
+ {id:"kogei",n:"工芸",d:"金箔・友禅・焼き物。一問入魂の石が増える",per:"一問入魂 +12%"},
+ {id:"gakumon",n:"学問",d:"藩校の学び。今日の十問の石が増える",per:"今日の十問 +6%"},
+];
+const NLV=[0,3000,8000,20000,45000,100000];          // 校下の合計投資でLv1〜5
+const nLv=t=>NLV.filter(x=>t>=x).length-1;
+function nTotals(k){const h=hash(k+"nai"),m=(demo().find(x=>x.k===k)||{m:0}).m;const o={};NAISEI.forEach((n,i)=>{o[n.id]=Math.round(m*((h>>>(i*3))%9)*420)+(k===S.kouka?(S.inv[n.id]||0):0)});return o}
+const myLv=id=>S.lock?nLv(nTotals(S.kouka)[id]):0;
+// 地図上のおおよその位置（東西×南北の格子。正式な校下区域データで正確な配置に差し替え予定）
+const POS={"粟崎":[2,0],"大浦":[4,1],"花園":[6,0],"不動寺":[8,1],"大野町":[0,2],"金石町":[0,3],"鳴和台":[6,2],"浅野川":[5,3],"千坂":[7,3],"夕日寺":[8,3],"医王山":[10,4],"諸江町":[3,3],"戸板":[2,4],"鞍月":[1,4],"木曳野":[0,4],"大徳":[1,5],"安原":[0,6],"西":[3,5],"明成":[2,5],"長田町":[4,4],"浅野町":[5,4],"森山町":[6,4],"馬場":[6,5],"中央":[4,6],"新竪町":[5,6],"兼六":[6,6],"菫台":[3,6],"緑":[2,6],"米丸":[1,7],"泉":[3,7],"弥生":[4,7],"犀桜":[5,7],"小立野":[7,7],"田上":[8,6],"杜の里":[9,6],"西南部":[0,8],"押野":[2,8],"十一屋":[3,8],"泉野":[5,8],"扇台":[7,8],"米泉":[2,9],"三馬":[3,9],"長坂台":[4,9],"伏見台":[5,9],"富樫":[6,9],"額":[4,10],"四十万":[6,10],"内川":[8,10],"湯涌":[10,9]};
+// 建物カードの写真（たけさん撮影の写真を入れると、イラストの代わりに写真で表示）
+const PHOTO={/* 例: shiro:"photos/shiro.jpg" */};
+const pic=id=>PHOTO[id]?`<img src="${PHOTO[id]}" alt="" onerror="this.outerHTML=ART['${id}']">`:ART[id];
 
 /* ---------- 状態 ---------- */
 const KEY="hmg_v3";
-const S0={name:"",g:"m",a:"seijin",kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null};
-let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});
+const S0={name:"",g:"m",a:"seijin",kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null,inv:{},kouken:0,mapSel:""};
+let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s),app=$("#app"),abar=$("#abar");
 const Q_=new URLSearchParams(location.search), ADMIN=Q_.get("admin")==="1";
@@ -355,15 +394,16 @@ const title=k=>TITLES[rankLv(k)][1];
 const built=()=>S.town.filter(Boolean);
 const owned=id=>built().filter(b=>b.id===id).length;
 const bdef=id=>BLD.find(b=>b.id===id);
-const nextCost=d=>d.rep?Math.round(d.cost*Math.pow(GROW,owned(d.id))):d.cost;
+const disc=()=>1-.05*myLv("kogyo");
+const nextCost=d=>Math.round((d.rep?d.cost*Math.pow(GROW,owned(d.id)):d.cost)*disc());
 function units(cat){return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat)return s;return s+(d.uniq?UW:(d.w||1))*(b.old?.5:1)},0)}
 function catBonus(cat){const c=CATS[cat];return c.max?c.max*(1-Math.pow(DECAY,units(cat))):0}
 function harvest(){let sum=0,i=0;built().filter(b=>bdef(b.id)?.hv).sort((a,b)=>bdef(b.id).hv-bdef(a.id).hv).forEach(b=>{sum+=bdef(b.id).hv*Math.pow(.85,i++)*(b.old?.5:1)});
-  if(S.invites>=1)sum+=50;return Math.round(sum)}
+  if(S.invites>=1)sum+=50;sum+=25*myLv("nogyo")+10*myLv("chisui");return Math.round(sum)}
 function upkeep(){return built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:Math.round(b.paid*UPKEEP)),0)}
-function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
+function mult(kind){let m=1;const map={quiz:"manabi",nyukon:"bunka",game:"sangyo",invite:"kotsu"};if(map[kind])m+=catBonus(map[kind]);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=10)m+=.05;return m}
 function seasonEvent(){if(!S.lock)return null;const r=ranking();const i=r.findIndex(x=>x.k===S.kouka);const bs=catBonus("bousai");
-  if(i===0){const p=Math.round(20*(1-bs));return {cls:"ng",t:`❄️ 大雪：首位の校下は獲得 −${p}%`+(bs>0?`（防災で軽減中）`:""),mul:1-p/100}}
+  if(i===0){const p=Math.round(20*(1-bs)*(1-.15*myLv("chisui")));return {cls:"ng",t:`❄️ 大雪：首位の校下は獲得 −${p}%`+(p<20?`（防災・治水で軽減中）`:""),mul:1-p/100}}
   if(i===r.length-1)return {cls:"ok",t:"⚔️ 一揆の大将：最下位の校下は獲得 +50%",mul:1.5};
   if(i>=r.length-6)return {cls:"ok",t:"🐎 援軍到着：下位の校下は獲得 +30%",mul:1.3};
   return null}
@@ -454,6 +494,15 @@ function home(){abar.className="abar";if(!S.lock)return register();
     ${ev?`<div class="evb ${ev.cls}">${ev.t}</div>`:""}
   </div>
 
+  <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🗾 金沢の陣地図</h2><span class="mute">柱の高さ＝石高</span></div>
+    <div class="mapw" onclick="mapView()">${isoMap(S.kouka)}</div>
+    <button class="gold" style="width:100%" onclick="mapView()">地図をひらく</button></div>
+
+  <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">⚙️ ${S.kouka}校下の内政</h2><span class="mute">みんなで投資</span></div>
+    <div class="nmini">${NAISEI.map(n=>`<div class="nm" onclick="naisei()">${ART["n_"+n.id]}<b>${n.n}</b><small>Lv${myLv(n.id)}</small></div>`).join("")}</div>
+    <div class="mute" style="margin-top:6px">蔵の石を投資すると、校下のレベルが上がり<b>校下の全員</b>に効きます。</div>
+    <button class="gold" style="width:100%;margin-top:8px" onclick="naisei()">評定（内政）をひらく</button></div>
+
   ${rep?`<div class="card"><h2>📜 けさの決算${rep.days>1?`（${rep.days}日分）`:""}</h2>
     <div class="row" style="justify-content:space-around;text-align:center">
       <div><div class="mute">収穫</div><b style="color:#9fd48a">+${fmt(rep.hv)}</b></div>
@@ -513,8 +562,56 @@ function inviteArrived(){S.invites++;const got=addKoku(300,"援軍が参戦！",
   if(it&&it.kind==="bld"){if(!S.town.includes(null)){S.lots++;S.town.push(null)}S.town[S.town.indexOf(null)]={id:it.id,paid:0,inv:1}}
   if(it)toast(`🎁 ${it.n} を手に入れた！`);save();home()}
 
+/* ---------- 画面：内政 ---------- */
+function naisei(){abar.className="abar";hd();const T=nTotals(S.kouka);
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">⚙️ ${S.kouka}校下の評定</h2><button onclick="home()">もどる</button></div>
+  <div class="mute">蔵 <b style="color:var(--gold2)">${fmt(S.kura)}石</b> ・ あなたの内政への貢献 <b style="color:var(--gold2)">${fmt(S.kouken)}石</b></div>
+  <div class="notice" style="margin-top:6px">投資は蔵の石を使います。<b>校下の石高（手柄）は減りません。</b>レベルは校下の全員の投資の合計で上がり、全員に効きます。</div></div>
+  ${NAISEI.map(n=>{const t=T[n.id],lv=nLv(t),nx=NLV[lv+1],pr=nx?Math.min(100,(t-NLV[lv])/(nx-NLV[lv])*100):100;
+    return `<div class="card ncard"><div class="row" style="align-items:center;gap:12px;flex-wrap:nowrap"><div class="nimg">${ART["n_"+n.id]}</div><div style="flex:1;min-width:0">
+    <div class="row" style="justify-content:space-between;align-items:baseline"><b style="font-size:18px">${n.n}</b><span class="lv">Lv${lv}${lv>=5?" 極":""}</span></div>
+    <div class="mute">${n.d}</div><div class="mute">1Lvごと：${n.per}</div></div></div>
+    <div class="prog" style="height:10px;margin-top:8px"><i style="width:${pr}%"></i></div>
+    <div class="mute">${nx?`校下の投資 ${fmt(t)} / ${fmt(nx)}石 → Lv${lv+1}`:`最高レベル（${fmt(t)}石）`} ・ あなた ${fmt(S.inv[n.id]||0)}石</div>
+    ${nx?`<div class="row" style="margin-top:8px">${[100,500,1000].map(v=>`<button class="ib" ${S.kura<v?"disabled":""} onclick="invest('${n.id}',${v})">+${v}</button>`).join("")}<button class="gold ib" ${S.kura<1?"disabled":""} onclick="invest('${n.id}',Math.min(S.kura,${nx}-${t}))">次のLvまで</button></div>`:""}</div>`}).join("")}
+  <div class="card"><h2>🏅 ${S.kouka}校下の功労者番付 <span class="tag">デモ</span></h2>${kouroList()}</div>`}
+function invest(id,v){v=Math.floor(v);if(v<=0||S.kura<v)return;const before=myLv(id);S.kura-=v;S.inv[id]=(S.inv[id]||0)+v;S.kouken+=v;save();
+  const after=myLv(id);toast(after>before?`🎉 ${NAISEI.find(n=>n.id===id).n}が Lv${after} に上がった！`:`${NAISEI.find(n=>n.id===id).n}に ${fmt(v)}石 投資`);naisei()}
+function kouroList(){const m=(demo().find(x=>x.k===S.kouka)||{m:1}).m;const L=Array.from({length:Math.max(0,m-1)},(_,i)=>({n:["じーま","まつ","ひでお","はるな","こうた","さち"][i%6],v:(hash(S.kouka+i)%6000)+200}));L.push({n:S.name+"（あなた）",v:S.kouken,me:1});L.sort((a,b)=>b.v-a.v);
+  return L.slice(0,10).map((x,i)=>`<div class="rank ${x.me?"me":""}"><div class="bz">${BANZUKE(i)}</div><div class="name">${x.n}</div><div class="pt">${fmt(x.v)}石</div></div>`).join("")}
+
+/* ---------- 地図（3Dの斜め俯瞰） ---------- */
+const PJ=(x,y)=>[(x-y)*16+180,(x+y)*8+78];
+const pts=a=>a.map(p=>PJ(...p).join(",")).join(" ");
+function isoMap(sel){const rk=ranking(),mx=Math.max(1,...rk.map(x=>x.koku));
+  let s=`<svg viewBox="0 0 360 270" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sea" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f4a6e"/><stop offset="1" stop-color="#173a58"/></linearGradient></defs>`;
+  s+=`<polygon points="${pts([[-2.6,-1],[-.6,-1],[-.6,11],[-2.6,11]])}" fill="url(#sea)"/>`;
+  s+=`<text x="${PJ(-1.8,3)[0]}" y="${PJ(-1.8,3)[1]}" font-size="9" fill="#8fb9d8" font-family="sans-serif" transform="rotate(27 ${PJ(-1.8,3).join(" ")})">日本海</text>`;
+  s+=`<polygon points="${pts([[-.6,-1],[11,-1],[11,11],[-.6,11]])}" fill="#2c3a22"/>`;
+  s+=`<polygon points="${pts([[8.6,-1],[11,-1],[11,11],[8.6,11]])}" fill="#253220"/>`;
+  [[9.6,1.5],[10.4,3],[9.4,5],[10.5,7],[9.6,10.5],[10.6,10]].forEach(([x,y])=>{const[a,b]=PJ(x,y);s+=`<path d="M${a-9} ${b} L${a} ${b-14} L${a+9} ${b}Z" fill="#3a4a2e"/><path d="M${a-3} ${b-9} L${a} ${b-14} L${a+3} ${b-9}Z" fill="#e8ecef" opacity=".7"/>`});
+  const river=(p,n,lab)=>{s+=`<polyline points="${pts(p)}" fill="none" stroke="#4f8ac0" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>`;const[a,b]=PJ(...lab);s+=`<text x="${a}" y="${b}" font-size="8" fill="#9cc8ec" font-family="sans-serif" font-weight="700">${n}</text>`};
+  river([[10.8,10.4],[8.6,9.2],[7,8.2],[5.6,7.6],[4.5,6.6],[3.4,6.3],[2,5.6],[.6,5.2],[-.8,5.1]],"犀川",[7.8,9.6]);
+  river([[10.8,2.2],[8.6,3.4],[7.2,4.1],[5.6,4.5],[4.5,3.6],[3,3.6],[1.4,2.8],[-.8,2.4]],"浅野川",[8.4,2.6]);
+  const L=KOUKA.filter(k=>POS[k]).map(k=>({k,p:POS[k],r:rk.find(x=>x.k===k)})).sort((a,b)=>(a.p[0]+a.p[1])-(b.p[0]+b.p[1]));
+  const tile=(x,y,h,c,k,me)=>{const d=.42,t=[[x-d,y-d],[x+d,y-d],[x+d,y+d],[x-d,y+d]].map(p=>PJ(...p));const up=t.map(([a,b])=>[a,b-h]);
+    return `<g onclick="mapTap('${k}')" style="cursor:pointer"><polygon points="${[t[3],t[2],up[2],up[3]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.7)"/><polygon points="${[t[1],t[2],up[2],up[1]].map(p=>p.join(",")).join(" ")}" fill="${c}" style="filter:brightness(.5)"/><polygon points="${up.map(p=>p.join(",")).join(" ")}" fill="${c}" stroke="${me?"#ffd76a":"#00000055"}" stroke-width="${me?2:.6}"/></g>`};
+  let mine=null;
+  L.forEach(o=>{const h=3+o.r.koku/mx*46,me=o.k===sel;s+=tile(o.p[0],o.p[1],h,o.r.m?color(o.k):"#5a5446",o.k,me);if(me)mine={...o,h}});
+  if(mine){const[a,b]=PJ(...mine.p),top=b-mine.h;const lab=`${mine.k} ${fmt(mine.r.koku)}石`,w=lab.length*8.4+14;
+    s+=`<line x1="${a}" y1="${top}" x2="${a}" y2="${top-26}" stroke="#ffd76a" stroke-width="1.5"/><g transform="translate(${Math.min(352-w,Math.max(8,a-w/2))} ${top-46})"><rect width="${w}" height="20" rx="10" fill="#1b1711" stroke="#ffd76a"/><text x="${w/2}" y="14" font-size="11.5" font-weight="900" text-anchor="middle" fill="#f3dc9a" font-family="sans-serif">${lab}</text></g><circle cx="${a}" cy="${top}" r="3.5" fill="#ffd76a"/>`}
+  return s+`</svg>`}
+function mapView(){abar.className="abar";hd();const k=S.mapSel||S.kouka;
+  app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🗾 金沢の陣地図</h2><button onclick="S.mapSel='';home()">もどる</button></div>
+  <div class="mapw big">${isoMap(k)}</div><div id="mapInfo"></div>
+  <div class="notice" style="margin-top:8px">柱の高さ＝校下の石高、色つき＝参加者がいる校下。柱をタップすると詳しく見られます。<br>※ 位置はおおよその仮配置です（正式な校下の区域データで正確な地図に差し替え予定）。</div></div>`;mapInfo(k)}
+function mapTap(k){if(!$("#mapInfo"))return mapView();S.mapSel=k;mapView()}
+function mapInfo(k){const rk=ranking(),i=rk.findIndex(x=>x.k===k),r=rk[i],T=nTotals(k);
+  $("#mapInfo").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div style="flex:1"><b style="font-size:17px">${k}校下</b>${k===S.kouka?'<span class="tag">わが校下</span>':""}<div class="mute">${BANZUKE(i)}・${fmt(r.koku)}石・${r.m}人</div>
+  <div class="mute" style="font-size:12px">内政：${NAISEI.map(n=>`${n.n}${nLv(T[n.id])}`).join(" ")}</div></div></div>`}
+
 /* ---------- 画面：城下町 ---------- */
-function town(){abar.className="abar";
+function town(){abar.className="abar";hd();
   const cats=Object.entries(CATS).map(([k,c])=>{const v=k==="midori"?`毎朝+${harvest()}石`:`+${Math.round(catBonus(k)*100)}%`;return `<div class="cb"><b>${c.n}</b><span>${c.eff}</span><em>${v}${c.max?`<small> / 上限${Math.round(c.max*100)}%</small>`:""}</em></div>`}).join("");
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🏘️ わたしの城下町</h2><button onclick="home()">もどる</button></div>
   <div class="mute" style="margin-top:4px">蔵 <b style="color:var(--gold2)">${fmt(S.kura)}石</b> ・ 毎朝の維持費 <b style="color:#ff9a8f">${fmt(upkeep())}石</b></div>
@@ -526,7 +623,7 @@ function town(){abar.className="abar";
 function buyLot(){const c=lotCost(S.lots);if(S.kura<c)return toast(`蔵の石が足りません（あと${fmt(c-S.kura)}石）`);S.kura-=c;S.lots++;S.town.push(null);save();toast("区画が増えました");town()}
 function lotTap(i){const b=S.town[i];if(!b)return buildMenu(i);
   const d=bdef(b.id),inv=!d;const name=inv?INV_ITEMS.find(x=>x.id===b.id).n:d.n;
-  app.innerHTML=`<div class="card center"><div class="bimg">${ART[b.id]}</div><h2>${name}${b.old?"（老朽化）":""}</h2>
+  app.innerHTML=`<div class="card center"><div class="bcard big ${d&&d.uniq?"rare":""}"><div class="bph">${pic(b.id)}${d?`<span class="chip">${CATS[d.c].n}</span>`:'<span class="chip r">援軍の品</span>'}</div></div><h2>${name}${b.old?"（老朽化）":""}</h2>
   <div class="mute">${inv?INV_ITEMS.find(x=>x.id===b.id).d:`${CATS[d.c].n}：${d.d}`}</div>
   ${inv?"":`<div class="mute" style="margin-top:6px">毎朝の維持費 ${b.old?0:fmt(b.paid*UPKEEP)}石</div>`}
   ${b.old?`<button class="pri" style="margin-top:10px" onclick="repair(${i})">修繕する（${fmt(b.paid*REPAIR)}石）</button>`:""}
@@ -536,9 +633,10 @@ function repair(i){const b=S.town[i],c=Math.round(b.paid*REPAIR);if(S.kura<c)ret
 function buildMenu(i){
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">🔨 何を建てる？</h2><button onclick="town()">もどる</button></div>
   <div class="mute">蔵 <b style="color:var(--gold2)">${fmt(S.kura)}石</b></div>
-  ${BLD.map(d=>{const done=d.uniq&&owned(d.id),c=nextCost(d);const gain=d.c==="midori"?`毎朝+${Math.round(d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length))}石`:`${CATS[d.c].eff} +${Math.round((CATS[d.c].max*(1-Math.pow(DECAY,units(d.c)+(d.uniq?UW:(d.w||1))))-catBonus(d.c))*1000)/10}%`;
-    return `<div class="bl ${done?"done":""}"><div class="bt">${ART[d.id]}</div><div style="flex:1;min-width:0"><b>${d.n}</b>${d.uniq?'<span class="tag">名所・1つだけ</span>':owned(d.id)?`<span class="tag">${owned(d.id)}棟目</span>`:""}<div class="mute">${d.d}</div><div class="mute">建てると：${gain}・維持費 毎朝${fmt(c*UPKEEP)}石</div></div>
-    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${done?"建設済":fmt(c)+"石"}</button></div>`}).join("")}</div>`}
+  <div class="bcards">${BLD.map(d=>{const done=d.uniq&&owned(d.id),c=nextCost(d);const gain=d.c==="midori"?`毎朝+${Math.round(d.hv*Math.pow(.85,built().filter(b=>bdef(b.id)?.hv).length))}石`:`${CATS[d.c].eff} +${Math.round((CATS[d.c].max*(1-Math.pow(DECAY,units(d.c)+(d.uniq?UW:(d.w||1))))-catBonus(d.c))*1000)/10}%`;
+    return `<div class="bcard ${done?"done":""} ${d.uniq?"rare":""}"><div class="bph">${pic(d.id)}<span class="chip">${CATS[d.c].n}</span>${d.uniq?'<span class="chip r">名所</span>':""}</div>
+    <div class="bbody"><b>${d.n}</b>${!d.uniq&&owned(d.id)?`<small class="mute"> ${owned(d.id)+1}棟目</small>`:""}<div class="mute">${d.d}</div><div class="eff">${gain}</div><div class="mute" style="font-size:11px">維持費 毎朝${fmt(c*UPKEEP)}石</div>
+    <button class="gold" ${done||S.kura<c?"disabled":""} onclick="doBuild(${i},'${d.id}')">${done?"建設済":fmt(c)+"石で建てる"}</button></div></div>`}).join("")}</div></div>`}
 function doBuild(i,id){const d=bdef(id),c=nextCost(d);if(S.kura<c)return;S.kura-=c;S.town[i]={id,paid:c};save();toast(`${d.n} が建ちました！`);town()}
 
 /* ---------- 今日の十問 ---------- */
