@@ -359,18 +359,18 @@ const CATS={
 // rep=何棟でも建てられる（建てるほど次が高くなる）／uniq=1つだけの名所（効き目3棟分）
 const BLD=[
  {id:"shogakko",n:"小学校",c:"manabi",cost:12,rep:1,lim:5,d:"地区の学び舎。十問の石が増える"},
- {id:"toshokan",n:"図書館",c:"manabi",cost:22,rep:1,lim:4,w:1.5,d:"本は知恵の蔵。十問の石が大きく増える"},
+ {id:"toshokan",n:"図書館",c:"manabi",cost:22,rep:1,lim:5,w:1.5,d:"本は知恵の蔵。十問の石が大きく増える"},
  {id:"kageki",n:"文化ホール",c:"bunka",cost:10,rep:1,lim:5,d:"芸どころ金沢。一問入魂の石が増える"},
- {id:"ichiba",n:"市場",c:"sangyo",cost:15,rep:1,lim:6,d:"台所をささえる。ミニゲームの石が増える"},
+ {id:"ichiba",n:"市場",c:"sangyo",cost:15,rep:1,lim:5,d:"台所をささえる。ミニゲームの石が増える"},
  {id:"koen",n:"公園",c:"midori",cost:15,rep:1,lim:5,hv:2,d:"毎朝、蔵に石が入る"},
  {id:"shobo",n:"消防署",c:"bousai",cost:15,rep:1,lim:5,d:"加賀鳶の心意気。大雪の被害をへらす"},
- {id:"bijutsukan",n:"金沢21世紀美術館",c:"bunka",cost:100,uniq:1,rep:1,lim:3,d:"2004年開館の円い美術館"},
- {id:"eki",n:"金沢駅",c:"kotsu",cost:100,uniq:1,rep:1,lim:3,d:"援軍を呼んだときの石が増える"},
- {id:"kinpaku",n:"金箔工房",c:"sangyo",cost:75,uniq:1,rep:1,lim:3,d:"金箔の町の誇り"},
- {id:"yosui",n:"辰巳用水",c:"midori",cost:100,uniq:1,rep:1,lim:3,hv:8,d:"1632年の用水。毎朝の収穫が大きい"},
- {id:"chaya",n:"ひがし茶屋街",c:"meisho",cost:125,uniq:1,rep:1,lim:3,d:"格子戸の町並み"},
- {id:"kenroku",n:"兼六園",c:"meisho",cost:150,uniq:1,rep:1,lim:3,hv:3,d:"日本三名園。収穫もつく"},
- {id:"shiro",n:"金沢城",c:"meisho",cost:150,uniq:1,rep:1,lim:3,d:"石垣の博物館"},
+ {id:"bijutsukan",n:"金沢21世紀美術館",c:"bunka",cost:100,uniq:1,rep:1,lim:5,d:"2004年開館の円い美術館"},
+ {id:"eki",n:"金沢駅",c:"kotsu",cost:100,uniq:1,rep:1,lim:5,d:"援軍を呼んだときの石が増える"},
+ {id:"kinpaku",n:"金箔工房",c:"sangyo",cost:75,uniq:1,rep:1,lim:5,d:"金箔の町の誇り"},
+ {id:"yosui",n:"辰巳用水",c:"midori",cost:100,uniq:1,rep:1,lim:5,hv:8,d:"1632年の用水。毎朝の収穫が大きい"},
+ {id:"chaya",n:"ひがし茶屋街",c:"meisho",cost:125,uniq:1,rep:1,lim:5,d:"格子戸の町並み"},
+ {id:"kenroku",n:"兼六園",c:"meisho",cost:150,uniq:1,rep:1,lim:5,hv:3,d:"日本三名園。収穫もつく"},
+ {id:"shiro",n:"金沢城",c:"meisho",cost:150,uniq:1,rep:1,lim:5,d:"石垣の博物館"},
 ];
 // 援軍を呼んだ人だけの品（建物は維持費なし）
 const INV_ITEMS=[
@@ -444,7 +444,7 @@ const pic=id=>PHOTO[id]?`<img src="${PHOTO[id]}" alt="" onerror="this.outerHTML=
 /* ---------- 状態 ---------- */
 const KEY="hmg_v5";
 const S0={name:"",g:"m",a:"seijin",age:0,seen:{},kouka:"",zip:"",lock:"",koku:0,kura:0,lots:3,town:[null,null,null],days:{},streak:0,last:"",tick:"",invites:0,from:"",report:null,inv:{},kouken:0,mapSel:""};
-let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};(()=>{const keep={};(S.town||[]).forEach((b,i)=>{if(!b)return;if(keep[b.id]!=null){const k=S.town[keep[b.id]];k.lv=(k.lv||1)+1;k.paid=(k.paid||0)+(b.paid||0);S.town[i]=null}else{keep[b.id]=i;b.lv=b.lv||1;b.exp=b.exp||0}})})();S.seen=S.seen||{};S.total=S.total??S.koku;if(S.age)S.a=ageArt(S.age);
+let S=Object.assign({},S0,JSON.parse(localStorage.getItem(KEY)||"null")||{});S.inv=S.inv||{};(S.town||[]).forEach(b=>{if(b&&b.lv>5)b.lv=5});(()=>{const keep={};(S.town||[]).forEach((b,i)=>{if(!b)return;if(keep[b.id]!=null){const k=S.town[keep[b.id]];k.lv=(k.lv||1)+1;k.paid=(k.paid||0)+(b.paid||0);S.town[i]=null}else{keep[b.id]=i;b.lv=b.lv||1;b.exp=b.exp||0}})})();S.seen=S.seen||{};S.total=S.total??S.koku;if(S.age)S.a=ageArt(S.age);
 if(S.lock&&S.lock!==SEASON_ID){S.past=(S.past||[]).concat([{season:S.lock,kouka:S.kouka,koku:S.koku}]);S.koku=0;S.lock="";S.days={};REG={step:2,carry:1}}  // 城下町・内政・蔵・位は引き継ぎ
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
 const $=s=>document.querySelector(s),app=$("#app"),abar=$("#abar");
@@ -953,7 +953,7 @@ document.addEventListener("gesturestart",e=>e.preventDefault());
    ・同じ建物は1つだけ。普請（石がかかる）→その建物のミニゲーム→師範のひとこと
    ・出来に応じて見えない「腕前」がたまり、たまると段が上がる（進み具合は表示しない）
    ・段が上がるほどミニゲームはむずかしくなる／普請は1日3回まで */
-const DAN=["","一の段","二の段","三の段","四の段","五の段","六の段"];
+const DAN=["","一の段","二の段","三の段","四の段","五の段"];
 const FUSHIN_PER_DAY=3, EXP_NEED=100;
 const MASTER={bijutsukan:{who:"学芸員",g:"色の目利き",d:"加賀友禅の色「加賀五彩」をはじめ、示された色の名を見きわめよ。"},
  eki:{who:"駅長",g:"時刻の勘定",d:"何時に出て何時間かかれば、何時に着くか。すばやく答えよ。"},
@@ -1062,7 +1062,7 @@ function hkTap(k){if(!MG)return;const el=$("#hk"+k);if(!el.classList.contains("f
 
 /* --- 金沢21世紀美術館：色の目利き（加賀五彩ほか。色見本はおおよその色） --- */
 const IRO=[["臙脂","えんじ","#9b2335"],["藍","あい","#1f4a7a"],["黄土","おうど","#c2913a"],["草","くさ","#5a7a2a"],["古代紫","こだいむらさき","#7a4a6e"],["朱","しゅ","#e0482c"],["群青","ぐんじょう","#3a54a8"],["萌黄","もえぎ","#9ab83a"],["鶯","うぐいす","#6e6a2e"],["紅梅","こうばい","#e88aa0"],["鼠","ねずみ","#8a8a86"],["山吹","やまぶき","#f0a81e"]];
-function mgIro(){const lv=MG.lv,pool=IRO.slice(0,lv===1?5:lv===2?9:12),goal=8;MG.ok=0;MG.miss=0;
+function mgIro(){const lv=MG.lv,pool=IRO.slice(0,[0,5,7,9,11,12][lv]),goal=8;MG.ok=0;MG.miss=0;
   app.innerHTML=`<div class="card">${mgHead("🎨 色の目利き",40)}<div class="mute">見本の色の名を選べ。${lv===1?"（加賀五彩：臙脂・藍・黄土・草・古代紫）":""}</div><div id="irS" class="irS"></div><div id="irO"></div><div class="mute center">見きわめた数 <b id="irN">0</b></div><div class="mute" style="font-size:11px">※色見本はおおよその色です</div></div>`;
   const round=()=>{const c=pool[Math.floor(Math.random()*pool.length)];MG.ans=c[0];$("#irS").style.background=c[2];
     $("#irO").innerHTML=shuffle([c,...shuffle(pool.filter(x=>x!==c)).slice(0,3)]).map(x=>`<button class="opt" onclick="irTap('${x[0]}')">${x[0]}（${x[1]}）</button>`).join("")};
@@ -1073,7 +1073,7 @@ function irTap(n){if(!MG)return;if(n===MG.ans){MG.ok++;$("#irN").textContent=MG.
 function mgJikoku(){const lv=MG.lv,goal=6;MG.ok=0;MG.miss=0;const tt=m=>`${Math.floor(m/60)%24}時${String(m%60).padStart(2,"0")}分`;
   app.innerHTML=`<div class="card">${mgHead("🚄 時刻の勘定",45)}<div class="mute">着く時刻を答えよ（問題はつくりものです）。</div><div id="jkQ" class="akQ"></div><div id="jkO"></div><div class="mute center">正解 <b id="jkN">0</b></div></div>`;
   const round=()=>{const dep=6*60+Math.floor(Math.random()*14)*60+[0,5,10,15,20,25,30,35,40,45,50,55][Math.floor(Math.random()*12)];
-    const legs=lv>=2?2:1,ds=Array.from({length:legs},()=>[25,35,48,55,72,95,108,147,168][Math.floor(Math.random()*(lv>=3?9:6))]),wait=legs>1?[8,12,15,20][Math.floor(Math.random()*4)]:0;
+    const legs=lv>=5?3:lv>=2?2:1,ds=Array.from({length:legs},()=>([25,35,48,55,72,95,108,147,168][Math.floor(Math.random()*(lv>=3?9:6))]+(lv>=4?[0,3,7,13][Math.floor(Math.random()*4)]:0))),wait=legs>1?[8,12,15,20][Math.floor(Math.random()*4)]:0;
     const arr=dep+ds.reduce((a,b)=>a+b,0)+wait;MG.ans=arr;const h=m=>m>=60?`${Math.floor(m/60)}時間${m%60?m%60+"分":""}`:`${m}分`;
     $("#jkQ").innerHTML=`<div>${tt(dep)}に金沢を出発</div>${ds.map((d,i)=>`<div>${i?`乗りかえ待ち ${wait}分、つぎの列車で `:"列車で "}${h(d)}</div>`).join("")}`;
     $("#jkO").innerHTML=shuffle([arr,arr+10,arr-10,arr+(lv>=2?60:5)].filter((v,i,a)=>a.indexOf(v)===i)).map(v=>`<button class="opt" onclick="jkTap(${v})">${tt(v)}に着く</button>`).join("")};
@@ -1081,7 +1081,7 @@ function mgJikoku(){const lv=MG.lv,goal=6;MG.ok=0;MG.miss=0;const tt=m=>`${Math.
 function jkTap(v){if(!MG)return;if(v===MG.ans){MG.ok++;$("#jkN").textContent=MG.ok}else{MG.miss++;toast("ちがう")}MG.round()}
 
 /* --- 金箔工房：箔打ち（真ん中で打つ） --- */
-function mgHaku(){const lv=MG.lv,N=10,zone=[0,22,15,10][lv],speed=[0,1.1,1.5,1.9][lv];MG.n=0;MG.acc=0;MG.pos=0;MG.dir=1;
+function mgHaku(){const lv=MG.lv,N=10,zone=[0,24,18,13,10,7][lv],speed=[0,1.1,1.4,1.7,2.0,2.4][lv];MG.n=0;MG.acc=0;MG.pos=0;MG.dir=1;
   app.innerHTML=`<div class="card">${mgHead("✨ 箔打ち",40)}<div class="mute">印が金の帯の真ん中に来たら「打つ」（${N}回）。</div><div class="hkBar"><div class="hkZone" style="width:${zone}%;left:${50-zone/2}%"></div><div class="hkMk" id="hkMk"></div></div><div class="hakuF" id="hkF"></div><button class="tkDrum" id="hkD">打つ</button><div class="mute center">打った <b id="hkN">0</b>/${N}</div></div>`;
   let last=performance.now();const tick=t=>{if(!MG)return;MG.pos+=MG.dir*speed*(t-last)/16;last=t;if(MG.pos>100){MG.pos=100;MG.dir=-1}if(MG.pos<0){MG.pos=0;MG.dir=1}const m=$("#hkMk");if(m)m.style.left=MG.pos+"%";MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
   const hit=e=>{e.preventDefault();if(!MG)return;drum();const d=Math.abs(MG.pos-50),a=d<=zone/2?1-d/(zone/2)*.4:Math.max(0,.5-(d-zone/2)/40);MG.acc+=a;MG.n++;$("#hkN").textContent=MG.n;
@@ -1092,7 +1092,7 @@ function mgHaku(){const lv=MG.lv,N=10,zone=[0,22,15,10][lv],speed=[0,1.1,1.5,1.9
 // 樋の口：1=上 2=右 4=下 8=左
 const PIPE={5:"M50 0V100",10:"M0 50H100",3:"M50 0V50H100",6:"M100 50H50V100",12:"M50 100V50H0",9:"M0 50H50V0"};
 const rot=v=>((v<<1)&15)|(v>>3);
-function mgSuiro(){const lv=MG.lv;MG.solved=0;MG.goal=3;MG.sz=lv===1?4:5;mgSuiroNew();mgTimer(75,()=>mgEnd(MG.solved/MG.goal+(MG.part||0)))}
+function mgSuiro(){const lv=MG.lv;MG.solved=0;MG.goal=3;MG.sz=lv===1?4:lv<=3?5:6;mgSuiroNew();mgTimer(75,()=>mgEnd(MG.solved/MG.goal+(MG.part||0)))}
 function mgSuiroNew(){const n=MG.sz,g=Array.from({length:n*n},()=>0);let r=Math.floor(Math.random()*n),c=0,from=8;const path=[];
   while(true){let to;if(c===n-1)to=2;else{const opts=[2];if(r>0&&from!==1&&!path.some(p=>p[0]===r-1&&p[1]===c))opts.push(1);if(r<n-1&&from!==4&&!path.some(p=>p[0]===r+1&&p[1]===c))opts.push(4);to=opts[Math.floor(Math.random()*opts.length)]}
     g[r*n+c]=from|to;path.push([r,c]);if(to===2&&c===n-1)break;if(to===2){c++;from=8}else if(to===1){r--;from=4}else{r++;from=1}}
@@ -1110,7 +1110,7 @@ function srTap(k){if(!MG)return;MG.g[k]=rot(MG.g[k]);srDraw()}
 /* --- ひがし茶屋街：お座敷の手（鳴った順をおぼえる） --- */
 const OZA=[["三味線",392,"#c8382c"],["笛",587,"#2f6aa0"],["太鼓",110,"#c2913a"],["鼓",262,"#5a7a2a"]];
 function tone(fq){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=fq<150?"sine":"triangle";o.frequency.value=fq;g.gain.setValueAtTime(.5,AC.currentTime);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+.4);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+.42)}catch(e){}}
-function mgOzashiki(){const lv=MG.lv;MG.seq=[];MG.goalLen=3+lv*2;MG.best=0;
+function mgOzashiki(){const lv=MG.lv;MG.seq=[];MG.goalLen=[0,5,6,7,8,9][lv];MG.best=0;
   app.innerHTML=`<div class="card">${mgHead("🪭 お座敷の手",90)}<div class="mute">鳴った鳴り物の順をおぼえ、同じ順に打て。まちがえたら終わり（めざせ ${MG.goalLen}手）。</div><div class="mute center" id="ozM">よく見ておけ…</div><div class="ozG">${OZA.map((o,k)=>`<button class="ozB" id="oz${k}" style="--c:${o[2]}" onclick="ozTap(${k})">${o[0]}</button>`).join("")}</div><div class="mute center">いま <b id="ozN">0</b> 手</div></div>`;
   mgTimer(90,()=>mgEnd(MG.best/MG.goalLen));setTimeout(ozNext,700)}
 function ozFlash(k){const b=$("#oz"+k);if(!b)return;b.classList.add("lit");tone(OZA[k][1]);setTimeout(()=>b.classList.remove("lit"),320)}
@@ -1120,17 +1120,17 @@ function ozTap(k){if(!MG||MG.lock)return;ozFlash(k);if(MG.seq[MG.inp]!==k){$("#o
   MG.inp++;if(MG.inp===MG.seq.length){MG.best=MG.seq.length;$("#ozN").textContent=MG.best;if(MG.best>=MG.goalLen)return mgEnd(1);MG.lock=true;setTimeout(ozNext,700)}}
 
 /* --- 兼六園：灯籠の配置（一瞬おぼえる） --- */
-function mgToro(){const lv=MG.lv;MG.n=lv===1?4:5;MG.k=2+lv;MG.r=0;MG.R=5;MG.hit=0;MG.tot=0;
+function mgToro(){const lv=MG.lv;MG.n=lv===1?4:lv<=3?5:6;MG.k=2+lv;MG.r=0;MG.R=5;MG.hit=0;MG.tot=0;
   app.innerHTML=`<div class="card">${mgHead("🏮 灯籠の配置",60)}<div class="mute">灯った灯籠の場所をおぼえ、消えたら同じ場所を選べ（${MG.R}回）。</div><div class="mute center" id="trM"></div><div class="trG" id="trG" style="grid-template-columns:repeat(${MG.n},1fr)"></div></div>`;
   mgTimer(60,()=>mgEnd(MG.tot?MG.hit/(MG.R*MG.k):0));trRound()}
 function trRound(){if(!MG)return;const N=MG.n*MG.n;MG.on=shuffle([...Array(N).keys()]).slice(0,MG.k);MG.pick=[];MG.lock=true;$("#trM").textContent=`第${MG.r+1}回・おぼえよ`;
   $("#trG").innerHTML=[...Array(N).keys()].map(k=>`<button class="trC ${MG.on.includes(k)?"lit":""}" id="tr${k}" onclick="trTap(${k})">${MG.on.includes(k)?"🏮":""}</button>`).join("");
-  MG.timers.push(setTimeout(()=>{if(!MG)return;document.querySelectorAll(".trC").forEach(b=>{b.classList.remove("lit");b.textContent=""});MG.lock=false;$("#trM").textContent=`灯籠は ${MG.k}つ`},Math.max(700,1500-MG.lv*250)))}
+  MG.timers.push(setTimeout(()=>{if(!MG)return;document.querySelectorAll(".trC").forEach(b=>{b.classList.remove("lit");b.textContent=""});MG.lock=false;$("#trM").textContent=`灯籠は ${MG.k}つ`},Math.max(600,1500-MG.lv*180)))}
 function trTap(k){if(!MG||MG.lock||MG.pick.includes(k))return;MG.pick.push(k);MG.tot++;const ok=MG.on.includes(k);const b=$("#tr"+k);b.textContent=ok?"🏮":"✖";b.classList.add(ok?"ok":"ng");if(ok)MG.hit++;
   if(MG.pick.length>=MG.k){MG.lock=true;MG.r++;if(MG.r>=MG.R)return setTimeout(()=>mgEnd(MG.hit/(MG.R*MG.k)),400);setTimeout(trRound,700)}}
 
 /* --- 金沢城：石垣積み（重なるところで落とす） --- */
-function mgIshigaki(){const lv=MG.lv;MG.goal=10;MG.h=0;MG.w=60;MG.x=0;MG.dir=1;MG.prevX=20;MG.sp=[0,1,1.4,1.8][lv];MG.stack=[[20,60]];
+function mgIshigaki(){const lv=MG.lv;MG.goal=10;MG.h=0;MG.w=60;MG.x=0;MG.dir=1;MG.prevX=20;MG.sp=[0,1,1.3,1.6,1.9,2.2][lv];MG.stack=[[20,60]];
   app.innerHTML=`<div class="card">${mgHead("🏯 石垣積み",60)}<div class="mute">動く石が下の石に重なったところで「落とす」。はみ出た分は削れる（めざせ ${MG.goal}段）。</div><div class="igW" id="igW"></div><button class="tkDrum" id="igD">落とす</button><div class="mute center">積んだ <b id="igN">0</b> 段</div></div>`;
   let last=performance.now();const tick=t=>{if(!MG)return;MG.x+=MG.dir*MG.sp*(t-last)/16;last=t;if(MG.x+MG.w>100){MG.x=100-MG.w;MG.dir=-1}if(MG.x<0){MG.x=0;MG.dir=1}igDraw();MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
   const drop=e=>{e.preventDefault();if(!MG)return;drum();const[px,pw]=MG.stack[MG.stack.length-1];const l=Math.max(px,MG.x),r=Math.min(px+pw,MG.x+MG.w);
