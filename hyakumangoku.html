@@ -596,10 +596,10 @@ function hd(){$("#hdN").textContent=(S.kura>=1000?fmt(S.kura):f1(S.kura))+"石"}
 
 // 毎朝の決算（収穫と維持費。払えなければ老朽化）
 function dailyTick(){if(!S.lock)return;const t=today();{const r=dayRec();if(r.k0==null){r.k0=S.kura-(r.inc||0);save()}}if(!S.tick){S.tick=t;save();return}
-  // 維持費は、ひらかなかった日も毎日かかる。朝の収入（収穫・俸禄）は、ひらいた日の朝の分だけ
+  // 朝の収入（収穫・俸禄）も維持費も、ひらかなかった日の分まで毎日つく
   const days=Math.min(400,dBetween(S.tick,t));if(days<=0)return;
   let hv=0,up=0,aged=0;
-  for(let d=0;d<days;d++){if(d===days-1){const st=PERK[rankLv(S.total||0)].st;if(st)hv+=addKoku(st,"");const h=harvest()*storyMul("hv");if(h){hv+=addKoku(h,"")}}
+  for(let d=0;d<days;d++){const st=PERK[rankLv(S.total||0)].st;if(st)hv+=addKoku(st,"");const h=harvest()*storyMul("hv");if(h){hv+=addKoku(h,"")}
     let u=upkeep();
     while(u>S.kura){const cand=built().filter(b=>!b.old&&bdef(b.id)).sort((a,b)=>b.paid-a.paid)[0];if(!cand)break;cand.old=1;aged++;u=upkeep()}
     S.kura-=u;up+=u}
@@ -724,7 +724,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
     <button class="gold" style="width:100%;margin-top:8px" onclick="naisei()">評定（内政）をひらく</button></div>
 
   ${rep&&(rep.aged||rep.days>1)?`<div class="card"><h2>📜 けさの決算</h2>
-    ${rep.days>1?`<div class="mute">${rep.days-1}日ひらかなかったあいだも維持費がかかりました（${rep.days}日分 −${f1(rep.up)}石）。</div>`:""}
+    ${rep.days>1?`<div class="mute">ひらかなかった日の分もまとめて決算しました（${rep.days}日分：収入 +${f1(rep.hv)}石・維持費 −${f1(rep.up)}石）。</div>`:""}
     ${rep.aged?`<div class="notice" style="margin-top:6px">蔵の石が足りず、${rep.aged}棟が老朽化しました。効き目は半分になり、維持費はかかりません。城下町で修繕できます。</div>`:""}
     <button style="width:100%;margin-top:8px" onclick="S.report=null;save();home()">とじる</button></div>`:""}
 
