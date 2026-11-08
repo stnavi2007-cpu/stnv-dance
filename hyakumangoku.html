@@ -341,7 +341,7 @@ function pixelate(root){(root||document).querySelectorAll("svg[data-px]").forEac
 if(typeof MutationObserver!=="undefined")new MutationObserver(()=>pixelate()).observe(document.documentElement,{childList:true,subtree:true});
 
 /* ---------- 水彩の絵（MUSE作・透過WebP）で上書き ---------- */
-const IMGP=f=>`<img src="hyakumangoku_img/${f}.webp" alt="" draggable="false">`;
+const IMGP=f=>`<img src="hyakumangoku_img/${f}.webp?v=1108c" alt="" draggable="false">`;
 ART.nabe=IMGP("jibuni_nabe");
 {const F={"鴨肉":"kamo","すだれ麩":"sudarefu","せり":"seri","しいたけ":"shiitake","わさび":"wasabi","小麦粉":"komugiko","豆腐":"tofu","ねぎ":"negi","かまぼこ":"kamaboko","たまご":"tamago","ちくわ":"chikuwa","牛乳":"gyunyu"};for(const k in F)ART.ing[k]=IMGP("ing_"+F[k])}
 const VEGF={"さつまいも（五郎島金時）":"veg_imo","加賀れんこん":"veg_renkon","たけのこ":"veg_take","加賀太きゅうり":"veg_kyuri","金時草":"veg_kinjiso","加賀つるまめ":"veg_tsurumame","ヘタ紫なす":"veg_nasu","源助だいこん":"veg_gensuke","金沢せり":"veg_seri","打木赤皮甘栗かぼちゃ":"veg_kabocha","金沢一本太ねぎ":"veg_negi","二塚からしな":"veg_karashina","赤ずいき":"veg_zuiki","くわい":"veg_kuwai","金沢春菊":"veg_shungiku","青首だいこん":"nveg_aokubi","九条ねぎ":"nveg_kujo","聖護院かぶ":"nveg_shogoin","下仁田ねぎ":"nveg_shimonita","京みず菜":"nveg_mizuna","賀茂なす":"nveg_kamo","桜島だいこん":"nveg_sakurajima","万願寺とうがらし":"nveg_manganji","三浦だいこん":"nveg_miura","小松菜":"nveg_komatsuna"};
@@ -781,7 +781,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
     <h2>${IC("saikoro")} ミニゲーム</h2>
     
     <div class="games">
-      <button class="gm" ${r.jibu!=null?"disabled":""} onclick="jibu()"><span class="gi"><img src="hyakumangoku_img/thumb_jibuni.webp" alt=""></span><b>治部煮をつくれ</b><small>${r.jibu!=null?"本日 +"+f1(r.jibu)+"石":(60+(waza("kyoyo",1)?10:0))+"秒"}</small></button>
+      <button class="gm" ${r.jibu!=null?"disabled":""} onclick="jibu()"><span class="gi"><img src="hyakumangoku_img/thumb_jibuni.webp?v=1108c" alt=""></span><b>治部煮をつくれ</b><small>${r.jibu!=null?"本日 +"+f1(r.jibu)+"石":(60+(waza("kyoyo",1)?10:0))+"秒"}</small></button>
       <button class="gm" ${r.kaga!=null?"disabled":""} onclick="kaga()"><span class="gi"><img src="hyakumangoku_img/thumb_yasai.webp" alt=""></span><b>加賀野菜 仕分け</b><small>${r.kaga!=null?"本日 +"+f1(r.kaga)+"石":(45+(waza("kyoyo",1)?10:0))+"秒"}</small></button>
     </div>
   </div>
@@ -1041,7 +1041,7 @@ function jibuPick(k){if(J.done)return;const el=$("#ing"+k),i=J.sel.indexOf(k);if
 function jibuFinish(){if(J.done)return;J.done=true;clearInterval(J.timer);let good=0,bad=0;
   J.items.forEach((it,k)=>{const el=$("#ing"+k),p=J.sel.includes(k);if(p&&it.ok){good++;el.classList.add("good")}if(p&&!it.ok){bad++;el.classList.add("bad")}if(!p&&it.ok)el.classList.add("miss")});
   const perfect=good===6&&bad===0;const got=addKoku(Math.max(0,(good-bad+(perfect?2+Math.floor(J.t/12):0))*.85),"治部煮","game");dayRec().jibu=got;save();const up=abUp("kyoyo",perfect?.5:GR(Math.max(0,good-bad)/6*.85));
-  abar.className="abar on";{const pi=$("#potimg");if(pi&&perfect){pi.src="hyakumangoku_img/thumb_jibuni.webp";const po=$("#pot");if(po)po.style.display="none"}}abar.innerHTML=`<div class="res">${perfect?IC("iwai")+" 完璧な治部煮！":`正しい具材 ${good}/6 ・ にせ具材 ${bad}`}</div><div class="mute" style="margin-bottom:8px">治部煮＝鴨肉（または鶏肉）に小麦粉をまぶし、だしで煮て、すだれ麩・しいたけ・せりを合わせ、わさびを添える。</div>${abTxt(up)}<button class="pri" onclick="home()">+${f1(got)}石 ・ ホームへ</button>`}
+  abar.className="abar on";{const pi=$("#potimg");if(pi&&perfect){pi.src="hyakumangoku_img/thumb_jibuni.webp?v=1108c";const po=$("#pot");if(po)po.style.display="none"}}abar.innerHTML=`<div class="res">${perfect?IC("iwai")+" 完璧な治部煮！":`正しい具材 ${good}/6 ・ にせ具材 ${bad}`}</div><div class="mute" style="margin-bottom:8px">治部煮＝鴨肉（または鶏肉）に小麦粉をまぶし、だしで煮て、すだれ麩・しいたけ・せりを合わせ、わさびを添える。</div>${abTxt(up)}<button class="pri" onclick="home()">+${f1(got)}石 ・ ホームへ</button>`}
 
 /* ---------- 加賀野菜 仕分け ---------- */
 let K;
