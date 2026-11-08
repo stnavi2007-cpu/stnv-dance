@@ -64,6 +64,8 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .games{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 .gm{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;background:#241d12}.gm small{color:var(--mute);font-weight:400}
 .gi{width:100%;max-width:120px;height:62px;display:flex;align-items:center;justify-content:center}.gi svg{max-height:62px;width:auto}
+.gi img{max-height:62px;max-width:100%;width:auto;display:block}
+.nm img,.nimg img{width:100%;height:auto;display:block}
 .gimg{max-width:260px;margin:0 auto 6px}.gimg svg{max-height:90px;width:auto;margin:0 auto}
 .potw{position:relative;margin:4px auto 8px;max-width:320px}.pot{position:absolute;left:14%;right:14%;top:6%;display:flex;justify-content:center;gap:2px}.pot>span{width:15%}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
@@ -312,13 +314,6 @@ function veg(type,col,col2){
 }
 
 /* ---------- 内政（校下のみんなで投資） ---------- */
-const N=(i)=>`<svg viewBox="0 0 100 100" data-px="68" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="14" fill="#16130d"/>${i}</svg>`;
-ART.n_chisui=N(`<path d="M0 70 Q25 62 50 70 T100 70 V100 H0Z" fill="#3f7ab0"/><path d="M0 78 Q25 70 50 78 T100 78" stroke="#9cc8ec" stroke-width="2" fill="none"/><path d="M10 64 L30 40 L70 40 L90 64Z" fill="#8a8476"/><path d="M30 40 L70 40 L74 46 L26 46Z" fill="#a8a294"/>${[0,1,2,3,4].map(i=>`<path d="M${22+i*12} 50 l8 0" stroke="#5e594f" stroke-width="2"/>`).join("")}<rect x="46" y="22" width="4" height="18" fill="#6a4a2a"/><path d="M50 22 h16 v10 h-16Z" fill="#c8382c"/>`);
-ART.n_nogyo=N(`<path d="M0 50 L100 40 V100 H0Z" fill="#6a8a32"/>${[0,1,2,3,4,5].map(i=>`<path d="M0 ${56+i*8} L100 ${46+i*9}" stroke="#4a6a22" stroke-width="2"/>`).join("")}${[0,1,2,3,4,5,6].map(i=>`<path d="M${12+i*13} 56 q-3 -12 0 -18 M${12+i*13} 56 q4 -10 6 -14" stroke="#d8c04a" stroke-width="2.2" fill="none"/>`).join("")}<circle cx="80" cy="18" r="10" fill="#f3c64a"/>`);
-ART.n_shogyo=N(`<rect x="14" y="40" width="72" height="46" fill="#7a5a3a"/><path d="M8 40 L50 18 L92 40Z" fill="#3a2a1a"/>${[0,1,2,3].map(i=>`<rect x="${16+i*18}" y="42" width="16" height="22" fill="${i%2?"#2f4a7a":"#26406a"}"/>`).join("")}<text x="50" y="58" font-size="12" font-weight="900" text-anchor="middle" fill="#f3ede0" font-family="sans-serif">商</text><rect x="22" y="70" width="56" height="12" fill="#e9d8b0"/><circle cx="34" cy="76" r="4" fill="#d8b45a"/><circle cx="46" cy="76" r="4" fill="#d8b45a"/><circle cx="58" cy="76" r="4" fill="#c84a3a"/>`);
-ART.n_kogyo=N(`<path d="M10 86 V50 L30 38 V50 L50 38 V50 L70 38 V86Z" fill="#6e7480"/><rect x="74" y="20" width="10" height="66" fill="#565c66"/><circle cx="79" cy="14" r="5" fill="#c9ccd2" opacity=".6"/><circle cx="86" cy="8" r="4" fill="#c9ccd2" opacity=".4"/>${[0,1,2].map(i=>`<rect x="${16+i*18}" y="60" width="10" height="10" fill="#f3c64a"/>`).join("")}<g transform="translate(40 80)"><circle r="9" fill="none" stroke="#d8b45a" stroke-width="4" stroke-dasharray="4 3"/><circle r="3" fill="#d8b45a"/></g>`);
-ART.n_kogei=N(`<path d="M40 86 Q22 70 30 46 Q34 36 40 32 L60 32 Q66 36 70 46 Q78 70 60 86Z" fill="#f4f1ea"/><path d="M34 54 Q50 46 66 54 Q66 66 50 70 Q34 66 34 54Z" fill="#2f6aa0"/><circle cx="44" cy="58" r="4" fill="#c8382c"/><circle cx="56" cy="60" r="3" fill="#d8b45a"/><path d="M40 32 L60 32 L58 26 L42 26Z" fill="#e3dfd6"/><rect x="66" y="64" width="22" height="22" fill="#e8c860" transform="rotate(12 77 75)"/><rect x="12" y="66" width="18" height="18" fill="#f0d878" transform="rotate(-10 21 75)"/>`);
-ART.n_gakumon=N(`<path d="M18 80 L18 40 L50 26 L82 40 L82 80Z" fill="#e2d4b8"/><path d="M12 42 L50 22 L88 42 L82 44 L50 28 L18 44Z" fill="#3a2a1a"/><rect x="40" y="56" width="20" height="24" fill="#5a3a22"/><path d="M24 50 h10 v10 h-10Z M66 50 h10 v10 h-10Z" fill="#8a6a3a"/><g transform="translate(70 70) rotate(-35)"><rect x="-2" y="-18" width="4" height="22" fill="#2a1f14"/><path d="M-2 4 L0 10 L2 4Z" fill="#1a140d"/></g>`);
 
 /* ---------- ドット化（イラストを低解像度に落として、歴史ゲームらしいドット絵に） ---------- */
 const PXC=new Map();
@@ -747,7 +742,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
     <button class="gold" style="width:100%" onclick="mapView()">地図をひらく</button></div>
 
   <div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">${IC("naisei")} ${S.kouka}校下の内政</h2><span class="mute">みんなで投資</span></div>
-    <div class="nmini">${NAISEI.map(n=>`<div class="nm" onclick="naisei()">${ART["n_"+n.id]}<b>${n.n}</b><small>Lv${myLv(n.id)}</small></div>`).join("")}</div>
+    <div class="nmini">${NAISEI.map(n=>`<div class="nm" onclick="naisei()"><img src="hyakumangoku_img/naisei_${n.id}.webp" alt="" loading="lazy"><b>${n.n}</b><small>Lv${myLv(n.id)}</small></div>`).join("")}</div>
     <div class="mute" style="margin-top:6px">蔵の石を投資すると、校下のレベルが上がり<b>校下の全員</b>に効きます。</div>
     <button class="gold" style="width:100%;margin-top:8px" onclick="naisei()">評定（内政）をひらく</button></div>
 
@@ -773,8 +768,8 @@ function home(){abar.className="abar";if(!S.lock)return register();
     <h2>${IC("saikoro")} ミニゲーム</h2>
     
     <div class="games">
-      <button class="gm" ${r.jibu!=null?"disabled":""} onclick="jibu()"><span class="gi">${ART.nabe}</span><b>治部煮をつくれ</b><small>${r.jibu!=null?"本日 +"+f1(r.jibu)+"石":"60秒"}</small></button>
-      <button class="gm" ${r.kaga!=null?"disabled":""} onclick="kaga()"><span class="gi">${veg("thick","#f4f0e6")}</span><b>加賀野菜 仕分け</b><small>${r.kaga!=null?"本日 +"+f1(r.kaga)+"石":"45秒"}</small></button>
+      <button class="gm" ${r.jibu!=null?"disabled":""} onclick="jibu()"><span class="gi"><img src="hyakumangoku_img/thumb_jibuni.webp" alt=""></span><b>治部煮をつくれ</b><small>${r.jibu!=null?"本日 +"+f1(r.jibu)+"石":(60+(waza("kyoyo",1)?10:0))+"秒"}</small></button>
+      <button class="gm" ${r.kaga!=null?"disabled":""} onclick="kaga()"><span class="gi"><img src="hyakumangoku_img/thumb_yasai.webp" alt=""></span><b>加賀野菜 仕分け</b><small>${r.kaga!=null?"本日 +"+f1(r.kaga)+"石":(45+(waza("kyoyo",1)?10:0))+"秒"}</small></button>
     </div>
   </div>
 
@@ -872,7 +867,7 @@ function naisei(){abar.className="abar";hd();const T=nTotals(S.kouka);
   <div class="mute">蔵 <b style="color:var(--gold2)">${f1(S.kura)}石</b> ・ あなたの内政への貢献 <b style="color:var(--gold2)">${fmt(S.kouken)}石</b></div>
   <div class="notice" style="margin-top:6px">投資は蔵の石を使います。<b>校下の石高（手柄）は減りません。</b>レベルは校下の全員の投資の合計で上がり、全員に効きます。</div></div>
   ${NAISEI.map(n=>{const t=T[n.id],lv=nLv(t),nx=NLV[lv+1],pr=nx?Math.min(100,(t-NLV[lv])/(nx-NLV[lv])*100):100;
-    return `<div class="card ncard"><div class="row" style="align-items:center;gap:12px;flex-wrap:nowrap"><div class="nimg">${ART["n_"+n.id]}</div><div style="flex:1;min-width:0">
+    return `<div class="card ncard"><div class="row" style="align-items:center;gap:12px;flex-wrap:nowrap"><div class="nimg"><img src="hyakumangoku_img/naisei_${n.id}.webp" alt="" loading="lazy"></div><div style="flex:1;min-width:0">
     <div class="row" style="justify-content:space-between;align-items:baseline"><b style="font-size:18px">${n.n}</b><span class="lv">Lv${lv}${lv>=5?" 極":""}</span></div>
     <div class="mute">${n.d}</div><div class="nowfx">いま：${nFx(n.id,lv)}</div><div class="mute" style="font-size:12px">${lv<5?`次のLv${lv+1}で：${nFx(n.id,lv+1)}`:"最高レベル"}</div></div></div>
     <div class="prog" style="height:10px;margin-top:8px"><i style="width:${pr}%"></i></div>
