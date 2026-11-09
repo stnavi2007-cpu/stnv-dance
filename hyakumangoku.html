@@ -1904,8 +1904,7 @@ function pzTap(k){if(!MG)return;const W=MG.W,x=k%W,y=Math.floor(k/W),v=MG.cell[k
   const [fx,fy]=p.c[0],ox=x-fx,oy=y-fy;MG.ghost={o:[ox,oy],cells:p.c.map(([a,b])=>[a+ox,b+oy]),ok:pzFits(p.c,ox,oy)};pzDraw()}
 function pzEnd(){if(!MG||MG.ended)return;MG.ended=1;const r=pzFill()/MG.holes;mgEnd(r>=1?1:r*.85)}
 
-/* 起動 */
-home();
+
 /* ===================== 金沢 時代すごろく（1日2回・能力で運命が変わる） ===================== */
 // 問題はすべて問題バンク（ジュニアかなざわ検定の過去問）から。q＝QBの番号（どれか1つが出る）
 const SG_ERA={出発:"#8a7a5a",古代:"#6a8a5a",中世:"#8a6a3a",戦国:"#9a4a3a",江戸:"#3a5a8a",近代:"#2f7a7a",昭和:"#6a4a7a",現代:"#a0822a",令和:"#c9a227"};
@@ -2291,6 +2290,9 @@ function kzAdvTxt(a,d){const m=kzMod(a.c.el,d.c.el);return m>1?"相性有利":m<
 function kzEnd(win){const b=KB;if(b.over)return;b.over=true;const z=kzSt(),s=KZ_DOJO[b.stage];let rew=[];
   if(win){if(b.stage===z.clear){z.clear++;z.tix+=s.tix;rew.push(`初勝利！ 札券${s.tix}枚`)}const r=dayRec();if((r.kzw||0)<KZ_DAYWIN){r.kzw=(r.kzw||0)+1;const g=addKoku(1+b.stage*.3,"","kz");rew.push(`+${f1(g)}石`)}save()}
   infoPop({title:win?"勝利！":"敗北…",btn:"道場へもどる",onClose:()=>{KB=null;kzDojo()},body:`<div class="kbEnd ${win?"win":"lose"}">${win?`${s.n}に勝った！`:`${s.n}に敗れた…`}</div>${rew.length?`<div class="ipsec"><b>ほうび</b>${rew.join("・")}</div>`:""}${!win?`<div class="mute">相性の良い札で編成したり、札を重ねて★を上げよう。</div>`:""}`})}
+
+/* 起動 */
+home();
 
 </script>
 </body>
