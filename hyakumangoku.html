@@ -2289,7 +2289,7 @@ function kzGacha(){abar.className="abar";const z=kzSt(),fr=z.free!==today();
   app.innerHTML=`<div class="card kzG"><h2 class="row" style="align-items:center;gap:6px">${IC("saikoro")} 札まわし ${infoBtn("金沢偉人札とは",kzHelp())}</h2>
    <div class="kzMach"><div class="kzMachIn"><span>偉人札</span><small>UR ${KZ_RAR.UR.w}%・SSR ${KZ_RAR.SSR.w}%・SR ${KZ_RAR.SR.w}%</small></div></div>
    <div class="kzBar"><span>札券 <b>${z.tix}</b>枚</span><span>蔵の石 <b>${f1(S.kura)}</b>石</span>${infoBtn("札券とは",kzTixHelp())}</div>
-   ${!z.starter?`<button class="pri big" onclick="kzAsk(10,'starter')">はじめの10連（無料・SRが1枚確定。SSR・URは出ません）</button>`:`
+   ${!z.starter?`<button class="pri big" onclick="kzAsk(10,'starter')">はじめの10連（無料）</button>`:`
    ${fr?`<button class="pri big" onclick="kzAsk(1,'free')">きょうの無料1回</button>`:""}
    <div class="row" style="gap:6px;margin-top:6px"><button class="gold" style="flex:1" ${z.tix>=1?"":"disabled"} onclick="kzAsk(1,'tix')">札券1枚で1回</button><button class="gold" style="flex:1" ${z.tix>=10?"":"disabled"} onclick="kzAsk(10,'tix')">札券10枚で10連</button></div>
    <div class="row" style="gap:6px;margin-top:6px"><button style="flex:1" ${S.kura>=30?"":"disabled"} onclick="kzAsk(1,'koku')">30石で1回</button><button style="flex:1" ${S.kura>=270?"":"disabled"} onclick="kzAsk(10,'koku')">270石で10連</button></div>
