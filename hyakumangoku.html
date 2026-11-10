@@ -2169,6 +2169,7 @@ const KZ_SU={
  exp:{t:"勝ったとき{}%で、ほかの3枚の勝ち数がもう1増える",v:[20,25,30,40,50]},gold:{t:"勝ったときの石+{}%",v:[10,12,15,20,25]},
  guts:{t:"場の札が倒れる攻撃を受けたとき{}%で体力1で耐える（1戦1回）",v:[10,12,15,20,25]}};
 function kzSuV(c){const u=KZ_SU[c.su],b=u.v[KZ_RI[c.r]]*(c.sw||1);return u.base!=null?Math.round((u.base+b)*100)/100:u.int?Math.round(b):Math.round(b*2)/2}
+const kzSuB=c=>{const u=KZ_SU[c.su],v=u.v[KZ_RI[c.r]];return u.base!=null?"+"+v:v};
 const kzSuT=c=>KZ_SU[c.su].t.replace("{}",kzSuV(c));
 // 縁
 const KZ_ENB={組:{t:"体力と攻撃+8%",o:0},家族:{t:"体力+10%",o:1},師弟:{t:"攻撃+10%",o:2},主従:{t:"はじめの気+1",o:3},宿敵:{t:"会心の出やすさ+5%",o:4},仲間:{t:"速さ+3",o:5}};
@@ -2329,7 +2330,7 @@ function kzDetail(id){const c=KZM[id],z=kzSt(),o=z.own[id],star=kzStar(id),st=kz
    <div class="ipsec"><b>人物</b>${c.d}<br><small class="mute">${c.cls}・道場と過去問に${c.tot}問出てくる</small></div>
    <div class="ipsec"><b>能力</b>体力 ${st.hp}・攻撃 ${st.atk}・速さ ${st.spd}（会心${Math.round(st.spd/2*10)/10}%）<br><small class="mute">${c.cls}：${kzFit(c)}</small><br>属性 <b style="color:${KZ_EL[c.el]}">${c.el}</b>：${KZ_ELD[c.el]}<br>★${star}・${o.w||0}勝${star<5?`（あと${nx-(o.w||0)}勝で★${star+1}）`:"（★5 きわめた！）"}${o.gold?"<br>金箔仕様：体力と攻撃が5%強い":""}</div>
    <div class="ipsec"><b>必殺技</b>${c.sk?`<b style="color:${KZ_SK[c.sk].c}">${c.sk}</b>（${KZ_TIER[c.tr]}）気5：${kzSkD(c)}`:"なし（補佐で活躍）"}</div>
-   <div class="ipsec"><b>補佐に入れたとき</b>${kzSuT(c)}${c.sw>1?`<br><small class="mute">${c.cls}は補佐向き：効果×${c.sw}</small>`:""}</div>
+   <div class="ipsec"><b>補佐に入れたとき</b>${kzSuT(c)}${c.sw>1?`<br><small class="mute">${c.cls}は補佐向きなので、もとの値${kzSuB(c)}の${c.sw}倍になっています（表示は倍にしたあとの値）</small>`:""}</div>
    <div class="ipsec"><b>縁（えにし）</b>${kzEnHtml(kzEnAll(id))}</div>
    ${qs.length?`<div class="ipsec"><b>この人物の問題</b>${z.quiz[id]?"正解ずみ ✓":"初めて正解すると 札券1枚"}<button class="gold" style="width:100%;margin-top:6px" onclick="kzQuiz('${id}')">問題に挑む</button></div>`:""}`})}
 function kzQuiz(id){const c=KZM[id],qs=c.q.filter(i=>QB[i]),qi=qs[Math.floor(Math.random()*qs.length)],Q=QB[qi],ord=shuffle([0,1,2,3]);$("#ipop")?.remove();document.body.classList.remove("ipon");
