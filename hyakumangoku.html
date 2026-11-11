@@ -427,7 +427,7 @@ body.ipon{overflow:hidden}
 .sgFaces .win{background:#3d6b32;color:#fff}.sgFaces .lose{background:rgba(255,255,255,.08);color:#8a8070}.sgFaces .hit{outline:3px solid #ffd76a;transform:scale(1.15)}
 .sgStake{font-size:14px;line-height:1.8;padding:6px 10px;border-radius:8px;background:rgba(0,0,0,.2)}.sgStake .ok{color:#9fd48a}.sgStake .ng{color:#ff9a8f}
 .kawara{background:linear-gradient(#efe2c0,#e2d0a4);color:#2a1c10;border-color:#8a6a3a}.kawara .mute{color:#6a5236}.kwT{font-weight:900;font-size:17px;display:flex;align-items:center;gap:6px}.kwT small{margin-left:auto;font-weight:700;color:#7a5a30}
-.kwB{margin-top:8px;line-height:1.75;font-size:15px}.kwN{margin-top:8px;font-size:13px;color:#7a2a1a}.kwK{margin-top:10px;padding-top:8px;border-top:1px dashed #8a6a3a;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.kwK span{font-weight:800;font-size:13px}.kwK small{font-size:11px;color:#6a5236;width:100%}
+.kwB{margin-top:8px;line-height:1.75;font-size:15px}.kwN{margin-top:8px;font-size:13px;color:#7a2a1a}.kwK{margin-top:10px;padding-top:8px;border-top:1px dashed #8a6a3a;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.kwK span{font-weight:800;font-size:13px}.kwK small{font-size:11px;color:#6a5236;width:100%}.kwL{display:block;margin-top:10px;padding:9px;text-align:center;border:1px solid #8a6a3a;border-radius:8px;color:#7a2a1a;font-weight:800;font-size:14px;text-decoration:none;background:#f6ecd0}
 .kwS{display:flex;gap:4px}.kwS i{font-style:normal;width:26px;height:26px;border-radius:50%;border:1.5px solid #8a6a3a;display:grid;place-items:center;font-size:11px;color:#8a6a3a}.kwS i.on{background:#b3261e;border-color:#b3261e;color:#fff;font-weight:900}
 .sgHome{margin-left:auto;padding:6px 14px;font-size:14px}
 .kzSub{font-size:16px;margin:14px 0 6px;padding-top:8px;border-top:1px solid #4a3a26}
@@ -1373,7 +1373,7 @@ function kawaraCard(){const q=kawaraQ();if(!q)return "";const r=dayRec(),k=S.kay
   return `<div class="card kawara"><div class="kwT">${IC("makimono")} 金沢かわら版 <small>${today().slice(5).replace("-","月")}日</small></div>
    ${read?`<div class="kwB">${q.e}</div><div class="kwN">${IC("mato")} この話から、<b>あすの「今日の十問」</b>に1問出ます</div>`
    :`<div class="mute">あすの十問に出る話が、ひと足先にとどいています。</div><button class="gold" style="width:100%;margin-top:8px" onclick="kawaraRead()">かわら版を読む（+2石）</button>`}
-   <div class="kwK"><span>通い帳</span><div class="kwS">${stamps}</div><small>7日ひらくと札券3枚・7日つづけてなら6枚${k.n&&k.chain?"（いま連続中）":""}</small></div></div>`}
+   <div class="kwK"><span>通い帳</span><div class="kwS">${stamps}</div><small>7日ひらくと札券3枚・7日つづけてなら6枚${k.n&&k.chain?"（いま連続中）":""}</small></div><a class="kwL" href="https://kanazawa-marutto.jp/" target="_blank" rel="noopener">金沢情報サイト「金沢まるっと」</a></div>`}
 function kawaraRead(){const r=dayRec();if(r.kawara)return;r.kawara=1;const g=gain(2,"かわら版");save();toast("かわら版を読んだ "+g);home()}
 function storyCard(){const st=storyToday();if(!st)return `<div class="card emaki calm"><div class="emt">${IC("meguri_none")} けふは何事もなき日</div><div class="mute" style="margin-top:4px">できごと帳 ${Object.keys(S.seen).length} / ${STORY.length}</div></div>`;
   if(!S.seen[st.id]){S.seen[st.id]=today();save()}
