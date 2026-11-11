@@ -1323,7 +1323,7 @@ const IRR=[
  {id:"dezome",t:"加賀鳶の出初め",d:"加賀藩の大名火消し「加賀鳶」の心意気。きょうは町の守りがかたい。",good:1,w:1,b:{shobo:3},act:()=>{dayRec().guard=1;return "きょう一日、災いのできごとの被害を受けない"}},
  {id:"gyosho",t:"行商人がやってきた",d:"「よい土地がありますぜ」——区画を半値で売ってくれるという。",good:1,w:2,b:{eki:3,ichiba:1},shop:1},
  {id:"boya",t:"ぼや騒ぎ",d:"城下の一角で火が出た。",good:0,w:3,b:{},act:()=>{if(dayRec().guard||catBonus("bousai")>=.3)return "消防の備えで、すぐに消し止めた（被害なし）";const c=built().filter(b=>!b.old&&bdef(b.id));if(!c.length)return lose(2,"ぼやの片付け");const v=c[Math.floor(Math.random()*c.length)];v.old=1;save();return `${bdef(v.id).n}が傷んで老朽化した（城下町で修繕できます）`}},
- {id:"nusubito",t:"盗人が入った",d:"夜のうちに、蔵が荒らされた。",good:0,w:2,b:{},act:()=>{if(dayRec().guard)return "見回りのおかげで盗人を追い払った";return lose(Math.min(30,Math.max(1,S.kura*.1))*(1-catBonus("bousai")),"盗人")}},
+ {id:"nusubito",t:"盗人が入った",d:"夜のうちに、蔵が荒らされた。",good:0,w:2,b:{},act:()=>{if(dayRec().guard)return "見回りのおかげで盗人を追い払った";return lose(Math.min(30,Math.max(1,S.kura*.05))*(1-catBonus("bousai")),"盗人")}},
  {id:"ooame",t:"大雨",d:"川が増水し、田畑が水をかぶった。",good:0,w:2,b:{},act:()=>{const g=Math.min(1,.2*myLv("chisui")+(dayRec().guard?1:0));if(g>=1)return "治水の備えで被害なし";return lose(Math.min(20,Math.max(1,S.kura*.05))*(1-g),"大雨の被害")}},
 ];
 function gain(n,why){const g=addKoku(n,why);return `+${f1(g)}石`}
