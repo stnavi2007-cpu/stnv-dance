@@ -2562,7 +2562,7 @@ function sgMikiri(){const R=S.sg,Q=SGQ.q;if(R.mk<=0)return;const bs=[...document
 function sgAns(j){const R=S.sg,Q=SGQ.q,ok=j===Q.a;document.querySelectorAll("#sgMB .opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===Q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});$("#sgMk")?.remove();
   R.asked++;let up=null;if(ok){R.ok++;const g=addKoku(SG_PT.ok,"","sugoroku");R.tally=Math.round((R.tally+g)*10)/10;up=abUp(ABG[Q.g],.05)}save();hd();
   $("#sgMB").insertAdjacentHTML("beforeend",`<div class="sgRes ${ok?"ok":"ng"}">${ok?IC("iwai")+` 正解！ +${SG_PT.ok}石`:IC("batsu")+` 残念…　正解「${Q.o[Q.a]}」`}</div><div class="mute" style="margin:4px 0">${Q.e}</div>${up?abTxt(up):""}<div class="mute" style="font-size:11px">出典：${Q.src}</div>
-   <button class="pri" style="width:100%;margin-top:8px" onclick="${SGQ.s.f?"sgFate()":"sgNext()"}">${SGQ.s.f?"運命の判定へ":"つぎへ"}</button>`)}
+   <button class="pri" id="sgNextB" style="width:100%;margin-top:8px" onclick="${SGQ.s.f?"sgFate()":"sgNext()"}">${SGQ.s.f?"運命の判定へ":"つぎへ"}</button>`);requestAnimationFrame(()=>{const b=$("#sgNextB");if(b)b.scrollIntoView({block:"end",behavior:"smooth"})})}
 // 運命の判定：サイコロで「○以上」が出たら成功。能力が高いほど必要な目が小さくなる
 function sgReq(f){return Math.max(1,Math.min(6,Math.ceil((f.need-AB(f.ab))/5)))}
 function sgFxTxt(E){const fx=[];if(E.koku)fx.push(`${E.koku>0?"+":""}${E.koku}石`);if(E.mv)fx.push(E.mv>0?`${E.mv}マス進む`:`${-E.mv}マス戻る`);if(E.rest)fx.push("1回休み");return fx.join("・")||"なにも起きない"}
