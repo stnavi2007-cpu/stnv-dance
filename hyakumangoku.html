@@ -2251,16 +2251,16 @@ function ckTap(i){if(!MG||MG.lock)return;const sl=document.querySelectorAll(".ck
   if(MG.ci>=MG.L){MG.lock=true;MG.r++;{const m=MG;if(MG.r>=MG.R)return setTimeout(()=>MG===m&&mgEnd(MG.hit/(MG.R*MG.L)),600);setTimeout(()=>MG===m&&ckRound(),900)}}}
 
 /* --- 兼六園：庭石はこび（太閤立志伝IVの石運搬を下じきに、天秤の左右を釣り合わせる形に変えたもの） --- */
-function mgIshihakobi(){const lv=MG.lv;MG.T=Math.round((1800+Math.random()*1400)/50)*50;MG.nomi=3;MG.mode=0;MG.side="L";MG.tol=1-.1*(lv-1);
+function mgIshihakobi(){const lv=MG.lv,TM=[0,50,45,40,35,30][lv];MG.T=Math.round((1800+Math.random()*1400)*(1+.15*(lv-1))/50)*50;MG.nomi=[0,3,3,2,2,1][lv];MG.mode=0;MG.side="L";MG.tol=[0,1,.75,.55,.4,.3][lv];
   const mk=(a,b,sz)=>({w:Math.round(a+Math.random()*(b-a)),sz,on:""});
-  MG.st=shuffle([...[...Array(4)].map(()=>mk(600,900,3)),...[...Array(4)].map(()=>mk(250,450,2)),...[...Array(4)].map(()=>mk(60,160,1))]);
-  app.innerHTML=`<div class="card">${mgHead(IC("niwaishi")+" 庭石はこび",50)}<div class="mute">庭石を天秤の<b>左右の皿</b>に分けてのせ、<b>ぴたりと釣り合わせよ</b>。ただし両方あわせて <b>${fmt(MG.T)}貫</b> 以上。石の目方は、のせるまで分からぬ。「石を削る」で石を少し軽くできる。</div>
+  MG.st=shuffle([...[...Array(4)].map(()=>mk(600,900,3)),...[...Array(4)].map(()=>mk(250,450,2)),...[...Array(4+(lv>=4?3:0))].map(()=>mk(60,160,1)),...[...Array(lv>=3?2:0)].map(()=>mk(900,1300,3))]);
+  app.innerHTML=`<div class="card">${mgHead(IC("niwaishi")+" 庭石はこび",TM)}<div class="mute">庭石を天秤の<b>左右の皿</b>に分けてのせ、<b>ぴたりと釣り合わせよ</b>。ただし両方あわせて <b>${fmt(MG.T)}貫</b> 以上。石の目方は、のせるまで分からぬ。「石を削る」で石を少し軽くできる。</div>
   <div class="ihTop"><div>左 <b id="ihL">0</b> 貫</div><div class="mute" id="ihSum"></div><div>右 <b id="ihR">0</b> 貫</div></div>
   <div class="ihBal"><div class="ihBeam" id="ihBeam"><div class="ihPan2" id="ihPL"></div><div class="ihPan2" id="ihPR"></div></div><div class="ihPost"></div></div>
   <div class="row" style="margin:6px 0"><span class="mute" style="align-self:center">のせる皿：</span><button class="ihSd" id="sdL" onclick="ihSide('L')">左</button><button class="ihSd" id="sdR" onclick="ihSide('R')">右</button></div>
   <div class="ihYard" id="ihY"></div>
   <div class="row"><button style="flex:1" id="ihNomi" onclick="ihNomi()">石を削る（あと${MG.nomi}回）</button><button class="gold" style="flex:1" onclick="ihEnd()">これで納める</button></div></div>`;
-  ihDraw();mgTimer(50,ihEnd)}
+  ihDraw();mgTimer(TM,ihEnd)}
 const ihStone=(s,pan)=>`<svg viewBox="0 0 100 80" width="${(pan?[0,16,22,30]:[0,30,42,56])[s.sz]}"><path d="M8 60 Q4 30 30 18 Q52 6 74 16 Q96 28 92 56 Q88 74 50 76 Q14 76 8 60Z" fill="#8c8a86"/><path d="M20 40 Q30 24 50 20 Q66 18 76 26" stroke="#c9c7c2" stroke-width="5" fill="none" opacity=".7"/><path d="M14 62 Q40 72 86 58" stroke="#5c5a56" stroke-width="5" fill="none"/></svg>`;
 function ihDraw(){const L=MG.st.filter(s=>s.on==="L").reduce((a,s)=>a+s.w,0),R=MG.st.filter(s=>s.on==="R").reduce((a,s)=>a+s.w,0);MG.L=L;MG.R=R;
   $("#ihL").textContent=fmt(L);$("#ihR").textContent=fmt(R);const sum=L+R;$("#ihSum").innerHTML=`合計 ${fmt(sum)}${sum>=MG.T?" ✓":` / ${fmt(MG.T)}`}`;
