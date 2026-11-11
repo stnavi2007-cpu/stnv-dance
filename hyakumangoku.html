@@ -1103,7 +1103,8 @@ const disc=()=>(1-.05*myLv("kogyo"))*((storyToday()||{fx:{}}).fx.cost||1);
 const nextCost=d=>Math.round(d.cost*disc()*10)/10;
 function units(cat){const seen={};return built().reduce((s,b)=>{const d=bdef(b.id);if(!d||d.c!==cat||seen[d.id])return s;seen[d.id]=1;const n=d.rep?Math.min(b.lv||1,d.lim):1;return s+(d.uniq?UW:(d.w||1))*n*(b.old?.5:1)},0)}
 function umax(cat){return BLD.filter(d=>d.c===cat).reduce((s,d)=>s+(d.uniq?UW:(d.w||1))*(d.rep?(d.lim||1):1),0)}
-function catBonus(cat,u){const c=CATS[cat];if(!c.max)return 0;const m=umax(cat);return m?Math.min(c.max,c.max*(1-Math.pow(DECAY,u??units(cat)))/(1-Math.pow(DECAY,m))):0}
+// ★が1つ上がるごとに、いつも同じだけ増える（全部の建物を★5にすると、その分野の最大）
+function catBonus(cat,u){const c=CATS[cat];if(!c.max)return 0;const m=umax(cat);return m?Math.min(c.max,c.max*(u??units(cat))/m):0}
 function harvest(){const L=[],seen={};built().forEach(b=>{const d=bdef(b.id);if(!d||!d.hv||seen[d.id])return;seen[d.id]=1;for(let k=0;k<(d.rep?Math.min(b.lv||1,d.lim):1);k++)L.push(d.hv*(b.old?.5:1))});L.sort((a,b)=>b-a);let sum=L.reduce((s,v,i)=>s+v*Math.pow(.85,i),0);
   if(S.invites>=1)sum+=3;if(S.invites>=10)sum+=5;sum+=1.2*myLv("nogyo")+.5*myLv("chisui");return Math.round(sum*10)/10}
 function upkeep(){return Math.round(built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:b.paid*UPKEEP),0)*(1-abFx("sanyo"))*100)/100}
