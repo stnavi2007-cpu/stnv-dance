@@ -429,6 +429,7 @@ body.ipon{overflow:hidden}
 .kawara{background:linear-gradient(#efe2c0,#e2d0a4);color:#2a1c10;border-color:#8a6a3a}.kawara .mute{color:#6a5236}.kwT{font-weight:900;font-size:17px;display:flex;align-items:center;gap:6px}.kwT small{margin-left:auto;font-weight:700;color:#7a5a30}
 .kwB{margin-top:8px;line-height:1.75;font-size:15px}.kwN{margin-top:8px;font-size:13px;color:#7a2a1a}.kwK{margin-top:10px;padding-top:8px;border-top:1px dashed #8a6a3a;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.kwK span{font-weight:800;font-size:13px}.kwK small{font-size:11px;color:#6a5236;width:100%}
 .kwS{display:flex;gap:4px}.kwS i{font-style:normal;width:26px;height:26px;border-radius:50%;border:1.5px solid #8a6a3a;display:grid;place-items:center;font-size:11px;color:#8a6a3a}.kwS i.on{background:#b3261e;border-color:#b3261e;color:#fff;font-weight:900}
+.sgHome{margin-left:auto;padding:6px 14px;font-size:14px}
 </style>
 </head>
 <body>
@@ -2524,7 +2525,7 @@ let SGB=false;
 function sg(){abar.className="abar";const R=S.sg;if(!R)return home();sgMigrate(R);const sq=sgSq(R.pos,R.route),p=sgPerk();
   app.innerHTML=`<div class="card sgTop"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">${IC("saikoro")} 時代すごろく</h2><span class="sgEra" style="background:${SG_ERA[sq.e]}">${sq.e}</span></div>
    <div class="prog" style="height:8px;margin:8px 0 4px"><i style="width:${R.pos/(SG_LEN-1)*100}%"></i></div>
-   <div class="sgStat"><span>旅の手柄 <b>${f1(R.tally)}石</b></span><span>正解 <b>${R.ok}/${R.asked}</b></span><span>振り直し <b>${R.rr}</b></span><span>見抜き <b>${R.mk}</b></span>${infoBtn("時代すごろくとは",sgHelp())}</div></div>
+   <div class="sgStat"><span>旅の手柄 <b>${f1(R.tally)}石</b></span><span>正解 <b>${R.ok}/${R.asked}</b></span><span>振り直し <b>${R.rr}</b></span><span>見抜き <b>${R.mk}</b></span>${infoBtn("時代すごろくとは",sgHelp())}<button class="sgHome" onclick="home()">${YA("l")} ホームへ</button></div></div>
   <div class="card kmCard">${kmBoard()}</div>
   <div class="sgDock"><div class="sgDie" id="sgDie">${sgFace(R.last||1)}</div><div class="sgDockR"><div class="sgMsg" id="sgMsg">${sgLeft()<=0?"きょうのサイコロは終わり。あしたまた進もう":R.rest?"1回休み。サイコロをふると番が明ける":`サイコロ きょう${sgLeftTxt()}`}</div>
    <div class="row" style="gap:6px"><button class="pri" id="sgRoll" style="flex:2" onclick="sgRoll()" ${sgLeft()<=0?"disabled":""}>${sgLeft()<=0?"きょうはここまで":"サイコロをふる"}</button><button id="sgRe" style="flex:1;display:none" onclick="sgReroll()">振り直す</button></div></div></div>
