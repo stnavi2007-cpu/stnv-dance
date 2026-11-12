@@ -2825,11 +2825,11 @@ function kzZukan(){abar.className="abar";const z=kzSt(),n=Object.keys(z.own).len
    <div class="kzFil">${["all","UR","SSR","SR","R","N","武","政","文","学","技"].map(f=>`<button class="${KZF===f?"on":""}" onclick="KZF='${f}';kzZukan()" ${KZ_EL[f]?`style="--el:${KZ_EL[f]}"`:""}>${f==="all"?"すべて":f}</button>`).join("")}</div>
    <h3 class="kzSub">手持ちの札 <small class="mute">${mine.length}枚</small></h3>
    ${mine.length?`<div class="kzGrid">${mine.map(c=>kzCard(c.id,{tap:`kzDetail('${c.id}')`})).join("")}</div>`:`<div class="mute">まだありません</div>`}
-   <h3 class="kzSub">図鑑 <small class="mute">${list.filter(c=>z.own[c.id]).length}/${list.length}</small></h3>
-   <div class="kzGrid">${list.map(c=>z.own[c.id]?kzCard(c.id,{tap:`kzDetail('${c.id}')`}):kzCard(c.id,{hide:1})).join("")}</div></div>
+   <h3 class="kzSub">図鑑 <small class="mute">${list.filter(c=>z.own[c.id]).length}/${list.length}</small></h3>${FUSHIN_TEST?`<div class="mute" style="font-size:12px;margin-bottom:6px">試作中は、持っていない札もすべて表示しています。</div>`:""}
+   <div class="kzGrid">${list.map(c=>(z.own[c.id]||FUSHIN_TEST)?kzCard(c.id,{tap:`kzDetail('${c.id}')`}):kzCard(c.id,{hide:1})).join("")}</div></div>
    <button class="backb" onclick="kzHomeGo()">${YA("l")} もどる</button>`}
 function kzEnHtml(list){return list.length?list.map(e=>`<div class="kzEn"><b>${e.t==="組"?"組「"+e.g+"」":e.t}</b>${e.with.map(x=>KZM[x].n).join("・")}<small>${e.w}（${KZ_ENB[e.t].t}）</small></div>`).join(""):`<span class="mute">道場と過去問で確かめられたつながりは、まだありません。</span>`}
-function kzDetail(id){const c=KZM[id],z=kzSt(),o=z.own[id],star=kzStar(id),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
+function kzDetail(id){const c=KZM[id],z=kzSt(),o=z.own[id]||{},star=Math.max(1,kzStar(id)),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
   infoPop({title:c.n,body:`<div class="kzDet">${kzCard(id,{size:"big"})}</div>
    <div class="ipsec"><b>人物</b>${c.d}<br><small class="mute">${c.cls}・道場と過去問に${c.tot}問出てくる</small></div>
    <div class="ipsec"><b>能力</b>体力 ${st.hp}・攻撃 ${st.atk}・速さ ${st.spd}（会心${Math.round(st.spd/2*10)/10}%）<br><small class="mute">${c.cls}：${kzFit(c)}</small><br>属性 <b style="color:${KZ_EL[c.el]}">${c.el}</b>：${KZ_ELD[c.el]}<br>★${star}・${o.w||0}勝${star<5?`（あと${nx-(o.w||0)}勝で★${star+1}）`:"（★5 きわめた！）"}${o.gold?"<br>金箔仕様：体力と攻撃が5%強い":""}</div>
@@ -2841,7 +2841,7 @@ function kzQs(c){const p=(typeof KZ_QP!=="undefined"&&KZ_QP[c.n])||[];return p.l
 function kzQuiz(id){const c=KZM[id],qs=kzQs(c),qi=qs[Math.floor(Math.random()*qs.length)],Q=QB[qi],ord=shuffle([0,1,2,3]);$("#ipop")?.remove();document.body.classList.remove("ipon");
   infoPop({title:`${c.n}の問題`,body:`<div class="q" style="margin-bottom:8px">${Q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="kzQAns('${id}',${qi},${j})">${Q.o[j]}</button>`).join("")}<div id="kzQR"></div>`})}
 function kzQAns(id,qi,j){const Q=QB[qi],ok=j===Q.a,z=kzSt();document.querySelectorAll("#ipop .opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===Q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
-  let msg=ok?"正解！":"残念…";if(ok&&!z.quiz[id]){z.quiz[id]=1;const o=z.own[id],s0=kzStar(id);o.w=(o.w||0)+3;msg+=` ${KZM[id].n}の勝ち数 +3`;if(kzStar(id)>s0)msg+=`・★${kzStar(id)}に上がった！`;const up=abUp(ABG[Q.g],.05);save();if(up)msg+=`・${up.a.n}+${ad(up.add)}`}save();
+  let msg=ok?"正解！":"残念…";if(ok&&!z.quiz[id]&&z.own[id]){z.quiz[id]=1;const o=z.own[id],s0=kzStar(id);o.w=(o.w||0)+3;msg+=` ${KZM[id].n}の勝ち数 +3`;if(kzStar(id)>s0)msg+=`・★${kzStar(id)}に上がった！`;const up=abUp(ABG[Q.g],.05);save();if(up)msg+=`・${up.a.n}+${ad(up.add)}`}save();
   $("#kzQR").innerHTML=`<div class="sgRes ${ok?"ok":"ng"}">${msg}</div><div class="mute">${Q.e}</div><div class="mute" style="font-size:11px">出典：${Q.src}</div>`}
 /* ---------- 編成 ---------- */
 let KZD=null;
