@@ -2818,11 +2818,11 @@ function kzPull(n,how){const z=kzSt();
 const KZ_DUPW=5;// 同じ札がもう1枚出たときに増える勝ち数
 function kzNwWrap(id,html){const o=kzSt().own[id];return o&&o.nw?`<div class="kzNwW">${html}<i class="kzNwB" data-nw="${id}">NEW</i></div>`:html}
 function kzRevTap(i,id){const f=$("#kzF"+i);if(!f)return;if(!f.classList.contains("open"))return kzFlip(i);
-  kzDetail(id);const p=$("#ipop");if(p){p.style.zIndex=80;p.querySelectorAll(".ipok,.ipx").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{if($("#kzRev"))document.body.classList.add("ipon")},200)))}}
+  kzDetail(id,1);const p=$("#ipop");if(p){p.style.zIndex=80;p.querySelectorAll(".ipok,.ipx").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{if($("#kzRev"))document.body.classList.add("ipon")},200)))}}
 function kzPow(id){const s=kzStats(id,kzStar(id),kzSt().own[id]?.gold);return s.hp+s.atk*4+s.spd*3+(KZM[id].sk?20+KZM[id].tr*15:0)}
 function kzReveal(out){const ov=document.createElement("div");ov.className="kzRev";ov.id="kzRev";
   ov.innerHTML=`<div class="kzRevIn"><div class="kzRevT">札まわし</div><div class="kzRevG n${out.length}">${out.map((x,i)=>`<div class="kzFlip r${KZM[x.id].r}" data-r="${KZM[x.id].r}" id="kzF${i}" onclick="kzRevTap(${i},'${x.id}')"><div class="kzBack"><span>偉</span></div><div class="kzFace">${kzCard(x.id,{size:out.length>1?"mid":"big",star:x.star,gold:x.gold})}${x.isNew?`<i class="kzNew">NEW</i>`:x.up?`<i class="kzNew up">★UP</i>`:`<i class="kzNew dup">+${KZ_DUPW}勝</i>`}</div></div>`).join("")}</div>
-   <div class="mute" style="color:#e8dcc4;font-size:12px;margin-top:8px">札をタップすると、その偉人のくわしい説明が見られます</div><button class="pri big" style="margin-top:8px;visibility:hidden" id="kzEnd" onclick="kzRevClose()">とじる</button><span id="kzAll" hidden></span></div>`;
+   <button class="pri big" style="margin-top:10px;visibility:hidden" id="kzEnd" onclick="kzRevClose()">とじる</button><span id="kzAll" hidden></span></div>`;
   document.body.appendChild(ov);document.body.classList.add("ipon");setTimeout(kzFlipAll,250)}
 function kzFlip(i){const f=$("#kzF"+i);if(!f||f.classList.contains("open"))return;f.classList.add("open");const r=f.dataset.r;if(r==="SSR"||r==="UR")kzSpark(r==="UR");
   if(![...document.querySelectorAll(".kzFlip")].some(x=>!x.classList.contains("open"))){setTimeout(()=>{const e=$("#kzEnd");if(e)e.style.visibility="visible"},500)}}
@@ -2842,7 +2842,7 @@ function kzZukan(){abar.className="abar";const z=kzSt(),n=Object.keys(z.own).len
    <div class="kzGrid">${list.map(c=>(z.own[c.id]||FUSHIN_TEST)?kzNwWrap(c.id,kzCard(c.id,{tap:`kzDetail('${c.id}')`})):kzCard(c.id,{hide:1})).join("")}</div></div>
    <button class="backb" onclick="kzHomeGo()">${YA("l")} もどる</button>`}
 function kzEnHtml(list){return list.length?list.map(e=>`<div class="kzEn"><b>${e.t==="組"?"組「"+e.g+"」":e.t}</b>${e.with.map(x=>KZM[x].n).join("・")}<small>${e.w}（${KZ_ENB[e.t].t}）</small></div>`).join(""):`<span class="mute">道場と過去問で確かめられたつながりは、まだありません。</span>`}
-function kzDetail(id){{const o0=kzSt().own[id];if(o0&&o0.nw){delete o0.nw;save();document.querySelectorAll(`.kzNwB[data-nw="${id}"]`).forEach(e=>e.remove())}}const c=KZM[id],z=kzSt(),o=z.own[id]||{},star=Math.max(1,kzStar(id)),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
+function kzDetail(id,keepNew){{const o0=kzSt().own[id];if(o0&&o0.nw&&!keepNew){delete o0.nw;save();document.querySelectorAll(`.kzNwB[data-nw="${id}"]`).forEach(e=>e.remove())}}const c=KZM[id],z=kzSt(),o=z.own[id]||{},star=Math.max(1,kzStar(id)),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
   infoPop({title:c.n,body:`<div class="kzDet">${kzCard(id,{size:"big"})}</div>
    <div class="ipsec"><b>人物</b>${c.d}<br><small class="mute">${c.cls}・道場と過去問に${c.tot}問出てくる</small></div>
    <div class="ipsec"><b>能力</b>体力 ${st.hp}・攻撃 ${st.atk}・速さ ${st.spd}（会心${Math.round(st.spd/2*10)/10}%）<br><small class="mute">${c.cls}：${kzFit(c)}</small><br>属性 <b style="color:${KZ_EL[c.el]}">${c.el}</b>：${KZ_ELD[c.el]}<br>★${star}・${o.w||0}勝${star<5?`（あと${nx-(o.w||0)}勝で★${star+1}）`:"（★5 きわめた！）"}${o.gold?"<br>金箔仕様：体力と攻撃が5%強い":""}</div>
