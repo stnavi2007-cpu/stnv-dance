@@ -954,7 +954,7 @@ const SEASON_ID="S"+(SEASON_N+1), SEASON_START=new Date(new Date(SEASON0).getTim
 const GOAL=1000000, ACTIVE=0.6;
 // 配点（1石は重い）：新人の1日 平均30石ほど／やりこんだ人（建物・内政が育った）で70石ほど
 // → 毎日やりこむ500人が育ってやっと1か月で百万石。30人なら何年もかかる＝「百万石はすごい」
-const PT={quiz:1.5,quizAll:4,nyukon:8,hagure:4,invite:100,invitee:5,kagaMax:11},AVG_DAY=25;
+const PT={quiz:1.5,quizAll:1.5,nyukon:8,hagure:4,invite:100,invitee:5,kagaMax:11},AVG_DAY=25;
 
 /* ---------- 校下（仮一覧：正式な61校下は金沢まるっとの一覧に差し替え予定） ---------- */
 const KOUKA=KDATA.map(x=>x.n);  // 金沢の61校下（金沢市立図書館『金沢市校下誌』・地区公民館61館。金沢まるっとと同じ区分）
@@ -1293,7 +1293,7 @@ function home(){abar.className="abar";if(!S.lock)return register();
   <div class="card" id="cTen">
     <h2>${IC("mondaifuda")} 今日の十問</h2>
     ${r.quiz?`<div class="ox">${OX(r.quiz.ox)}</div><div class="mute">${r.quiz.n}/10問正解 ・ +${f1(r.quiz.koku)}石（あしたまた出ます）</div><button class="gold" style="margin-top:8px;width:100%" onclick="share()">${IC("kawaraban")} 結果を画像にして共有</button><div id="shareBox"></div>`
-      :`<div class="mute">正解1問 1.5石・全問正解で +4石</div><button class="pri" style="margin-top:8px" onclick="quiz()">はじめる</button>`}
+      :`<div class="mute">正解1問 1.5石・全問正解で 1.5倍</div><button class="pri" style="margin-top:8px" onclick="quiz()">はじめる</button>`}
   </div>
 
   <div class="card" id="cNy">
@@ -1548,7 +1548,7 @@ function qAns(j){const q=QB[Q.order[Q.i]],ok=j===q.a;document.querySelectorAll("
   Q.ox+=ok?"🟡":"⚫";if(!ok){S.miss=S.miss||{};S.miss[Q.order[Q.i]]=today()}if(ok){Q.n++;const g=ABG[q.g];if(g)Q.ab[g]=(Q.ab[g]||0)+.05}
   abar.className="abar on";abar.innerHTML=`<div class="res">${ok?IC("maru")+" 正解！":IC("batsu")+" 不正解"} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:2px">${q.e}</div>${srcLine(q)}<button class="pri" style="margin-top:6px" onclick="qNext()">${Q.i<9?"次の問題へ":"結果を見る"}</button>`}
 function qNext(){Q.i++;if(Q.i<10)return qShow();
-  const got=addKoku(Q.n*PT.quiz+(Q.n===10?PT.quizAll:0),"今日の十問","quiz");dayRec().quiz={ox:Q.ox,n:Q.n,koku:got};const ups=Object.entries(Q.ab).map(([g,n])=>abUp(g,Math.round(n*100)/100)).filter(Boolean);
+  const got=addKoku(Q.n*PT.quiz*(Q.n===10?PT.quizAll:1),Q.n===10?"今日の十問 全問正解で1.5倍！":"今日の十問","quiz");dayRec().quiz={ox:Q.ox,n:Q.n,koku:got};const ups=Object.entries(Q.ab).map(([g,n])=>abUp(g,Math.round(n*100)/100)).filter(Boolean);
   S.streak=(S.last&&dBetween(S.last,today())===1)?S.streak+1:1;S.last=today();save();
   abar.className="abar";app.innerHTML=`<div class="card center"><div class="mute">今日の十問</div><div class="big">${Q.n}/10</div><div class="ox">${OX(Q.ox)}</div><div style="margin:8px 0;font-weight:800">+${f1(got)}石</div><div class="mute">連続 ${S.streak}日</div>${ups.map(abTxt).join("")}
   <button class="gold" style="margin-top:10px;width:100%" onclick="share()">${IC("kawaraban")} 結果を画像にして共有</button><div id="shareBox"></div><button style="margin-top:8px;width:100%" onclick="home()">ホームへ</button></div>`}
@@ -1567,14 +1567,14 @@ function maybeHagure(){const r=dayRec();if(r.hagure!=null||HG||HGP)return;const 
   HGP=true;setTimeout(()=>{HGP=false;if(HG||dayRec().hagure!=null||abar.classList.contains("on"))return;showHagure()},1500)}
 function showHagure(){if(HG)return;const ts=todayQs(),XP=QB.filter((q,i)=>q.lv==="X"&&!q.dup&&!ts.has(i)),ML=makiLeft(),q=(ML.length&&Math.random()<.5)?Object.assign({maki:1},ML[Math.floor(Math.random()*ML.length)]):XP[Math.floor(Math.random()*XP.length)],ord=shuffle([0,1,2,3]);HG={q,t:10000,start:Date.now()};
   const ov=document.createElement("div");ov.className="hg";ov.id="hg";
-  ov.innerHTML=`<div class="hgbox"><div class="hgm"><img src="hyakumangoku_img/tsuchinoko.webp${IMGQ}" alt="はぐれツチノコ" style="width:100%;display:block"></div><div class="hgt">はぐれツチノコが あらわれた！</div>${q.maki?`<div class="hgMk">📜 巻物の問題：金沢まるっとのお話から出ます。初めて正解すると巻物が1巻たまり、札券1枚（偉人札の札まわし1回ぶん）</div>`:""}<div class="mute">10秒で逃げる・正解で4石</div><div class="prog" style="height:8px;margin:8px 0"><i id="hgbar" style="width:100%;background:#ff6a5c"></i></div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" onclick="hgAns(${j})">${q.o[j]}</button>`).join("")}</div>`;
+  ov.innerHTML=`<div class="hgbox"><div class="hgm"><img src="hyakumangoku_img/tsuchinoko.webp${IMGQ}" alt="はぐれツチノコ" style="width:100%;display:block"></div><div class="hgt">はぐれツチノコが あらわれた！</div>${q.maki?`<div class="hgMk">🎫 金沢まるっとのお話の問題（初めて正解すると札券1枚）</div>`:""}<div class="mute">10秒で逃げる・正解で4石</div><div class="prog" style="height:8px;margin:8px 0"><i id="hgbar" style="width:100%;background:#ff6a5c"></i></div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" onclick="hgAns(${j})">${q.o[j]}</button>`).join("")}</div>`;
   document.body.appendChild(ov);
   HG.timer=setInterval(()=>{const left=HG.t-(Date.now()-HG.start),b=$("#hgbar");if(b)b.style.width=Math.max(0,left/HG.t*100)+"%";if(left<=0)hgEnd(null)},50)}
 function hgAns(j){hgEnd(j===HG.q.a)}
 function hgEnd(ok){clearInterval(HG.timer);$("#hg")?.remove();const r=dayRec();
   const q=HG.q;let got=false;if(ok){r.hagure=addKoku(PT.hagure,"はぐれツチノコをたおした");const u=q.g&&abUp(ABG[q.g],.2);if(u)setTimeout(()=>toast(`${u.a.n} +${ad(u.add)}`+(u.w?`・技「${u.w[1]}」を覚えた！`:"")),1600);
     if(q.maki){S.maki=S.maki||{};if(!S.maki[q.id]){S.maki[q.id]=1;kzSt().tix+=1;got=true}}}else{r.hagure=0;if(!q.maki)toast("はぐれツチノコは 逃げ出した…")}save();HG=null;home();
-  if(q.maki)infoPop({title:ok?(got?"📜 巻物を手に入れた！ 札券1枚":"📜 正解！"):"はぐれツチノコは 逃げ出した…",body:`<p><b>${q.q}</b></p><p>答え：<b>${q.o[0]}</b></p><p class="mute">${q.e}</p><a class="kwL" href="${makiUrl(q)}" target="_blank" rel="noopener">このお話は 金沢まるっと「${q.ti}」の「${q.tab}」</a><p class="mute" style="font-size:12px;margin-top:8px">巻物 ${Object.keys(S.maki||{}).length}／${MAKI.length}巻　まだの巻物は、またツチノコと出てきます。札券は「偉人札」の札まわしに使えます</p>`})}
+  if(q.maki)infoPop({title:ok?(got?"🎫 札券1枚を手に入れた！":"正解！"):"はぐれツチノコは 逃げ出した…",body:`<p><b>${q.q}</b></p><p>答え：<b>${q.o[0]}</b></p><p class="mute">${q.e}</p><a class="kwL" href="${makiUrl(q)}" target="_blank" rel="noopener">このお話は 金沢まるっと「${q.ti}」の「${q.tab}」</a><p class="mute" style="font-size:12px;margin-top:8px">札券は「偉人札」の札まわしに使えます</p>`})}
 
 /* ---------- 治部煮をつくれ ---------- */
 let J;
@@ -2774,7 +2774,7 @@ function kzHomeCard(){const z=kzSt(),n=Object.keys(z.own).length;
    <div class="mute">金沢検定に出てくる偉人たちの札を集めて、戦う札3枚＋補佐1枚で戦うカードバトル。</div>
    <div class="kzBar"><span>札 <b>${n}</b>/${KZ.length}種</span><span>札券 <b>${z.tix}</b>枚</span><span>道場 <b>${z.clear}</b>/${KZ_DOJO.length}</span></div>
    ${!z.starter?`<button class="pri" style="width:100%;margin-top:8px" onclick="kzGacha()">はじめの10連（無料）をまわす</button>`:`<div class="kzMenu"><button onclick="kzGacha()">${IC("fudamawashi")}<b>札まわし</b>${z.free!==today()?"<i>無料</i>":""}</button><button onclick="kzDojo()">${IC("dojo")}<b>道場</b></button><button onclick="kzDeck()">${IC("hensei")}<b>編成</b></button><button onclick="kzZukan()">${IC("zukan")}<b>手持ち・図鑑</b></button></div>`}</div>`}
-function kzTixHelp(){return `<p><b>札券</b>は、札まわしを1回まわせる券です。</p><ul><li>道場で、相手に<b>初めて勝つ</b>と1〜5枚</li><li>時代すごろくで<b>ゴール</b>すると20枚</li><li>通い帳が7日たまると3枚（7日連続なら6枚）</li><li>はぐれツチノコの<b>巻物の問題</b>に初めて正解すると1枚（1問につき1回）</li></ul><p>札券がなくても、毎日1回は無料。蔵の石でもまわせる（1回30石・10連270石）。</p>`}
+function kzTixHelp(){return `<p><b>札券</b>は、札まわしを1回まわせる券です。</p><ul><li>道場で、相手に<b>初めて勝つ</b>と1〜5枚</li><li>時代すごろくで<b>ゴール</b>すると20枚</li><li>通い帳が7日たまると3枚（7日連続なら6枚）</li><li>はぐれツチノコの<b>金沢まるっとのお話の問題</b>に初めて正解すると1枚（1問につき1回）</li></ul><p>札券がなくても、毎日1回は無料。蔵の石でもまわせる（1回30石・10連270石）。</p>`}
 function kzSkHelp(){return `<div class="kzSkL">${Object.keys(KZ_SK).map(k=>`<div><b style="color:${KZ_SK[k].c}">${k}</b> 並：${KZ_SK[k].d(KZ_SK[k].v[0])}／上：${KZ_SK[k].d(KZ_SK[k].v[1])}／極：${KZ_SK[k].d(KZ_SK[k].v[2])}</div>`).join("")}</div>`}
 function kzHelp(){return `<p>金沢検定に出てくる偉人の札を集めて、<b>戦う札3枚と補佐の札1枚</b>でCPUと戦います。相手の戦う札3枚をすべて倒せば勝ちです。</p>
  <p><b>能力</b>：体力・攻撃・速さの3つです。</p><ul><li>4枚の速さの合計が大きいほうが、先に動きます。あとから動く側の1枚目は、最初に受ける攻撃のダメージが15%小さくなります。</li><li>速さの半分（%）が、会心（ダメージ1.5倍）の出やすさです。</li><li>相手より速い札は、速さの差1につき2%（いちばん多くて25%）の確率で、攻撃をかわします。</li></ul>
@@ -3087,7 +3087,7 @@ function makiUrl(m){return `https://kanazawa-marutto.jp/#${m.c}-${m.t}`}
 function makiLeft(){S.maki=S.maki||{};return MAKI.filter(m=>!S.maki[m.id])}
 
 /* ===== 復習の間（土日だけ・まちがえた問題をもう一度） ===== */
-const FUKU_PT=2;
+const FUKU_PT=1;
 const fukuDay=()=>{const w=jst().getUTCDay();return w===6||w===0};
 const fukuList=()=>Object.entries(S.miss||{}).filter(([i])=>QB[+i]).sort((a,b)=>a[1]<b[1]?-1:1).map(([i])=>+i);
 function fukuCard(){if(!S.lock)return "";const L=fukuList();if(!L.length)return "";const done=!!dayRec().fuku;
