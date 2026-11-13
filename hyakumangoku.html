@@ -2818,7 +2818,7 @@ function kzPull(n,how){const z=kzSt();
 const KZ_DUPW=5;// 同じ札がもう1枚出たときに増える勝ち数
 function kzNwWrap(id,html){const o=kzSt().own[id];return o&&o.nw?`<div class="kzNwW">${html}<i class="kzNwB" data-nw="${id}">NEW</i></div>`:html}
 function kzRevTap(i,id){const f=$("#kzF"+i);if(!f)return;if(!f.classList.contains("open"))return kzFlip(i);
-  kzDetail(id,1);const p=$("#ipop");if(p){p.style.zIndex=80;p.querySelectorAll(".ipok,.ipx").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{if($("#kzRev"))document.body.classList.add("ipon")},200)))}}
+  kzDetail(id,1);const p=$("#ipop");if(p){p.style.zIndex=80;p.style.webkitBackdropFilter="none";p.style.backdropFilter="none";p.style.background="rgba(8,6,4,.6)";p.querySelectorAll(".ipok,.ipx").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{if($("#kzRev"))document.body.classList.add("ipon")},200)))}}
 function kzPow(id){const s=kzStats(id,kzStar(id),kzSt().own[id]?.gold);return s.hp+s.atk*4+s.spd*3+(KZM[id].sk?20+KZM[id].tr*15:0)}
 function kzReveal(out){const ov=document.createElement("div");ov.className="kzRev";ov.id="kzRev";
   ov.innerHTML=`<div class="kzRevIn"><div class="kzRevT">札まわし</div><div class="kzRevG n${out.length}">${out.map((x,i)=>`<div class="kzFlip r${KZM[x.id].r}" data-r="${KZM[x.id].r}" id="kzF${i}" onclick="kzRevTap(${i},'${x.id}')"><div class="kzBack"><span>偉</span></div><div class="kzFace">${kzCard(x.id,{size:out.length>1?"mid":"big",star:x.star,gold:x.gold})}${x.isNew?`<i class="kzNew">NEW</i>`:x.up?`<i class="kzNew up">★UP</i>`:`<i class="kzNew dup">+${KZ_DUPW}勝</i>`}</div></div>`).join("")}</div>
@@ -3069,7 +3069,7 @@ function tq(o){if(TQ)return;const ord=shuffle([0,1,2,3].filter(j=>o.q.o[j]!=null
 function tqAns(j){const T=TQ;if(!T||T.end)return;T.end=true;clearInterval(T.timer);const a=T.q.a||0,ok=j===a;
   document.querySelectorAll("#tqp .opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
   const m=T.done(ok)||"";$("#tqsec").textContent=j<0?"時間切れ！":"";
-  $("#tqR").innerHTML=`<div class="sgRes ${ok?"ok":"ng"}">${ok?"正解！ ":j<0?"時間切れ… ":"残念… "}${m}</div><div class="mute">${T.q.e}</div><div class="mute" style="font-size:11px">出典：${T.q.src||KQ_SRC}</div><button class="pri" style="margin-top:8px;width:100%" onclick="tqClose()">とじる</button>`;setTimeout(()=>{const cb=$("#tqR .pri");if(cb)cb.scrollIntoView({behavior:"smooth",block:"center"})},60)}
+  $("#tqR").innerHTML=`<div class="sgRes ${ok?"ok":"ng"}">${ok?"正解！ ":j<0?"時間切れ… ":"残念… "}${m}</div><div class="mute">${T.q.e}</div><div class="mute" style="font-size:11px">出典：${T.q.src||KQ_SRC}</div><button class="pri" style="margin-top:8px;width:100%" onclick="tqClose()">とじる</button>`;setTimeout(()=>{const bx=document.querySelector("#tqp .ipb");if(bx)bx.scrollTo({top:bx.scrollHeight,behavior:"smooth"})},60)}
 function tqClose(){const T=TQ;$("#tqp")?.remove();document.body.classList.remove("ipon");TQ=null;if(T&&T.close)T.close()}
 
 /* ---------- 必殺技問答：相手の偉人の問題（答えが本人の名前になる問題は使わない） ---------- */
