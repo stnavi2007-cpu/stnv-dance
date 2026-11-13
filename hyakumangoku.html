@@ -3070,16 +3070,16 @@ function makiUrl(m){return `https://kanazawa-marutto.jp/#${m.c}-${m.t}`}
 function makiLeft(){S.maki=S.maki||{};return MAKI.filter(m=>!S.maki[m.id])}
 
 /* ===== 復習の間（土日だけ・まちがえた問題をもう一度） ===== */
-const FUKU_N=5,FUKU_PT=2;
+const FUKU_PT=2;
 const fukuDay=()=>{const w=jst().getUTCDay();return w===6||w===0};
 const fukuList=()=>Object.entries(S.miss||{}).filter(([i])=>QB[+i]).sort((a,b)=>a[1]<b[1]?-1:1).map(([i])=>+i);
 function fukuCard(){if(!S.lock)return "";const L=fukuList();if(!L.length)return "";const done=!!dayRec().fuku;
   if(!fukuDay())return `<div class="card fukuC"><div class="kwT">${IC("fumi")} 復習の間 <small>土・日だけ</small></div><div class="mute">まちがえた問題が <b>${L.length}問</b> たまっています。土曜・日曜に、もう一度挑めます。</div></div>`;
   return `<div class="card fukuC"><div class="kwT">${IC("fumi")} 復習の間 <small>きょう開いています</small></div>
-  <div class="mute">まちがえた問題 <b>${L.length}問</b> のうち、古いものから${Math.min(FUKU_N,L.length)}問。正解すると1問 ${FUKU_PT}石で、その問題は復習帳から消えます。</div>
+  <div class="mute">まちがえた問題 <b>${L.length}問</b> に、全部もう一度挑めます。正解すると1問 ${FUKU_PT}石で、その問題は復習帳から消えます。</div>
   <button class="pri" style="width:100%;margin-top:8px" ${done?"disabled":""} onclick="fuku()">${done?"きょうの復習はおわりました":"復習する"}</button></div>`}
 let F;
-function fuku(){if(!fukuDay()||dayRec().fuku)return home();const L=fukuList().slice(0,FUKU_N);if(!L.length)return home();F={i:0,n:0,ox:"",order:L};fShow()}
+function fuku(){if(!fukuDay()||dayRec().fuku)return home();const L=fukuList();if(!L.length)return home();F={i:0,n:0,ox:"",order:L};fShow()}
 function fShow(){abar.className="abar";const q=QB[F.order[F.i]],ord=shuffle([0,1,2,3]);
   app.innerHTML=`<div class="card"><h2>${IC("fumi")} 復習の間</h2><div class="prog"><i style="width:${F.i/F.order.length*100}%"></i></div><div class="mute">${F.i+1}問目 / ${F.order.length}・前にまちがえた問題</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="fAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
 function fAns(j){const qi=F.order[F.i],q=QB[qi],ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
