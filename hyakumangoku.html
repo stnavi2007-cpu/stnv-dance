@@ -319,7 +319,7 @@ body.ipon{overflow:hidden}
 .mnPair{display:grid;grid-template-columns:1fr 1fr;gap:8px}.mnPair>div{display:flex;flex-direction:column;gap:6px}
 .miniAll{display:grid;gap:6px}.gm1.sm{padding:6px 8px}.gm1.sm .gi{flex:0 0 46px;height:46px}.gm1.sm b{font-size:15px}
 .gm1{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px}.gm1 .gi{flex:0 0 76px;height:76px;border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#1c150f}.gm1 .gi img{width:100%;height:100%;object-fit:cover}.gm1 b{display:block;font-size:18px}.gm1 small{display:block;color:var(--mute)}
-.kzNew{position:absolute;top:-6px;right:-4px;z-index:2;background:#d0503a;color:#fff;font-style:normal;font-size:9px;font-weight:900;padding:1px 4px;border-radius:6px}.kzNew.up{background:#c9a227;color:#2a1f14}.kzNew.dup{background:#5a5a5a}
+.kzNew{position:absolute;top:-6px;right:-4px;z-index:2;background:#d0503a;color:#fff;font-style:normal;font-size:9px;font-weight:900;padding:1px 4px;border-radius:6px}.kzNew.up{background:#c9a227;color:#2a1f14}.kzNew.dup{background:#5a5a5a}.kzNwW{position:relative}.kzNwB{position:absolute;top:-5px;right:-3px;z-index:3;background:#d0503a;color:#fff;font-style:normal;font-size:10px;font-weight:900;padding:1px 5px;border-radius:7px;box-shadow:0 1px 3px rgba(0,0,0,.35);pointer-events:none}.kzFlip.open{cursor:pointer}
 .kzSlots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.kzSlot{display:flex;flex-direction:column;align-items:center;gap:2px}.kzSlot>span{font-size:12px;color:#c9a227;font-weight:800}
 .kzSlot.empty{aspect-ratio:5/7.4;border:2px dashed #5a4a30;border-radius:9px;justify-content:center}
 .kzPickW.on{opacity:.4}
@@ -2780,7 +2780,7 @@ function kzHelp(){return `<p>金沢検定に出てくる偉人の札を集めて
  <p><b>能力</b>：体力・攻撃・速さの3つです。</p><ul><li>4枚の速さの合計が大きいほうが、先に動きます。あとから動く側の1枚目は、最初に受ける攻撃のダメージが15%小さくなります。</li><li>速さの半分（%）が、会心（ダメージ1.5倍）の出やすさです。</li><li>相手より速い札は、速さの差1につき2%（いちばん多くて25%）の確率で、攻撃をかわします。</li></ul>
  <p><b>札の型</b>：職によって3つの型に分かれます。</p><ul><li><b>戦型</b>（武将・藩主など）：戦に強い。補佐の効果はない</li><li><b>両用型</b>：戦も補佐もそこそこ。補佐の効果はURで2つ、ほかは1つ</li><li><b>補佐型</b>（姫・文人・医者など）：戦は苦手。補佐の効果はURで3つ、SSRで2つ、ほかは1つ。1つ1つの効果も両用型より大きい</li></ul>
  <p><b>属性</b>（左が右に強い）：<b>武→技→学→文→政→武</b>。強い相手にはダメージが1.3倍、弱い相手には0.75倍になります。</p><ul>${Object.keys(KZ_ELD).map(k=>`<li><b style="color:${KZ_EL[k]}">${k}</b>：${KZ_ELD[k]}</li>`).join("")}</ul>
- <p><b>★＝その札で勝った数</b>。勝つと、編成した4枚全員（補佐も）の勝ち数が1増えます。同じ札がもう1枚出たときも1増えます。</p><ul><li>★2：10勝</li><li>★3：30勝</li><li>★4：60勝</li><li>★5：100勝</li></ul><p>★が1つ上がるごとに、体力・攻撃・速さが3.2%、補佐に置いたときの効果が25%ずつ上がります。</p>
+ <p><b>★＝その札で勝った数</b>。勝つと、編成した4枚全員（補佐も）の勝ち数が1増えます。同じ札がもう1枚出たときは5増えます。</p><ul><li>★2：10勝</li><li>★3：30勝</li><li>★4：60勝</li><li>★5：100勝</li></ul><p>★が1つ上がるごとに、体力・攻撃・速さが3.2%、補佐に置いたときの効果が25%ずつ上がります。</p>
  <p><b>気（き）</b>：札1枚ずつに気があり、戦いのはじめは★の数と同じです。場に出ている札は、自分の番が終わるたびに気が1たまります（いちばん多くて5）。<b>5たまると必殺技</b>を使えて、使うと0に戻ります。控えの札の気はたまりませんが、引っこめても気はそのまま残ります。</p>
  <p><b>必殺技</b>：Nは持たず、Rは持つ札と持たない札があり、SR以上は全員が持ちます。同じ技でも、並（R・SR）・上（SSR）・極（UR）の順に強くなります。</p>
  <p><b>補佐の札</b>：戦いには出ませんが、補佐の効果が戦いのあいだずっと続きます。戦型の札を補佐に入れても効果はなく、速さが合計に加わるだけです。</p>
@@ -2813,12 +2813,16 @@ function kzPull(n,how){const z=kzSt();
   const res=[];for(let i=0;i<n;i++)res.push(kzRoll(null,cap));
   if(n===10&&!res.some(x=>["SR","SSR","UR"].includes(KZM[x.id].r)))res[9]=kzRoll("SR",cap);
   if(how==="starter"){const ids=new Set(res.map(x=>x.id));let k=0;while(ids.size<5&&k++<40){const x=kzRoll(null,cap);if(!ids.has(x.id)){res[res.findIndex((y,i)=>res.findIndex(q=>q.id===y.id)!==i)]=x;ids.add(x.id)}}}
-  const out=res.map(x=>{const o=z.own[x.id];const was=o?kzStar(x.id):0;if(!o)z.own[x.id]={n:1,w:0,gold:x.gold};else{o.n++;o.w=(o.w||0)+1;if(x.gold)o.gold=true}return {...x,isNew:!o,up:o&&kzStar(x.id)>was,star:kzStar(x.id)}});
+  const out=res.map(x=>{const o=z.own[x.id];const was=o?kzStar(x.id):0;if(!o)z.own[x.id]={n:1,w:0,gold:x.gold,nw:1};else{o.n++;o.w=(o.w||0)+KZ_DUPW;if(x.gold)o.gold=true}return {...x,isNew:!o,up:o&&kzStar(x.id)>was,star:kzStar(x.id)}});
   kzAutoDeck();save();kzReveal(out)}
+const KZ_DUPW=5;// 同じ札がもう1枚出たときに増える勝ち数
+function kzNwWrap(id,html){const o=kzSt().own[id];return o&&o.nw?`<div class="kzNwW">${html}<i class="kzNwB" data-nw="${id}">NEW</i></div>`:html}
+function kzRevTap(i,id){const f=$("#kzF"+i);if(!f)return;if(!f.classList.contains("open"))return kzFlip(i);
+  kzDetail(id);const p=$("#ipop");if(p){p.style.zIndex=80;p.querySelectorAll(".ipok,.ipx").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{if($("#kzRev"))document.body.classList.add("ipon")},200)))}}
 function kzPow(id){const s=kzStats(id,kzStar(id),kzSt().own[id]?.gold);return s.hp+s.atk*4+s.spd*3+(KZM[id].sk?20+KZM[id].tr*15:0)}
 function kzReveal(out){const ov=document.createElement("div");ov.className="kzRev";ov.id="kzRev";
-  ov.innerHTML=`<div class="kzRevIn"><div class="kzRevT">札まわし</div><div class="kzRevG n${out.length}">${out.map((x,i)=>`<div class="kzFlip r${KZM[x.id].r}" data-r="${KZM[x.id].r}" id="kzF${i}"><div class="kzBack"><span>偉</span></div><div class="kzFace">${kzCard(x.id,{size:out.length>1?"mid":"big",star:x.star,gold:x.gold})}${x.isNew?`<i class="kzNew">NEW</i>`:x.up?`<i class="kzNew up">★UP</i>`:`<i class="kzNew dup">+1勝</i>`}</div></div>`).join("")}</div>
-   <button class="pri big" style="margin-top:10px;visibility:hidden" id="kzEnd" onclick="kzRevClose()">とじる</button><span id="kzAll" hidden></span></div>`;
+  ov.innerHTML=`<div class="kzRevIn"><div class="kzRevT">札まわし</div><div class="kzRevG n${out.length}">${out.map((x,i)=>`<div class="kzFlip r${KZM[x.id].r}" data-r="${KZM[x.id].r}" id="kzF${i}" onclick="kzRevTap(${i},'${x.id}')"><div class="kzBack"><span>偉</span></div><div class="kzFace">${kzCard(x.id,{size:out.length>1?"mid":"big",star:x.star,gold:x.gold})}${x.isNew?`<i class="kzNew">NEW</i>`:x.up?`<i class="kzNew up">★UP</i>`:`<i class="kzNew dup">+${KZ_DUPW}勝</i>`}</div></div>`).join("")}</div>
+   <div class="mute" style="color:#e8dcc4;font-size:12px;margin-top:8px">札をタップすると、その偉人のくわしい説明が見られます</div><button class="pri big" style="margin-top:8px;visibility:hidden" id="kzEnd" onclick="kzRevClose()">とじる</button><span id="kzAll" hidden></span></div>`;
   document.body.appendChild(ov);document.body.classList.add("ipon");setTimeout(kzFlipAll,250)}
 function kzFlip(i){const f=$("#kzF"+i);if(!f||f.classList.contains("open"))return;f.classList.add("open");const r=f.dataset.r;if(r==="SSR"||r==="UR")kzSpark(r==="UR");
   if(![...document.querySelectorAll(".kzFlip")].some(x=>!x.classList.contains("open"))){setTimeout(()=>{const e=$("#kzEnd");if(e)e.style.visibility="visible"},500)}}
@@ -2833,12 +2837,12 @@ function kzZukan(){abar.className="abar";const z=kzSt(),n=Object.keys(z.own).len
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">${IC("makimono")} 偉人札 <small class="mute">${n}/${KZ.length}</small></h2><button onclick="kzHomeGo()">${YA("l")} ホームへ</button></div>
    <div class="kzFil">${["all","UR","SSR","SR","R","N","武","政","文","学","技"].map(f=>`<button class="${KZF===f?"on":""}" onclick="KZF='${f}';kzZukan()" ${KZ_EL[f]?`style="--el:${KZ_EL[f]}"`:""}>${f==="all"?"すべて":f}</button>`).join("")}</div>
    <h3 class="kzSub">手持ちの札 <small class="mute">${mine.length}枚</small></h3>
-   ${mine.length?`<div class="kzGrid">${mine.map(c=>kzCard(c.id,{tap:`kzDetail('${c.id}')`})).join("")}</div>`:`<div class="mute">まだありません</div>`}
+   ${mine.length?`<div class="kzGrid">${mine.map(c=>kzNwWrap(c.id,kzCard(c.id,{tap:`kzDetail('${c.id}')`}))).join("")}</div>`:`<div class="mute">まだありません</div>`}
    <h3 class="kzSub">図鑑 <small class="mute">${list.filter(c=>z.own[c.id]).length}/${list.length}</small></h3>${FUSHIN_TEST?`<div class="mute" style="font-size:12px;margin-bottom:6px">試作中は、持っていない札もすべて表示しています。</div>`:""}
-   <div class="kzGrid">${list.map(c=>(z.own[c.id]||FUSHIN_TEST)?kzCard(c.id,{tap:`kzDetail('${c.id}')`}):kzCard(c.id,{hide:1})).join("")}</div></div>
+   <div class="kzGrid">${list.map(c=>(z.own[c.id]||FUSHIN_TEST)?kzNwWrap(c.id,kzCard(c.id,{tap:`kzDetail('${c.id}')`})):kzCard(c.id,{hide:1})).join("")}</div></div>
    <button class="backb" onclick="kzHomeGo()">${YA("l")} もどる</button>`}
 function kzEnHtml(list){return list.length?list.map(e=>`<div class="kzEn"><b>${e.t==="組"?"組「"+e.g+"」":e.t}</b>${e.with.map(x=>KZM[x].n).join("・")}<small>${e.w}（${KZ_ENB[e.t].t}）</small></div>`).join(""):`<span class="mute">道場と過去問で確かめられたつながりは、まだありません。</span>`}
-function kzDetail(id){const c=KZM[id],z=kzSt(),o=z.own[id]||{},star=Math.max(1,kzStar(id)),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
+function kzDetail(id){{const o0=kzSt().own[id];if(o0&&o0.nw){delete o0.nw;save();document.querySelectorAll(`.kzNwB[data-nw="${id}"]`).forEach(e=>e.remove())}}const c=KZM[id],z=kzSt(),o=z.own[id]||{},star=Math.max(1,kzStar(id)),st=kzStats(id,star,o.gold),nx=KZ_STAR[star+1],qs=kzQs(c);
   infoPop({title:c.n,body:`<div class="kzDet">${kzCard(id,{size:"big"})}</div>
    <div class="ipsec"><b>人物</b>${c.d}<br><small class="mute">${c.cls}・道場と過去問に${c.tot}問出てくる</small></div>
    <div class="ipsec"><b>能力</b>体力 ${st.hp}・攻撃 ${st.atk}・速さ ${st.spd}（会心${Math.round(st.spd/2*10)/10}%）<br><small class="mute">${c.cls}：${kzFit(c)}</small><br>属性 <b style="color:${KZ_EL[c.el]}">${c.el}</b>：${KZ_ELD[c.el]}<br>★${star}・${o.w||0}勝${star<5?`（あと${nx-(o.w||0)}勝で★${star+1}）`:"（★5 きわめた！）"}${o.gold?"<br>金箔仕様：体力と攻撃が5%強い":""}</div>
