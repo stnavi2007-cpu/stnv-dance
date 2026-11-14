@@ -433,10 +433,11 @@ body.ipon{overflow:hidden}
 .kzSub{font-size:16px;margin:14px 0 6px;padding-top:8px;border-top:1px solid #4a3a26}
 .sellL{max-height:260px;overflow:auto;margin:8px 0;border-top:1px dashed var(--line)}.sellR{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}.sellR button{padding:6px 10px;font-size:13px;white-space:nowrap}
 .kzHelp{display:flex;gap:8px;align-items:center;margin:6px 0;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:rgba(216,180,90,.08)}.kzHelp img{width:72px;height:48px;object-fit:cover;border-radius:6px}.bgBox .bgInf,.bgBox .sellR{text-align:left}.bgBox{margin-top:10px;padding:8px;border:1px dashed var(--line);border-radius:10px;text-align:left}.bgRow{display:flex;gap:8px;align-items:center}.bgRow .kzHelp{margin:0}.bgInf{font-size:13px;line-height:1.5}.bgImg{width:96px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0}.bgYk{color:#e0b84a;font-weight:800}
+.hdLogo{display:block;height:22px;width:auto;max-width:100%}.trLogo{display:block;width:100%;max-width:420px;margin:0 auto 6px}
 </style>
 </head>
 <body>
-<header><h1>百万石クエスト<small>HYAKUMANGOKU QUEST ・ 試作</small></h1><button id="furiBtn" class="furiBtn" onclick="furiToggle()" aria-pressed="false" data-noruby>ふりがな</button><button id="sndBtn" class="furiBtn on" style="margin-left:0" onclick="sndToggle()" aria-pressed="true" data-noruby>音 ON</button><div class="koku" id="hdKoku"><span id="hdN">0石</span><small>蔵の石</small></div></header>
+<header><h1 data-noruby><img class="hdLogo" src="hyakumangoku_img/logo_text.webp?v=1114b" alt="百万石クエスト"><small>試作</small></h1><button id="furiBtn" class="furiBtn" onclick="furiToggle()" aria-pressed="false" data-noruby>ふりがな</button><button id="sndBtn" class="furiBtn on" style="margin-left:0" onclick="sndToggle()" aria-pressed="true" data-noruby>音 ON</button><div class="koku" id="hdKoku"><span id="hdN">0石</span><small>蔵の石</small></div></header>
 <main id="app"></main>
 <div class="abar" id="abar"></div>
 <div class="toast" id="toast"></div>
@@ -1257,7 +1258,7 @@ function unlockCard(){if(!S.start)return "";const nx=Object.keys(RKFX).map(Numbe
 /* ---------- けふの一問（登録の前にまず遊ぶ） ---------- */
 var TR=null;
 function trial(){abar.className="abar";const i=dailyPick("one",1,q=>q.lv!=="X",[...todayQs()])[0],q=QB[i],ord=shuffle([0,1,2,3]);TR={i};
-  app.innerHTML=`<div class="card center"><h2 style="margin:0">百万石クエスト</h2><div class="mute">校下対抗で遊ぶ、金沢の歴史ゲーム</div></div><div class="card"><div class="mute">けふの一問</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="trialAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
+  app.innerHTML=`<div class="card center"><img class="trLogo" src="hyakumangoku_img/logo_full.webp?v=1114b" alt="百万石クエスト"><div class="mute">校下対抗で遊ぶ、金沢の歴史ゲーム</div></div><div class="card"><div class="mute">けふの一問</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="trialAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
 function trialAns(j){if(!TR||TR.end)return;TR.end=1;const q=QB[TR.i],ok=j===q.a;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const k=+b.dataset.j;if(k===q.a)b.classList.add("ok");else if(k===j)b.classList.add("ng")});
   S.trialDay=today();S.start=S.start||today();S.trialOk=ok?1:0;save();SE(ok?"ok":"ng");
   abar.className="abar on";abar.innerHTML=`<div class="res">${ok?IC("maru")+" 正解！":IC("batsu")+" 不正解"} <span class="mute">正解「${q.o[q.a]}」</span></div><div class="mute" style="margin-bottom:2px">${q.e}</div>${srcLine(q)}<button class="pri" style="margin-top:6px" onclick="REG.step=2;REG.fin=1;register()">どの校下の味方になる？</button>`}
