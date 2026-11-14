@@ -3166,6 +3166,7 @@ function bgPick(i){const b=S.town[i],d=bdef(b.id),z=kzSt(),used=bgSet();const id
   ${ids.length?ids.map(id=>{const c=KZM[id],ap=bgApt(b.id,id),inDeck=z.deck.includes(id)||z.x===id;return `<div class="sellR"><span><b style="color:${KZ_RAR[c.r].c}">${c.r}</b> ${c.n}<br><small class="${ap.m===2?"bgYk":"mute"}">${ap.k}・見習い +${Math.round(bgPow(b.id,id,0)*100)}% → 名奉行 +${Math.round(bgPow(b.id,id,4)*100)}%${inDeck?"・編成中":""}</small></span><button onclick="bgSetTo(${i},'${id}')">${id===b.bg?"いまの奉行":"任命する"}</button></div>`}).join(""):`<div class="mute">偉人札がまだありません</div>`}
   </div>`}
 function bgSetTo(i,id){const b=S.town[i];if(!b)return;if(id===b.bg)return lotTap(i);const z=kzSt();
+  if(b.bg&&S.kz.own[b.bg]&&!confirm(`${id?"交代する":"はずす"}と、${KZM[b.bg].n}が勤めた${bgDays(b)}日（${BG_TIER[bgTier(b)].n}）は0にもどります。よろしいですか？`))return;
   if(id){(S.town||[]).forEach(x=>{if(x&&x!==b&&x.bg===id){x.bg=null;x.bgDay=null;x.bgW=null}});z.deck=z.deck.filter(x=>x!==id);if(z.x===id)z.x="";b.bg=id;b.bgDay=today();b.bgW=today();toast(`${KZM[id].n} を${bdef(b.id).n}の奉行に任命した`)}
   else{b.bg=null;b.bgDay=null;b.bgW=null}
   save();lotTap(i)}
