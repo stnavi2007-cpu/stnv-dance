@@ -435,7 +435,7 @@ body.ipon{overflow:hidden}
 .kzHelp{display:flex;gap:8px;align-items:center;margin:6px 0;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:rgba(216,180,90,.08)}.kzHelp img{width:72px;height:48px;object-fit:cover;border-radius:6px}.bgBox .bgInf,.bgBox .sellR{text-align:left}.bgBox{margin-top:10px;padding:8px;border:1px dashed var(--line);border-radius:10px;text-align:left}.bgRow{display:flex;gap:8px;align-items:center}.bgRow .kzHelp{margin:0}.bgInf{font-size:13px;line-height:1.5}.bgImg{width:96px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0}.bgYk{color:#e0b84a;font-weight:800}
 .hdLogo{display:block;height:64px;width:auto;max-width:100%}header .furiBtn{font-size:10.5px;padding:3px 7px}.trLogo{display:block;width:100%;max-width:420px;margin:0 auto 6px}
 .hubHide{display:none!important}.secMode .hubHide.secOn{display:block!important}.secMode>*:not(.secOn):not(.secBack){display:none!important}.secBack{margin:6px 0}
-.hubG{padding:10px}.hubBar{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 10px;margin-bottom:10px}.hubGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.hubI{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 2px 8px;font-size:11px;line-height:1.25;min-height:84px}.hubI span{display:block;white-space:nowrap;font-size:11.5px;letter-spacing:0}.hubDot{position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:#e5534b;box-shadow:0 0 0 2px #1b1711}
+.hubG{padding:10px}.hubBar{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 10px;margin-bottom:10px}.hubGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.hubI{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 2px 8px;font-size:11px;line-height:1.25;min-height:84px}.hubI.zL{grid-column:span 2;flex-direction:row;gap:10px;min-height:86px}.hubI.zL span{font-size:16px!important;font-weight:800}.hubI.zS{min-height:64px;padding:6px 2px}.hubI.zS span{font-size:10.5px!important;opacity:.85}.hubBar+.hubBar{margin-top:-4px}.hubGS{margin-top:8px}.hubI.zW{flex-direction:row;gap:10px;min-height:60px}.hubI span{display:block;white-space:nowrap;font-size:11.5px;letter-spacing:0}.hubDot{position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:#e5534b;box-shadow:0 0 0 2px #1b1711}
 </style>
 </head>
 <body>
@@ -1266,38 +1266,38 @@ function trialPay(){if(S.trialOk&&!S.trialPaid){S.trialPaid=1;addKoku(PT.quiz,"�
 var HUB_SEC="";
 const SEC=(id,h)=>h?h.replace(/<div class="card/,`<div data-sec="${id}" class="card`):"";
 const HUBI=[
- {s:"ten",ic:"mondaifuda",n:"今日の十問",dot:r=>!r.quiz},
- {s:"ny",ic:"mato",n:"一問入魂",dot:r=>!r.ny},
- {s:"mini",ic:"minigame",n:"ミニゲーム",dot:r=>r.mini==null},
+ {s:"ten",ic:"mondaifuda",n:"今日の十問",z:"L",dot:r=>!r.quiz,go:r=>!r.quiz&&"quiz()"},
+ {s:"ny",ic:"mato",n:"一問入魂",z:"L",dot:r=>!r.ny,go:r=>!r.ny&&"nyukon()"},
+ {s:"mini",ic:"minigame",n:"ミニゲーム",z:"L",dot:r=>r.mini==null},
+ {s:"kz",ic:"kzfuda",n:"偉人札",z:"L",dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
  {s:"kawara",ic:"kawaraban",n:"かわら版",dot:r=>!r.kawara},
  {s:"meguri",ic:"meguri",n:"めぐりあわせ",dot:r=>r.irr&&!r.irr.done},
- {s:"fuku",ic:"oboe",n:"復習の間",dot:r=>!r.fuku},
- {s:"sg",ic:"saikoro",n:"すごろく",dot:()=>typeof sgLeft==="function"&&sgLeft()>0&&!FUSHIN_TEST},
- {s:"kz",ic:"kzfuda",n:"偉人札",dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
- {s:"town",ic:"jokamachi",n:"城下町",dot:()=>S.town.includes(null)},
- {s:"naisei",ic:"naisei",n:"内政"},
- {s:"map",ic:"chizu",n:"陣地図"},
+ {s:"town",ic:"jokamachi",n:"城下町",dot:()=>S.town.includes(null),go:()=>"town()"},
+ {s:"sg",ic:"saikoro",n:"すごろく",dot:()=>typeof sgLeft==="function"&&sgLeft()>0&&!FUSHIN_TEST,go:()=>"sgOpen()"},
+ {s:"fuku",ic:"oboe",n:"復習の間",dot:r=>!r.fuku,go:r=>!r.fuku&&"fuku()"},
+ {s:"naisei",ic:"naisei",n:"内政",go:()=>"naisei()"},
+ {s:"map",ic:"chizu",n:"陣地図",go:()=>"mapView()"},
  {s:"rank",ic:"ishikawamon",n:"校下番付"},
- {s:"all",ic:"ineho",n:"百万石"},
- {s:"age",ic:"nendai",n:"年代別"},
- {s:"story",ic:"nenpyo",n:"できごと"},
- {s:"kqd",ic:"kouka_ichiran",n:"きょうの校下"},
- {s:"kq",ic:"kouka",n:"わが校下"},
- {s:"ab",ic:"noryoku",n:"能力"},
- {s:"ledger",ic:"chobo",n:"石の出入り"},
- {s:"inv",ic:"engun",n:"援軍"},
- {s:"toia",ic:"fumi",n:"問い合わせ"},
+ {s:"kq",ic:"kouka",n:"わが校下",go:()=>`kqPop(S.kouka)`},
+ {s:"kqd",ic:"kouka_ichiran",n:"きょうの校下",go:()=>`kqPop(kqDailyK())`},
+ {s:"story",ic:"nenpyo",n:"できごと",z:"S"},
+ {s:"age",ic:"nendai",n:"年代別",z:"S"},
+ {s:"inv",ic:"engun",n:"援軍",z:"S"},
+ {s:"toia",ic:"fumi",n:"問い合わせ",z:"S"},
 ];
 function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").forEach(el=>{if(el.style.display!=="none")secs[el.dataset.sec]=el});
   Object.values(secs).forEach(el=>el.classList.add("hubHide"));
   if(HUB_SEC&&secs[HUB_SEC]){app.classList.add("secMode");secs[HUB_SEC].classList.add("secOn");
-    const bk=()=>{const b=document.createElement("button");b.className="backb secBack";b.innerHTML=`${YA("l")} ホームへ`;b.onclick=()=>{HUB_SEC="";home()};return b};
+    const bk=()=>{const b=document.createElement("button");b.className="backb secBack";b.innerHTML=`${YA("l")} ホームへ`;b.onclick=()=>{HUB_SEC="";home();viewRestore(VIEW_POS.home)};return b};
     app.prepend(bk());app.append(bk());return}
   app.classList.remove("secMode");
   const rk=ranking(),myI=rk.findIndex(x=>x.k===S.kouka),t=totals();
   const g=document.createElement("div");g.className="card hubG";
+  const ab=ABL.map(a=>`${a.n}${AB(a.id)}`).join("・"),lr=dayRec(),inc=f1(lr.inc||0);
   g.innerHTML=`<button class="hubBar" onclick="secOpen('all')"><span>${IC("ineho")} みんなで百万石 <b>${(Math.min(100,t.koku/GOAL*100)).toFixed(1)}%</b></span><span>${S.kouka} <b>${myI+1}位</b></span></button>
-  <div class="hubGrid">${HUBI.filter(x=>secs[x.s]).map(x=>`<button class="hubI" onclick="secOpen('${x.s}')">${IC(x.ic,"38px")}<span data-noruby>${x.n}</span>${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`).join("")}</div>`;
+  ${secs.ab?`<button class="hubBar" onclick="secOpen('ab')"><span>${IC("noryoku")} 能力</span><span class="mute">${ab}</span></button>`:""}
+  ${secs.ledger?`<button class="hubBar" onclick="secOpen('ledger')"><span>${IC("chobo")} 石の出入り</span><span class="mute">きょう +${inc}石</span></button>`:""}
+  ${[HUBI.filter(x=>secs[x.s]&&x.z!=="S"),HUBI.filter(x=>secs[x.s]&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const go=x.go&&x.go(r),nM=L.filter(y=>(y.z||"M")==="M").length,rem=nM%4,wide=!gi&&rem&&(x.z||"M")==="M"&&xi===L.length-1;return `<button class="hubI z${x.z||"M"}${wide?" zW":""}" style="${wide?`grid-column:span ${5-rem}`:""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
   const prof=app.querySelector(".card.prof");if(prof)prof.after(g);else app.prepend(g)}
 function secOpen(s){HUB_SEC=s;home();window.scrollTo(0,0)}
 /* ---------- 画面：ホーム ---------- */
@@ -1725,8 +1725,8 @@ let VIEW="";const VIEW_POS={},HUB=new Set(["home","kzGacha"]),ALWAYS_TOP=new Set
 function viewName(){const st=(new Error().stack||"").split("\n");for(const l of st){const m=l.match(/^\s*at (?:Object\.|HTMLDocument\.|HTMLButtonElement\.)?([A-Za-z_$][\w$]*)\b/)||l.match(/^([A-Za-z_$][\w$]*)@/);const n=m&&m[1];if(n&&!["viewName","set","Error","Object","new","async","eval"].includes(n)&&!/^HTML|^anonymous$/.test(n))return n}return ""}
 function viewAnchor(el){const b=el&&el.closest&&el.closest("#app [onclick]");if(!b||!app.contains(b))return null;const L=[...app.querySelectorAll("[onclick]")];return{i:L.indexOf(b),k:b.getAttribute("onclick"),top:b.getBoundingClientRect().top,y:window.scrollY}}
 function viewRestore(p){if(!p)return window.scrollTo(0,0);const go=()=>{const L=[...app.querySelectorAll("[onclick]")];const c=L.find(x=>x.getAttribute("onclick")===p.k)||L[p.i];if(c)window.scrollTo(0,Math.max(0,c.getBoundingClientRect().top+window.scrollY-p.top));else window.scrollTo(0,p.y)};go();requestAnimationFrame(go);setTimeout(go,250);setTimeout(go,700)}
-document.addEventListener("click",e=>{if(HUB.has(VIEW)){const a=viewAnchor(e.target);if(a)VIEW_POS[VIEW]=a}},true);
-{const D=Object.getOwnPropertyDescriptor(Element.prototype,"innerHTML");Object.defineProperty(app,"innerHTML",{configurable:true,get(){return D.get.call(this)},set(v){const prev=VIEW,name=viewName()||prev,y=window.scrollY;D.set.call(this,v);VIEW=name;
+document.addEventListener("click",e=>{if(HUB.has(VIEW)&&!(VIEW==="home"&&HUB_SEC)){const a=viewAnchor(e.target);if(a)VIEW_POS[VIEW]=a}},true);
+{const D=Object.getOwnPropertyDescriptor(Element.prototype,"innerHTML");Object.defineProperty(app,"innerHTML",{configurable:true,get(){return D.get.call(this)},set(v){const prev=VIEW,name=viewName()||prev,y=window.scrollY;this.classList.remove("secMode");D.set.call(this,v);VIEW=name;
   if(name===prev&&!ALWAYS_TOP.has(name))window.scrollTo(0,y);
   else if(HUB.has(name)&&name!==prev)viewRestore(VIEW_POS[name]);
   else window.scrollTo(0,0)}})}
