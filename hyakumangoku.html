@@ -1276,11 +1276,10 @@ const HUBI=[
  {s:"kqd",ic:"kouka_ichiran",n:"きょうの校下",go:()=>`kqPop(kqDailyK())`},
  {s:"story",ic:"nenpyo",n:"できごと",z:"S"},
  {s:"age",ic:"nendai",n:"年代別",z:"S"},
- {s:"inv",ic:"engun",n:"援軍",z:"S"},
  {s:"toia",ic:"fumi",n:"問い合わせ",z:"S"},
 ];
 function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").forEach(el=>{if(el.style.display!=="none")secs[el.dataset.sec]=el});
-  Object.values(secs).forEach(el=>el.classList.add("hubHide"));
+  Object.entries(secs).forEach(([k,el])=>{if(k!=="inv")el.classList.add("hubHide")});
   if(HUB_SEC&&secs[HUB_SEC]){app.classList.add("secMode");secs[HUB_SEC].classList.add("secOn");
     const bk=()=>{const b=document.createElement("button");b.className="backb secBack";b.innerHTML=`${YA("l")} ホームへ`;b.onclick=()=>{HUB_SEC="";home();viewRestore(VIEW_POS.home)};return b};
     app.prepend(bk());app.append(bk());return}
@@ -1292,7 +1291,7 @@ function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").
   ${secs.ab?`<button class="hubBar" onclick="secOpen('ab')"><span>${IC("noryoku")} 能力</span><span class="mute">${ab}</span></button>`:""}
   ${secs.ledger?`<button class="hubBar" onclick="secOpen('ledger')"><span>${IC("chobo")} 石の出入り</span><span class="mute">きょう +${inc}石</span></button>`:""}
   ${[HUBI.filter(x=>secs[x.s]&&x.z!=="S"),HUBI.filter(x=>secs[x.s]&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const go=x.go&&x.go(r),nM=L.filter(y=>(y.z||"M")==="M").length,rem=nM%4,wide=!gi&&rem&&(x.z||"M")==="M"&&xi===L.length-1;return `<button class="hubI z${x.z||"M"}${wide?" zW":""}${x.dim&&x.dim()?" hubDim":""}" style="${wide?`grid-column:span ${5-rem}`:""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.sub?`<small class="hubSub" data-noruby>${x.sub()}</small>`:""}${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
-  const prof=app.querySelector(".card.prof");if(prof)prof.after(g);else app.prepend(g)}
+  const prof=app.querySelector(".card.prof");if(prof)prof.after(g);else app.prepend(g);if(secs.inv)app.append(secs.inv)}
 function secOpen(s){HUB_SEC=s;HUB_KEEP=1;home();window.scrollTo(0,0)}
 /* ---------- 画面：ホーム ---------- */
 function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP)HUB_SEC="";HUB_KEEP=0;if(!S.lock)return (!S.name&&!S.trialDay)?trial():register();if(REG.fin||!S.name||!S.age){REG.fin=1;REG.step=1;return register()}trialPay();bgTick();
