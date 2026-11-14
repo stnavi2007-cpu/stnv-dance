@@ -264,7 +264,7 @@ body.ipon{overflow:hidden}
 .ddWin{text-align:center;font-size:22px;font-weight:900;color:#ffd76a;margin:10px 0 4px}
 .ddPick{display:flex;flex-direction:column;align-items:flex-start;width:100%;margin-top:8px;padding:10px 12px;text-align:left;background:#2a2018;border:1.5px solid #c9a227;border-radius:10px;color:#f3ead6}.ddPick b{color:#ffd76a;font-size:17px}.ddPick span{font-weight:800}.ddPick small{color:var(--mute)}
 .kzBar{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;margin-top:6px}.kzBar b{color:#ffd76a}
-.kzMenu{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}.kzMenu button{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0;font-size:13px}.kzMenu button i{position:absolute;top:-6px;right:-4px;background:#d0503a;color:#fff;font-style:normal;font-size:10px;padding:1px 5px;border-radius:8px}
+.kzMenu{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:10px}.kzMenu button{grid-column:span 2;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 0 8px;font-size:12px;min-height:84px;white-space:nowrap}.kzMenu button.kzL{grid-column:span 3;flex-direction:row;gap:10px;min-height:88px;font-size:17px}.kzMenu button i{position:absolute;top:-6px;right:-4px;background:#d0503a;color:#fff;font-style:normal;font-size:10px;padding:1px 5px;border-radius:8px}
 .kc{position:relative;aspect-ratio:5/7.4;border-radius:9px;overflow:hidden;color:#2a1f14;display:flex;flex-direction:column;background:linear-gradient(170deg,#f8f2e2 0%,#efe4c8 100%);border:3px solid var(--rc);box-shadow:inset 0 0 0 2px rgba(255,255,255,.6),0 3px 8px rgba(0,0,0,.45)}
 .kc.mid{width:100%}.kc.big{width:220px;margin:0 auto}.kc.mini{width:52px;border-width:2px;border-radius:6px}
 .kc .kcTop{display:flex;justify-content:space-between;align-items:center;padding:2px 4px;background:var(--el);color:#fff}
@@ -435,7 +435,7 @@ body.ipon{overflow:hidden}
 .kzHelp{display:flex;gap:8px;align-items:center;margin:6px 0;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:rgba(216,180,90,.08)}.kzHelp img{width:72px;height:48px;object-fit:cover;border-radius:6px}.bgBox .bgInf,.bgBox .sellR{text-align:left}.bgBox{margin-top:10px;padding:8px;border:1px dashed var(--line);border-radius:10px;text-align:left}.bgRow{display:flex;gap:8px;align-items:center}.bgRow .kzHelp{margin:0}.bgInf{font-size:13px;line-height:1.5}.bgImg{width:96px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0}.bgYk{color:#e0b84a;font-weight:800}
 .hdLogo{display:block;height:64px;width:auto;max-width:100%}header .furiBtn{font-size:10.5px;padding:3px 7px}.trLogo{display:block;width:100%;max-width:420px;margin:0 auto 6px}
 .hubHide{display:none!important}.secMode .hubHide.secOn{display:block!important}.secMode>*:not(.secOn):not(.secBack){display:none!important}.secBack{margin:6px 0}
-.hubG{padding:10px}.hubBar{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 10px;margin-bottom:10px}.hubGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.hubI{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 2px 8px;font-size:11px;line-height:1.25;min-height:84px}.hubI.zL{grid-column:span 2;flex-direction:row;gap:10px;min-height:86px}.hubI.zL span{font-size:16px!important;font-weight:800}.hubI.zS{min-height:64px;padding:6px 2px}.hubI.zS span{font-size:10.5px!important;opacity:.85}.hubBar+.hubBar{margin-top:-4px}.hubGS{margin-top:8px}.hubSub{display:block;font-size:10px;color:var(--mute);margin-top:-2px}.hubDim{opacity:.6}.hubI.zW{flex-direction:row;gap:10px;min-height:60px}.hubI span{display:block;white-space:nowrap;font-size:11.5px;letter-spacing:0}.hubDot{position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:#e5534b;box-shadow:0 0 0 2px #1b1711}
+.hubG{padding:10px}.hubBar{width:100%;display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:8px 10px;margin-bottom:10px}.hubGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.hubI{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:10px 2px 8px;font-size:11px;line-height:1.25;min-height:84px}.hubI.zL{grid-column:span 2;flex-direction:row;gap:10px;min-height:86px}.hubI.zL span{font-size:16px!important;font-weight:800}.hubI.zS{min-height:64px;padding:6px 2px}.hubI.zS span{font-size:10.5px!important;opacity:.85}.hubBar+.hubBar{margin-top:-4px}.hubGS{margin-top:8px}.hubSub{display:block;font-size:10px;color:var(--mute);margin-top:-2px}.hubDim{opacity:.6}.hubI.hubLock{opacity:.4;filter:grayscale(1);pointer-events:none}.hubI.zW{flex-direction:row;gap:10px;min-height:60px}.hubI span{display:block;white-space:nowrap;font-size:11.5px;letter-spacing:0}.hubDot{position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:#e5534b;box-shadow:0 0 0 2px #1b1711}
 </style>
 </head>
 <body>
@@ -1244,7 +1244,7 @@ function doReg(k,resident){S.kouka=k;S.zip=resident?REG.zip:"";S.lock=SEASON_ID;
 
 /* ---------- 位で開く（はじめての人から） ---------- */
 const RKFX={1:"偉人札",2:"すごろく・校下の内政"};
-const opn=r=>!S.start||RL()>=r,lk=(r,h)=>opn(r)?h:"",LK=r=>opn(r)?"":' style="display:none"';
+const opn=r=>FUSHIN_TEST||!S.start||RL()>=r,lk=(r,h)=>opn(r)?h:"",LK=r=>opn(r)?"":' style="display:none"';
 function unlockCard(){if(!S.start)return "";const nx=Object.keys(RKFX).map(Number).find(r=>RL()<r);
   return nx?`<div class="card"><div class="mute">🔒 「${TITLES[nx][1]}」になると${RKFX[nx]}が開きます</div></div>`:""}
 /* ---------- けふの一問（登録の前にまず遊ぶ） ---------- */
@@ -1263,13 +1263,13 @@ const HUBI=[
  {s:"ten",ic:"mondaifuda",n:"今日の十問",z:"L",dot:r=>!r.quiz,go:r=>!r.quiz&&"quiz()"},
  {s:"ny",ic:"mato",n:"一問入魂",z:"L",dot:r=>!r.ny,go:r=>!r.ny&&"nyukon()"},
  {s:"mini",ic:"minigame",n:"ミニゲーム",z:"L",dot:r=>r.mini==null},
- {s:"kz",ic:"kzfuda",n:"偉人札",z:"L",dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
+ {s:"kz",ic:"kzfuda",n:"偉人札",z:"L",rk:1,dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
  {s:"kawara",ic:"kawaraban",n:"かわら版",dot:r=>!r.kawara},
  {s:"meguri",ic:"meguri",n:"めぐりあわせ",dot:r=>r.irr&&!r.irr.done},
  {s:"town",ic:"jokamachi",n:"城下町",go:()=>"town()"},
- {s:"sg",ic:"saikoro",n:"すごろく",dot:()=>typeof sgLeft==="function"&&sgLeft()>0&&!FUSHIN_TEST,go:()=>"sgOpen()"},
+ {s:"sg",ic:"saikoro",n:"すごろく",rk:2,dot:()=>typeof sgLeft==="function"&&sgLeft()>0&&!FUSHIN_TEST,go:()=>"sgOpen()"},
  {s:"fuku",ic:"oboe",n:"復習の間",sub:()=>fukuDay()?"きょう開いています":"土・日だけ",dim:()=>!fukuDay(),dot:r=>fukuDay()&&!r.fuku,go:r=>fukuDay()&&!r.fuku&&"fuku()"},
- {s:"naisei",ic:"naisei",n:"内政",go:()=>"naisei()"},
+ {s:"naisei",ic:"naisei",n:"内政",rk:2,go:()=>"naisei()"},
  {s:"map",ic:"chizu",n:"陣地図",go:()=>"mapView()"},
  {s:"rank",ic:"ishikawamon",n:"校下番付"},
  {s:"kq",ic:"kouka",n:"わが校下",go:()=>`kqPop(S.kouka)`},
@@ -1278,6 +1278,7 @@ const HUBI=[
  {s:"age",ic:"nendai",n:"年代別",z:"S"},
  {s:"toia",ic:"fumi",n:"問い合わせ",z:"S"},
 ];
+const hubHas=(x,secs)=>secs[x.s]||(x.rk&&!opn(x.rk));
 function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").forEach(el=>{if(el.style.display!=="none")secs[el.dataset.sec]=el});
   Object.entries(secs).forEach(([k,el])=>{if(k!=="inv")el.classList.add("hubHide")});
   if(HUB_SEC&&secs[HUB_SEC]){app.classList.add("secMode");secs[HUB_SEC].classList.add("secOn");
@@ -1290,7 +1291,7 @@ function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").
   g.innerHTML=`<button class="hubBar" onclick="secOpen('all')"><span>${IC("ineho")} みんなで百万石 <b>${(Math.min(100,t.koku/GOAL*100)).toFixed(1)}%</b></span><span>${S.kouka} <b>${myI+1}位</b></span></button>
   ${secs.ab?`<button class="hubBar" onclick="secOpen('ab')"><span>${IC("noryoku")} 能力</span><span class="mute">${ab}</span></button>`:""}
   ${secs.ledger?`<button class="hubBar" onclick="secOpen('ledger')"><span>${IC("chobo")} 石の出入り</span><span class="mute">きょう +${inc}石</span></button>`:""}
-  ${[HUBI.filter(x=>secs[x.s]&&x.z!=="S"),HUBI.filter(x=>secs[x.s]&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const go=x.go&&x.go(r),nM=L.filter(y=>(y.z||"M")==="M").length,rem=nM%4,wide=!gi&&rem&&(x.z||"M")==="M"&&xi===L.length-1;return `<button class="hubI z${x.z||"M"}${wide?" zW":""}${x.dim&&x.dim()?" hubDim":""}" style="${wide?`grid-column:span ${5-rem}`:""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.sub?`<small class="hubSub" data-noruby>${x.sub()}</small>`:""}${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
+  ${[HUBI.filter(x=>hubHas(x,secs)&&x.z!=="S"),HUBI.filter(x=>hubHas(x,secs)&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const lkd=x.rk&&!opn(x.rk);if(lkd)x={...x,sub:()=>"🔒"+TITLES[x.rk][1]+"で開く",dot:null,go:null};const go=x.go&&x.go(r),nM=L.filter(y=>(y.z||"M")==="M").length,rem=nM%4,wide=!gi&&rem&&(x.z||"M")==="M"&&xi===L.length-1;return `<button class="hubI z${x.z||"M"}${wide?" zW":""}${x.dim&&x.dim()?" hubDim":""}${lkd?" hubLock":""}"${lkd?" disabled":""} style="${wide?`grid-column:span ${5-rem}`:""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.sub?`<small class="hubSub" data-noruby>${x.sub()}</small>`:""}${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
   const prof=app.querySelector(".card.prof");if(prof)prof.after(g);else app.prepend(g);if(secs.inv)app.append(secs.inv)}
 function secOpen(s){HUB_SEC=s;HUB_KEEP=1;home();window.scrollTo(0,0)}
 /* ---------- 画面：ホーム ---------- */
@@ -2876,7 +2877,7 @@ function kzHomeCard(){const z=kzSt(),n=Object.keys(z.own).length;
   return `<div class="card kzHome" id="kzH"><h2 class="row" style="align-items:center;gap:6px">${IC("kzfuda")} 金沢偉人札 ${infoBtn("金沢偉人札とは",kzHelp())}</h2>
    <div class="mute">金沢検定に出てくる偉人たちの札を集めて、戦う札3枚＋補佐1枚で戦うカードバトル。</div>
    <div class="kzBar"><span>札 <b>${n}</b>/${KZ.length}種</span><span>札券 <b>${z.tix}</b>枚</span><span>道場 <b>${z.clear}</b>/${KZ_DOJO.length}</span></div>
-   ${!z.starter?`<button class="pri" style="width:100%;margin-top:8px" onclick="kzGacha()">はじめの10連（無料）をまわす</button>`:`<div class="kzMenu"><button onclick="kzGacha()">${IC("fudamawashi")}<b>札まわし</b>${z.free!==today()?"<i>無料</i>":""}</button><button onclick="kzDojo()">${IC("dojo")}<b>道場</b></button><button onclick="tjOpen()">${IC("katana")}<b>辻試合</b>${tjLeft()>0&&!FUSHIN_TEST?"<i>"+tjLeft()+"回</i>":""}</button><button onclick="kzDeck()">${IC("hensei")}<b>編成</b></button><button onclick="kzZukan()">${IC("zukan")}<b>手持ち・図鑑</b></button></div>`}</div>`}
+   ${!z.starter?`<button class="pri" style="width:100%;margin-top:8px" onclick="kzGacha()">はじめの10連（無料）をまわす</button>`:`<div class="kzMenu"><button class="kzL" onclick="kzDojo()">${IC("dojo","50px")}<b>道場</b></button><button class="kzL" onclick="tjOpen()">${IC("katana","50px")}<b>辻試合</b>${tjLeft()>0&&!FUSHIN_TEST?"<i>"+tjLeft()+"回</i>":""}</button><button onclick="kzGacha()">${IC("fudamawashi","36px")}<b>札まわし</b>${z.free!==today()?"<i>無料</i>":""}</button><button onclick="kzDeck()">${IC("hensei","36px")}<b>編成</b></button><button onclick="kzZukan()">${IC("zukan","36px")}<b>手持ち・図鑑</b></button></div>`}</div>`}
 function kzTixHelp(){return `<p><b>札券</b>は、札まわしを1回まわせる券です。</p><ul><li>道場で、相手に<b>初めて勝つ</b>と1〜5枚</li><li>時代すごろくで<b>ゴール</b>すると20枚</li><li>通い帳が7日たまると3枚（7日連続なら6枚）</li></ul><p>札券がなくても、毎日1回は無料。蔵の石でもまわせる（1回30石・10連270石）。</p>`}
 function kzSkHelp(){return `<div class="kzSkL">${Object.keys(KZ_SK).map(k=>`<div><b style="color:${KZ_SK[k].c}">${k}</b> 並：${KZ_SK[k].d(KZ_SK[k].v[0])}／上：${KZ_SK[k].d(KZ_SK[k].v[1])}／極：${KZ_SK[k].d(KZ_SK[k].v[2])}</div>`).join("")}</div>`}
 function kzHelp(){return `<p>金沢検定に出てくる偉人の札を集めて、<b>戦う札3枚と補佐の札1枚</b>でCPUと戦います。相手の戦う札3枚をすべて倒せば勝ちです。</p>
