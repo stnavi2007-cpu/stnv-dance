@@ -326,7 +326,7 @@ body.ipon{overflow:hidden}
 .kzSlots.four{grid-template-columns:repeat(4,1fr);gap:6px}.kzSlot.sup>span{color:#7ab0ff}.kzSlot.empty.sup{border-color:#3a5a7a}
 .kzMode{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kzMode button{font-size:13px;padding:7px 0}.kzMode button.on{background:#c9a227;color:#2a1f14;font-weight:800}
 .kzDInfo{font-size:12px;background:#2a1f14;border-radius:8px;padding:6px 8px;margin:4px 0 8px;line-height:1.6}.kzDInfo b{color:#ffd76a}.kzDEn span{display:block}.kzDEn span b{color:#fff;margin-right:4px}
-.kzSuS{display:block;font-size:10px;line-height:1.25;color:#9ac0e0;margin-top:2px}
+.kzSuS{display:block;font-size:10px;line-height:1.25;color:#9ac0e0;margin-top:2px}.kzSkS{display:block;font-size:10px;line-height:1.25;color:#e0b0a0;margin-top:2px}.kzSkS[hidden],.kzSuS[hidden]{display:none}
 .kzEn{margin:4px 0;line-height:1.45}.kzEn b{color:#ffd76a;margin-right:6px}.kzEn small{display:block;color:var(--mute);font-size:11px}
 .kzDjX{position:relative;margin-left:12px;padding-left:10px;border-left:2px dashed #7a6440}
 .kbKiW{font-size:12px;color:#ffd76a;letter-spacing:1px;margin-top:2px}.kbKiS{font-size:9px;color:#ffd76a;text-align:center}.kbB.sup{opacity:.85}.kbSupT{font-size:9px;color:#7ab0ff;text-align:center}
@@ -2976,14 +2976,15 @@ function kzDeck(){abar.className="abar";const z=kzSt();KZD=KZD||{d:[...z.deck],x
    <div id="kzDI">${kzDeckInfo(D.d,D.x)}</div>
    <button class="pri" id="kzDB" style="width:100%" ${D.d.length===3?"":"disabled"} onclick="kzSt().deck=[...KZD.d];kzSt().x=KZD.x;save();toast('編成を決めた');KZD=null;kzHomeGo()">この編成で決める</button>
    <div class="mute" id="kzDH" style="font-size:12px;margin-top:6px">${kzDeckHint(D)}</div>
-   <div class="kzGrid" id="kzDG" style="margin-top:8px">${own.map(id=>`<div class="kzPickW${D.d.includes(id)||D.x===id?" on":""}" data-id="${id}">${kzCard(id,{tap:`kzDTap('${id}')`})}<small class="kzSuS"${D.m==="x"?"":" hidden"}>${kzSuT(KZM[id],kzStar(id))}</small><i class="kzEnB" data-noruby${kzEnHit(id,D)?"":" hidden"}>縁</i></div>`).join("")}</div></div>
+   <div class="kzGrid" id="kzDG" style="margin-top:8px">${own.map(id=>`<div class="kzPickW${D.d.includes(id)||D.x===id?" on":""}" data-id="${id}">${kzCard(id,{tap:`kzDTap('${id}')`})}<small class="kzSuS"${D.m==="x"?"":" hidden"}>${kzSuT(KZM[id],kzStar(id))}</small><small class="kzSkS"${D.m==="d"?"":" hidden"}>${kzSkT(KZM[id])}</small><i class="kzEnB" data-noruby${kzEnHit(id,D)?"":" hidden"}>縁</i></div>`).join("")}</div></div>
    <button class="backb" onclick="KZD=null;kzHomeGo()">${YA("l")} もどる</button>`}
 // 画面を作り直さずに、変わった所だけ書きかえる（絵がちらつかないように）
+function kzSkT(c){return c.sk?`必殺技「${c.sk}」（${KZ_TIER[c.tr]}）：${kzSkD(c)}`:"必殺技なし"}
 function kzDUpd(){const D=KZD;if(!$("#kzDG"))return kzDeck();
   document.querySelectorAll("#kzDM button").forEach((b,k)=>b.classList.toggle("on",(k?"x":"d")===D.m));
   const sl=$("#kzDS"),h=kzDeckSlots(D);if(sl._h!==h){sl.innerHTML=h;sl._h=h}
   $("#kzDI").innerHTML=kzDeckInfo(D.d,D.x);$("#kzDB").disabled=D.d.length!==3;$("#kzDH").textContent=kzDeckHint(D);
-  document.querySelectorAll("#kzDG .kzPickW").forEach(w=>{const id=w.dataset.id;w.classList.toggle("on",D.d.includes(id)||D.x===id);const sm=w.querySelector(".kzSuS");if(sm)sm.hidden=D.m!=="x";const eb=w.querySelector(".kzEnB");if(eb)eb.hidden=!kzEnHit(id,D)})}
+  document.querySelectorAll("#kzDG .kzPickW").forEach(w=>{const id=w.dataset.id;w.classList.toggle("on",D.d.includes(id)||D.x===id);const sm=w.querySelector(".kzSuS");if(sm)sm.hidden=D.m!=="x";const sk=w.querySelector(".kzSkS");if(sk)sk.hidden=D.m!=="d";const eb=w.querySelector(".kzEnB");if(eb)eb.hidden=!kzEnHit(id,D)})}
 // その札が、いまえらんでいる札（自分以外）と縁でつながるか
 function kzEnHit(id,D){const sel=[...D.d,...(D.x?[D.x]:[])].filter(x=>x!==id);return sel.length>0&&kzEnOf(id,[...sel,id]).length>0}
 function kzDTap(id){const D=KZD,i=D.d.indexOf(id);if(i>=0)D.d.splice(i,1);else if(D.x===id)D.x="";else if(D.m==="x")D.x=id;else if(D.d.length<3)D.d.push(id);kzDUpd()}
