@@ -2448,15 +2448,14 @@ sndBtn();
 
 /* ===== BGM（オープニング曲・ゲーム内BGM）
    ファイル側で音量を下げてあるので、再生側は100%のまま。つなぎ目は1.5秒のクロスフェードでループ。 */
-const BGM_URL={op:"hyakumangoku_img/bgm_opening.mp3",game:"hyakumangoku_img/bgm_ingame.mp3"},BGM_XF=1.5,BGM_VOL=.35; // BGM音量35%
+const BGM_URL={op:"hyakumangoku_img/bgm_opening.mp3",game:"hyakumangoku_img/bgm_ingame.mp3"},BGM_XF=1.5,BGM_VOL=.45; // BGM音量45%
 const BG={buf:{},want:null,cur:null,nodes:[],timer:0,el:null};
 function bgmBuf(k){if(!BG.buf[k]){const a=acGet();BG.buf[k]=!a?Promise.reject():fetch(BGM_URL[k]).then(r=>{if(!r.ok)throw 0;return r.arrayBuffer()}).then(b=>new Promise((ok,ng)=>a.decodeAudioData(b,ok,ng)));BG.buf[k].catch(()=>{})}return BG.buf[k]}
 function bgmKill(fade){const a=AC;clearTimeout(BG.timer);BG.nodes.forEach(n=>{try{if(a&&fade){const t=a.currentTime;n.g.gain.cancelScheduledValues(t);n.g.gain.setValueAtTime(n.g.gain.value,t);n.g.gain.linearRampToValueAtTime(0,t+fade);n.s.stop(t+fade+.05)}else n.s.stop()}catch(e){}});BG.nodes=[];
   if(BG.el){try{BG.el.pause()}catch(e){}BG.el=null}BG.cur=null}
 // ループ：曲の終わり1.5秒前に次の頭を重ねる
 // iPhone向け：タップの中で無音を1回鳴らして音の出口を開ける
-function acUnlock(){try{if(navigator.audioSession)navigator.audioSession.type="playback"}catch(e){} // iPhoneのマナーモードでもBGMを鳴らす
-  const a=acGet();if(!a)return;try{const b=a.createBuffer(1,1,22050),s=a.createBufferSource();s.buffer=b;s.connect(a.destination);s.start(0)}catch(e){}}
+function acUnlock(){const a=acGet();if(!a)return;try{const b=a.createBuffer(1,1,22050),s=a.createBufferSource();s.buffer=b;s.connect(a.destination);s.start(0)}catch(e){}}
 function bgmOut(){if(!BG.out){BG.out=AC.createGain();BG.out.gain.value=BGM_VOL;BG.out.connect(AC.destination)}return BG.out}
 function bgmLoop(k,buf,t0,fadeIn){const a=AC;if(BG.want!==k||!SND)return;const s=a.createBufferSource(),g=a.createGain();s.buffer=buf;s.connect(g);g.connect(bgmOut());
   const d=buf.duration,xf=Math.min(BGM_XF,d/4);g.gain.setValueAtTime(fadeIn?0:1,t0);if(fadeIn)g.gain.linearRampToValueAtTime(1,t0+fadeIn);
