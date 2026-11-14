@@ -19,7 +19,7 @@ img.px{display:block;width:100%;height:auto;image-rendering:pixelated;image-rend
 /* 歴史ゲームの窓：ドットの見出し×読みやすい本文 */
 header h1,.card h2,.big,.bz,.lv,.timer,.pname,.koku,.sg,.chip{font-family:"DotGothic16","Hiragino Sans",sans-serif;font-weight:400;letter-spacing:.04em}
 .card{border:2px solid #6a5530;border-radius:6px;box-shadow:inset 0 0 0 2px #120f0a,inset 0 0 0 3px #4a3c24}
-header{position:sticky;top:0;z-index:5;background:linear-gradient(#1b1711,#0f0d0a);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+header{position:relative;z-index:5;background:linear-gradient(#1b1711,#0f0d0a);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
 header h1{margin:0;font-size:19px;letter-spacing:.08em;color:var(--gold2)}
 header h1 small{display:block;font-size:10px;color:var(--mute);letter-spacing:.2em;white-space:nowrap}
 header{gap:8px}header h1{min-width:0;flex:1;overflow:hidden}header h1 small{overflow:hidden;text-overflow:ellipsis;letter-spacing:.12em}header .koku{flex-shrink:0;text-align:right;padding-right:12px}header .furiBtn{flex-shrink:0}
@@ -433,11 +433,11 @@ body.ipon{overflow:hidden}
 .kzSub{font-size:16px;margin:14px 0 6px;padding-top:8px;border-top:1px solid #4a3a26}
 .sellL{max-height:260px;overflow:auto;margin:8px 0;border-top:1px dashed var(--line)}.sellR{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}.sellR button{padding:6px 10px;font-size:13px;white-space:nowrap}
 .kzHelp{display:flex;gap:8px;align-items:center;margin:6px 0;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:rgba(216,180,90,.08)}.kzHelp img{width:72px;height:48px;object-fit:cover;border-radius:6px}.bgBox .bgInf,.bgBox .sellR{text-align:left}.bgBox{margin-top:10px;padding:8px;border:1px dashed var(--line);border-radius:10px;text-align:left}.bgRow{display:flex;gap:8px;align-items:center}.bgRow .kzHelp{margin:0}.bgInf{font-size:13px;line-height:1.5}.bgImg{width:96px;height:64px;object-fit:cover;border-radius:6px;flex-shrink:0}.bgYk{color:#e0b84a;font-weight:800}
-.hdLogo{display:block;height:22px;width:auto;max-width:100%}.trLogo{display:block;width:100%;max-width:420px;margin:0 auto 6px}
+.hdLogo{display:block;height:64px;width:auto;max-width:100%}header .furiBtn{font-size:10.5px;padding:3px 7px}.trLogo{display:block;width:100%;max-width:420px;margin:0 auto 6px}
 </style>
 </head>
 <body>
-<header><h1 data-noruby><img class="hdLogo" src="hyakumangoku_img/logo_text.webp?v=1114b" alt="百万石クエスト"><small>試作</small></h1><button id="furiBtn" class="furiBtn" onclick="furiToggle()" aria-pressed="false" data-noruby>ふりがな</button><button id="sndBtn" class="furiBtn on" style="margin-left:0" onclick="sndToggle()" aria-pressed="true" data-noruby>音 ON</button><div class="koku" id="hdKoku"><span id="hdN">0石</span><small>蔵の石</small></div></header>
+<header><h1 data-noruby><img class="hdLogo" src="hyakumangoku_img/logo_full.webp?v=1114b" alt="百万石クエスト"><small>試作</small></h1><button id="furiBtn" class="furiBtn" onclick="furiToggle()" aria-pressed="false" data-noruby>ふりがな</button><button id="sndBtn" class="furiBtn on" style="margin-left:0" onclick="sndToggle()" aria-pressed="true" data-noruby>音 ON</button><div class="koku" id="hdKoku"><span id="hdN">0石</span><small>蔵の石</small></div></header>
 <main id="app"></main>
 <div class="abar" id="abar"></div>
 <div class="toast" id="toast"></div>
