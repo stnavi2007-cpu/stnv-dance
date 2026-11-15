@@ -2542,7 +2542,8 @@ const ST1=[
 // 始めてから何日目か（始めた日＝1日目）
 function stDay(){if(!S.start)return 1;return Math.floor((Date.parse(today())-Date.parse(S.start))/864e5)+1}
 const stDone=i=>!!(S.st&&S.st[i]);
-const stOpen=i=>FUSHIN_TEST||i<stDay();
+// 物語は試作（テスト）中も本番と同じく1日1話ずつ開く。読み終えた話はいつでも読み返せる
+const stOpen=i=>i<stDay()||stDone(i);
 // きょうの1話（7日間だけ）。答えていなければその番号、なければ -1
 function stToday(){const d=stDay();return d>=1&&d<=7&&!stDone(d-1)?d-1:-1}
 var STQ=null;
