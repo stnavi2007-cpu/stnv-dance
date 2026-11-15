@@ -1235,7 +1235,7 @@ function register(){abar.className="abar";
     <div class="regHow"><b>郵便番号を入力するか、下の校下から選んでください</b></div>
     <label class="mute">郵便番号（ハイフンなし7桁）</label><input id="zip" inputmode="numeric" maxlength="7" value="${REG.zip||""}">
     <button class="gold" style="width:100%;margin-top:8px" onclick="zipGo()">この郵便番号できめる</button>
-    <div class="mute" style="margin-top:8px">金沢市内は郵便番号で自分の校下に。金沢市外の方や、入力がめんどうな方は下の一覧から選べます。</div>
+    <div class="mute" style="margin-top:8px">金沢市内は郵便番号で自分の校下が出ます。金沢市外の方や、入力がめんどうな方は下の一覧から選べます。</div>
     ${inv?`<div class="notice" style="margin-top:8px">${IC("engun")} ${inv}校下の${invFrom()||"仲間"}さんから援軍のお願いがきています</div>`:""}
     ${REG.carry&&S.kouka?`<div class="okbox">${flagSvg(S.kouka,color(S.kouka))}<div style="flex:1"><b>新しいシーズンです</b><div class="mute">城下町・内政・位はそのまま。校下だけ選びなおせます。</div></div></div><button class="pri" style="margin-top:8px" onclick="doReg(S.kouka,!!S.zip)">前と同じ${S.kouka}校下で続ける</button>`:""}
     <div id="pick"></div></div><button class="backb" style="${REG.fin?"display:none":""}" onclick="REG.step=1;register()">${YA("l")} 名前・年齢にもどる</button>`;
@@ -1259,12 +1259,12 @@ function zipGo(silent){const z=($("#zip").value||"").replace(/\D/g,"");REG.zip=z
 function pickList(){const d=demo();const s=REG.sort||(REG.sort="many");
   const RG=[...new Set(KDATA.map(x=>x.r))];
   const L=d.slice().sort((a,b)=>s==="many"?b.m-a.m:s==="few"?a.m-b.m:s==="area"?(RG.indexOf(kInfo(a.k).r)-RG.indexOf(kInfo(b.k).r))||a.k.localeCompare(b.k,"ja"):a.k.localeCompare(b.k,"ja"));
-  $("#pick").innerHTML=`${REG.mode?`<div class="notice" style="margin:10px 0">${REG.mode==="kz"?`金沢市内（${(REG.towns||[]).join("・")}）です。この町の校下はまだ自動で判定できないので、下から選んでください。`:"金沢市外の郵便番号です。<b>援軍</b>として、好きな校下をえらんでください。"}</div>`:`<h3 class="regLh">校下から選ぶ</h3>`}
+  $("#pick").innerHTML=`${REG.mode?`<div class="notice" style="margin:10px 0">${REG.mode==="kz"?`金沢市内（${(REG.towns||[]).join("・")}）です。この町の校下はまだ自動で判定できないので、下から選んでください。`:"金沢市外の郵便番号です。好きな校下を選んでください。"}</div>`:`<h3 class="regLh">校下から選ぶ</h3>`}
   <div class="seg sm">${[["many","人が多い順"],["few","少ない順"],["area","地域別"],["name","名前順"]].map(([v,l])=>`<button class="${s===v?"on":""}" onclick="REG.sort='${v}';pickList()">${l}</button>`).join("")}</div>
   <div class="mute" style="margin:6px 0">人数は<b>デモ用の仮の数字</b>です</div>
   <div class="klist">${L.map(x=>`<button class="kitem" onclick="pickK('${x.k}')"><span class="kf">${flagSvg(x.k,color(x.k))}</span><span class="kn">${x.k}<small>${kInfo(x.k).r?kInfo(x.k).r+"地域・":""}${fmt(x.koku)}石</small></span><span class="km">${x.m?`${x.m}人`:`<b class="first">0人・一番乗り</b>`}</span></button>`).join("")}</div>`}
 function pickK(k,res){REG.res=!!res;const m=demo().find(x=>x.k===k).m;
-  $("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>${REG.mode==="kz"?"に住民として":REG.mode==="out"?"に援軍として":"で"}参戦します<div class="mute">いま ${m}人</div></div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',REG.mode==='kz')">${k}校下で参戦する</button><button style="width:100%;margin-top:8px" onclick="pickList()">えらびなおす</button>`}
+  $("#pick").innerHTML=`<div class="okbox">${flagSvg(k,color(k))}<div><b>${k}校下</b>で参戦します<div class="mute">いま ${m}人</div></div></div>${lockNote()}<button class="pri" onclick="doReg('${k}',REG.mode==='kz')">${k}校下で参戦する</button><button style="width:100%;margin-top:8px" onclick="pickList()">えらびなおす</button>`}
 const lockNote=()=>`<div class="notice" style="margin:10px 0">${IC("chui")} <b>このシーズンが終わるまで、校下は変えられません。</b></div>`;
 function doReg(k,resident){S.kouka=k;S.zip=resident?REG.zip:"";S.lock=SEASON_ID;S.tick=today();save();if(REG.fin&&(!S.name||!S.age)){REG.step=1;if(invK())S.from=(Q_.get("from")||"").slice(0,20);return register()}
   // 招待URLから来た人の石は0。呼んだ人は、来た人がどの校下に参戦しても+100石（本番はサーバーで「新規登録」のときだけ数える）
@@ -1339,7 +1339,7 @@ function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP)HUB_SEC="";HUB
     <div class="av">${avatar(S.g,S.a,RA(),undefined,S.invites>=10)}</div>
     <div style="flex:1;min-width:0">
       <div class="pname">${S.name}<span class="tag">${title(S.total||0)}</span></div>
-      <div class="pk"><span class="kf sm">${flagSvg(S.kouka,color(S.kouka))}</span>${S.kouka}校下 <span class="tag">${S.zip?"住民":"援軍"}</span></div>
+      <div class="pk"><span class="kf sm">${flagSvg(S.kouka,color(S.kouka))}</span>${S.kouka}校下</div>
       <div class="mute">${S.age?`${ageG(S.age).n}（${ageG(S.age).y}）${!S.ageGo&&ageWord(S.age)?"・"+ageWord(S.age).n:""}`:""}</div>
       <div class="mute">今シーズンの手柄 <b style="color:var(--gold2)">${f1(S.koku)}石</b></div>
       ${rankBox()}
