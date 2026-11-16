@@ -2943,20 +2943,21 @@ function kzHit(B,ai,di,t,m,o={}){const A=B.s[ai],D=B.s[di],a=kzCur(B,ai),r=B.rnd
   d=Math.max(back&&d<1?0:1,Math.round(d));d=kzHurt(B,di,t,d);kzE(B,{k:"dmg",side:di,id:t.id,v:d,crit,mod});
   if(back>0){a.hp=Math.max(0,a.hp-back);kzE(B,{k:"dmg",side:ai,id:a.id,v:back,back:1});kzE(B,{k:"log",t:`迎撃！ ${back}をはね返された`})}return {d,crit,mod}}
 function kzCure(B,di){const D=B.s[di];if(D.cure>0){D.cure--;kzE(B,{k:"log",t:"補佐の力でふせいだ！"});return true}return false}
+// 必殺技の威力（補佐の技の威力・クイズの1.5倍）は、ダメージと回復だけに効く。籠城・迎撃・罵倒の％は技そのままの値（無敵にならないように）
 function kzSkill(B,ai,di){const A=B.s[ai],D=B.s[di],a=kzCur(B,ai),t=kzCur(B,di),c=a.c,v=KZ_SK[c.sk].v[c.tr],p=a.skp*(ai===0&&B.skx?B.skx:1);B.skx=0;kzE(B,{k:"sk",side:ai,n:c.sk,id:a.id});
   switch(c.sk){
    case"強襲":kzHit(B,ai,di,t,v*p);break;
    case"連撃":kzHit(B,ai,di,t,v*p);if(t.hp>0)kzHit(B,ai,di,t,v*p);break;
    case"治療":{const h=Math.round(a.max*v*p);a.hp=Math.min(a.max,a.hp+h);kzE(B,{k:"heal",side:ai,id:a.id,v:h});break}
    case"鼓舞":kzHit(B,ai,di,t,p);A.f.forEach(f=>{if(f.hp>0){f.buf=3;f.bufv=v*p}});kzE(B,{k:"log",t:"味方3枚の攻撃が上がった！"});break;
-   case"籠城":kzHit(B,ai,di,t,p);a.sh=v[0];a.shv=Math.min(.8,v[1]*p);kzE(B,{k:"log",t:"守りをかためた"});break;
+   case"籠城":kzHit(B,ai,di,t,p);a.sh=v[0];a.shv=v[1];kzE(B,{k:"log",t:"守りをかためた"});break;
    case"足止め":kzHit(B,ai,di,t,v*p);if(t.hp>0&&!kzCure(B,di)){t.stun=1;kzE(B,{k:"log",t:"相手は足止めされた"})}break;
    case"火計":kzHit(B,ai,di,t,1*p);if(t.hp>0&&!kzCure(B,di)){t.po=3;t.pov=v*p;kzE(B,{k:"log",t:"火の手が上がった"})}break;
    case"一斉攻撃":D.f.forEach(f=>{if(f.hp>0)kzHit(B,ai,di,f,v*p)});break;
    case"看破":kzHit(B,ai,di,t,p,{crit:true,cm:v,noBad:true});break;
-   case"罵倒":kzHit(B,ai,di,t,1.1*p);if(t.hp>0&&!kzCure(B,di)){t.dn=3;t.dnv=Math.min(.6,v*p);kzE(B,{k:"log",t:"相手の攻撃が下がった"})}break;
+   case"罵倒":kzHit(B,ai,di,t,1.1*p);if(t.hp>0&&!kzCure(B,di)){t.dn=3;t.dnv=v;kzE(B,{k:"log",t:"相手の攻撃が下がった"})}break;
    case"攪乱":kzHit(B,ai,di,t,1.4*p);t.ki=Math.max(0,t.ki-v);kzE(B,{k:"log",t:`相手の気が${v}減った`});break;
-   case"迎撃":kzHit(B,ai,di,t,.8*p);a.cnt=Math.min(1,v*p);kzE(B,{k:"log",t:"迎え撃つ構え"});break;
+   case"迎撃":kzHit(B,ai,di,t,.8*p);a.cnt=v;kzE(B,{k:"log",t:"迎え撃つ構え"});break;
    case"救援":{A.f.forEach(f=>{if(f.hp>0){const h=Math.round(f.max*v*p);f.hp=Math.min(f.max,f.hp+h);if(f===a)kzE(B,{k:"heal",side:ai,id:a.id,v:h})}});kzE(B,{k:"log",t:"味方3枚の体力が回復した"});break}
    case"威圧":kzHit(B,ai,di,t,v[0]*p);if(t.hp>0&&!kzCure(B,di)){t.seal=v[1];kzE(B,{k:"log",t:"相手の必殺技を封じた"})}break}}
 function kzCanSk(f){return f.c.sk&&f.ki>=5&&!f.seal}
