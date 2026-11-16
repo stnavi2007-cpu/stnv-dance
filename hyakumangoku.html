@@ -2919,7 +2919,7 @@ function kzStar(id){const o=kzSt().own[id];return o?kzStarW(o.w||0):0}
 var KZ_RF={N:1.31,R:1.15,SR:1,SSR:.89,UR:.76};  // レア度ごとの強さの補正（2026-11-16 総当たり試算で調整：同じ★なら1つ上のレア度に勝てるのは約15%、★5まで育てれば1つ上の★1と五分前後）
 var KZ_TYF={戦:1,両:1.12,補:1};
 // 同じレア度・同じ型の中で、強すぎる札・弱すぎる札の差を少しだけ縮める（個性は残す）
-var KZ_SHRINK=.4,KZ_CFC=null;
+var KZ_SHRINK=0,KZ_CFC=null;
 function kzCF(c){if(!KZ_SHRINK)return 1;if(!KZ_CFC){KZ_CFC={};const G={};KZ.forEach(k=>{const g=k.r+(k.ty||"戦");(G[g]=G[g]||[]).push(k)});
   for(const g in G){const L=G[g],gm=Math.exp(L.reduce((a,k)=>a+Math.log(k.hp*k.atk),0)/L.length);L.forEach(k=>KZ_CFC[k.id]=Math.pow(gm/(k.hp*k.atk),KZ_SHRINK/2))}}return KZ_CFC[c.id]||1}// 型ごとの能力の底上げ（両用型が戦で弱すぎないように）
 function kzStats(id,star,gold){const c=KZM[id],g=1+KZ_GROW*((star||1)-1),m=g*(gold?1.05:1)*(KZ_RF[c.r]||1)*(KZ_TYF[c.ty||"戦"]||1)*kzCF(c);return {hp:Math.round(c.hp*m),atk:Math.round(c.atk*m),spd:Math.round(c.spd*g)}}
