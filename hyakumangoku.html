@@ -3593,14 +3593,14 @@ function ktCheck(){const m=MG;if(!m||m.ended||m.lock)return;m.lock=1;let ok=0;m.
 
 /* --- 友禅流し：上流で反物を持ち、流れにのせて洗う。きれいな流れの筋にのせ、流れてくる流木をよける --- */
 function mnYuzen(){const lv=MG.lv,W=320,H=400;Object.assign(MG,{W,H,x:W/2,tx:W/2,rk:[],hit:0,wash:0,sp:[0,120,140,160,180,200][lv],every:[0,1000,900,800,700,620][lv],next:900,last:0,el:0,lane:W/2,lv2:0,trail:[],done:0});
-  app.innerHTML=`<div class="card">${mgHead(IC("mizu")+" 友禅流し",30)}<div class="mute">浅野川で加賀友禅の糊を洗い流す。上で反物を持ち、<b>指で左右に動かして</b>、<b>きれいな流れの筋（明るい帯）</b>にのせよう。上から流れてくる<b>流木</b>に当たると汚れる。</div>
-  <div class="yrBar"><span>洗い <b id="yzW">0</b>%</span><span>汚れ <b id="yzH">0</b></span></div><canvas id="yzC2" class="mgCv" style="width:100%;max-width:320px;aspect-ratio:${W}/${H};touch-action:none"></canvas></div>`;
+  app.innerHTML=`<div class="card">${mgHead(IC("mizu")+" 友禅流し",30)}<div class="mute">浅野川で加賀友禅の糊を洗い流す。上で反物を持ち、<b>指で左右に動かして</b>、<b>きれいな流れの筋（明るい帯）</b>にのせよう。上から流れてくる<b>流木</b>に当たると汚れる。<b>きれいな筋にのっている時間がそのまま得点</b>（流木に当たると−50点）。</div>
+  <div class="yrBar"><span>得点 <b id="yzP">0</b></span><span>洗い <b id="yzW">0</b>%</span><span>汚れ <b id="yzH">0</b></span></div><canvas id="yzC2" class="mgCv" style="width:100%;max-width:320px;aspect-ratio:${W}/${H};touch-action:none"></canvas></div>`;
   const c=$("#yzC2");MG.cx=mgCanvas("yzC2",W,H);const mv=e=>{e.preventDefault();if(!MG)return;MG.tx=Math.max(20,Math.min(W-20,mgPt(c,e,W,H)[0]))};
   ["touchstart","touchmove"].forEach(k=>c.addEventListener(k,mv,{passive:false}));c.addEventListener("mousemove",mv);c.addEventListener("mousedown",mv);
   const m=MG;m.last=performance.now();const loop=t=>{if(MG!==m||m.ended)return;const dt=Math.min(.05,(t-m.last)/1000);m.last=t;yzStep(dt);yzDraw();m.raf=requestAnimationFrame(loop)};m.raf=requestAnimationFrame(loop);
-  mgTimer(30,()=>{const m=MG;sbAdd(m.wash*10);mnFin(m.wash,100)})}
+  mgTimer(30,()=>{const m=MG;mnFin(m.wash,100)})}
 function yzStep(dt){const m=MG;m.el+=dt*1000;m.x+=(m.tx-m.x)*Math.min(1,dt*10);m.trail.unshift(m.x);m.trail.length=Math.min(m.trail.length,44);
-  m.lane=m.W/2+Math.sin(m.el/2300)*95+Math.sin(m.el/900)*25;const inL=Math.abs(m.x-m.lane)<34;m.inL=inL;if(inL&&m.wash<100){m.wash=Math.min(100,m.wash+dt*5.5);if(m.wash>=100&&!m.done){m.done=1;sbAdd(Math.max(0,(30000-m.el)/1000)*20);try{SE("rank")}catch(e){}}}$("#yzW").textContent=Math.floor(m.wash);
+  m.lane=m.W/2+Math.sin(m.el/2300)*95+Math.sin(m.el/900)*25;const inL=Math.abs(m.x-m.lane)<34;m.inL=inL;if(inL){sbAdd(40*dt);if(m.wash<100){m.wash=Math.min(100,m.wash+dt*5.5);if(m.wash>=100&&!m.done){m.done=1;try{SE("rank")}catch(e){}}}}$("#yzW").textContent=Math.floor(m.wash);$("#yzP").textContent=Math.floor(Math.max(0,m.pts||0));
   m.next-=dt*1000;if(m.next<=0){m.next=m.every*(.7+Math.random()*.6);m.rk.push({x:20+Math.random()*(m.W-40),y:-20,r:10+Math.random()*10,a:Math.random()*3})}
   m.rk.forEach(r=>r.y+=m.sp*dt*(1+m.el/40000));m.rk=m.rk.filter(r=>r.y<m.H+30);
   m.rk.forEach(r=>{if(r.hitd)return;for(let k=0;k<m.trail.length;k+=3){const y=70+k*7;if(Math.abs(r.y-y)<r.r&&Math.abs(r.x-m.trail[k])<r.r+12){r.hitd=1;m.hit++;m.wash=Math.max(0,m.wash-8);sbAdd(-50);m.flash=.3;try{SE("ng")}catch(e){}$("#yzH").textContent=m.hit;break}}});if(m.flash>0)m.flash-=dt}
@@ -3636,8 +3636,8 @@ const sbS=(rtMs,fast,slow,mx)=>mx*Math.max(0,Math.min(1,(slow*1000-rtMs)/((slow-
 function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
-// その時間内で取れる最高点（一の段・最速でミスなし）。最高点の95%以上なら出来100%（上位5%の帯）
-const SB_MAX={cut:3600,kouka:1195,kaga:7100,vname:2900,kotoba:4500,kutani:1680,yuki:2800,ysui:6000,haku:3700,hashigo:1600,kokuin:1900,oden:2200,yuzen:1240,hayashi:2500,toshokan:955,ichiba:1800,koen:820,shobo:3300,bijutsukan:1140,kinpaku:950,kageki:1480,eki:675,shogakko:1175,yosui:790,chaya:960,kenroku:900,shiro:900};
+// 最高点＝「上手な大人が本気で遊んだときの点」（計算の理論値ではなく、人がやって届く上限の目安）。その95%以上で出来100%
+const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1600,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1500,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
 const SB_BASE=Object.fromEntries(Object.entries(SB_MAX).map(([k,v])=>[k,Math.round(v*.95)]));
 // 目標を早く終えたときの「のこり1秒」の点
 const SB_LEFT={koen:10,bijutsukan:2};
