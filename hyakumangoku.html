@@ -410,7 +410,7 @@ body.ipon{overflow:hidden}
 .ktMsg{text-align:center;font-weight:800;margin:4px 0}.ktG{display:grid;gap:4px;max-width:260px;margin:6px auto}.ktC{aspect-ratio:1;border-radius:6px;border:2px solid #5a4a30;padding:0}.ktC.ng{outline:3px solid #ff6a5a;outline-offset:-3px}
 .ktPal{display:flex;gap:4px;margin-top:6px}.ktP{flex:1;color:#fff;font-weight:900;padding:10px 0;border:3px solid transparent;text-shadow:0 1px 2px #000}.ktP.on{border-color:#fff}
 .hyW{display:flex;gap:8px;margin-top:10px}.hyB{flex:1;min-height:110px;font-size:20px;font-weight:900;border:3px solid var(--c);background:#221a12;color:#f6f0e0;border-radius:14px;transition:background .1s}.hyB.lit{background:var(--c);color:#fff}
-.yrBar{display:flex;justify-content:space-between;margin:6px 2px;font-size:14px}.yrBar b{color:#ffd76a}
+.sbPts{font-size:44px;font-weight:900;color:var(--gold2);margin:8px 0 2px}.sbPts small{font-size:18px;margin-left:2px}.sbRes{background:#2a2211;border:1px solid #5a4a22;border-radius:10px;padding:8px 10px;margin:6px 0;font-size:13px}.sbT{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;background:#c9a227;color:#2a1f14;font-weight:900}.yrBar{display:flex;justify-content:space-between;margin:6px 2px;font-size:14px}.yrBar b{color:#ffd76a}
 .yrLog{text-align:center;font-size:15px;min-height:1.6em;margin-top:2px}
 .pkHand{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:10px 0 6px}
 .pkC{position:relative;padding:4px 0 6px;background:#f6f0e0;color:#2a1f14;border:3px solid var(--sc);border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .12s;min-height:96px}
@@ -1241,7 +1241,7 @@ function catBonus(cat,u){const c=CATS[cat];if(!c.max)return 0;const m=umax(cat);
 function harvest(){const L=[],seen={};built().forEach(b=>{const d=bdef(b.id);if(!d||!d.hv||seen[d.id])return;seen[d.id]=1;for(let k=0;k<(d.rep?Math.min(b.lv||1,d.lim):1);k++)L.push(d.hv*HVK*(b.old?.5:1)*(1+bgB(b)))});let sum=L.reduce((s,v)=>s+v,0);  // ★1つごとに同じだけ増える
   if(S.invites>=1)sum+=3;if(S.invites>=10)sum+=5;sum+=1.2*myLv("nogyo")+.5*myLv("chisui");return Math.round(sum*10)/10}
 function upkeep(){return Math.round(built().reduce((s,b)=>s+(b.old||!bdef(b.id)?0:bUp(b)),0)*(1-abFx("sanyo"))*100)/100}
-function mult(kind){let m=1;const map={nyukon:"bunka",game:"sangyo"};if(map[kind])m+=catBonus(map[kind]);if(kind==="invite")m*=((storyToday()||{fx:{}}).fx.invite||1);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=5)m+=.05;if(kind==="quiz"||kind==="nyukon")m+=abFx("chiryaku");if(kind==="game")m+=abFx("kyoyo");return m}
+function mult(kind){let m=1;const map={nyukon:"bunka",game:"sangyo"};if(map[kind])m+=catBonus(map[kind]);if(kind==="invite")m*=((storyToday()||{fx:{}}).fx.invite||1);m+=({quiz:.06*myLv("gakumon"),nyukon:.12*myLv("kogei"),game:.06*myLv("shogyo")}[kind]||0);m+=catBonus("meisho");if(S.invites>=5)m+=.05;if(kind==="quiz"||kind==="nyukon")m+=abFx("chiryaku");if(kind==="game")m+=abFx("kyoyo");if(typeof shobuBonus==="function")m+=shobuBonus();return m}
 function checkRank(){const lv=gatedRank();if(S.rlv==null){S.rlv=lv;S.rlv10=1}if(lv>S.rlv){S.rlv=lv;lotSync();save();S.promo=lv;setTimeout(()=>SE("rank"),300)}}
 function addKoku(n,why,kind){const rem0=S.lock?GOAL-totals().koku:0;n=Math.round(n*(wzOn()?WZ_BONUS:1)*zkMul()*(kind?mult(kind):1)*sakugara().m*storyMul(kind||"all")*10)/10;setTimeout(()=>finMeter(rem0,rem0-n),0);S.koku+=n;S.total=(S.total||0)+n;S.kura+=n;{const r=dayRec();r.inc=Math.round(((r.inc||0)+n)*10)/10}checkRank();save();hd();if(why)toast(`+${f1(n)}石 ${why}`);return n}
 function hd(){$("#hdN").textContent=(S.kura>=1000?fmt(S.kura):f1(S.kura))+"石"}
@@ -1354,6 +1354,7 @@ const HUBI=[
  {s:"ten",ic:"mondaifuda",n:"今日の十問",z:"L",dot:r=>!r.quiz,go:r=>!r.quiz&&"quiz()"},
  {s:"ny",ic:"mato",n:"一問入魂",z:"L",dot:r=>!r.ny,go:r=>!r.ny&&"nyukon()"},
  {s:"mini",ic:"minigame",n:"ミニゲーム",z:"L",dot:r=>r.mini==null},
+ {s:"shobu",ic:"gunbai",n:"きょうの勝負",z:"L",dot:r=>!r.shobu,go:()=>"shobuGo()"},
  {s:"kz",ic:"kzfuda",n:"偉人札",z:"L",rk:1,dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
  {s:"kawara",ic:"kawaraban",n:"かわら版",dot:r=>!r.kawara},
  {s:"meguri",ic:"meguri",n:"めぐりあわせ",dot:r=>r.irr&&!r.irr.done},
@@ -1452,6 +1453,7 @@ function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP)HUB_SEC="";HUB
     <div class="notice" style="margin-top:8px">きのうの正答率 ${20+hash(today()+"y")%35}%（デモ）</div>
   </div>
 
+  ${shobuCard()}
   <div class="card" id="cMini" data-sec="mini">
     <h2 class="row" style="align-items:center;gap:6px">${IC("minigame")} きょうのミニゲーム ${infoBtn("ミニゲームとは",`<p>ミニゲームは${MINI.length}種類あり、<b>1日1種類</b>が日替わりで出ます。1日1回あそべます。</p><p>${MINI.map(m=>m.n).join("・")}</p>`)}</h2>
     ${FUSHIN_TEST?`<div class="mute" style="font-size:12px;margin-bottom:6px">試作中は全種類えらべます（公開版は日替わりで1日1種類）。きょうの1種類：<b>${miniToday().n}</b></div><div class="miniAll">${MINI.map(m=>`<button class="gm1 sm" onclick="miniGo('${m.k}')"><span class="gi">${m.img?`<img src="hyakumangoku_img/${m.img}.webp?v=1114b" alt="">`:IC(m.ic||"minigame","36px")}</span><span><b>${m.n}</b></span></button>`).join("")}</div>`:(()=>{const m=miniToday(),done=miniDone(),got=r.mini;return `<button class="gm1" ${done?"disabled":""} onclick="miniGo()"><span class="gi">${m.img?`<img src="hyakumangoku_img/${m.img}.webp?v=1114b" alt="">`:IC(m.ic||"minigame","48px")}</span><span><b>${m.n}</b><small>${done?"本日 +"+f1(got)+"石（あすは別のゲーム）":FUSHIN_TEST&&got!=null?"本日 +"+f1(got)+"石・試作中はもう一度あそべる":"きょうの1回"}</small></span></button>`})()}
@@ -1767,7 +1769,7 @@ function jibuFinish(){if(J.done)return;J.done=true;clearInterval(J.timer);let go
 let K;
 const deck=()=>shuffle([...KAGA.map(v=>({v,ok:true})),...NOTKAGA.map(v=>({v,ok:false}))]);
 function kaga(){abar.className="abar";app.innerHTML=`<div class="card"><div class="gimg"><img src="hyakumangoku_img/thumb_yasai.webp" alt="加賀野菜"></div><h2>${IC("kaga")} 加賀野菜 仕分け</h2><div class="mute">出てきた野菜が<b>加賀野菜15品目</b>なら<b>右</b>へ、ちがえば<b>左</b>へスワイプ（ボタンでもOK）。${45+(waza("kyoyo",1)?10:0)}秒で何枚さばける？</div><button class="pri" style="margin-top:12px" onclick="kagaStart()">スタート</button><button style="width:100%;margin-top:8px" onclick="home()">やめる</button></div>`}
-function kagaStart(){const T=45+(waza("kyoyo",1)?10:0);K={t:T,ok:0,ng:0,done:false,deck:deck()};
+function kagaStart(sb){const T=45+(waza("kyoyo",1)?10:0);K={t:T,ok:0,ng:0,done:false,deck:deck(),shobu:!!sb};
   app.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between;align-items:center"><h2 style="margin:0">${IC("kaga")} 仕分け</h2><div class="timer" id="tm">${T}</div></div>
   <div class="stage" id="stage"><div class="lane l">${YA("l")} ちがう</div><div class="lane r">加賀野菜 ${YA()}</div><div class="flash" id="flash"></div><div class="veg" id="veg"></div></div>
   <div class="row"><button style="flex:1" onclick="kagaJudge(false)">${YA("l")} ちがう</button><button class="gold" style="flex:1" onclick="kagaJudge(true)">加賀野菜 ${YA()}</button></div>
@@ -1781,7 +1783,7 @@ function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok,f=$("#flash
 function swipe(el){let sx=0,dx=0;el.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;dx=0},{passive:true});
   el.addEventListener("touchmove",e=>{dx=e.touches[0].clientX-sx;el.style.transition="none";el.style.transform=`translateX(calc(-50% + ${dx}px)) rotate(${dx/15}deg)`},{passive:true});
   el.addEventListener("touchend",()=>{if(Math.abs(dx)>70)kagaJudge(dx>0);else{el.style.transition="transform .15s";el.style.transform="translateX(-50%)"}})}
-function kagaFinish(){if(K.done)return;K.done=true;clearInterval(K.timer);const got=addKoku(Math.min(PT.kagaMax,Math.max(0,Math.round((K.ok*1.2-K.ng*.8)/2*10)/10)),"加賀野菜","game");dayRec().kaga=got;dayRec().mini=got;save();const up=abUp("sanyo",GR(got/PT.kagaMax));
+function kagaFinish(){if(K.done)return;K.done=true;clearInterval(K.timer);if(K.shobu){MG={t:0,timers:[]};return shobuEnd(Math.max(0,(K.ok*1.2-K.ng*.8)/2)/PT.kagaMax)}const got=addKoku(Math.min(PT.kagaMax,Math.max(0,Math.round((K.ok*1.2-K.ng*.8)/2*10)/10)),"加賀野菜","game");dayRec().kaga=got;dayRec().mini=got;save();const up=abUp("sanyo",GR(got/PT.kagaMax));
   abar.className="abar on";abar.innerHTML=`<div class="res">正解 ${K.ok} ・ ミス ${K.ng}</div><div class="mute" style="margin-bottom:8px">加賀野菜15品目：${KAGA.map(v=>v[0]).join("・")}</div>${abTxt(up)}<button class="pri" onclick="home()">+${f1(got)}石 ・ ホームへ</button>`}
 
 /* ---------- 共有画像（人物の絵入り） ---------- */
@@ -1995,7 +1997,7 @@ function miniGo(k){const m=(FUSHIN_TEST&&k&&MINI.find(x=>x.k===k))||miniToday();
   MG={i:-1,id:m.k,gk:m.k,lv:Math.min(5,1+Math.floor(RL()/2)),home:true,score:0,t:0,timers:[]};mgPre()}
 function miniEnd(ratio){const m=MINI_CUR||miniToday(),gk=MG.gk;const got=addKoku(Math.round(ratio*DAYMAX.game*10)/10,m.n,"game");const r=dayRec();r.mini=got;save();const up=abUp(m.ab||ABB[gk],GR(ratio));const word=PRAISE.find(x=>ratio>=x[0]);MG=null;hd();
   app.innerHTML=`<div class="card center"><h2>${IC("minigame")} ${m.n}</h2><div class="master big2"><b>${m.who||(MASTER[gk]||{}).who||""}</b><br>「${word?word[2][Math.floor(Math.random()*word[2].length)]:"また挑め"}」</div><div style="font-size:22px;font-weight:900;color:var(--gold2);margin:8px 0">+${f1(got)}石</div>${abTxt(up)}<button class="pri" style="margin-top:10px" onclick="home()">ミニゲームへもどる</button></div>`}
-function mgEnd(ratio){mgClear();ratio=Math.max(0,Math.min(1,ratio));if(MG.home)return miniEnd(ratio);const b=S.town[MG.i],d=bdef(MG.id);
+function mgEnd(ratio){mgClear();if(MG&&MG.shobu)return shobuEnd(ratio);ratio=Math.max(0,Math.min(1,ratio));if(MG.home)return miniEnd(ratio);const b=S.town[MG.i],d=bdef(MG.id);
   const p=PRAISE.find(x=>ratio>=x[0]),eg=EXPG.find(x=>ratio>=x[0]);const gain=Math.round((eg[1]+Math.floor(Math.random()*(eg[2]-eg[1]+1)))*(waza("kyoyo",0)?1.2:1));const abu=abUp(ABB[MG.id],GR(ratio));
   b.exp=(b.exp||0)+gain;let up=false;if(b.exp>=EXP_NEED&&(b.lv||1)<d.lim){b.lv=(b.lv||1)+1;b.exp=0;up=true;setTimeout(()=>SE("rank"),200)}save();
   const word=p[2][Math.floor(Math.random()*p[2].length)];
@@ -3584,6 +3586,38 @@ function hyNew(){const m=MG;m.seq=[...Array(m.L)].map(()=>Math.floor(Math.random
   m.seq.forEach((v,k)=>mnT(()=>hyFlash(v),400+k*m.sp));mnT(()=>{m.lock=0;$("#hyMsg").textContent="同じ順に打とう"},400+m.seq.length*m.sp)}
 function hyTap(i){const m=MG;if(!m||m.ended||m.lock)return;hyFlash(i);if(i===m.seq[m.p]){m.p++;if(m.p===m.seq.length){m.ok++;m.L++;m.lock=1;$("#hyOk").textContent=m.ok;$("#hyMsg").textContent="見事！";mnT(hyNew,900)}}
   else{m.life--;m.lock=1;$("#hyL").textContent=m.life;$("#hyMsg").textContent="ちがう！";try{SE("ng")}catch(e){}if(m.life<=0)return mnT(()=>mnFin(m.ok,m.goal),700);mnT(hyNew,1000)}}
+/* ===================== きょうの勝負（個人スコア） =====================
+   ・ミニゲーム14種類＋普請13種類＝27種類から、毎日1種類（全員同じゲーム・中身は人ごとにランダム）
+   ・いちばん簡単な段（一の段）で、1日1回だけ。やり直しなし
+   ・点数＝出来（割合）×1000 ＋ のこり秒×5（早く終わったほうが上。目標に届いたときだけ）
+   ・結果は翌日0:00に発表。番付に応じて、その日1日の石が増える
+   ※全員の点数を集めるのはサーバー（Cloudflare）につないでから。それまでは番付は見本（デモ）の相手で出す */
+const SHOBU_G=()=>[...MINI.map(m=>({k:m.k,n:m.n,home:1})),...Object.keys(MASTER).map(id=>({k:id,n:MASTER[id].g}))];
+const SHOBU_RW=[["横綱",.20,1],["大関",.20,1],["関脇",.20,1],["小結",.20,0]];
+function shobuDay(d){return Math.floor(dBetween("2026-01-04",d||today()))}
+function shobuToday(d){const G=SHOBU_G(),n=shobuDay(d),cyc=Math.floor(n/G.length),r=rng(hash("shobu"+cyc));const o=G.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return G[o[((n%G.length)+G.length)%G.length]]}
+// 見本（デモ）の相手：その日のゲームごとに100人ぶんの点数
+function shobuDemo(d){const r=rng(hash("sbd"+d));return [...Array(100)].map(()=>Math.round(Math.max(0,Math.min(1.25,.62+(r()+r()+r()-1.5)*.42))*1000+r()*60)).sort((a,b)=>b-a)}
+function shobuRank(d,pts){const L=shobuDemo(d);let k=L.findIndex(x=>pts>x);if(k<0)k=L.length;return {pos:k+1,n:L.length+1}}
+function shobuTitle(pos,n){if(pos<=4)return SHOBU_RW[pos-1][0];if(pos===5)return "前頭筆頭";if(pos/n<=.1)return "前頭";return ""}
+function shobuPrize(pos,n){if(pos<=4)return {b:SHOBU_RW[pos-1][1],tix:SHOBU_RW[pos-1][2]};if(pos/n<=.1)return {b:.15,tix:0};if(pos/n<=.2)return {b:.10,tix:0};return {b:0,tix:0}}
+const shobuYday=()=>{const d=new Date(today()+"T00:00:00+09:00");d.setDate(d.getDate()-1);return d.toISOString().slice(0,10)};
+// きのうの勝負の結果（0:00に発表）→ きょう1日の石の上乗せ
+function shobuRes(){const y=shobuYday(),rec=(S.days||{})[y],sb=rec&&rec.shobu;if(!sb)return null;const rk=shobuRank(y,sb.pts);return {...sb,...rk,title:shobuTitle(rk.pos,rk.n),...shobuPrize(rk.pos,rk.n)}}
+function shobuBonus(){const x=shobuRes();return x?x.b:0}
+function shobuClaim(){const x=shobuRes(),r=dayRec();if(!x||!x.tix||r.sbTix)return;r.sbTix=1;kzSt().tix+=x.tix;save()}
+function shobuGo(){const r=dayRec();if(r.shobu)return shobuView();const g=shobuToday();
+  if(g.k==="kaga"){MINI_CUR=MINI.find(m=>m.k==="kaga");return kagaStart(true)}
+  MG={i:-1,id:g.k,gk:g.k,lv:1,home:!!g.home,shobu:1,score:0,t:0,timers:[]};mgPre()}
+function shobuEnd(raw){const g=shobuToday(),t=MG?MG.t||0:0;const pts=Math.max(0,Math.round(raw*1000))+(raw>=1?Math.max(0,Math.round(t*5)):0);  /* 目標に届いたときだけ、のこり秒を足す */mgClear();MG=null;const r=dayRec();if(!r.shobu){r.shobu={k:g.k,pts};save()}shobuView(true)}
+function shobuView(fresh){const r=dayRec(),g=shobuToday(),sb=r.shobu;hd();
+  app.innerHTML=`<div class="card center"><h2>${IC("gunbai")} きょうの勝負</h2><div class="mute">${g.n}</div>
+  <div class="sbPts">${sb?fmt(sb.pts):"—"}<small>点</small></div><div class="mute">結果発表は あす 0:00</div>
+  <button class="pri" style="margin-top:12px" onclick="home()">${YA("l")} ホームへ</button></div>`;if(fresh)try{SE("rank")}catch(e){}}
+function shobuCard(){const r=dayRec(),g=shobuToday(),x=shobuRes();shobuClaim();
+  return `<div class="card" data-sec="shobu"><h2 class="row" style="align-items:center;gap:6px">${IC("gunbai")} きょうの勝負 <span class="tag">デモ</span></h2>
+  ${x?`<div class="sbRes"><b>きのうの勝負</b>（${(SHOBU_G().find(z=>z.k===x.k)||{}).n||""}） ${fmt(x.pts)}点・${x.pos}位${x.title?`<span class="sbT">${x.title}</span>`:""}${x.b?`<div>きょう1日 石 <b>+${Math.round(x.b*100)}%</b>${x.tix?"・札券 +1枚":""}</div>`:""}</div>`:""}
+  <button class="gm1" ${r.shobu?"":""} onclick="shobuGo()"><span class="gi">${IC("gunbai","48px")}</span><span><b>${g.n}</b><small>${r.shobu?`きょうの点数 ${fmt(r.shobu.pts)}点・発表は あす 0:00`:"一の段で1回だけ"}</small></span></button></div>`}
 
 /* ===== 偉人札を活かす：図鑑の力・問題の助っ人・城下町の奉行 ===== */
 
