@@ -397,7 +397,7 @@ body.ipon{overflow:hidden}
 .kbEnd{text-align:center;font-size:22px;font-weight:900;margin:6px 0}.kbEnd.win{color:#ffd76a}.kbEnd.lose{color:#ff9a8f}
 .mgCv{display:block;width:100%;max-width:360px;margin:6px auto;border-radius:10px;touch-action:none;background:#1c1a18}
 .mgCv{display:block;margin:6px auto;border-radius:10px;background:#111}
-.ysWrap{display:flex;justify-content:center;align-items:flex-start;gap:4px;margin:8px 0}.ysSide{display:flex;flex-direction:column;width:28px}.ysSide>div{display:flex;align-items:center;justify-content:center}.ysSrc{font-size:22px}
+.ysWrap{display:flex;justify-content:center;align-items:flex-start;gap:4px;margin:8px 0}.ysSide{display:flex;flex-direction:column;width:36px}.ysSide>div{display:flex;align-items:center;justify-content:center}.ysSrc{font-size:22px}
 .ysG{display:grid;gap:2px;background:#2a2218;padding:2px;border-radius:8px}.ysT{padding:0;border:0;border-radius:4px;background:#3e3324;display:flex}.ysT svg{width:100%;height:100%;transition:transform .12s}.ysT.wet{background:#24384a}
 .kkQ{text-align:center;margin:6px 0;font-size:16px}.kkMk{font-weight:900;color:#2a2017;opacity:.62;font-size:18px;display:inline-block}.kkMk.big{opacity:1;color:#ffd76a;font-size:28px;margin-left:6px}
 .kkW{display:flex;flex-wrap:wrap;gap:4px;background:#3a3329;padding:6px;border-radius:10px}.kkS{flex-basis:15%;height:46px;padding:0;border:2px solid #4e463a;background:linear-gradient(145deg,#a99c86,#7f7462);display:flex;align-items:center;justify-content:center}.kkS.ok{outline:3px solid #7fd06a}.kkS.ng{outline:3px solid #ff6a5a}
@@ -410,6 +410,14 @@ body.ipon{overflow:hidden}
 .ktMsg{text-align:center;font-weight:800;margin:4px 0}.ktG{display:grid;gap:4px;max-width:260px;margin:6px auto}.ktC{aspect-ratio:1;border-radius:6px;border:2px solid #5a4a30;padding:0}.ktC.ng{outline:3px solid #ff6a5a;outline-offset:-3px}
 .ktPal{display:flex;gap:4px;margin-top:6px}.ktP{flex:1;color:#fff;font-weight:900;padding:10px 0;border:3px solid transparent;text-shadow:0 1px 2px #000}.ktP.on{border-color:#fff}
 .hyW{display:flex;gap:8px;margin-top:10px}.hyB{flex:1;min-height:110px;font-size:20px;font-weight:900;border:3px solid var(--c);background:#221a12;color:#f6f0e0;border-radius:14px;transition:background .1s}.hyB.lit{background:var(--c);color:#fff}
+/* ミニゲームの絵 */
+.ysSrc,.ysDst{width:36px;height:36px;object-fit:contain}.ysG{background:#5a4a30 url(hyakumangoku_img/mg/ys_tile_bg.webp?v=1118) center/96px}.ysT{background:transparent!important;overflow:hidden}.ysT img{width:100%;height:100%;display:block;transition:transform .12s}
+.kkS{background-size:100% 100%!important;background-color:#8f8472}.kkMk{color:#1e1710;opacity:.72;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.hkStage{background-color:#2a2016;background-position:center;background-size:220px 220px;background-repeat:no-repeat}.hkFoil{background-size:100% 100%!important;background-color:transparent;opacity:.95}
+.odShop{display:flex;align-items:center;gap:8px}.odKyaku{width:72px;height:72px;object-fit:contain;flex:none}.odCus{flex:1}
+.odC img{width:22px;height:22px;object-fit:contain}.odPot{background-color:#5a3a22;background-size:100% 100%;background-position:center;padding:14px 12px}.odI{background:rgba(40,26,14,.72)}.odI img{width:44px;height:44px;object-fit:contain}
+.ktPlate{background-size:100% 100%;background-position:center;max-width:300px;margin:6px auto;padding:17%;aspect-ratio:1}.ktPlate .ktG{margin:0 auto}.ktFude{width:18px;height:18px;vertical-align:middle;margin-right:2px;display:none}.ktP.on .ktFude{display:inline-block}
+.hyB{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px}.hyB img{width:72px;height:72px;object-fit:contain}.hyB span{font-size:16px}
 .sbPts{font-size:44px;font-weight:900;color:var(--gold2);margin:8px 0 2px}.sbPts small{font-size:18px;margin-left:2px}.sbRes{background:#2a2211;border:1px solid #5a4a22;border-radius:10px;padding:8px 10px;margin:6px 0;font-size:13px}.sbT{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;background:#c9a227;color:#2a1f14;font-weight:900}.odCus{min-height:30px;font-size:16px;margin:4px 0}.odSay{font-size:20px;color:#ffd76a}.hgPad{position:relative;width:130px;height:130px;margin:8px auto 0;border-radius:50%;background:radial-gradient(#3a3226,#221a12);border:2px solid #c8a46a;touch-action:none}#hgKnob{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#c9a227;box-shadow:0 2px 6px #000}.bzDiv{margin:10px 0 4px;padding:2px 8px;border-left:4px solid #c9a227;font-weight:900;color:var(--gold2);font-size:13px;background:#2a2211}.hyTL{position:relative;height:46px;margin:8px 0;background:#1d1610;border:1px solid #4a3a22;border-radius:10px;overflow:hidden}.hyTk{position:absolute;top:30px;bottom:6px;width:2px;background:#5a4a30}.hyTk.s{top:36px;background:#3a3020}.hyMk{position:absolute;top:8px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid #f6f0e0}.hyCur{position:absolute;top:0;bottom:0;width:3px;margin-left:-1px;background:#ffd76a;box-shadow:0 0 8px #ffd76a}.yrBar{display:flex;justify-content:space-between;margin:6px 2px;font-size:14px}.yrBar b{color:#ffd76a}
 .yrLog{text-align:center;font-size:15px;min-height:1.6em;margin-top:2px}
 .pkHand{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:10px 0 6px}
@@ -1987,11 +1995,11 @@ function mgTimer(sec,onEnd){MG.t=sec;const m=MG;const iv=setInterval(()=>{if(MG!
 const MG_FN={cut:mgYari,vname:mnName,kotoba:mnKotoba,haya:mnHaya,kouka:mnKouka,ysui:mnYosui,kokuin:mnKokuin,yuki:mnYukitsuri,hashigo:mnHashigo,haku:mnHaku,oden:mnOden,kutani:mnKutani,yuzen:mnYuzen,hayashi:mnHayashi,shogakko:mgSan,toshokan:mgNen,kageki:mgNinjadera,ichiba:mgAkinai,koen:mgAwase,shobo:mgHikeshi,bijutsukan:mgDaimyo,eki:mgGyoretsu,kinpaku:mgKinmyaku,yosui:mgShinden,chaya:mgChaki,kenroku:mgIshihakobi,shiro:mgFushinPz};
 function mgStart(){MG.pts=0;MG.t0=sbNow();MG_FN[MG.gk||MG.id]()}
 // ---- ホームのミニゲーム（1日1種類・日替わり） ----
-const MINI=[{k:"cut",n:"加賀野菜スワイプカット",img:"thumb_cut",who:"槍の又左（前田利家）",ab:"tosotsu"},{k:"kouka",n:"校下さがし",ic:"chizu",who:"町年寄",ab:"chiryaku"},{k:"kaga",n:"加賀野菜 仕分け",img:"thumb_kaga",ab:"sanyo"},
- {k:"kutani",n:"九谷五彩ぬり",ic:"gosai",who:"九谷の絵付け師",ab:"kyoyo"},{k:"yuki",n:"雪吊り",ic:"ooyuki",who:"兼六園の庭師",ab:"tosotsu"},{k:"ysui",n:"用水つなぎ",ic:"mizu",who:"用水の番人",ab:"chiryaku"},
- {k:"haku",n:"箔打ち",ic:"hakuuchi",who:"箔打ちの職人",ab:"sanyo"},{k:"kotoba",n:"金沢ことば合わせ",who:"城下の古老",ab:"kyoyo",img:"thumb_kotoba"},{k:"hashigo",n:"加賀鳶はしご乗り",ic:"hikeshi",who:"加賀鳶の頭",ab:"tosotsu"},
- {k:"kokuin",n:"石垣の刻印さがし",ic:"ishigaki",who:"穴太の石工",ab:"chiryaku"},{k:"oden",n:"金沢おでん屋",ic:"ichiba",who:"おでん屋の大将",ab:"sanyo"},{k:"yuzen",n:"友禅流し",ic:"mizu",who:"友禅の染め師",ab:"kyoyo"},
- {k:"vname",n:"加賀野菜 名前当て",img:"thumb_vname",who:"加賀野菜の農家",ab:"sanyo"},{k:"hayashi",n:"素囃子",ic:"taiko",who:"囃子方の師匠",ab:"kyoyo"}];
+const MINI=[{k:"cut",n:"加賀野菜スワイプカット",img:"thumb_cut",who:"槍の又左（前田利家）",ab:"tosotsu"},{k:"kouka",img:"mg/thumb_kouka",n:"校下さがし",ic:"chizu",who:"町年寄",ab:"chiryaku"},{k:"kaga",n:"加賀野菜 仕分け",img:"thumb_kaga",ab:"sanyo"},
+ {k:"kutani",img:"mg/thumb_kutani",n:"九谷五彩ぬり",ic:"gosai",who:"九谷の絵付け師",ab:"kyoyo"},{k:"yuki",img:"mg/thumb_yuki",n:"雪吊り",ic:"ooyuki",who:"兼六園の庭師",ab:"tosotsu"},{k:"ysui",img:"mg/thumb_ysui",n:"用水つなぎ",ic:"mizu",who:"用水の番人",ab:"chiryaku"},
+ {k:"haku",img:"mg/thumb_haku",n:"箔打ち",ic:"hakuuchi",who:"箔打ちの職人",ab:"sanyo"},{k:"kotoba",n:"金沢ことば合わせ",who:"城下の古老",ab:"kyoyo",img:"thumb_kotoba"},{k:"hashigo",img:"mg/thumb_hashigo",n:"加賀鳶はしご乗り",ic:"hikeshi",who:"加賀鳶の頭",ab:"tosotsu"},
+ {k:"kokuin",img:"mg/thumb_kokuin",n:"石垣の刻印さがし",ic:"ishigaki",who:"穴太の石工",ab:"chiryaku"},{k:"oden",img:"mg/thumb_oden",n:"金沢おでん屋",ic:"ichiba",who:"おでん屋の大将",ab:"sanyo"},{k:"yuzen",img:"mg/thumb_yuzen",n:"友禅流し",ic:"mizu",who:"友禅の染め師",ab:"kyoyo"},
+ {k:"vname",n:"加賀野菜 名前当て",img:"thumb_vname",who:"加賀野菜の農家",ab:"sanyo"},{k:"hayashi",img:"mg/thumb_hayashi",n:"素囃子",ic:"taiko",who:"囃子方の師匠",ab:"kyoyo"}];
 function miniToday(){const d=Math.floor(new Date(today()+"T00:00:00+09:00").getTime()/864e5);return MINI[((d%MINI.length)+MINI.length)%MINI.length]}
 function miniDone(){const r=dayRec();return !FUSHIN_TEST&&r.mini!=null}
 let MINI_CUR=null;
@@ -2382,7 +2390,7 @@ function geoIn(pt,rg){let c=false;for(let i=0,j=rg.length-1;i<rg.length;j=i++){c
 function mgGeo(){const lv=MG.lv;MG.R=6;MG.r=0;MG.sc=0;MG.b=geoPrep();MG.z=lv<=2?2.5:2;
   const nM=MG.kOnly?0:[0,4,3,3,2,2][lv],ks=shuffle(Object.keys(KAREA)).slice(0,MG.R-nM).map(n=>({t:"k",n})),ms=shuffle(MEISHO).slice(0,nM).map(m=>({t:"m",n:m[0],m}));MG.qs=shuffle([...ks,...ms]);
   app.innerHTML=`<div class="card">${mgHead(IC("chizu")+(MG.kOnly?" 校下さがし":" 道案内"),90)}<div class="mute">${MG.kOnly?"言われた校下が地図のどこにあるか、":"旅のお方に道をたずねられた。"}<b>地図でその場所をタップ</b>せよ（2本指で拡大・指でずらせる）。近いほど上出来じゃ。</div><div class="geoQ" id="geoQ"></div>
-  <div class="mzbar"><button onclick="geoZoom(-1)">－</button><span id="gzv"></span><button onclick="geoZoom(1)">＋</button></div><div class="geoZ" id="geoZ"><div class="geoIn" id="geoIn"></div></div>${MG.kOnly?`<div class="geoLg"><span style="color:#5aa0d8">━ 川</span><span style="color:#f6f0e0">┅ JR・北陸新幹線</span><span style="color:#f3dc9a">◆ 金沢城公園・金沢駅</span></div>`:`<div class="geoLg"><span style="color:#5aa0d8">━ 川</span><span style="color:#f6f0e0">┅ JR・新幹線</span><span style="color:#7fd06a">━ 北陸道</span><span style="color:#e8a040">━ 環状道路</span><span style="color:#e86a5a">━ 国道8号</span><span style="color:#d8a060">━ 北鉄（浅電・石川線）</span><span class="mute">線は駅・橋・ICなどを結んだ目安</span></div>`}<div class="mute center">得点 <b id="geoN">0</b> / ${MG.R}</div></div>`;
+  <div class="mzbar"><button onclick="geoZoom(-1)">－</button><span id="gzv"></span><button onclick="geoZoom(1)">＋</button></div><div class="geoZ" id="geoZ"${MG.kOnly?` style="background:#3a2f22 url(${MGP("kq_washi")}) center/cover"`:""}><div class="geoIn" id="geoIn"></div></div>${MG.kOnly?`<div class="geoLg"><span style="color:#5aa0d8">━ 川</span><span style="color:#f6f0e0">┅ JR・北陸新幹線</span><span style="color:#f3dc9a">◆ 金沢城公園・金沢駅</span></div>`:`<div class="geoLg"><span style="color:#5aa0d8">━ 川</span><span style="color:#f6f0e0">┅ JR・新幹線</span><span style="color:#7fd06a">━ 北陸道</span><span style="color:#e8a040">━ 環状道路</span><span style="color:#e86a5a">━ 国道8号</span><span style="color:#d8a060">━ 北鉄（浅電・石川線）</span><span class="mute">線は駅・橋・ICなどを結んだ目安</span></div>`}<div class="mute center">得点 <b id="geoN">0</b> / ${MG.R}</div></div>`;
   geoDraw();geoAsk();geoPinch($("#geoZ"));geoZoom(0,true);mgTimer(90,()=>mgEnd(MG.sc/MG.R))}
 function geoDraw(hl,ans){const b=MG.b,lv=MG.lv,P=rg=>rg.map(([lo,la])=>geoXY(b,lo,la).map(v=>v.toFixed(1)).join(",")).join(" "),q=MG.qs[MG.r]||{};
   const KO=MG.kOnly,showB=lv<=4,lab=lv<=2&&!KO;let s=`<svg viewBox="0 0 ${b.W} ${b.H}" class="geoS" id="geoS" onclick="geoTap(event)"><rect width="${b.W}" height="${b.H}" fill="#18261a"/>`;
@@ -3437,6 +3445,10 @@ function kzDeal5(){let d=[];try{d=JSON.parse(localStorage.getItem("hgKz")||"[]")
   if(!MG_DRY)try{localStorage.setItem("hgKz",JSON.stringify(d))}catch(e){}return out.map(i=>KZ_KOTOBA[i])}
 
 function mnFin(sc,goal){const m=MG;if(!m||m.ended)return;m.ended=1;mgEnd(Math.max(0,sc)/goal)}
+// ミニゲームの絵（MUSE作 2026-11-18）
+const MGP=n=>"hyakumangoku_img/mg/"+n+".webp?v=1118",MGIC={};
+function mgI(n){let i=MGIC[n];if(!i){i=new Image();i.src=MGP(n);MGIC[n]=i}return i}
+const mgOk=i=>i&&i.complete&&i.naturalWidth>0;
 /* ===================== ホームのミニゲーム（2週間で14種類） 新しい10種類 ===================== */
 // 共通：MG.lv（1〜5）でむずかしさが上がる。終わりは mnFin(得点, 目標) → mgEnd(割合)
 const mnT=(fn,ms)=>{const m=MG,t=setTimeout(()=>{if(MG===m&&!m.ended)fn()},ms);m.timers.push(t);return t};
@@ -3470,10 +3482,11 @@ function ysFlow(){const m=MG,n=m.n,wet=new Set();let r=m.s,c=0,din=3,ok=false;
   return {wet,ok}}
 const ysWet=()=>MG&&MG.g?ysFlow().wet.size:0,ysDone=()=>ysFlow().ok;
 function ysDraw(){const m=MG,n=m.n,f=ysFlow(),cs=Math.floor(Math.min(290,window.innerWidth-90)/n);
-  const tile=(t,w)=>{const col=w?"#4aa3e8":"#8a7350";return `<svg viewBox="0 0 100 100" style="transform:rotate(${t.r*90}deg)">${t.k==="S"?`<line x1="50" y1="0" x2="50" y2="100" stroke="${col}" stroke-width="24"/>`:`<path d="M50 0 L50 50 L100 50" fill="none" stroke="${col}" stroke-width="24" stroke-linejoin="round"/>`}</svg>`};
-  $("#ysW").innerHTML=`<div class="ysWrap"><div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.s?`<span class="ysSrc">💧</span>`:""}</div>`).join("")}</div>
+  // 絵：まっすぐ（横向き）は90度足す、曲がり（上と右）はそのまま
+  const tile=(t,w)=>`<img src="${MGP((t.k==="S"?"ys_tile_s":"ys_tile_l")+(w?"_w":""))}" alt="" style="transform:rotate(${t.r*90+(t.k==="S"?90:0)}deg)">`;
+  $("#ysW").innerHTML=`<div class="ysWrap"><div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.s?`<img class="ysSrc" src="${MGP("ys_src")}" alt="用水の取り入れ口">`:""}</div>`).join("")}</div>
    <div class="ysG" style="grid-template-columns:repeat(${n},${cs}px)">${m.g.map((t,i)=>`<button class="ysT${f.wet.has(i)?" wet":""}" style="height:${cs}px" onclick="ysRot(${i})">${tile(t,f.wet.has(i))}</button>`).join("")}</div>
-   <div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.e?`<span class="ysDst">${IC("jo","26px")}</span>`:""}</div>`).join("")}</div></div>`;
+   <div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.e?`<img class="ysDst" src="${MGP("ys_jo")}" alt="城下">`:""}</div>`).join("")}</div></div>`;
   if(f.ok){m.lock=1;m.ok++;sbOk(300,200,10,40);m.k++;$("#ysOk").textContent=m.ok;try{SE("ok")}catch(e){}mnT(()=>{m.lock=0;ysNew()},700)}}
 function ysRot(i){const m=MG;if(!m||m.ended||m.lock)return;m.g[i].r=(m.g[i].r+1)%4;ysDraw()}
 
@@ -3484,9 +3497,9 @@ function mnKokuin(){const lv=MG.lv;Object.assign(MG,{ok:0,ng:0,goal:[0,6,7,8,9,1
   <div class="yrBar"><span>見つけた <b id="kkOk">0</b></span><span>まちがい <b id="kkNg">0</b></span></div><div class="kkQ" id="kkQ"></div><div class="kkW" id="kkW"></div></div>`;
   kkNew();mgTimer(45,()=>mnFin(MG.ok-MG.ng*.5,MG.goal))}
 function kkNew(){const m=MG,N=30,g=KK_GR[Math.floor(Math.random()*KK_GR.length)],tg=g[Math.floor(Math.random()*g.length)],oth=g.filter(x=>x!==tg);m.tg=tg;
-  const ans=Math.floor(Math.random()*N);$("#kkQ").innerHTML=`この刻印をさがせ <b class="kkMk big">${tg}</b>`;
+  const ans=Math.floor(Math.random()*N);$("#kkQ").innerHTML=`この刻印をさがせ <b class="kkMk big" data-noruby="1">${tg}</b>`;
   $("#kkW").innerHTML=[...Array(N)].map((_,i)=>{const w=60+Math.random()*40,rot=(Math.random()*6-3).toFixed(1),br=`${30+Math.random()*20}% ${30+Math.random()*20}% ${30+Math.random()*20}% ${30+Math.random()*20}%`,mk=i===ans?tg:oth[Math.floor(Math.random()*oth.length)];
-    return `<button class="kkS" style="flex-grow:${w};border-radius:${br};transform:rotate(${rot}deg);filter:brightness(${(.8+Math.random()*.35).toFixed(2)})" onclick="kkTap(this,${i})"><span class="kkMk" data-noruby="1" style="transform:rotate(${Math.floor(Math.random()*50-25)}deg)">${mk}</span></button>`}).join("");m.ans=ans;sbT0()}
+    return `<button class="kkS" style="flex-grow:${w};border-radius:${br};background-image:url(${MGP("kk_ishi"+(1+Math.floor(Math.random()*3)))});transform:rotate(${rot}deg);filter:brightness(${(.8+Math.random()*.35).toFixed(2)})" onclick="kkTap(this,${i})"><span class="kkMk" data-noruby="1" style="transform:rotate(${Math.floor(Math.random()*50-25)}deg)">${mk}</span></button>`}).join("");m.ans=ans;sbT0()}
 function kkTap(b,i){const m=MG;if(!m||m.ended||m.lock)return;if(i===m.ans){m.ok++;sbOk(60,40,1.5,8);b.classList.add("ok");m.lock=1;try{SE("ok")}catch(e){}mnT(()=>{m.lock=0;kkNew()},350)}else{m.ng++;sbAdd(-30);b.classList.add("ng");try{SE("ng")}catch(e){}mnT(()=>b.classList.remove("ng"),400)}
   $("#kkOk").textContent=m.ok;$("#kkNg").textContent=m.ng}
 
@@ -3508,13 +3521,13 @@ function ytTie(i){const m=MG,b=m.br[i];if(b.brk)return;const urgent=b.ld>=.5;if(
 function ytStep(dt){const m=MG;m.el+=dt;m.gust-=dt;if(m.gust<=0){m.gust=3+Math.random()*3;const k=Math.floor(Math.random()*m.br.length);m.br[k].rate+=.06;m.gk=k;m.gT=1.2}if(m.gT>0)m.gT-=dt;
   m.br.forEach(b=>{if(b.brk>0){b.brk-=dt;if(b.brk<=0){b.brk=0;b.ld=0;b.rp=0}return}b.rp=Math.max(0,b.rp-m.decay*dt);const r=b.rate*(1+m.el/40)*(b.rp>.15?.12:1);b.ld=Math.min(1,b.ld+r*dt);if(b.rp>.15)b.ld=Math.max(0,b.ld-.08*dt);b.rate=Math.max(.05,b.rate-.01*dt);
     if(b.ld>=1&&b.rp<=.15){b.brk=3;m.lost++;sbAdd(-150);try{SE("ng")}catch(e){}$("#ytL").textContent=m.lost}})}
-function ytDraw(){const m=MG,x=m.cx2,W=m.W,H=m.H;x.fillStyle="#1c2a38";x.fillRect(0,0,W,H);
+function ytDraw(){const m=MG,x=m.cx2,W=m.W,H=m.H;const bg=mgI("yt_bg");if(mgOk(bg))x.drawImage(bg,0,0,W,H);else{x.fillStyle="#1c2a38";x.fillRect(0,0,W,H)}
   x.fillStyle="rgba(255,255,255,.7)";for(let i=0;i<40;i++){const sx=(i*53+m.el*20*(1+i%3))%W,sy=(i*97+m.el*60*(1+i%2))%H;x.fillRect(sx,sy,2,2)}
-  x.strokeStyle="#6b4a2a";x.lineWidth=10;x.beginPath();x.moveTo(m.cx,H);x.lineTo(m.cx,m.cy);x.stroke();
-  m.br.forEach(b=>{x.strokeStyle=b.brk?"#5a3a2a":"#3f6b3a";x.lineWidth=7;x.beginPath();x.moveTo(m.cx,b.y+20);x.quadraticCurveTo((m.cx+b.x)/2,b.y+(b.brk?40:b.ld*26),b.x,b.y+(b.brk?50:b.ld*30));x.stroke();
-    const by=b.y+(b.brk?50:b.ld*30);x.fillStyle=b.brk?"#5a3a2a":"#2f5a2a";x.beginPath();x.arc(b.x,by,15,0,7);x.fill();
-    if(!b.brk){x.fillStyle="#f6f8ff";x.beginPath();x.ellipse(b.x,by-10,14*b.ld+2,6*b.ld+1,0,0,7);x.fill();
-      x.fillStyle="#111";x.fillRect(b.x-16,by+18,32,5);x.fillStyle=b.ld>.75?"#ff8f84":b.ld>.5?"#ffd76a":"#e8eef6";x.fillRect(b.x-16,by+18,32*b.ld,5)}
+  const sh=mgI("yt_shin");if(mgOk(sh))x.drawImage(sh,m.cx-13,m.cy-14,26,H-m.cy+14);else{x.strokeStyle="#6b4a2a";x.lineWidth=10;x.beginPath();x.moveTo(m.cx,H);x.lineTo(m.cx,m.cy);x.stroke()}
+  m.br.forEach(b=>{const by=b.y+(b.brk?50:b.ld*30),dx=b.x-m.cx,len=Math.abs(dx)+34,y0=b.y+20,ei=mgI(b.brk?"yt_eda_ore":b.ld<.34?"yt_eda0":b.ld<.67?"yt_eda1":"yt_eda2");
+    // 枝の絵：根もとを芯柱に、先を枝先に（左の枝は左右反転）。雪が重いほど垂れる
+    if(mgOk(ei)){x.save();x.translate(m.cx,y0);if(dx<0)x.scale(-1,1);x.rotate(Math.atan2(by-y0,Math.abs(dx)));x.drawImage(ei,-6,-len*.35,len,len*.7);x.restore()}
+    if(!b.brk){x.fillStyle="#111";x.fillRect(b.x-16,by+18,32,5);x.fillStyle=b.ld>.75?"#ff8f84":b.ld>.5?"#ffd76a":"#e8eef6";x.fillRect(b.x-16,by+18,32*b.ld,5)}
     if(b.rp>.15&&!b.brk){x.strokeStyle=`rgba(232,208,150,${.35+.65*b.rp})`;x.lineWidth=1.6;x.beginPath();x.moveTo(m.cx,m.cy);x.lineTo(b.x,by-4);x.stroke()}
     if(b.brk){x.fillStyle="#ff8f84";x.font="bold 12px sans-serif";x.textAlign="center";x.fillText("折れた",b.x,by-20)}});
   x.fillStyle="#ffd76a";x.font="bold 22px sans-serif";x.textAlign="center";x.fillText("★",m.cx,m.cy+8);
@@ -3538,15 +3551,15 @@ function hgStep(dt){const m=MG;m.el+=dt;if(m.shout>0)m.shout-=dt;if(m.down>0){m.
   const amp=m.waza?1.4:1;["x","y"].forEach(k=>{const a=m["a"+k],p=m["p"+k];m["w"+k]+=(Math.sin(a)*1.5+(Math.random()-.5)*m.wob*1.5*amp+p*3.2)*dt;m["w"+k]*=.985;m["a"+k]+=m["w"+k]*dt});
   const tilt=Math.hypot(m.ax,m.ay);m.as+=tilt*dt;m.at+=dt;if(tilt<.35){m.up+=dt;sbAdd(40*dt*(m.waza?2:1))}$("#hgP").textContent=Math.floor(m.pts||0);
   if(tilt>1){m.fall++;m.down=1.2;m.waza=0;m.nextW=3;try{SE("ng")}catch(e){}}$("#hgUp").textContent=Math.floor(m.up)}
-function hgDraw(){const m=MG,x=m.cx,W=m.W,H=m.H,bx=W/2-30,by=H-22,L=200;x.clearRect(0,0,W,H);x.fillStyle="#1b2a3a";x.fillRect(0,0,W,H);x.fillStyle="#3a3024";x.fillRect(0,by,W,22);
-  const ok=Math.hypot(m.ax,m.ay)<.35,fell=m.down>0;
-  // 支える人たち（鳶口で支える）と纏
-  for(let i=-1;i<=1;i+=2){x.strokeStyle="#8a6a3a";x.lineWidth=3;x.beginPath();x.moveTo(bx+i*46,by);x.lineTo(bx+i*12,by-90);x.stroke();x.fillStyle="#24364f";x.fillRect(bx+i*46-7,by-30,14,30);x.fillStyle="#f0d2a8";x.beginPath();x.arc(bx+i*46,by-37,7,0,7);x.fill()}
-  x.strokeStyle="#c8a46a";x.lineWidth=3;x.beginPath();x.moveTo(bx+80,by);x.lineTo(bx+80,by-120);x.stroke();x.fillStyle="#f3efe6";x.fillRect(bx+70,by-138,20,20);for(let k=0;k<6;k++){x.fillStyle=k%2?"#e8e2d4":"#fff";x.fillRect(bx+70+(k%3)*7+Math.sin(m.el*6+k)*2,by-118,5,18)}
-  if(m.shout>0){x.fillStyle="#ffd76a";x.font="bold 16px sans-serif";x.textAlign="center";x.fillText("ヤーッ！",bx-50,by-60);x.fillText("ヤーッ！",bx+60,by-150)}
+function hgDraw(){const m=MG,x=m.cx,W=m.W,H=m.H,bx=W/2-30,by=H-22,L=165;x.clearRect(0,0,W,H);x.fillStyle="#1b2a3a";x.fillRect(0,0,W,H);x.fillStyle="#3a3024";x.fillRect(0,by,W,22);
+  const ok=Math.hypot(m.ax,m.ay)<.35,fell=m.down>0,dr=(n,X,Y,w,h)=>{const i=mgI(n);if(mgOk(i))x.drawImage(i,X,Y,w,h)};
+  // 纏と、鳶口ではしごを支える人たち
+  dr("hg_matoi",bx+82,by-170,56,168);dr("hg_sasae_l",bx-86,by-110,80,107);dr("hg_sasae_r",bx+6,by-110,80,107);
+  if(m.shout>0){x.fillStyle="#ffd76a";x.font="bold 16px sans-serif";x.textAlign="center";x.fillText("ヤーッ！",bx-60,by-122);x.fillText("ヤーッ！",bx+60,by-182)}
   x.save();x.translate(bx,by);x.rotate(fell?Math.sign(m.ax||1)*1.2:m.ax);const sc=1-Math.max(-.35,Math.min(.35,m.ay))*.6;x.scale(1,sc);
-  x.strokeStyle="#c8a46a";x.lineWidth=6;x.beginPath();x.moveTo(-14,0);x.lineTo(-14,-L);x.moveTo(14,0);x.lineTo(14,-L);x.stroke();x.lineWidth=4;for(let y=-20;y>-L;y-=22){x.beginPath();x.moveTo(-14,y);x.lineTo(14,y);x.stroke()}
-  x.translate(0,-L);x.fillStyle="#2a3f6a";if(m.waza==="腹亀"||m.waza==="背亀"){x.fillRect(-24,-14,48,12)}else{x.fillRect(-9,-34,18,28)}x.fillStyle="#f0d2a8";x.beginPath();x.arc(m.waza==="腹亀"||m.waza==="背亀"?-28:0,m.waza==="腹亀"||m.waza==="背亀"?-10:-44,9,0,7);x.fill();x.restore();
+  dr("hg_hashigo",-25,-L-6,50,L+6);
+  x.translate(0,-L);const lie=m.waza==="腹亀"||m.waza==="背亀";
+  dr({"遠見":"hg_tobi_tomi","腹亀":"hg_tobi_harakame","背亀":"hg_tobi_sekame","鯱":"hg_tobi_shachi"}[m.waza]||"hg_tobi_tachi",-46,lie?-64:-86,92,92);x.restore();
   // 水準器（前後左右のかたむき）
   const lx=W-56,ly=60,R=40;x.strokeStyle="#c8a46a";x.lineWidth=2;x.beginPath();x.arc(lx,ly,R,0,7);x.stroke();x.strokeStyle="#7fd06a";x.beginPath();x.arc(lx,ly,R*.35,0,7);x.stroke();
   x.fillStyle=ok?"#7fd06a":"#ff8f84";x.beginPath();x.arc(lx+Math.max(-1,Math.min(1,m.ax))*R,ly+Math.max(-1,Math.min(1,m.ay))*R,6,0,7);x.fill();
@@ -3556,29 +3569,29 @@ function hgDraw(){const m=MG,x=m.cx,W=m.W,H=m.H,bx=W/2-30,by=H-22,L=200;x.clearR
 function mnHaku(){const lv=MG.lv,bpm=[0,76,84,92,100,108][lv],iv=60000/bpm,N=Math.floor((30000-1500)/iv)+1;Object.assign(MG,{iv,N,pt:0,miss:0,k:0,t0:0,hit:new Set()});
   app.innerHTML=`<div class="card">${mgHead(IC("hakuuchi")+" 箔打ち",30)}<div class="mute">輪が<b>まん中の円に重なった瞬間</b>に「打つ」を押す。輪は<b>だんだん消えていく</b>ので、リズムを体で覚えて打ちつづけよう。ずれが小さいほど高得点。</div>
   <div class="yrBar"><span>のびた <b id="hkP">0</b></span><span>破れ <b id="hkM">0</b></span></div>
-  <div class="hkStage"><div class="hkFoil" id="hkFoil"></div><div class="hkRing" id="hkRing"></div><div class="hkTgt"></div><div class="hkMsg" id="hkMsg">よーい</div></div>
+  <div class="hkStage" style="background-image:url(${MGP("hk_kami")})"><div class="hkFoil" id="hkFoil" style="background-image:url(${MGP("hk_haku")})"></div><div class="hkRing" id="hkRing"></div><div class="hkTgt"></div><div class="hkMsg" id="hkMsg">よーい</div></div>
   <button class="gold" id="hkB" style="width:100%;min-height:64px;font-size:20px">打つ</button></div>`;
   mnHit($("#hkB"),hkTap);MG.t0=performance.now()+1500;const m=MG;
   const loop=()=>{if(MG!==m||m.ended)return;const t=performance.now()-m.t0,ph=((t%m.iv)+m.iv)%m.iv/m.iv,r=$("#hkRing");
     if(r&&t>-m.iv){r.style.transform=`translate(-50%,-50%) scale(${(2.2-1.2*ph).toFixed(3)})`;const f=Math.max(0,Math.min(1,(t/m.iv-m.N*.25)/(m.N*.4)));r.style.opacity=t<0?.4:(1-f).toFixed(3);const tg=$(".hkTgt");if(tg)tg.style.opacity=(1-f*.75).toFixed(3)}
     if(t>m.iv*(m.N-.5))return mnFin(m.pt,m.N*2*.75);m.raf=requestAnimationFrame(loop)};m.raf=requestAnimationFrame(loop);
   mgTimer(30,()=>mnFin(MG.pt,MG.N*2*.75))}
-function hkMsg(t,c){const e=$("#hkMsg");if(e){e.textContent=t;e.className="hkMsg "+c}}
+function hkMsg(t,c){const e=$("#hkMsg");if(e){e.textContent=t;e.className="hkMsg "+c}const f=$("#hkFoil");if(f&&c==="ng"){f.style.backgroundImage=`url(${MGP("hk_yaburi")})`;clearTimeout(MG.hkT);MG.hkT=setTimeout(()=>{if(f)f.style.backgroundImage=`url(${MGP("hk_haku")})`},350)}}
 function hkTap(){const m=MG;if(!m||m.ended)return;const t=performance.now()-m.t0;if(t<-m.iv/2)return;const k=Math.round(t/m.iv),d=Math.abs(t-k*m.iv);if(k<0||k>m.N-1||m.hit.has(k)){m.miss++;sbAdd(-20);hkMsg("破れ！","ng");$("#hkM").textContent=m.miss;return}
   m.hit.add(k);const sd=t-k*m.iv,gp=100*Math.max(0,1-d/170);sbAdd(gp);const zs=`${sd<0?"はやい":"おそい"} ${(d/1000).toFixed(3)}秒`;if(d<90){m.pt+=2;hkMsg(`見事 +${gp.toFixed(1)}（${zs}）`,"ok")}else if(d<170){m.pt+=1;hkMsg(`よし +${gp.toFixed(1)}（${zs}）`,"")}else{m.miss++;hkMsg(`破れ！（${zs}）`,"ng");try{SE("ng")}catch(e){}}
   try{tone(d<170?660:220,0,.06,"square",.06)}catch(e){}$("#hkP").textContent=m.pt;$("#hkM").textContent=m.miss;const f=$("#hkFoil");if(f){const s=40+m.pt*2;f.style.width=f.style.height=Math.min(170,s)+"px"}}
 
 /* --- 金沢おでん屋：お客さんの注文を聞いて覚え、同じ具を出す --- */
-const OD=[["車麩","#d8b070"],["玉子","#f3e3a0"],["こんにゃく","#8a8478"],["大根","#f0e6c8"],["かに面","#c8503a"],["ばい貝","#7a6a58"],["赤巻","#e8c8b8"],["牛すじ","#8a4a3a"]];
+const OD=[["車麩","#d8b070","od_kurumafu"],["玉子","#f3e3a0","od_tamago"],["こんにゃく","#8a8478","od_konnyaku"],["大根","#f0e6c8","od_daikon"],["かに面","#c8503a","od_kanimen"],["ばい貝","#7a6a58","od_baigai"],["赤巻","#e8c8b8","od_akamaki"],["牛すじ","#8a4a3a","od_gyusuji"]];
 function mnOden(){const lv=MG.lv;Object.assign(MG,{ok:0,ng:0,goal:[0,7,8,9,10,11][lv],mx:[0,4,5,5,5,6][lv]});
   app.innerHTML=`<div class="card">${mgHead(IC("ichiba")+" 金沢おでん屋",40)}<div class="mute">お客さんが<b>注文を1つずつ言う</b>。消えたら、鍋から<b>同じ具</b>を出そう（順番はどれからでもよい）。</div>
-  <div class="yrBar"><span>出した皿 <b id="odOk">0</b></span><span>まちがい <b id="odNg">0</b></span></div><div class="odCus" id="odCus"></div><div class="odOrd" id="odOrd"></div>
-  <div class="odPot">${OD.map((o,i)=>`<button class="odI" onclick="odTap(${i},this)"><i style="background:${o[1]}"></i><span>${o[0]}</span></button>`).join("")}</div></div>`;
+  <div class="yrBar"><span>出した皿 <b id="odOk">0</b></span><span>まちがい <b id="odNg">0</b></span></div><div class="odShop"><img class="odKyaku" src="${MGP("od_kyaku")}" alt="お客さん"><div class="odCus" id="odCus"></div></div><div class="odOrd" id="odOrd"></div>
+  <div class="odPot" style="background-image:url(${MGP("od_nabe")})">${OD.map((o,i)=>`<button class="odI" onclick="odTap(${i},this)"><img src="${MGP(o[2])}" alt=""><span>${o[0]}</span></button>`).join("")}</div></div>`;
   mnT(odNew,500);mgTimer(40,()=>mnFin(MG.ok-MG.ng*.3,MG.goal))}
 function odNew(){const m=MG,n=1+Math.floor(Math.random()*m.mx);m.ord=[];for(let k=0;k<n;k++){let v;do v=Math.floor(Math.random()*OD.length);while(k&&v===m.ord[k-1]);m.ord.push(v)}m.got=[];m.lock=1;$("#odOrd").innerHTML="";
   m.ord.forEach((v,k)=>mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span><b class="odSay" style="animation:none">${"①②③④⑤⑥"[k]}「${OD[v][0]}！」</b>`;const e=$("#odCus .odSay");void e.offsetWidth;e.style.animation=""},k*750));
   mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span>「<b>${n}品</b>たのむよ」`;m.lock=0;sbT0();odShow()},n*750)}
-function odShow(){const m=MG;$("#odOrd").innerHTML=m.got.map(i=>`<b class="odC"><i style="background:${OD[i][1]}"></i>${OD[i][0]}</b>`).join("")+`<span class="mute">（${m.got.length}/${m.ord.length}）</span>`}
+function odShow(){const m=MG;$("#odOrd").innerHTML=m.got.map(i=>`<b class="odC"><img src="${MGP(OD[i][2])}" alt="">${OD[i][0]}</b>`).join("")+`<span class="mute">（${m.got.length}/${m.ord.length}）</span>`}
 function odTap(i,b){const m=MG;if(!m||m.ended||m.lock)return;m.got.push(i);odShow();if(m.got.length<m.ord.length)return;m.lock=1;
   const need=m.ord.slice().sort().join(),have=m.got.slice().sort().join(),okAll=need===have;
   if(okAll){m.ok++;sbOk(40*m.ord.length+40,40,.6*m.ord.length,2.5*m.ord.length);try{SE("ok")}catch(e){}$("#odOk").textContent=m.ok;$("#odCus").innerHTML=`<b style="color:#7fd06a">「うまい！」</b>`}
@@ -3589,8 +3602,8 @@ function odTap(i,b){const m=MG;if(!m||m.ended||m.lock)return;m.got.push(i);odSho
 const KT_C=[["緑","#2e7d4f"],["黄","#e2b53a"],["紺青","#23408f"],["紫","#6b3f8c"],["赤","#b83b2e"]];
 function mnKutani(){const lv=MG.lv;Object.assign(MG,{n:lv>=3?4:3,sc:0,r:0,see:[0,3500,3200,4000,3600,3200][lv],pen:0});
   app.innerHTML=`<div class="card">${mgHead(IC("gosai")+" 九谷五彩ぬり",60)}<div class="mute">九谷焼の<b>五彩</b>（緑・黄・紺青・紫・赤）。見本をおぼえて、消えたら同じに塗ろう。</div>
-  <div class="yrBar"><span>合った色 <b id="ktSc">0</b></span><span id="ktR"></span></div><div class="ktMsg" id="ktMsg"></div><div class="ktG" id="ktG"></div>
-  <div class="ktPal" id="ktPal">${KT_C.map((c,i)=>`<button class="ktP${i===0?" on":""}" style="background:${c[1]}" onclick="ktPen(${i})">${c[0]}</button>`).join("")}</div><button class="gold" id="ktGo" style="width:100%;margin-top:8px" onclick="ktCheck()">できた</button></div>`;
+  <div class="yrBar"><span>合った色 <b id="ktSc">0</b></span><span id="ktR"></span></div><div class="ktMsg" id="ktMsg"></div><div class="ktPlate" style="background-image:url(${MGP("kt_sara")})"><div class="ktG" id="ktG"></div></div>
+  <div class="ktPal" id="ktPal">${KT_C.map((c,i)=>`<button class="ktP${i===0?" on":""}" style="background:${c[1]}" onclick="ktPen(${i})"><img class="ktFude" src="${MGP("kt_fude")}" alt="">${c[0]}</button>`).join("")}</div><button class="gold" id="ktGo" style="width:100%;margin-top:8px" onclick="ktCheck()">できた</button></div>`;
   ktNew();mgTimer(60,()=>mnFin(MG.sc,MG.n*MG.n*2.2))}
 function ktNew(){const m=MG,N=m.n*m.n;m.r++;m.ans=[...Array(N)].map(()=>Math.floor(Math.random()*5));m.cur=Array(N).fill(-1);m.show=1;m.lock=1;$("#ktR").textContent=`${m.r}枚目`;
   $("#ktMsg").textContent="見本をおぼえよう";ktDraw();mnT(()=>{m.show=0;m.lock=0;sbT0();$("#ktMsg").textContent="同じに塗ろう";ktDraw()},m.see)}
@@ -3614,16 +3627,18 @@ function yzStep(dt){const m=MG;m.el+=dt*1000;m.x+=(m.tx-m.x)*Math.min(1,dt*10);m
   m.next-=dt*1000;if(m.next<=0){m.next=m.every*(.7+Math.random()*.6);m.rk.push({x:20+Math.random()*(m.W-40),y:-40,r:10+Math.random()*10,a:Math.random()*3})}
   m.rk.forEach(r=>r.y+=m.sp*dt*(1+m.el/90000));m.rk=m.rk.filter(r=>r.y<m.H+30);
   m.rk.forEach(r=>{if(r.hitd)return;for(let k=0;k<m.trail.length;k+=3){const y=m.hy+k*7;if(Math.abs(r.y-y)<r.r&&Math.abs(r.x-m.trail[k])<r.r+12){r.hitd=1;m.hit++;m.wash=Math.max(0,m.wash-8);sbAdd(-50);m.flash=.3;try{SE("ng")}catch(e){}$("#yzH").textContent=m.hit;break}}});if(m.flash>0)m.flash-=dt}
-function yzDraw(){const m=MG,x=m.cx,W=m.W,H=m.H;x.fillStyle="#2d5f86";x.fillRect(0,0,W,H);
-  const g=x.createLinearGradient(m.lane-40,0,m.lane+40,0);g.addColorStop(0,"rgba(160,220,255,0)");g.addColorStop(.5,"rgba(170,230,255,.35)");g.addColorStop(1,"rgba(160,220,255,0)");x.fillStyle=g;x.fillRect(m.lane-40,0,80,H);
+function yzDraw(){const m=MG,x=m.cx,W=m.W,H=m.H;const kw=mgI("yz_kawa");if(mgOk(kw)){const h=W*kw.naturalHeight/kw.naturalWidth,o=(m.el*m.sp/1000)%h;x.drawImage(kw,0,o-h,W,h);x.drawImage(kw,0,o,W,h)}else{x.fillStyle="#2d5f86";x.fillRect(0,0,W,H)}
+  const g=x.createLinearGradient(m.lane-40,0,m.lane+40,0);g.addColorStop(0,"rgba(120,210,255,.15)");g.addColorStop(.5,"rgba(200,240,255,.55)");g.addColorStop(1,"rgba(120,210,255,.15)");x.fillStyle=g;x.fillRect(m.lane-40,0,80,H);x.strokeStyle="rgba(255,255,255,.85)";x.lineWidth=2;x.setLineDash([8,6]);x.beginPath();x.moveTo(m.lane-40,0);x.lineTo(m.lane-40,H);x.moveTo(m.lane+40,0);x.lineTo(m.lane+40,H);x.stroke();x.setLineDash([]);
   x.strokeStyle="rgba(255,255,255,.18)";x.lineWidth=2;for(let i=0;i<9;i++){const y=((m.el*m.sp/1000+i*60)%(H+60))-30;x.beginPath();x.moveTo(20+i*31%W,y);x.quadraticCurveTo(40+i*31%W,y+12,60+i*31%W,y);x.stroke()}
-  m.rk.forEach(r=>{if(r.y<r.r){x.fillStyle="rgba(255,210,120,.9)";x.beginPath();x.moveTo(r.x-9,2);x.lineTo(r.x+9,2);x.lineTo(r.x,14);x.fill()}});m.rk.forEach(r=>{x.save();x.translate(r.x,r.y);x.rotate(r.a);x.fillStyle=r.hitd?"#5a4a3a":"#7a5a3a";x.fillRect(-r.r*1.4,-r.r*.35,r.r*2.8,r.r*.7);x.restore()});
-  const cols=["#c0303a","#e8a03a","#2e7d4f","#23408f","#6b3f8c"],dull=1-m.wash/100;for(let k=0;k<m.trail.length;k++){const y=m.hy+k*7;x.fillStyle=cols[Math.floor(k/9)%5];x.globalAlpha=.9;x.fillRect(m.trail[k]-11,y-4,22,8);x.fillStyle=`rgba(200,190,170,${(dull*.75).toFixed(2)})`;x.fillRect(m.trail[k]-11,y-4,22,8)}x.globalAlpha=1;
-  x.fillStyle="#3a2a1a";x.fillRect(m.x-18,m.hy-14,36,10);x.fillStyle=m.inL?"#bfe8ff":"#f6f0e0";x.font="bold 13px sans-serif";x.textAlign="center";x.fillText(m.wash>=100?"洗い上がり！":m.inL?"よく洗えている":"きれいな筋へ",W/2,22);
+  m.rk.forEach(r=>{if(r.y<r.r){x.fillStyle="rgba(255,210,120,.9)";x.beginPath();x.moveTo(r.x-9,2);x.lineTo(r.x+9,2);x.lineTo(r.x,14);x.fill()}});m.rk.forEach(r=>{x.save();x.translate(r.x,r.y);x.rotate(r.a);const ri=mgI(r.a>1.5?"yz_ryuboku2":"yz_ryuboku1");if(r.hitd)x.globalAlpha=.55;if(mgOk(ri))x.drawImage(ri,-r.r*1.6,-r.r*.65,r.r*3.2,r.r*1.3);else{x.fillStyle="#7a5a3a";x.fillRect(-r.r*1.4,-r.r*.35,r.r*2.8,r.r*.7)}x.restore()});
+  // 反物：絵を細く切って流れの跡にそって並べる。糊が残っているぶん「糊つき」の絵を重ねる
+  const tm=mgI("yz_tanmono"),tn=mgI("yz_tanmono_nori"),dull=1-m.wash/100,N=m.trail.length;
+  for(let k=0;k<N;k++){const y=m.hy+k*7;if(mgOk(tm)){const sh=tm.naturalHeight/36,sy=k*sh;x.globalAlpha=1;x.drawImage(tm,0,sy,tm.naturalWidth,sh,m.trail[k]-14,y-4,28,8);if(mgOk(tn)&&dull>0){x.globalAlpha=dull;x.drawImage(tn,0,sy,tn.naturalWidth,sh,m.trail[k]-14,y-4,28,8)}}else{x.fillStyle="#c0303a";x.fillRect(m.trail[k]-11,y-4,22,8)}}x.globalAlpha=1;
+  {const te=mgI("yz_te");if(mgOk(te))x.drawImage(te,m.x-32,m.hy-46,64,51)}x.fillStyle="rgba(20,30,40,.6)";x.fillRect(W/2-70,8,140,22);x.fillStyle=m.inL?"#bfe8ff":"#f6f0e0";x.font="bold 13px sans-serif";x.textAlign="center";x.fillText(m.wash>=100?"洗い上がり！":m.inL?"よく洗えている":"きれいな筋へ",W/2,22);
   if(m.flash>0){x.fillStyle=`rgba(255,80,60,${m.flash})`;x.fillRect(0,0,W,H)}}
 
 /* --- 素囃子：太鼓・鼓・笛の「順番」と「リズム」を聞いて覚え、同じように打つ --- */
-const HY_I=[["太鼓","#b8432e"],["鼓","#c9a227"],["笛","#3a7fb8"]];
+const HY_I=[["太鼓","#b8432e","hy_taiko"],["鼓","#c9a227","hy_tsuzumi"],["笛","#3a7fb8","hy_fue"]];
 function hySnd(i){const a=acGet();if(!a)return;const t=a.currentTime,out=a.createGain();out.gain.value=.9;out.connect(a.destination);
   const noise=(d,f,q,v)=>{const b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),c=b.getChannelData(0);for(let k=0;k<c.length;k++)c[k]=Math.random()*2-1;const s=a.createBufferSource();s.buffer=b;const bp=a.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f;bp.Q.value=q;const g=a.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(bp).connect(g).connect(out);s.start(t);s.stop(t+d)};
   if(i===0){const o=a.createOscillator(),g=a.createGain();o.type="sine";o.frequency.setValueAtTime(110,t);o.frequency.exponentialRampToValueAtTime(48,t+.45);g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(.001,t+.6);o.connect(g).connect(out);o.start(t);o.stop(t+.62);noise(.08,400,1,.5)}
@@ -3633,9 +3648,9 @@ function mnHayashi(){const lv=MG.lv;Object.assign(MG,{L:[0,3,3,4,4,5][lv],ok:0,l
   app.innerHTML=`<div class="card">${mgHead(IC("taiko")+" 素囃子",60)}<div class="mute">金沢素囃子の囃子方になろう。<b>太鼓・鼓・笛</b>の<b>順番とリズム</b>を聞いて覚え、同じように打つ。下の帯の<b>線が印に重なるとき</b>が打つ時。「いち・に・さん」のあとの印から打ち始めよう。</div>
   <div class="yrBar"><span>得点 <b id="hyP">0</b></span><span>できた節 <b id="hyOk">0</b></span><span>のこり <b id="hyL">3</b></span></div><div class="ktMsg" id="hyMsg"></div>
   <div class="hyTL" id="hyTL"></div>
-  <div class="hyW">${HY_I.map((h,i)=>`<button class="hyB" id="hy${i}" style="--c:${h[1]}">${h[0]}</button>`).join("")}</div></div>`;
+  <div class="hyW">${HY_I.map((h,i)=>`<button class="hyB" id="hy${i}" style="--c:${h[1]}"><img src="${MGP(h[2])}" alt=""><span>${h[0]}</span></button>`).join("")}</div></div>`;
   HY_I.forEach((_,i)=>mnHit($("#hy"+i),()=>hyTap(i)));mnT(hyNew,700);mgTimer(60,()=>mnFin(MG.ok,MG.goal))}
-function hyFlash(i){const b=$("#hy"+i);if(b){b.classList.add("lit");setTimeout(()=>b.classList.remove("lit"),200)}try{hySnd(i)}catch(e){}}
+function hyFlash(i){const b=$("#hy"+i);if(b){const im=b.querySelector("img");b.classList.add("lit");if(im)im.src=MGP(HY_I[i][2]+"_on");setTimeout(()=>{b.classList.remove("lit");if(im)im.src=MGP(HY_I[i][2])},200)}try{hySnd(i)}catch(e){}}
 function hyTick(){try{tone(1000,0,.025,"square",.022)}catch(e){}}
 function hyClick(){try{tone(1600,0,.03,"square",.05);tone(1200,.02,.03,"square",.04)}catch(e){}}
 // 帯（タイムライン）：拍の目もりと、音の印。listen=色つき、input=灰色（順番は覚える）
