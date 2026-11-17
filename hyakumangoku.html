@@ -123,7 +123,7 @@ hr{border:0;border-top:1px solid #2a2318;margin:12px 0}
 .mzbar{display:flex;gap:6px;align-items:center;justify-content:center;margin:8px 0 4px}.mzbar button{padding:6px 14px}.mzbar>span{min-width:52px;text-align:center;font-weight:800;color:var(--gold2)}
 .mapz{overflow:auto;border-radius:12px;background:#141a10;max-height:62vh;margin:0 -6px;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}.mapin{min-width:100%}
 .mrow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:transparent;border-bottom:1px solid #2a2318;border-radius:0;padding:8px 2px}.mrow .name{flex:1;font-weight:700}.mrow .name small{display:block;color:var(--mute);font-weight:400;font-size:11px}.mrow .pt{font-weight:800;color:var(--gold2);font-size:14px}.mrow.me{background:#241d12}.mrow.sel{outline:1px solid var(--gold)}
-.nowfx{color:#9fd48a;font-weight:800;font-size:13px;margin-top:2px}.rk{margin:4px 0}.pkoku{font-size:30px;font-weight:900;color:var(--gold2);line-height:1.1;margin:2px 0}.pkoku small{font-size:15px;margin-left:2px}.rkRoadB{margin-top:4px;padding:4px 10px;font-size:12px}.rkRd{border:1px solid #4a3d22;border-radius:8px;padding:7px 9px;margin:6px 0}.rkRd.done{opacity:.6}.rkRd.now{border-color:#d8b45a;background:#2a2211}.rkRdH{display:flex;align-items:center;gap:6px}.rkRdK{margin-left:auto;color:var(--gold2);font-weight:800}.rkRd .mute{font-size:12px;margin-top:3px}.promo{background:linear-gradient(#3a2e12,#241d12);border-color:#d8b45a}.cb small{font-size:11px;line-height:1.35;margin-top:2px}
+.nowfx{color:#9fd48a;font-weight:800;font-size:13px;margin-top:2px}.rk{margin:4px 0}.kqTd{width:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px;justify-content:center}.kqTd small{width:100%;font-size:12px}.kqAr{margin-top:12px}.kqAr>b{font-size:14px;color:var(--gold2)}.kqGr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}.kqGr button{padding:8px 4px;font-size:14px}.kqGr button.me{border-color:#d8b45a;color:#ffd76a}.pkoku{font-size:30px;font-weight:900;color:var(--gold2);line-height:1.1;margin:2px 0}.pkoku small{font-size:15px;margin-left:2px}.rkRoadB{margin-top:4px;padding:4px 10px;font-size:12px}.rkRd{border:1px solid #4a3d22;border-radius:8px;padding:7px 9px;margin:6px 0}.rkRd.done{opacity:.6}.rkRd.now{border-color:#d8b45a;background:#2a2211}.rkRdH{display:flex;align-items:center;gap:6px}.rkRdK{margin-left:auto;color:var(--gold2);font-weight:800}.rkRd .mute{font-size:12px;margin-top:3px}.promo{background:linear-gradient(#3a2e12,#241d12);border-color:#d8b45a}.cb small{font-size:11px;line-height:1.35;margin-top:2px}
 .master{background:#241d12;border-left:4px solid var(--gold);border-radius:8px;padding:10px 12px;margin:10px 0;text-align:left;font-size:15px}.master.big2{font-size:19px;text-align:center;border-left:0;border-top:4px solid var(--gold)}
 .lvup{background:linear-gradient(#5a4210,#3a2a0a);color:#ffe08a;border-radius:10px;padding:10px;font-weight:900;font-size:17px;margin-top:8px}.dan{font-family:"DotGothic16",sans-serif;color:var(--gold2);font-size:15px;background:#2a2318;border-radius:8px;padding:1px 8px}
 .sanT,.sanS{text-align:center;font-size:20px;margin:6px 0}.sanT b{font-family:"DotGothic16",sans-serif;font-size:40px;color:var(--gold2)}.sanS.over{color:#ff6a5c}
@@ -1334,13 +1334,12 @@ const HUBI=[
  {s:"kz",ic:"kzfuda",n:"偉人札",z:"L",rk:1,dot:()=>{const z=kzSt();return !z.starter||z.free!==today()}},
  {s:"kawara",ic:"kawaraban",n:"かわら版",dot:r=>!r.kawara},
  {s:"meguri",ic:"meguri",n:"めぐりあわせ",dot:r=>r.irr&&!r.irr.done},
- {s:"town",ic:"jokamachi",n:"城下町",go:()=>"town()"},
+ {s:"town",ic:"jokamachi",n:"城下町",z:"L",go:()=>"town()"},
  {s:"sg",ic:"saikoro",n:"すごろく",rk:2,dot:()=>typeof sgLeft==="function"&&sgLeft()>0&&!FUSHIN_TEST,go:()=>"sgOpen()"},
  {s:"fuku",ic:"oboe",n:"復習の間",sub:()=>fukuDay()?"きょう開いています":"土・日だけ",dim:()=>!fukuDay(),dot:r=>fukuDay()&&!r.fuku,go:r=>fukuDay()&&!r.fuku&&"fuku()"},
  {s:"naisei",ic:"naisei",n:"内政",rk:2,go:()=>"naisei()"},
  {s:"map",ic:"chizu",n:"陣地図",go:()=>"mapView()"},
- {s:"kq",ic:"kouka",n:"わが校下",go:()=>`kqPop(S.kouka)`},
- {s:"kqd",ic:"kouka_ichiran",n:"きょうの校下",go:()=>`kqPop(kqDailyK())`},
+ {s:"kqd",ic:"kouka_ichiran",n:"校下紹介",dot:r=>!r.kqd,go:()=>"kqList()"},
  {s:"story",ic:"nenpyo",n:"できごと",z:"S"},
  {s:"age",ic:"nendai",n:"年代別",z:"S"},
  {s:"toia",ic:"fumi",n:"問い合わせ",z:"S"},
@@ -1358,7 +1357,7 @@ function hubBuild(){const r=dayRec(),secs={};app.querySelectorAll("[data-sec]").
   g.innerHTML=`<button class="hubBar" onclick="secOpen('all')"><span>${IC("ineho")} ${GOAL-t.koku>0&&GOAL-t.koku<=FIN_REM?`決着週間 のこり<b>${fmt(GOAL-t.koku)}石</b>`:`みんなで百万石 <b>${(Math.min(100,t.koku/GOAL*100)).toFixed(1)}%</b>`}</span><span>${S.kouka} <b>${myI+1}位</b>${rkMv(S.kouka,myI)}</span></button>
   ${secs.ab?`<button class="hubBar" onclick="secOpen('ab')"><span>${IC("noryoku")} 能力</span><span class="mute">${ab}</span></button>`:""}
   ${secs.ledger?`<button class="hubBar" onclick="secOpen('ledger')"><span>${IC("chobo")} 石の出入り</span><span class="mute">きょう +${inc}石</span></button>`:""}
-  ${[HUBI.filter(x=>hubHas(x,secs)&&x.z!=="S"),HUBI.filter(x=>hubHas(x,secs)&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const lkd=x.rk&&!(RL()>=x.rk);if(lkd)x={...x,sub:()=>"🔒"+TITLES[x.rk][1]+"で開く",dot:null,go:null};const go=x.go&&x.go(r),nM=L.reduce((a,y)=>a+((y.z||"M")==="L"?2:1),0),rem=nM%4,wide=!gi&&rem&&(x.z||"M")==="M"&&xi===L.length-1;return `<button class="hubI z${x.z||"M"}${wide?" zW":""}${x.dim&&x.dim()?" hubDim":""}${lkd?" hubLock":""}"${lkd?" disabled":""} style="${wide?`grid-column:span ${5-rem}`:""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.sub&&x.sub()?`<small class="hubSub" data-noruby>${x.sub()}</small>`:""}${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
+  ${[HUBI.filter(x=>hubHas(x,secs)&&x.z!=="S"),HUBI.filter(x=>hubHas(x,secs)&&x.z==="S")].map((L,gi)=>`<div class="hubGrid${gi?" hubGS":""}">${L.map((x,xi)=>{const lkd=x.rk&&!(RL()>=x.rk);if(lkd)x={...x,sub:()=>"🔒"+TITLES[x.rk][1]+"で開く",dot:null,go:null};const go=x.go&&x.go(r),nM=L.reduce((a,y)=>a+((y.z||"M")==="L"?2:1),0),rem=nM%4,isM=y=>(y.z||"M")==="M",wide=!gi&&isM(x)&&((rem===3&&xi===L.length-1)||(rem===2&&xi>=L.length-2&&isM(L[L.length-1])&&isM(L[L.length-2])));return `<button class="hubI z${x.z||"M"}${wide?" zW":""}${x.dim&&x.dim()?" hubDim":""}${lkd?" hubLock":""}"${lkd?" disabled":""} style="${wide?"grid-column:span 2":""}" onclick="${go?go.replace(/"/g,"&quot;"):`secOpen('${x.s}')`}">${IC(x.ic,x.z==="L"?"54px":x.z==="S"?"28px":"38px")}<span data-noruby>${x.n}</span>${x.sub&&x.sub()?`<small class="hubSub" data-noruby>${x.sub()}</small>`:""}${x.dot&&x.dot(r)?'<i class="hubDot"></i>':""}</button>`}).join("")}</div>`).join("")}`;
   const prof=app.querySelector(".card.prof");if(prof)prof.after(g);else app.prepend(g);if(secs.inv)app.append(secs.inv)}
 function secOpen(s){HUB_SEC=s;HUB_KEEP=1;home();window.scrollTo(0,0)}
 /* ---------- 画面：ホーム ---------- */
@@ -3476,7 +3475,15 @@ function kqInfo(k,full){const v=KZK[k];if(!v)return "";const H=KZH[k]||[];
   const hin=full&&H.length?`<div class="kqH"><b>🚨 避難所</b><small>（金沢市指定・令和8年7月1日現在／地震・津波・洪水・土砂のとき使えるか）</small>${H.map(([n,ky,mk])=>`<div class="kqHr">${ky?'<span class="kqKy">拠点</span>':""}${n}<span class="kqMk">${[...mk].map((c,i)=>`${KQ_DZ[i]}${KQ_MK[c]||c}`).join(" ")}</span></div>`).join("")}<div class="kqS">開いているかは災害のたびに変わります。避難の前に市の最新情報で確かめてください。</div></div>`:"";
   return `${v.d?`<div class="kqD">${v.d}</div>`:""}${nums}${story}${v.m.length?`<div class="kqT">おもな町：${v.m.map(x=>x[0]).join("・")}</div>`:""}${hin}
   <a class="kwL" href="https://kanazawa-marutto.jp/#kouka" target="_blank" rel="noopener">金沢情報サイト「金沢まるっと」で校下を調べる</a>`}
-function kqPop(k){infoPop({title:`${k}校下`,body:kqInfo(k,true)})}
+function kqPop(k,back){infoPop({title:`${k}校下`,body:kqInfo(k,true)+(back?`<button class="pri" style="width:100%;margin-top:10px" onclick="kqList()">${YA("l")} 校下の一覧へ</button>`:"")})}
+// 校下紹介：61校下の一覧。きょうの校下は見ると+1石（1日1回）
+const KQ_AR=["中央","東部・城南","南部","西部","北部"];
+function kqList(){const d=kqDailyK(),r=dayRec(),ks=Object.keys(KZK);
+  infoPop({title:"校下紹介",body:`<button class="gold kqTd" onclick="kqToday()">${IC("makimono")} きょうの校下：<b>${d}校下</b><small>${r.kqd?"見ました ✓":"見ると +1石"}</small></button>
+  ${KZK[S.kouka]?`<button class="pri" style="width:100%;margin-top:8px" onclick="kqPop(S.kouka,1)">${IC("kouka")} わが校下：<b>${S.kouka}校下</b></button>`:""}
+  ${KQ_AR.map(a=>{const L=ks.filter(k=>KZK[k].a===a);return L.length?`<div class="kqAr"><b>${a}</b><div class="kqGr">${L.map(k=>`<button class="${k===S.kouka?"me":""}" onclick="kqPop('${k}',1)">${k}</button>`).join("")}</div></div>`:""}).join("")}`})}
+function kqToday(){const r=dayRec(),d=kqDailyK();if(!r.kqd){r.kqd=1;const g=gain(1,"きょうの校下");save();toast("きょうの校下を見た "+g)}kqPop(d,1);hubBuildSafe()}
+function hubBuildSafe(){try{if(VIEW==="home"&&!HUB_SEC)home()}catch(e){}}
 function kqCard(){if(!S.lock||!KZK[S.kouka])return "";const k=S.kouka;
   return `<div class="card kqc"><h2>${IC("makimono")} わが校下の巻 <small>${k}校下</small></h2>
   <details class="kqDet"><summary>わが校下のこと・避難所を見る</summary>${kqInfo(k,true)}</details></div>`}
