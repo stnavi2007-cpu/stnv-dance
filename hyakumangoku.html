@@ -3565,9 +3565,9 @@ function mnOden(){const lv=MG.lv;Object.assign(MG,{ok:0,ng:0,goal:[0,7,8,9,10,11
   <div class="yrBar"><span>出した皿 <b id="odOk">0</b></span><span>まちがい <b id="odNg">0</b></span></div><div class="odCus" id="odCus"></div><div class="odOrd" id="odOrd"></div>
   <div class="odPot">${OD.map((o,i)=>`<button class="odI" onclick="odTap(${i},this)"><i style="background:${o[1]}"></i><span>${o[0]}</span></button>`).join("")}</div></div>`;
   mnT(odNew,500);mgTimer(40,()=>mnFin(MG.ok-MG.ng*.3,MG.goal))}
-function odNew(){const m=MG,n=1+Math.floor(Math.random()*m.mx);m.ord=[...Array(n)].map(()=>Math.floor(Math.random()*OD.length));m.got=[];m.lock=1;$("#odOrd").innerHTML="";
-  m.ord.forEach((v,k)=>mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span><b class="odSay">「${OD[v][0]}！」</b>`},k*500));
-  mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span>「<b>${n}品</b>たのむよ」`;m.lock=0;sbT0();odShow()},n*500)}
+function odNew(){const m=MG,n=1+Math.floor(Math.random()*m.mx);m.ord=[];for(let k=0;k<n;k++){let v;do v=Math.floor(Math.random()*OD.length);while(k&&v===m.ord[k-1]);m.ord.push(v)}m.got=[];m.lock=1;$("#odOrd").innerHTML="";
+  m.ord.forEach((v,k)=>mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span><b class="odSay" style="animation:none">${"①②③④⑤⑥"[k]}「${OD[v][0]}！」</b>`;const e=$("#odCus .odSay");void e.offsetWidth;e.style.animation=""},k*750));
+  mnT(()=>{$("#odCus").innerHTML=`<span class="mute">お客さん：</span>「<b>${n}品</b>たのむよ」`;m.lock=0;sbT0();odShow()},n*750)}
 function odShow(){const m=MG;$("#odOrd").innerHTML=m.got.map(i=>`<b class="odC"><i style="background:${OD[i][1]}"></i>${OD[i][0]}</b>`).join("")+`<span class="mute">（${m.got.length}/${m.ord.length}）</span>`}
 function odTap(i,b){const m=MG;if(!m||m.ended||m.lock)return;m.got.push(i);odShow();if(m.got.length<m.ord.length)return;m.lock=1;
   const need=m.ord.slice().sort().join(),have=m.got.slice().sort().join(),okAll=need===have;
@@ -3651,7 +3651,7 @@ function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
 // 最高点＝「上手な大人が本気で遊んだときの点」（計算の理論値ではなく、人がやって届く上限の目安）。その95%以上で出来100%
-const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1600,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1500,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
+const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1600,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1300,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
 const SB_BASE=Object.fromEntries(Object.entries(SB_MAX).map(([k,v])=>[k,Math.round(v*.95)]));
 // 目標を早く終えたときの「のこり1秒」の点
 const SB_LEFT={koen:10,bijutsukan:2};
