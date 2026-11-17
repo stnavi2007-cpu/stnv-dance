@@ -411,7 +411,7 @@ body.ipon{overflow:hidden}
 .ktPal{display:flex;gap:4px;margin-top:6px}.ktP{flex:1;color:#fff;font-weight:900;padding:10px 0;border:3px solid transparent;text-shadow:0 1px 2px #000}.ktP.on{border-color:#fff}
 .hyW{display:flex;gap:8px;margin-top:10px}.hyB{flex:1;min-height:110px;font-size:20px;font-weight:900;border:3px solid var(--c);background:#221a12;color:#f6f0e0;border-radius:14px;transition:background .1s}.hyB.lit{background:var(--c);color:#fff}
 /* ミニゲームの絵 */
-.ysSrc,.ysDst{width:36px;height:36px;object-fit:contain}.ysG{background:#5a4a30 url(hyakumangoku_img/mg/ys_tile_bg.webp?v=1118) center/96px}.ysT{background:transparent!important;overflow:hidden}.ysT img{width:100%;height:100%;display:block;transition:transform .12s}
+.ysSrc,.ysDst{width:36px;height:36px;object-fit:contain}.ysG{background:#5a4a30 url(hyakumangoku_img/mg/ys_tile_bg.webp?v=1118b) center/96px}.ysT{background:transparent!important;overflow:hidden}.ysT img{width:100%;height:100%;display:block;transition:transform .12s}
 .kkS{background-size:100% 100%!important;background-color:#8f8472}.kkMk{color:#1e1710;opacity:.72;text-shadow:0 1px 0 rgba(255,255,255,.35)}
 .hkStage{background-color:#2a2016;background-position:center;background-size:220px 220px;background-repeat:no-repeat}.hkFoil{background-size:100% 100%!important;background-color:transparent;opacity:.95}
 .odShop{display:flex;align-items:center;gap:8px}.odKyaku{width:72px;height:72px;object-fit:contain;flex:none}.odCus{flex:1}
@@ -3446,7 +3446,7 @@ function kzDeal5(){let d=[];try{d=JSON.parse(localStorage.getItem("hgKz")||"[]")
 
 function mnFin(sc,goal){const m=MG;if(!m||m.ended)return;m.ended=1;mgEnd(Math.max(0,sc)/goal)}
 // ミニゲームの絵（MUSE作 2026-11-18）
-const MGP=n=>"hyakumangoku_img/mg/"+n+".webp?v=1118",MGIC={};
+const MGP=n=>"hyakumangoku_img/mg/"+n+".webp?v=1118b",MGIC={};
 function mgI(n){let i=MGIC[n];if(!i){i=new Image();i.src=MGP(n);MGIC[n]=i}return i}
 const mgOk=i=>i&&i.complete&&i.naturalWidth>0;
 /* ===================== ホームのミニゲーム（2週間で14種類） 新しい10種類 ===================== */
