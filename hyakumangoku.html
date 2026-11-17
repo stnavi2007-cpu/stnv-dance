@@ -3626,6 +3626,7 @@ function mnHayashi(){const lv=MG.lv;Object.assign(MG,{L:[0,3,3,4,4,5][lv],ok:0,l
   <div class="hyW">${HY_I.map((h,i)=>`<button class="hyB" id="hy${i}" style="--c:${h[1]}">${h[0]}</button>`).join("")}</div></div>`;
   HY_I.forEach((_,i)=>mnHit($("#hy"+i),()=>hyTap(i)));mnT(hyNew,700);mgTimer(60,()=>mnFin(MG.ok,MG.goal))}
 function hyFlash(i){const b=$("#hy"+i);if(b){b.classList.add("lit");setTimeout(()=>b.classList.remove("lit"),200)}try{hySnd(i)}catch(e){}}
+function hyTick(){try{tone(1000,0,.025,"square",.022)}catch(e){}}
 function hyClick(){try{tone(1600,0,.03,"square",.05);tone(1200,.02,.03,"square",.04)}catch(e){}}
 // 帯（タイムライン）：拍の目もりと、音の印。listen=色つき、input=灰色（順番は覚える）
 function hyTL(show,cur){const m=MG,tot=m.at[m.at.length-1]+m.bt,el=$("#hyTL");if(!el)return;const X=t=>(4+t/tot*92).toFixed(1)+"%";
@@ -3633,9 +3634,11 @@ function hyTL(show,cur){const m=MG,tot=m.at[m.at.length-1]+m.bt,el=$("#hyTL");if
   h+=m.at.map((t,k)=>`<b class="hyMk${k<m.p&&!show?" done":""}" style="left:${X(t)};background:${show?HY_I[m.seq[k]][1]:k<m.p?HY_I[m.tapI[k]][1]:"#777"}"></b>`).join("");
   h+=`<i class="hyCur" id="hyCur" style="left:${cur==null?"-10%":X(cur)}"></i>`;el.innerHTML=h}
 function hyRun(t0,dur,fn){const m=MG;const step=()=>{if(MG!==m||m.ended)return;const t=sbNow()-t0;const c=$("#hyCur"),tot=m.at[m.at.length-1]+m.bt;if(c)c.style.left=(4+Math.max(0,Math.min(t,tot))/tot*92).toFixed(1)+"%";if(t<dur)m.raf=requestAnimationFrame(step);else fn&&fn()};m.raf=requestAnimationFrame(step)}
-function hyNew(){const m=MG,G=[1,1,.5,1.5,2];m.seq=[...Array(m.L)].map(()=>Math.floor(Math.random()*3));let s=0;m.at=m.seq.map((_,k)=>k?(s+=G[Math.floor(Math.random()*G.length)]*m.bt):0);m.p=0;m.tapI=[];m.lock=1;m.inT0=0;
+function hyNew(){const m=MG,G=[1,1,.5,1.5,2];m.seq=[...Array(m.L)].map(()=>Math.floor(Math.random()*3));let s=0;m.at=m.seq.map((_,k)=>k?(s+=G[Math.floor(Math.random()*G.length)]*m.bt):0);m.p=0;m.tapI=[];m.lock=1;m.inT0=0;const rd=m.rd=(m.rd||0)+1;
   $("#hyMsg").textContent="よく聞いて…";hyTL(true,null);const t0=sbNow()+400;m.seq.forEach((v,k)=>mnT(()=>hyFlash(v),400+m.at[k]));mnT(()=>hyRun(t0,m.at[m.at.length-1]+m.bt/2),400);
-  const end=400+m.at[m.at.length-1]+m.bt;
+  const end=400+Math.ceil((m.at[m.at.length-1]+m.bt)/m.bt)*m.bt,stop=end+3*m.bt+m.at[m.at.length-1]+m.bt*2;
+  // うらで拍のメトロノーム（聞くときも打つときもずっと）。合図「いち・に・さん」の拍は合図の音だけ
+  for(let t=400;t<=stop;t+=m.bt){if(t>=end&&t<end+3*m.bt)continue;mnT(()=>{if(MG===m&&!m.ended&&m.rd===rd)hyTick()},t)}
   // いち・に・さん（拍子木）→ 次の拍から打つ
   ["いち","に","さん"].forEach((w,k)=>mnT(()=>{hyClick();$("#hyMsg").textContent=w;if(k===0)hyTL(false,0)},end+k*m.bt));
   mnT(()=>{m.lock=0;m.inT0=sbNow();$("#hyMsg").textContent="打て！";hyRun(m.inT0,m.at[m.at.length-1]+m.bt*2,()=>{if(MG===m&&!m.ended&&!m.lock&&m.p<m.seq.length)hyFail("間に合わなかった")})},end+3*m.bt)}
