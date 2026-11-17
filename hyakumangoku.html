@@ -3503,36 +3503,55 @@ function kkNew(){const m=MG,N=30,g=KK_GR[Math.floor(Math.random()*KK_GR.length)]
 function kkTap(b,i){const m=MG;if(!m||m.ended||m.lock)return;if(i===m.ans){m.ok++;sbOk(60,40,1.5,8);b.classList.add("ok");m.lock=1;try{SE("ok")}catch(e){}mnT(()=>{m.lock=0;kkNew()},350)}else{m.ng++;sbAdd(-30);b.classList.add("ng");try{SE("ng")}catch(e){}mnT(()=>b.classList.remove("ng"),400)}
   $("#kkOk").textContent=m.ok;$("#kkNg").textContent=m.ng}
 
-/* --- 雪吊り：芯柱のてっぺんから枝へ縄を引いて、雪の重みで枝が折れないよう守る --- */
-// 雪が積もると枝が重くなる（白いゲージ）。縄が張ってある枝は重くなりにくい。縄は風でだんだんゆるむ。
-// 芯柱のてっぺん（★）から枝の先まで指でなぞると縄が張れる。危ない枝ほど早く張ると高得点。
-function mnYukitsuri(){const lv=MG.lv,W=320,H=330,cx=160,cy=40,n=7;const br=[...Array(n)].map((_,i)=>{const a=Math.PI*(.12+.76*i/(n-1));return {x:cx-Math.cos(a)*140,y:cy+60+Math.sin(a)*190,ld:Math.random()*.3,rp:0,rate:.05+Math.random()*.05,brk:0}});
-  Object.assign(MG,{W,H,cx,cy,br,drag:null,ok:0,lost:0,el:0,gust:0,last:0,decay:[0,.09,.1,.11,.12,.13][lv]});
-  app.innerHTML=`<div class="card">${mgHead(IC("ooyuki")+" 雪吊り",40)}<div class="mute">兼六園の松に大雪。<b>芯柱のてっぺん（★）から枝の先まで指でなぞって</b>縄を張れ。白いゲージが満タンになる前に張らないと枝が折れる。縄は風でゆるむので張り直そう。</div>
-  <div class="yrBar"><span>守った回数 <b id="ytOk">0</b></span><span>折れた枝 <b id="ytL">0</b></span></div><canvas id="ytC" class="mgCv" style="width:100%;max-width:320px;aspect-ratio:${W}/${H};touch-action:none"></canvas></div>`;
-  const c=$("#ytC");MG.cx2=mgCanvas("ytC",W,H);const m=MG;
-  const dn=e=>{e.preventDefault();const [x,y]=mgPt(c,e,W,H);if(Math.hypot(x-m.cx,y-m.cy)<46)m.drag=[x,y]};
-  const mv=e=>{e.preventDefault();if(m.drag)m.drag=mgPt(c,e,W,H)};
-  const up=e=>{e.preventDefault();if(!m.drag)return;const [x,y]=m.drag;m.drag=null;let bi=-1,bd=1e9;m.br.forEach((b,i)=>{const d=Math.hypot(b.x-x,b.y-y);if(d<bd){bd=d;bi=i}});if(bi>=0&&bd<52)ytTie(bi)};
-  c.addEventListener("touchstart",dn,{passive:false});c.addEventListener("touchmove",mv,{passive:false});c.addEventListener("touchend",up,{passive:false});c.addEventListener("mousedown",dn);c.addEventListener("mousemove",mv);c.addEventListener("mouseup",up);
+/* --- 雪吊り（縄投げ） --- */
+function mnYukitsuri(){const lv=MG.lv,W=320,H=330;
+  Object.assign(MG,{W,H,cx:W/2,cy:34,br:[],ok:0,lost:0,el:0,last:0,rope:null,aim:null,tree:0,
+    snow:[0,.045,.05,.055,.06,.065][lv],sway:[0,4,6,8,10,12][lv],guide:[0,14,11,9,7,5][lv]});
+  app.innerHTML=`<div class="card">${mgHead(IC("ooyuki")+" 雪吊り",40)}<div class="mute">兼六園の松に大雪。芯柱のてっぺんから<b>枝先の輪へ縄を投げて</b>かけよう。画面を<b>指で引っぱって離す</b>と、引いた反対向きに縄が飛ぶ（強く引くほど遠く）。<b>輪の真ん中に近いほど・早いほど高得点</b>。かけていない枝は雪で垂れていき、白いゲージが満タンになると折れる。</div>
+  <div class="yrBar"><span>得点 <b id="ytP">0</b></span><span>かけた縄 <b id="ytOk">0</b></span><span>折れた枝 <b id="ytL">0</b></span></div><canvas id="ytC" class="mgCv" style="width:100%;max-width:320px;aspect-ratio:${W}/${H};touch-action:none"></canvas></div>`;
+  const c=$("#ytC");MG.cx2=mgCanvas("ytC",W,H);const m=MG;ytTree();
+  const pt=e=>{const t=e.changedTouches&&e.changedTouches.length?e.changedTouches[0]:e;const b=c.getBoundingClientRect();return [(t.clientX-b.left)/b.width*W,(t.clientY-b.top)/b.height*H]};
+  const dn=e=>{e.preventDefault();if(m.ended||m.rope)return;const p=pt(e);m.aim={s:p,p}};
+  const mv=e=>{e.preventDefault();if(m.aim)m.aim.p=pt(e)};
+  const up=e=>{e.preventDefault();if(!m.aim)return;const v=ytVel(m.aim);m.aim=null;if(!v)return;m.rope={x:m.cx,y:m.cy,vx:v[0],vy:v[1],t:0};try{tone(520,0,.05,"triangle",.05)}catch(e){}};
+  c.addEventListener("touchstart",dn,{passive:false});c.addEventListener("touchmove",mv,{passive:false});c.addEventListener("touchend",up,{passive:false});
+  c.addEventListener("mousedown",dn);c.addEventListener("mousemove",mv);c.addEventListener("mouseup",up);
   m.last=performance.now();const loop=t=>{if(MG!==m||m.ended)return;const dt=Math.min(.05,(t-m.last)/1000);m.last=t;ytStep(dt);ytDraw();m.raf=requestAnimationFrame(loop)};m.raf=requestAnimationFrame(loop);
-  mgTimer(40,()=>{const m=MG;sbAdd(m.br.filter(b=>!b.brk).length*50);mnFin(m.ok-m.lost*2,14)})}
-function ytTie(i){const m=MG,b=m.br[i];if(b.brk)return;const urgent=b.ld>=.5;if(urgent){m.ok++;sbAdd(30+40*Math.max(0,Math.min(1,(1-b.ld)/.5)));try{SE("ok")}catch(e){}}else sbAdd(5);b.rp=1;$("#ytOk").textContent=m.ok}
-function ytStep(dt){const m=MG;m.el+=dt;m.gust-=dt;if(m.gust<=0){m.gust=3+Math.random()*3;const k=Math.floor(Math.random()*m.br.length);m.br[k].rate+=.06;m.gk=k;m.gT=1.2}if(m.gT>0)m.gT-=dt;
-  m.br.forEach(b=>{if(b.brk>0){b.brk-=dt;if(b.brk<=0){b.brk=0;b.ld=0;b.rp=0}return}b.rp=Math.max(0,b.rp-m.decay*dt);const r=b.rate*(1+m.el/40)*(b.rp>.15?.12:1);b.ld=Math.min(1,b.ld+r*dt);if(b.rp>.15)b.ld=Math.max(0,b.ld-.08*dt);b.rate=Math.max(.05,b.rate-.01*dt);
-    if(b.ld>=1&&b.rp<=.15){b.brk=3;m.lost++;sbAdd(-150);try{SE("ng")}catch(e){}$("#ytL").textContent=m.lost}})}
+  mgTimer(40,()=>{const m=MG;mnFin(m.ok-m.lost,12)})}
+const YT_G=520;
+// 引いた量 → 投げる速さ（引いた反対向き）。短すぎる引きは投げない
+function ytVel(a){const dx=a.s[0]-a.p[0],dy=a.s[1]-a.p[1],L=Math.hypot(dx,dy);if(L<12)return null;const k=Math.min(L,150)*4.2/L;return [dx*k,dy*k]}
+// 新しい松：7本の枝。位置・長さ・ゆれ方は毎回ちがう
+function ytTree(){const m=MG,n=7;m.tree++;m.br=[...Array(n)].map((_,i)=>{const side=i%2?1:-1,row=Math.floor(i/2),y=78+row*54+Math.random()*12,len=78+Math.random()*58;
+    return {side,y0:y,len,ld:Math.random()*.25,tied:0,brk:0,ph:Math.random()*6.28,sp:.8+Math.random()*.8,rate:m.snow*(.8+Math.random()*.6)}});m.t0=sbNow()}
+// 枝先（輪）の位置：雪の重みで垂れ、風でゆれる
+function ytTip(b){const m=MG,sw=b.tied||b.brk?0:Math.sin(m.el*b.sp+b.ph)*m.sway;return [m.cx+b.side*b.len,b.y0+18+b.ld*34+sw]}
+// 全部の枝が終わったら（かけた・折れた）、次の松へ
+function ytNext(){const m=MG;if(m.nexting||!m.br.every(b=>b.tied||b.brk))return;m.nexting=1;sbAdd(m.br.filter(b=>b.tied).length*10);mnT(()=>{if(MG===m&&!m.ended){ytTree();m.lastHit=0;m.nexting=0}},700)}
+function ytStep(dt){const m=MG;m.el+=dt;
+  m.br.forEach(b=>{if(b.tied||b.brk)return;b.ld=Math.min(1,b.ld+b.rate*(1+m.el/60)*dt);if(b.ld>=1){b.brk=1;m.lost++;sbAdd(-80);try{SE("ng")}catch(e){}$("#ytL").textContent=m.lost;ytNext()}});
+  const r=m.rope;if(r){r.t+=dt;r.vy+=YT_G*dt;r.x+=r.vx*dt;r.y+=r.vy*dt;
+    let hit=null;m.br.forEach(b=>{if(hit||b.tied||b.brk)return;const [tx,ty]=ytTip(b),d=Math.hypot(r.x-tx,r.y-ty);if(d<16)hit=[b,d]});
+    if(hit){const [b,d]=hit;b.tied=1;m.ok++;const acc=Math.max(0,1-d/16),sp=sbS(sbNow()-(m.lastHit||m.t0),1500,6000,30);sbAdd(60+30*acc+sp);m.lastHit=sbNow();m.rope=null;m.pop={t:.7,x:ytTip(b)[0],y:ytTip(b)[1],txt:acc>.6?"ど真ん中！":acc>.25?"かかった":"ぎりぎり"};
+      try{SE("ok")}catch(e){}$("#ytOk").textContent=m.ok;
+      ytNext()}
+    else if(r.x<-20||r.x>m.W+20||r.y>m.H+20)m.rope=null}
+  if(m.pop){m.pop.t-=dt;if(m.pop.t<=0)m.pop=null}$("#ytP").textContent=Math.floor(Math.max(0,m.pts||0))}
 function ytDraw(){const m=MG,x=m.cx2,W=m.W,H=m.H;const bg=mgI("yt_bg");if(mgOk(bg))x.drawImage(bg,0,0,W,H);else{x.fillStyle="#1c2a38";x.fillRect(0,0,W,H)}
-  x.fillStyle="rgba(255,255,255,.7)";for(let i=0;i<40;i++){const sx=(i*53+m.el*20*(1+i%3))%W,sy=(i*97+m.el*60*(1+i%2))%H;x.fillRect(sx,sy,2,2)}
-  const sh=mgI("yt_shin");if(mgOk(sh))x.drawImage(sh,m.cx-13,m.cy-14,26,H-m.cy+14);else{x.strokeStyle="#6b4a2a";x.lineWidth=10;x.beginPath();x.moveTo(m.cx,H);x.lineTo(m.cx,m.cy);x.stroke()}
-  m.br.forEach(b=>{const by=b.y+(b.brk?50:b.ld*30),dx=b.x-m.cx,len=Math.abs(dx)+34,y0=b.y+20,ei=mgI(b.brk?"yt_eda_ore":b.ld<.34?"yt_eda0":b.ld<.67?"yt_eda1":"yt_eda2");
-    // 枝の絵：根もとを芯柱に、先を枝先に（左の枝は左右反転）。雪が重いほど垂れる
-    if(mgOk(ei)){x.save();x.translate(m.cx,y0);if(dx<0)x.scale(-1,1);x.rotate(Math.atan2(by-y0,Math.abs(dx)));x.drawImage(ei,-6,-len*.35,len,len*.7);x.restore()}
-    if(!b.brk){x.fillStyle="#111";x.fillRect(b.x-16,by+18,32,5);x.fillStyle=b.ld>.75?"#ff8f84":b.ld>.5?"#ffd76a":"#e8eef6";x.fillRect(b.x-16,by+18,32*b.ld,5)}
-    if(b.rp>.15&&!b.brk){x.strokeStyle=`rgba(232,208,150,${.35+.65*b.rp})`;x.lineWidth=1.6;x.beginPath();x.moveTo(m.cx,m.cy);x.lineTo(b.x,by-4);x.stroke()}
-    if(b.brk){x.fillStyle="#ff8f84";x.font="bold 12px sans-serif";x.textAlign="center";x.fillText("折れた",b.x,by-20)}});
-  x.fillStyle="#ffd76a";x.font="bold 22px sans-serif";x.textAlign="center";x.fillText("★",m.cx,m.cy+8);
-  if(m.drag){x.strokeStyle="#ffd76a";x.lineWidth=2;x.setLineDash([5,4]);x.beginPath();x.moveTo(m.cx,m.cy);x.lineTo(m.drag[0],m.drag[1]);x.stroke();x.setLineDash([])}
-  if(m.gT>0){x.fillStyle="#cfe6ff";x.font="bold 14px sans-serif";x.fillText("どっと雪が来た！",W/2,H-12)}}
+  x.fillStyle="rgba(255,255,255,.75)";for(let i=0;i<40;i++){const sx=(i*53+m.el*20*(1+i%3))%W,sy=(i*97+m.el*60*(1+i%2))%H;x.fillRect(sx,sy,2,2)}
+  const sh=mgI("yt_shin");if(mgOk(sh))x.drawImage(sh,6,110,108,379,m.cx-14,m.cy-8,28,H-m.cy+8);  // 絵の柱の部分だけ（上の余白を除く）
+  m.br.forEach(b=>{const [tx,ty]=ytTip(b),y0=b.y0+10,ei=mgI(b.brk?"yt_eda_ore":b.ld<.34?"yt_eda0":b.ld<.67?"yt_eda1":"yt_eda2"),len=b.len+20;
+    if(mgOk(ei)){x.save();x.translate(m.cx,y0);if(b.side<0)x.scale(-1,1);x.rotate(Math.atan2(ty-y0,b.len));x.drawImage(ei,-6,-len*.35,len,len*.7);x.restore()}
+    if(b.tied){x.strokeStyle="rgba(240,220,160,.95)";x.lineWidth=1.8;x.beginPath();x.moveTo(m.cx,m.cy);x.lineTo(tx,ty);x.stroke()}
+    else if(!b.brk){x.strokeStyle=b.ld>.75?"#ff8f84":b.ld>.5?"#ffd76a":"#ffffff";x.lineWidth=2.5;x.beginPath();x.arc(tx,ty,14,0,7);x.stroke();x.fillStyle="rgba(255,255,255,.18)";x.fill();
+      x.fillStyle="rgba(0,0,0,.6)";x.fillRect(tx-16,ty+18,32,5);x.fillStyle="#f6f8ff";x.fillRect(tx-16,ty+18,32*b.ld,5)}
+    else{x.fillStyle="#ff8f84";x.font="bold 12px sans-serif";x.textAlign="center";x.fillText("折れた",tx,ty-16)}});
+  // ねらいの線（はじめの少しだけ）
+  if(m.aim){const v=ytVel(m.aim);if(v){x.fillStyle="#ffd76a";let px=m.cx,py=m.cy,vx=v[0],vy=v[1];for(let i=0;i<m.guide;i++){const d=.035;vy+=YT_G*d;px+=vx*d;py+=vy*d;x.beginPath();x.arc(px,py,2.4,0,7);x.fill()}}
+    x.strokeStyle="rgba(255,215,106,.5)";x.lineWidth=2;x.beginPath();x.moveTo(m.aim.s[0],m.aim.s[1]);x.lineTo(m.aim.p[0],m.aim.p[1]);x.stroke()}
+  if(m.rope){x.strokeStyle="#e8d096";x.lineWidth=1.8;x.beginPath();x.moveTo(m.cx,m.cy);x.quadraticCurveTo((m.cx+m.rope.x)/2,Math.max(m.cy,m.rope.y)+20,m.rope.x,m.rope.y);x.stroke();x.fillStyle="#e8d096";x.beginPath();x.arc(m.rope.x,m.rope.y,4,0,7);x.fill()}
+  x.fillStyle="#ffd76a";x.font="bold 20px sans-serif";x.textAlign="center";x.fillText("★",m.cx,m.cy+7);
+  if(m.pop){x.fillStyle=`rgba(255,240,180,${Math.min(1,m.pop.t*2)})`;x.font="bold 15px sans-serif";x.fillText(m.pop.txt,m.pop.x,m.pop.y-22)}}
 
 /* --- 加賀鳶はしご乗り：前後左右にゆれるはしごの上で、技を決めながら踏んばる --- */
 const HG_WAZA=["遠見","腹亀","背亀","鯱"];
@@ -3679,7 +3698,7 @@ function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
 // 最高点＝「上手な大人が本気で遊んだときの点」（計算の理論値ではなく、人がやって届く上限の目安）。その95%以上で出来100%
-const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1600,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1300,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
+const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1900,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1300,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
 const SB_BASE=Object.fromEntries(Object.entries(SB_MAX).map(([k,v])=>[k,Math.round(v*.95)]));
 // 目標を早く終えたときの「のこり1秒」の点
 const SB_LEFT={koen:10,bijutsukan:2};
