@@ -1361,6 +1361,7 @@ const HUBI=[
  {s:"fuku",ic:"oboe",n:"復習の間",sub:()=>fukuDay()?"きょう開いています":"土・日だけ",dim:()=>!fukuDay(),dot:r=>fukuDay()&&!r.fuku,go:r=>fukuDay()&&!r.fuku&&"fuku()"},
  {s:"naisei",ic:"naisei",n:"内政",rk:2,go:()=>"naisei()"},
  {s:"map",ic:"chizu",n:"陣地図",go:()=>"mapView()"},
+ {s:"rank",ic:"ishikawamon",n:"校下番付"},
  {s:"kqd",ic:"kouka_ichiran",n:"校下紹介",dot:r=>!r.kqd,go:()=>"kqList()"},
  {s:"story",ic:"nenpyo",n:"できごと",z:"S"},
  {s:"age",ic:"nendai",n:"年代別",z:"S"},
@@ -1464,6 +1465,11 @@ function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP)HUB_SEC="";HUB
     ${S.town.includes(null)?`<div class="mute center" style="margin-top:6px">空き地が${S.town.filter(x=>!x).length}つあります。建物を建てましょう</div>`:""}<button class="gold" style="width:100%;margin-top:8px" onclick="town()">城下町をひらく</button>
   </div>
 
+
+  <div class="card" data-sec="rank">
+    <h2>${IC("ishikawamon")} 校下番付 <span class="tag">デモ</span></h2>
+    ${rk.slice(0,8).map((x,i)=>row(x,i)).join("")}${myI>=8?`<div class="mute center">…</div>${row(my,myI)}`:""}
+  </div>
 
   <div class="card" data-sec="age">
     <h2>${IC("nendai","1.6em")} 年代別ランキング <span class="tag">デモ</span></h2>
