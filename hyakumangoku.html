@@ -3592,9 +3592,9 @@ const sbS=(rtMs,fast,slow,mx)=>mx*Math.max(0,Math.min(1,(slow*1000-rtMs)/((slow-
 function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
-// 上手な人の点（基準点）。出来＝点数÷基準点 → 石・能力・普請の経験に使う（仮の値・試しに遊んで調整）
-const SB_BASE={cut:1000,kouka:800,kaga:3500,vname:900,kotoba:800,kutani:700,yuki:1700,ysui:1000,haku:1400,hashigo:900,kokuin:800,oden:550,yuzen:950,hayashi:1000,
- toshokan:650,ichiba:700,koen:550,shobo:2000,bijutsukan:1000,kinpaku:750,kageki:1200,eki:550,shogakko:800,yosui:700,chaya:700,kenroku:750,shiro:800};
+// その時間内で取れる最高点（一の段・最速でミスなし）。最高点の95%以上なら出来100%（上位5%の帯）
+const SB_MAX={cut:2340,kouka:1195,kaga:7100,vname:2900,kotoba:4500,kutani:1680,yuki:2400,ysui:6000,haku:2000,hashigo:1200,kokuin:3300,oden:2500,yuzen:1660,hayashi:2100,toshokan:955,ichiba:1800,koen:820,shobo:3300,bijutsukan:1140,kinpaku:950,kageki:1480,eki:675,shogakko:1175,yosui:790,chaya:960,kenroku:900,shiro:900};
+const SB_BASE=Object.fromEntries(Object.entries(SB_MAX).map(([k,v])=>[k,Math.round(v*.95)]));
 // 目標を早く終えたときの「のこり1秒」の点
 const SB_LEFT={koen:10,bijutsukan:2};
 /* ===================== きょうの勝負（個人スコア） =====================
