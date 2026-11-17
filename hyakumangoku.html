@@ -3593,7 +3593,7 @@ function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
 // 上手な人の点（基準点）。出来＝点数÷基準点 → 石・能力・普請の経験に使う（仮の値・試しに遊んで調整）
-const SB_BASE={cut:1000,kouka:800,kaga:1800,vname:900,kotoba:800,kutani:700,yuki:1700,ysui:1000,haku:1400,hashigo:900,kokuin:800,oden:550,yuzen:950,hayashi:1000,
+const SB_BASE={cut:1000,kouka:800,kaga:3500,vname:900,kotoba:800,kutani:700,yuki:1700,ysui:1000,haku:1400,hashigo:900,kokuin:800,oden:550,yuzen:950,hayashi:1000,
  toshokan:650,ichiba:700,koen:550,shobo:2000,bijutsukan:1000,kinpaku:750,kageki:1200,eki:550,shogakko:800,yosui:700,chaya:700,kenroku:750,shiro:800};
 // 目標を早く終えたときの「のこり1秒」の点
 const SB_LEFT={koen:10,bijutsukan:2};
