@@ -1833,7 +1833,7 @@ const AB=id=>Math.floor((S.ab&&S.ab[id])||0);
 const abFx=id=>AB(id)/500;
 const waza=(id,i)=>AB(id)>=abDef(id).waza[i][0];
 // 伸び方：出来栄えで 0.5（見事）・0.4・0.3・0.2・0.1。問題は1問正解で0.05（十問ぜんぶ正解でも0.5）
-const AB_RATE=.7; // 伸びの全体倍率（上がりすぎないよう7割に）
+const AB_RATE=1.4; // 伸びの全体倍率（与力の条件「能力30」に、石2200と同じころ届くように）
 const GR=r=>r>=.9?.5:r>=.7?.4:r>=.5?.3:r>=.3?.2:.1;
 const abv=id=>(Math.floor((((S.ab&&S.ab[id])||0)+1e-9)*10)/10).toFixed(1);
 const ad=x=>String(Math.round(x*1000)/1000);
