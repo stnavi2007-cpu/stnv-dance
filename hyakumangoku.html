@@ -3097,7 +3097,7 @@ function kzDoAct(B,act,arg){// 今の番の側が行動する
   if(kzKOcheck(B,i))return;B.turn=j;if(B.pick<0)kzStart(B)}
 function kzAI(B,i){const S=B.s[i],a=kzCur(B,i),o=kzCur(B,1-i),r=B.rnd;
   if(kzMod(a.c.el,o.c.el)<1&&!kzCanSk(a)){const g=S.f.findIndex((f,k)=>k!==S.a&&f.hp>0&&kzMod(f.c.el,o.c.el)>1);if(g>=0&&r()<.4)return ["sw",g]}
-  if(kzCanSk(a)){const t=a.c.sk;const want=t==="治療"?a.hp<a.max*.55:t==="救援"?S.f.some((f,k)=>k!==S.a&&f.hp>0&&f.hp<f.max*.7)||a.hp<a.max*.5:t==="鼓舞"?!a.buf:t==="籠城"||t==="迎撃"?a.hp>a.max*.35:true;if(want)return ["sk"]}
+  if(kzCanSk(a))return ["sk"];
   return ["atk"]}
 function kzSim(A,Bd,rnd){const B=kzNewB(A,Bd,rnd);kzStart(B);let g=0;while(!B.over&&g++<400){const[a,x]=kzAI(B,B.turn);kzDoAct(B,a,x);if(B.pick>=0){kzSetNext(B,B.pick,kzBest(B,B.pick));kzStart(B)}B.ev.length=0}return B}
 /* ---------- 札の見た目 ---------- */
@@ -3280,9 +3280,9 @@ function kzBattle(){abar.className="abar";const b=KB,me=b.s[0],cp=b.s[1];
     app.innerHTML=`<div class="card kb" id="kbBox"><div class="kbHead"><b>${(b.opp||KZ_DOJO[b.stage]).n}</b><span>速さ ${me.spd}：${cp.spd}</span></div>
      ${sk("cp")}<div class="kbVs" id="kbVs"></div>${sk("me")}<div class="kbLog" id="kbLog"></div><div class="kbCmd" id="kbCmd"></div><div class="mute kbHelpL" id="kbHelp"></div></div>
      <button class="backb" onclick="const t=KB.stage==='t';KB.over=true;KB=null;if(t){delete dayRec().tjo;save();tjOpen()}else kzDojo()">${YA("l")} 降参して${b.stage==="t"?"辻試合":"道場"}へ</button>`;$("#kbBox")._b=b}
-  const kiD=f=>`${KRB("気","き")}<span class="kbKi">${"●".repeat(f.ki)}${"○".repeat(5-f.ki)}</span>`;
+  const kiD=f=>f.c.sk?`${KRB("気","き")}<span class="kbKi">${"●".repeat(f.ki)}${"○".repeat(5-f.ki)}</span>`:`<span class="mute" style="font-size:11px">必殺技なし</span>`;
   [[cp,"cp"],[me,"me"]].forEach(([S,who])=>{const ai=b.view&&b.view[who]!=null?b.view[who]:S.a,a=S.f[ai];b.shownA=b.shownA||{};b.shownA[who]=ai;
-    kzSet("kbB_"+who,S.f.map((f,i)=>i===ai?"":`<div class="kbB${kzDH(f)<=0?" ko":""}" ${who==="me"&&f.hp>0?`onclick="kzSwitchAsk(${i})"`:""}>${kzCard(f.id,{size:"mini",star:f.star})}<div class="kbHp"><i style="width:${kzDH(f)/f.max*100}%"></i></div><div class="kbKiS">気${f.ki}</div></div>`).join("")+(S.x?`<div class="kbB sup">${kzCard(S.x,{size:"mini",star:1})}<div class="kbSupT">補佐</div></div>`:""));
+    kzSet("kbB_"+who,S.f.map((f,i)=>i===ai?"":`<div class="kbB${kzDH(f)<=0?" ko":""}" ${who==="me"&&f.hp>0?`onclick="kzSwitchAsk(${i})"`:""}>${kzCard(f.id,{size:"mini",star:f.star})}<div class="kbHp"><i style="width:${kzDH(f)/f.max*100}%"></i></div><div class="kbKiS">${f.c.sk?`気${f.ki}`:"必殺なし"}</div></div>`).join("")+(S.x?`<div class="kbB sup">${kzCard(S.x,{size:"mini",star:1})}<div class="kbSupT">補佐</div></div>`:""));
     kzSet("kbC_"+who,kzCard(a.id,{size:"mid",star:a.star,st:{hp:a.max,atk:a.atk,spd:a.spd}}));if(kzDH(a)>0){const ce=$("#kbC_"+who);if(ce)ce.classList.remove("kbKO")}kzHpSet(who,a);
     kzSet("kbK_"+who,kiD(a));
     kzSet("kbS_"+who,`${a.buf?`<i class="up">攻+${Math.round((a.bufv||0)*100)}% あと${a.buf}回</i>`:""}${a.dn?`<i class="dn">攻−${Math.round((a.dnv||0)*100)}% あと${a.dn}回</i>`:""}${a.sh?`<i class="sh">受けるダメージ−${Math.round((a.shv||0)*100)}% あと${a.sh}回</i>`:""}${a.cnt?`<i class="sh">迎撃</i>`:""}${a.po?`<i class="po">火 毎ターン−${Math.round((a.pov||0)*100)}% あと${a.po}回</i>`:""}${a.stun?`<i class="st">足止め</i>`:""}${a.seal?`<i class="st">封${a.seal}</i>`:""}${a.en.map(e=>`<i class="en">${e.t==="組"?e.g:e.t}</i>`).join("")}`)});
