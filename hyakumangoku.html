@@ -190,7 +190,9 @@ body:not(.furi) .fg{padding:0!important}body:not(.furi) .fg .frt{display:none}
 .ihTray{position:relative;width:100%;aspect-ratio:2/1;margin-top:-14px}.ihTray::before{content:"";position:absolute;inset:0;background:url(hyakumangoku_img/mg/ih_pan_l.webp?v=1118c) center/100% 100% no-repeat}.ihTray.r::before{transform:scaleX(-1)}
 .ihOn{position:absolute;left:12%;right:12%;bottom:52%;display:flex;flex-wrap:wrap-reverse;justify-content:center;align-items:flex-end;gap:0 1px}
 .ihPan2 .ihB{min-height:0;padding:0}
-.ihSd{flex:1;padding:8px}.ihSd.on{background:#5a4210;border-color:var(--gold)}
+.ihSd{flex:1;padding:10px;background:#4a3a22;color:#fff3d6;border:2px solid #8a7040;font-weight:800;font-size:17px}
+.ihSd.on{background:#f0c95a;color:#2a1f14;border-color:#ffe9a8;box-shadow:0 0 10px rgba(255,215,106,.75)}
+.ihPan2{cursor:pointer;-webkit-tap-highlight-color:transparent}.ihPan2.sel .ihTray::before{filter:drop-shadow(0 0 3px #ffd76a) drop-shadow(0 0 3px #ffd76a) drop-shadow(0 0 6px #ffb02a)}
 .ckSlot.nm{justify-content:center;background:#3a2412;border-radius:6px;font-size:12px;font-weight:800;min-height:70px;width:72px;padding:2px;white-space:nowrap}
 .sdW{font-size:12px;color:#fff;background:#2f6aa0;border-radius:4px;padding:0 3px}
 .ihScale{flex:1;display:flex;flex-direction:column;align-items:center}.ihPan{min-height:120px;width:100%;display:flex;flex-wrap:wrap;align-content:flex-end;justify-content:center;border-bottom:6px solid #8a5a2a}
@@ -2683,7 +2685,7 @@ function mgIshihakobi(){const lv=MG.lv,TM=[0,50,45,40,35,30][lv];MG.T=Math.round
   MG.st=shuffle([...[...Array(4)].map(()=>mk(600,900,3)),...[...Array(4)].map(()=>mk(250,450,2)),...[...Array(4+(lv>=4?3:0))].map(()=>mk(60,160,1)),...[...Array(lv>=3?2:0)].map(()=>mk(900,1300,4))]);
   app.innerHTML=`<div class="card">${mgHead(IC("niwaishi")+" 庭石はこび",TM)}<div class="mute">庭石を天秤の<b>左右の皿</b>に分けてのせ、<b>ぴたりと釣り合わせよ</b>。ただし両方あわせて <b>${fmt(MG.T)}貫</b> 以上。石の目方は、のせるまで分からぬ。「石を削る」で石を少し軽くできる。</div>
   <div class="ihTop"><div>左 <b id="ihL">0</b> 貫</div><div class="mute" id="ihSum"></div><div>右 <b id="ihR">0</b> 貫</div></div>
-  <div class="ihBal" id="ihBal"><div class="ihPost"></div><div class="ihBeam" id="ihBeam"></div><div class="ihPan2" id="ihPL"><svg class="ihRope" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M50 0L22 30M50 0L78 30"/></svg><div class="ihTray"><div class="ihOn" id="ihOL"></div></div></div><div class="ihPan2" id="ihPR"><svg class="ihRope" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M50 0L22 30M50 0L78 30"/></svg><div class="ihTray r"><div class="ihOn" id="ihOR"></div></div></div></div>
+  <div class="ihBal" id="ihBal"><div class="ihPost"></div><div class="ihBeam" id="ihBeam"></div><div class="ihPan2" id="ihPL" onclick="ihSide('L')"><svg class="ihRope" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M50 0L22 30M50 0L78 30"/></svg><div class="ihTray"><div class="ihOn" id="ihOL"></div></div></div><div class="ihPan2" id="ihPR" onclick="ihSide('R')"><svg class="ihRope" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M50 0L22 30M50 0L78 30"/></svg><div class="ihTray r"><div class="ihOn" id="ihOR"></div></div></div></div>
   <div class="row" style="margin:6px 0"><span class="mute" style="align-self:center">のせる皿：</span><button class="ihSd" id="sdL" onclick="ihSide('L')">左</button><button class="ihSd" id="sdR" onclick="ihSide('R')">右</button></div>
   <div class="ihYard" id="ihY"></div>
   <div class="row"><button style="flex:1" id="ihNomi" onclick="ihNomi()">石を削る（あと${MG.nomi}回）</button><button class="gold" style="flex:1" onclick="ihEnd()">これで納める</button></div></div>`;
@@ -2694,10 +2696,10 @@ function ihDraw(){const L=MG.st.filter(s=>s.on==="L").reduce((a,s)=>a+s.w,0),R=M
   $("#ihL").textContent=fmt(L);$("#ihR").textContent=fmt(R);const sum=L+R;$("#ihSum").innerHTML=`合計 ${fmt(sum)}${sum>=MG.T?" ✓":` / ${fmt(MG.T)}`}`;
   const ang=Math.max(-7,Math.min(7,(L-R)/Math.max(600,MG.T/2)*7));$("#ihBeam").style.transform=`translateY(-50%) rotate(${-ang}deg)`;
   {/* 皿は横木の両はしの環から吊る：横木が傾いた分だけ上下させる（皿そのものは水平のまま） */const bw=$("#ihBal").clientWidth*.33,dy=Math.tan(ang*Math.PI/180)*bw;$("#ihPL").style.transform=`translateY(${dy}px)`;$("#ihPR").style.transform=`translateY(${-dy}px)`}
-  const pan=sd=>MG.st.map((s,k)=>s.on===sd?`<button class="ihB on ${MG.mode?"nomi":""}" onclick="ihTap(${k})">${ihStone(s,1)}</button>`:"").join("");
+  const pan=sd=>MG.st.map((s,k)=>s.on===sd?`<button class="ihB on ${MG.mode?"nomi":""}" onclick="event.stopPropagation();ihTap(${k})">${ihStone(s,1)}</button>`:"").join("");
   $("#ihOL").innerHTML=pan("L");$("#ihOR").innerHTML=pan("R");
   $("#ihY").innerHTML=MG.st.map((s,k)=>s.on?`<span class="ihE"></span>`:`<button class="ihB" onclick="ihTap(${k})">${ihStone(s)}</button>`).join("");
-  $("#sdL").classList.toggle("on",MG.side==="L");$("#sdR").classList.toggle("on",MG.side==="R");
+  $("#sdL").classList.toggle("on",MG.side==="L");$("#sdR").classList.toggle("on",MG.side==="R");$("#ihPL").classList.toggle("sel",MG.side==="L");$("#ihPR").classList.toggle("sel",MG.side==="R");
   $("#ihNomi").textContent=MG.mode?"削る石を皿から選べ":`石を削る（あと${MG.nomi}回）`;$("#ihNomi").disabled=!MG.nomi&&!MG.mode}
 function ihSide(sd){if(!MG)return;MG.side=sd;ihDraw()}
 function ihTap(k){if(!MG)return;const s=MG.st[k];if(MG.mode&&s.on){const cut=Math.round(s.w*(.12+Math.random()*.16));s.w-=cut;MG.nomi--;MG.mode=0;toast(`石を ${cut}貫 削った`);return ihDraw()}s.on=s.on?"":MG.side;ihDraw()}
