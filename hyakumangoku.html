@@ -2065,7 +2065,7 @@ function mgAkinai(){const lv=MG.lv,goal=7;MG.ok=0;MG.miss=0;
     MG.ch=ch;$("#akQ").innerHTML=items.map(x=>`<div>${x.n}　<b>${x.p}円</b></div>`).join("")+`<div class="akPay"><img src="${MGP("ak_zeni")}" alt="">お代 ${pay.toLocaleString()}円 を受け取った</div>`;{let k;do{k=1+Math.floor(Math.random()*4)}while(k===MG.kk);MG.kk=k;$("#akK").src=MGP("ak_kyaku"+k)}
     $("#akO").innerHTML=opts.map(v=>`<button class="opt" onclick="akTap(${v})">釣り銭 ${v.toLocaleString()}円</button>`).join("")};
   MG.round=round;round();mgTimer(45,()=>mgEnd(MG.ok/goal-MG.miss*.08))}
-function akTap(v){if(!MG)return;if(v===MG.ch){MG.ok++;sbOk(70,30,2,10);$("#akN").textContent=MG.ok;toast("毎度あり！")}else{MG.miss++;sbAdd(-20);MG.t0=sbNow();toast(`正しくは ${MG.ch.toLocaleString()}円`)}MG.round()}
+function akTap(v){if(!MG)return;if(v===MG.ch){SE("coin");MG.ok++;sbOk(70,30,2,10);$("#akN").textContent=MG.ok;toast("毎度あり！")}else{SE("bu");MG.miss++;sbAdd(-20);MG.t0=sbNow();toast(`正しくは ${MG.ch.toLocaleString()}円`)}MG.round()}
 
 /* --- 公園：加賀野菜あわせ（神経衰弱） --- */
 function mgAwase(){const lv=MG.lv,P=Math.min(4+lv,9);const V=shuffle(KAGA).slice(0,P);MG.cards=shuffle([...V,...V].map((v,i)=>({v,i})));MG.open=[];MG.got=0;MG.miss=0;MG.P=P;MG.lock=false;
@@ -2408,6 +2408,7 @@ function ndDraw(){const m=MG,x=m.x,W=m.W,H=m.H,gy=m.gy,now=performance.now(),bg=
     if(d){x.fillStyle=body;x.fillRect(-2,-16,26,16);x.fillStyle="#e8c8a0";x.fillRect(16,-14,6,5)}
     else{x.fillStyle=body;x.fillRect(2,-30,16,24);x.fillRect(4,-6,5,6);x.fillRect(11,-6,5,6);x.fillRect(1,-42,18,13);x.fillStyle="#e8c8a0";x.fillRect(6,-38,11,4);x.fillStyle="#000";x.fillRect(12,-37,2,2);x.fillStyle="#b8404a";x.fillRect(-4,-40,6,3)}
     x.restore()}}
+  if(!m.boss){const pg=Math.min(1,m.dist/m.goal);x.fillStyle="rgba(0,0,0,.5)";x.fillRect(8,6,W-16,8);x.fillStyle="#c9a227";x.fillRect(8,6,(W-16)*pg,8)}
   else{x.fillStyle="rgba(0,0,0,.5)";x.fillRect(8,6,W-16,8);x.fillStyle="#d02a2a";x.fillRect(8,6,(W-16)*Math.max(0,m.boss.hp)/m.boss.max,8)}
   x.textAlign="center";x.font="900 14px sans-serif";m.fx.forEach(f=>{x.globalAlpha=Math.min(1,f.t/250);x.fillStyle="#ffd76a";x.fillText(f.s,f.x,f.y-(500-f.t)*.03)});x.globalAlpha=1;
   if(m.msgT>0){x.font="900 17px sans-serif";x.fillStyle="#000";x.fillText(m.msg,W/2+1,62);x.fillStyle="#ffd76a";x.fillText(m.msg,W/2,61)}}
@@ -2630,7 +2631,7 @@ function tone(f,t0,d,type,v){const a=acGet();if(!a)return;const o=a.createOscill
 function slide(f1,f2,t0,d,type,v){const a=acGet();if(!a)return;const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+t0;
   o.type=type||"sawtooth";o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v||.1,t);g.gain.exponentialRampToValueAtTime(.0008,t+d);
   o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.05)}
-const VIB={ok:[18],ng:[60,40,60],flip:[10],rare:[30,40,30,40,80],rank:[40,60,40,60,160],win:[50,50,50,50,200],lose:[200]};
+const VIB={ok:[18],ng:[60,40,60],coin:[18],bu:[120],flip:[10],rare:[30,40,30,40,80],rank:[40,60,40,60,160],win:[50,50,50,50,200],lose:[200]};
 function SE(k){
   try{if(navigator.vibrate&&VIB[k]&&SND)navigator.vibrate(VIB[k])}catch(e){}
   if(!SND)return;
@@ -2640,6 +2641,8 @@ function SE(k){
   else if(k==="cut"){const a=acGet();if(!a)return;const len=.16,buf=a.createBuffer(1,Math.floor(a.sampleRate*len),a.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2.5);
     const src=a.createBufferSource();src.buffer=buf;const hp=a.createBiquadFilter();hp.type="highpass";hp.frequency.value=3200;const g=a.createGain();g.gain.value=.4;src.connect(hp);hp.connect(g);g.connect(a.destination);src.start();  // シャッ（刃が通る音）
     slide(5200,2600,0,.18,"sine",.07);tone(3300,.03,.45,"sine",.05);tone(4950,.03,.3,"sine",.025)}  // キーン（刃が鳴る余韻）
+  else if(k==="coin"){/* チャリーン：小銭どうしが当たる高い金属音を2回、2回目を長く響かせる */[[0,.12,.10],[.09,.55,.13]].forEach(([s,d,v])=>{[2794,3729,4699,5920].forEach((f,i)=>tone(f*(1+s*.04),s,d*(1-i*.15),"sine",v/(i+1)))})}
+  else if(k==="bu"){/* ブー：低い音を平らにのばす */tone(150,0,.42,"square",.09);tone(153,0,.42,"sawtooth",.05)}
   else if(k==="flip"){slide(500,1400,0,.09,"triangle",.08)}
   else if(k==="sr"){[880,1109,1319].forEach((f,i)=>tone(f,i*.06,.3,"triangle",.14))}
   else if(k==="rare"){[659,880,1109,1319,1760].forEach((f,i)=>tone(f,i*.07,.5,"triangle",.15));tone(2637,.4,.6,"sine",.08)}
