@@ -187,7 +187,7 @@ body:not(.furi) .fg{padding:0!important}body:not(.furi) .fg .frt{display:none}
 .ihBeam{position:absolute;left:13.3%;width:73.4%;top:96px;aspect-ratio:640/60;transform:translateY(-50%);background:url(hyakumangoku_img/mg/ih_beam.webp?v=1118c) center/100% 100% no-repeat;transition:transform .35s;transform-origin:50% 50%;margin-top:0}
 .ihPan2{position:absolute;top:96px;width:34%;transition:transform .35s;display:flex;flex-direction:column;align-items:center}#ihPL{left:0}#ihPR{right:0}
 .ihRope{display:block;width:82%;height:26px;margin-top:4px}.ihRope path{stroke:#4a3420;stroke-width:2.2;fill:none;vector-effect:non-scaling-stroke}
-.ihTray{position:relative;width:100%;aspect-ratio:2/1;margin-top:-14px;background:url(hyakumangoku_img/mg/ih_pan_l.webp?v=1118c) center/100% 100% no-repeat}.ihTray.r{background-image:url(hyakumangoku_img/mg/ih_pan_r.webp?v=1118c)}
+.ihTray{position:relative;width:100%;aspect-ratio:2/1;margin-top:-14px}.ihTray::before{content:"";position:absolute;inset:0;background:url(hyakumangoku_img/mg/ih_pan_l.webp?v=1118c) center/100% 100% no-repeat}.ihTray.r::before{transform:scaleX(-1)}
 .ihOn{position:absolute;left:12%;right:12%;bottom:52%;display:flex;flex-wrap:wrap-reverse;justify-content:center;align-items:flex-end;gap:0 1px}
 .ihPan2 .ihB{min-height:0;padding:0}
 .ihSd{flex:1;padding:8px}.ihSd.on{background:#5a4210;border-color:var(--gold)}
