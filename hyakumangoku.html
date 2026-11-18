@@ -2418,7 +2418,7 @@ function geoTap(ev){if(!MG||MG.lock)return;const sv=$("#geoS"),r=sv.getBoundingC
     msg=inside?`${IC("maru")} 見事、そこが<b>${q.n}校下</b>じゃ！`:`${q.n}校下は金色の所。あと <b>${d.toFixed(1)}km</b> じゃった。`;geoDraw(q.n,1)}
   else{d=km(q.m[1],q.m[2]);const ok=Math.max(.15,.4-MG.lv*.05),tol=Math.max(.8,2-MG.lv*.25);pt=d<=ok?1:Math.max(0,1-(d-ok)/tol);
     msg=`${d<=ok?IC("maru")+" 見事！ ":""}<b>${q.n}</b>はここ（赤い印）。${d<=ok?"":`あと <b>${d.toFixed(1)}km</b>。`}<br><small>${q.m[3]}</small>`;geoDraw(null,1)}
-  MG.sc+=pt;sbOk(pt*100,50,3,20);$("#geoN").textContent=MG.sc.toFixed(1);$("#geoMk").innerHTML=`<circle cx="${x}" cy="${y}" r="2.6" fill="#4fa3e0" stroke="#fff" stroke-width=".8"/>`;$("#geoQ").innerHTML=msg;
+  MG.sc+=pt;try{SE(pt>=1?"ok":"ng")}catch(e){}sbOk(pt*100,50,3,20);$("#geoN").textContent=MG.sc.toFixed(1);$("#geoMk").innerHTML=`<circle cx="${x}" cy="${y}" r="2.6" fill="#4fa3e0" stroke="#fff" stroke-width=".8"/>`;$("#geoQ").innerHTML=msg;
   MG.r++;const m=MG;if(MG.r>=MG.R)return setTimeout(()=>MG===m&&mgEnd(MG.sc/MG.R),2200);setTimeout(()=>{if(MG!==m)return;geoDraw();geoAsk()},2400)}
 
 /* --- 小学校：算術（太閤立志伝Vの算術にならう。数の札を□に入れて式を正しくする） --- */
@@ -3433,7 +3433,7 @@ function mnHayaNext(){const m=MG;if(!m||m.ended)return;if(m.n>=m.N)return mnFin(
 function mnHayaBuzz(){const m=MG;if(!m||m.ended||m.buzz)return;m.buzz=1;const q=m.q;m.bonus=Math.round((1-Math.min(1,m.k/q.q.length))*10)/10;
   const bz=$("#hyBz");if(bz)bz.remove();const ord=shuffle(q.o.map((_,i)=>i));
   $("#hyO").innerHTML=`<div class="mute center" style="margin:4px 0">${m.bonus>0?`早押しボーナス +${f1(m.bonus)}（当たれば）`:"問題文は全部出たぞ"}</div><div class="mnGrid two">${ord.map(i=>`<button class="mnOpt" data-i="${i}" onclick="mnHayaAns(this,${i})">${q.o[i]}</button>`).join("")}</div>`}
-function mnHayaAns(b,i){const m=MG;if(!m||m.ended||m.lock)return;m.lock=1;const q=m.q,ok=i===q.a,pt=ok?1+m.bonus:0;if(ok){m.ok++;m.sc+=pt}
+function mnHayaAns(b,i){const m=MG;if(!m||m.ended||m.lock)return;m.lock=1;const q=m.q,ok=i===q.a,pt=ok?1+m.bonus:0;try{SE(ok?"ok":"ng")}catch(e){}if(ok){m.ok++;m.sc+=pt}
   document.querySelectorAll("#hyO .mnOpt").forEach(x=>{x.disabled=true;if(+x.dataset.i===q.a)x.classList.add("ok")});if(!ok)b.classList.add("ng");
   $("#mnOk").textContent=m.ok;$("#hySc").textContent=f1(m.sc);const e=$("#hyQ");if(e)e.outerHTML=`<div class="hyQ">${q.q}</div>`;
   $("#hyO").insertAdjacentHTML("beforeend",`<div class="hyMemo"><div class="hyRes ${ok?"ok":"ng"}">${ok?`正解！ +${f1(pt)}点`:`ざんねん　正解は「${q.o[q.a]}」`}</div><b>${IC("oboe")} 覚えとかんなん</b><div>${q.e}</div></div><button class="pri" style="width:100%;margin-top:8px" onclick="mnHayaNext()">${m.n>=m.N?"結果を見る":"次の問題へ"}</button>`)}
