@@ -3890,10 +3890,11 @@ function mnKouka(){MG.kOnly=1;mgGeo()}
 
 /* --- 用水つなぎ：水路の板を回して、用水の水を城下まで通す --- */
 const YS_NM=["辰巳用水","鞍月用水","大野庄用水","長坂用水","寺津用水"];
-function mnYosui(){const lv=MG.lv;Object.assign(MG,{n:[0,4,5,5,6,6][lv],ok:0,goal:[0,2,2,3,3,3][lv],k:0});
+function mnYosui(){const lv=MG.lv;Object.assign(MG,{n:[0,4,5,5,6,6][lv],ok:0,goal:[0,2,2,3,3,3][lv],k:0,blk:0});
   app.innerHTML=`<div class="card">${mgHead(IC("mizu")+" 用水つなぎ",60)}<div class="mute">板を<b>タップして回し</b>、左の用水から右の城下まで水路をつなげよう。</div>
-  <div class="yrBar"><span>通した用水 <b id="ysOk">0</b></span><span id="ysNm"></span></div><div id="ysW"></div></div>`;
-  ysNew();mgTimer(60,()=>{sbAdd(ysWet()*10);mnFin(MG.ok+ysWet()/MG.path.length*.6,MG.goal)})}
+  <div class="yrBar"><span>水を通した板 <b id="ysOk">0</b>枚</span><span id="ysNm"></span></div><div id="ysW"></div></div>`;
+  ysNew();mgTimer(60,()=>{const w=ysWet();MG.blk+=w;sbAdd(w*40);mnFin(MG.blk,MG.goal*(MG.n+3))})}
+/* 得点は「水を通した板の枚数」（つないだ面の数ではない）。つなぎ終えた面の板＋時間切れのときに水が届いていた板（2026-11-19 たけさん） */
 const YS_D=[[-1,0],[0,1],[1,0],[0,-1]]; // 0上 1右 2下 3左
 const ysCon=t=>t.k==="S"?(t.r%2===0?[0,2]:[1,3]):[t.r,(t.r+1)%4];
 function ysNew(){const m=MG,n=m.n,s=Math.floor(Math.random()*n),e=Math.floor(Math.random()*n);let path=null;
@@ -3917,7 +3918,7 @@ function ysDraw(){const m=MG,n=m.n,f=ysFlow(),cs=Math.floor(Math.min(290,window.
   $("#ysW").innerHTML=`<div class="ysWrap"><div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.s?`<img class="ysSrc" src="${MGP("ys_src")}" alt="用水の取り入れ口">`:""}</div>`).join("")}</div>
    <div class="ysG" style="grid-template-columns:repeat(${n},${cs}px)">${m.g.map((t,i)=>`<button class="ysT${f.wet.has(i)?" wet":""}" style="height:${cs}px" onclick="ysRot(${i})">${tile(t,f.wet.has(i))}</button>`).join("")}</div>
    <div class="ysSide">${[...Array(n)].map((_,i)=>`<div style="height:${cs}px">${i===m.e?`<img class="ysDst" src="${MGP("ys_jo")}" alt="城下">`:""}</div>`).join("")}</div></div>`;
-  if(f.ok){m.lock=1;m.ok++;sbOk(300,200,10,40);m.k++;$("#ysOk").textContent=m.ok;try{SE("ok")}catch(e){}mnT(()=>{m.lock=0;ysNew()},700)}}
+  if(f.ok){m.lock=1;m.ok++;m.blk+=f.wet.size;sbAdd(f.wet.size*40);sbOk(0,80,10,40);m.k++;$("#ysOk").textContent=m.blk;try{SE("ok")}catch(e){}mnT(()=>{m.lock=0;ysNew()},700)}}
 function ysRot(i){const m=MG;if(!m||m.ended||m.lock)return;m.g[i].r=(m.g[i].r+1)%4;ysDraw()}
 
 /* --- 石垣の刻印さがし：よく似た印ばかりの石垣から、1つだけちがう印をさがす --- */
