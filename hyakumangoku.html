@@ -2051,7 +2051,7 @@ function mgAwase(){const lv=MG.lv,P=Math.min(4+lv,9);const V=shuffle(KAGA).slice
   {const m=MG;m.lock=true;document.querySelectorAll(".awC").forEach(e=>e.classList.add("up"));setTimeout(()=>{if(MG!==m||m.ended)return;document.querySelectorAll(".awC").forEach(e=>e.classList.remove("up"));m.lock=false;sbT0()},2000)}
   mgTimer(60,()=>mgEnd(MG.got/MG.P-MG.miss*.05))}
 function awTap(k){if(!MG||MG.lock)return;const el=$("#aw"+k);if(el.classList.contains("up")||el.classList.contains("done"))return;el.classList.add("up");MG.open.push(k);
-  if(MG.open.length===2){const[a,b]=MG.open;MG.lock=true;if(MG.cards[a].v[0]===MG.cards[b].v[0]){MG.got++;sbAdd(60);setTimeout(()=>{[a,b].forEach(x=>$("#aw"+x).classList.add("done"));MG.open=[];MG.lock=false;$("#awG").textContent=MG.got;if(MG.got===MG.P)mgEnd(1-MG.miss*.05)},300)}
+  if(MG.open.length===2){const[a,b]=MG.open;MG.lock=true;if(MG.cards[a].v[0]===MG.cards[b].v[0]){MG.got++;sbOk(50,40,1.5,6);setTimeout(()=>{[a,b].forEach(x=>$("#aw"+x).classList.add("done"));MG.open=[];MG.lock=false;$("#awG").textContent=MG.got;if(MG.got===MG.P)mgEnd(1-MG.miss*.05)},300)}
     else{MG.miss++;sbAdd(-15);$("#awM").textContent=MG.miss;toast("ちがう！ 減点");setTimeout(()=>{[a,b].forEach(x=>$("#aw"+x)?.classList.remove("up"));MG.open=[];MG.lock=false},700)}}}
 
 /* --- 消防署：火消し --- */
@@ -2170,18 +2170,18 @@ function ddDraw(){const m=MG,w=$("#ddW");if(!w)return;const sel=m.hand.filter(c=
   <div class="ddLog" id="ddLog">${m.log||""}</div>
   <details class="pkHelp"><summary>役の一覧</summary>${DDY.map(y=>`<div><b>${y[0]}</b> 兵力${y[1]}×${y[2]}　${y[3]}</div>`).join("")}</details>`}
 function ddTap(id){const m=MG;if(!m||m.ended||m.picking)return;const i=m.sel.indexOf(id);if(i>=0)m.sel.splice(i,1);else if(m.sel.length<5)m.sel.push(id);ddDraw()}
-function ddPlay(){const m=MG;if(!m||m.ended||!m.sel.length||m.hands<=0)return;const cs=m.hand.filter(c=>m.sel.includes(c.id)),ev=ddEval(cs);m.hands--;m.score+=ev.total;
+function ddPlay(){const m=MG;if(!m||m.ended||!m.sel.length||m.hands<=0)return;const cs=m.hand.filter(c=>m.sel.includes(c.id)),ev=ddEval(cs);m.hands--;m.score+=ev.total;sbAdd(Math.min(80,ev.total/(m.target||1)*80));
   const ord=[...cs].sort((a,b)=>a.r-b.r).map(c=>`${c.r===1?"初代":c.r+"代"}${HANSHU[c.r][0]}`).join("・");
   m.log=`<b>${ev.y[0]}</b> ${ev.total}の兵で攻めた！<div class="mute">${ord}</div>`;if(!m.best||ev.k>m.best.k)m.best=ev;
   m.hand=m.hand.filter(c=>!m.sel.includes(c.id));m.sel=[];ddFill();
   if(m.score>=m.target){ddDraw();const mm=m;return setTimeout(()=>MG===mm&&ddWin(),500)}
   if(m.hands<=0){ddDraw();const mm=m;return setTimeout(()=>MG===mm&&ddEnd(),700)}ddDraw()}
 function ddDiscard(){const m=MG;if(!m||m.ended||!m.sel.length||m.discards<=0)return;m.discards--;m.hand=m.hand.filter(c=>!m.sel.includes(c.id));m.sel=[];ddFill();m.log="札を入れかえた";ddDraw()}
-function ddWin(){const m=MG;m.stage++;if(m.stage>=3)return ddEnd(true);m.picking=true;const pool=shuffle(DDK.filter(k=>!ddHas(k.id))).slice(0,3);
+function ddWin(){const m=MG;sbAdd(m.hands*40+m.discards*15);m.stage++;if(m.stage>=3)return ddEnd(true);m.picking=true;const pool=shuffle(DDK.filter(k=>!ddHas(k.id))).slice(0,3);
   $("#ddW").innerHTML=`<div class="ddWin">${["第一陣","第二陣"][m.stage-1]}を落とした！</div><div class="mute center">家臣を1人 召しかかえよ</div>
   ${pool.map(k=>`<button class="ddPick" onclick="ddTake('${k.id}')"><b>${k.n}</b><span>${k.d}</span><small>${k.w}</small></button>`).join("")}`}
 function ddTake(id){const m=MG;if(!m||!m.picking)return;m.kas.push(DDK.find(k=>k.id===id));m.picking=false;toast(`${DDK.find(k=>k.id===id).n}が家臣になった`);ddStage()}
-function ddEnd(win){const m=MG;if(!m||m.ended)return;m.ended=1;const part=Math.min(1,m.score/(m.target||1));const r=win?1:(m.stage+part*.8)/3;sbAdd(win?900:(m.stage+part)*300);
+function ddEnd(win){const m=MG;if(!m||m.ended)return;m.ended=1;const part=Math.min(1,m.score/(m.target||1));const r=win?1:(m.stage+part*.8)/3;sbAdd(win?400:(m.stage+part)*150);
   toast(win?"本陣を攻め落とした！ 天晴れ":`${["第一陣","第二陣","本陣"][Math.min(2,m.stage)]}で力つきた`);mgEnd(r)}
 
 /* --- 金箔工房：金脈さがし（芋掘り藤五郎の伝説。数字を頼りに砂金のありかを見ぬく） --- */
@@ -2200,12 +2200,12 @@ function kmTap(c){const m=MG;if(!m||m.ended||m.open.has(c))return;
   if(m.mode==="flag"){if(m.flag.has(c))m.flag.delete(c);else m.flag.add(c);$("#kmF").textContent=m.flag.size;return kmDraw()}
   if(m.flag.has(c))return;if(!m.gold)kmSeed(c);
   if(m.gold.has(c)){m.lost++;m.open.add(c);$("#kmL").textContent=m.lost;toast("砂金を泥ごと流してしもうた！");kmDraw();if(m.lost>=3){const mm=m;return setTimeout(()=>MG===mm&&kmEnd(false),700)}return}
-  kmOpen(c);kmDraw();const safe=m.n*m.n-m.k;if([...m.open].filter(p=>!m.gold.has(p)).length>=safe){const mm=m;setTimeout(()=>MG===mm&&kmEnd(true),500)}}
+  {const b0=m.open.size;kmOpen(c);sbAdd((m.open.size-b0)*6);sbOk(0,15,1.5,8)}kmDraw();const safe=m.n*m.n-m.k;if([...m.open].filter(p=>!m.gold.has(p)).length>=safe){const mm=m;setTimeout(()=>MG===mm&&kmEnd(true),500)}}
 function kmDraw(){const m=MG,n=m.n,C=["","#5ab0ff","#7fd06a","#ff8a7a","#c9a2ff","#ffb05a","#5ad0c8","#f6f0e0","#f6f0e0"];
   $("#kmG").innerHTML=[...Array(n*n).keys()].map(c=>{if(m.open.has(c)){if(m.gold&&m.gold.has(c))return `<button class="kmC lost">×</button>`;const v=kmNum(c);return `<button class="kmC op" style="color:${C[v]}">${v||""}</button>`}
     return `<button class="kmC${m.flag.has(c)?" fl":""}" onclick="kmTap(${c})">${m.flag.has(c)?"金":""}</button>`}).join("")}
 function kmEnd(ok){const m=MG;if(!m||m.ended)return;m.ended=1;const safe=m.n*m.n-m.k,dug=m.gold?[...m.open].filter(p=>!m.gold.has(p)).length:0;
-  const r=ok?1-m.lost*.2:dug/safe*.6-m.lost*.05;sbAdd((ok?600:dug*20)-m.lost*80);toast(ok?"金脈を掘りあてた！":`掘れたのは ${dug}/${safe} マス`);mgEnd(r)}
+  const r=ok?1-m.lost*.2:dug/safe*.6-m.lost*.05;{const fc=[...m.flag].filter(c=>m.gold&&m.gold.has(c)).length;sbAdd((ok?300:0)+fc*10-(m.flag.size-fc)*10-m.lost*80)}toast(ok?"金脈を掘りあてた！":`掘れたのは ${dug}/${safe} マス`);mgEnd(r)}
 
 /* --- 文化ホール：からくり忍者寺（からくりと曲者をかわし、最後は番人と対決） --- */
 const NDK={ana:"落とし穴！ 跳べ",hari:"隠し梁！ 伏せよ",dan:"隠し階段！ 跳べ",teki:"曲者！ 踏むか手裏剣",karasu:"からす！ 伏せるか手裏剣"};
@@ -2271,11 +2271,11 @@ function ndStep(dt){const m=MG;if(m.duck>0)m.duck-=dt;if(m.inv>0)m.inv-=dt;if(m.
   m.fx.forEach(f=>f.t-=dt);m.fx=m.fx.filter(f=>f.t>0);
   const v=m.boss?0:(m.sp+=dt*.0000025,m.sp*dt);m.dist+=v;m.scroll+=v;
   if(!m.boss){m.nextO-=v;if(m.nextO<=0&&m.dist<m.goal-250)ndSpawn()}
-  m.obs.forEach(o=>{o.x-=v;if(o.t==="teki"){o.x-=o.vx*dt;o.ph+=dt*.012;if(o.hop){o.hp2+=dt*.0055;o.jy=Math.max(0,Math.sin(o.hp2))*56}}if(o.t==="karasu"){o.x-=o.vx*dt;o.ph+=dt*.006;o.yy=m.gy-(o.hi?84:44)+Math.sin(o.ph)*(o.hi?4:8)}});m.obs=m.obs.filter(o=>o.x+o.w>-30&&!o.dead);
+  m.obs.forEach(o=>{o.x-=v;if(o.t==="teki"){o.x-=o.vx*dt;o.ph+=dt*.012;if(o.hop){o.hp2+=dt*.0055;o.jy=Math.max(0,Math.sin(o.hp2))*56}}if(o.t==="karasu"){o.x-=o.vx*dt;o.ph+=dt*.006;o.yy=m.gy-(o.hi?84:44)+Math.sin(o.ph)*(o.hi?4:8)}});m.obs.forEach(o=>{if(!o.passed&&o.t!=="item"&&!o.dead&&o.x+o.w<m.px){o.passed=1;if(m.inv<=0&&!m.fall)sbAdd(8)}});m.obs=m.obs.filter(o=>o.x+o.w>-30&&!o.dead);
   m.shots.forEach(s=>{s.x+=.5*dt;s.a+=dt*.03});m.eshots.forEach(s=>{s.x-=s.v*dt;s.a+=dt*.02});
   // 手裏剣の当たり
-  m.shots.forEach(s=>{const sb=[s.x-5,s.y-5,10,10];m.obs.forEach(o=>{if(o.dead||(o.t!=="teki"&&o.t!=="karasu"))return;if(ndOv(sb,ndBox(o))){o.dead=1;s.done=1;m.kills++;m.fx.push({x:o.x+o.w/2,y:ndBox(o)[1],t:500,s:"討ち取った！"})}});
-    if(m.boss&&!s.done&&ndOv(sb,[m.boss.x,m.gy-70,46,70])){s.done=1;m.boss.hp--;m.boss.flash=200;m.fx.push({x:m.boss.x+23,y:m.gy-76,t:450,s:"命中！"});if(m.boss.hp<=0){const mm=m;m.boss.dead=1;setTimeout(()=>MG===mm&&ndEnd(true),700)}}});
+  m.shots.forEach(s=>{const sb=[s.x-5,s.y-5,10,10];m.obs.forEach(o=>{if(o.dead||(o.t!=="teki"&&o.t!=="karasu"))return;if(ndOv(sb,ndBox(o))){o.dead=1;s.done=1;m.kills++;sbAdd(25);m.fx.push({x:o.x+o.w/2,y:ndBox(o)[1],t:500,s:"討ち取った！"})}});
+    if(m.boss&&!s.done&&ndOv(sb,[m.boss.x,m.gy-70,46,70])){s.done=1;m.boss.hp--;sbAdd(40);m.boss.flash=200;m.fx.push({x:m.boss.x+23,y:m.gy-76,t:450,s:"命中！"});if(m.boss.hp<=0){const mm=m;m.boss.dead=1;setTimeout(()=>MG===mm&&ndEnd(true),700)}}});
   m.shots=m.shots.filter(s=>!s.done&&s.x<m.W+10);m.eshots=m.eshots.filter(s=>!s.done&&s.x>-10);
   if(m.fall){m.fall-=dt;m.y+=dt*.25;if(m.fall<=0){m.fall=0;m.y=0;m.vy=0;m.obs=m.obs.filter(o=>!(o.t==="ana"&&o.x<m.px+40));m.inv=1200}return ndHud()}
   const wasAir=m.y<0;if(m.y<0||m.vy<0){m.vy+=.0021*dt;m.y+=m.vy*dt;if(m.y>=0){m.y=0;m.vy=0}}
@@ -2283,9 +2283,9 @@ function ndStep(dt){const m=MG;if(m.duck>0)m.duck-=dt;if(m.inv>0)m.inv-=dt;if(m.
   if(m.y===0&&overPit&&!m.boss){if(m.star>0){/*無敵中は穴の上を駆けぬける*/}else{ndHit("落とし穴に落ちた！");m.fall=600;return}}
   const pb=ndHitBox();
   m.obs.forEach(o=>{if(o.hit||o.dead)return;
-    if(o.t==="item"){if(ndOv(pb,ndBox(o))){o.dead=1;if(o.k==="shu")m.ammo+=3;if(o.k==="fuda")m.star=5000;if(o.k==="musubi")m.life=Math.min(m.lifeMax||3,m.life+1);m.msg=NDI[o.k][0];m.msgT=900}return}
-    if(o.t==="teki"){const b=ndBox(o);if(!ndOv(pb,b))return;if(m.vy>0&&m.gy+m.y-8<b[1]+6){o.dead=1;m.kills++;m.vy=-.42;m.fx.push({x:o.x+9,y:b[1],t:500,s:"ふみつけ！"});return}
-      if(m.star>0){o.dead=1;m.kills++;return}if(m.inv<=0){o.hit=1;ndHit("曲者にやられた！")}return}
+    if(o.t==="item"){if(ndOv(pb,ndBox(o))){o.dead=1;sbAdd(15);if(o.k==="shu")m.ammo+=3;if(o.k==="fuda")m.star=5000;if(o.k==="musubi")m.life=Math.min(m.lifeMax||3,m.life+1);m.msg=NDI[o.k][0];m.msgT=900}return}
+    if(o.t==="teki"){const b=ndBox(o);if(!ndOv(pb,b))return;if(m.vy>0&&m.gy+m.y-8<b[1]+6){o.dead=1;m.kills++;sbAdd(25);m.vy=-.42;m.fx.push({x:o.x+9,y:b[1],t:500,s:"ふみつけ！"});return}
+      if(m.star>0){o.dead=1;m.kills++;sbAdd(25);return}if(m.inv<=0){o.hit=1;ndHit("曲者にやられた！")}return}
     if(o.t==="karasu"){if(!ndOv(pb,ndBox(o)))return;if(m.star>0){o.dead=1;return}if(m.inv<=0){o.hit=1;ndHit("からすにつつかれた！")}return}
     if(o.x>m.px+18||o.x+o.w<m.px)return;
     if(o.t==="hari"&&m.duck<=0&&m.star<=0&&m.inv<=0){o.hit=1;ndHit("梁に頭をぶつけた！")}
@@ -2313,7 +2313,7 @@ function ndBossAI(B,dt){const m=MG,lv=MG.lv,v0=ND_LV.bv[lv],hard=B.hp<=B.max/2,s
   ];
   const pool=hard?[1,2,3,4,5,6,3,5]:[0,1,3,4,5,0,6];let k;do{k=pool[Math.floor(Math.random()*pool.length)]}while(k===B.last&&Math.random()<.8);B.last=k;
   B.q=P[k]().map(([t,f])=>[t*(hard?.8:1),f])}
-function ndHit(s){const m=MG;m.life--;m.inv=1300;m.msg=s;m.msgT=1000;if(m.life<=0){const mm=m;setTimeout(()=>MG===mm&&ndEnd(false),400)}}
+function ndHit(s){const m=MG;m.life--;sbAdd(-40);m.inv=1300;m.msg=s;m.msgT=1000;if(m.life<=0){const mm=m;setTimeout(()=>MG===mm&&ndEnd(false),400)}}
 function ndHud(){const m=MG,l=$("#ndL"),p=$("#ndP"),a=$("#ndA");if(l)l.textContent=Math.max(0,m.life);if(a)a.textContent=m.ammo;if(p)p.textContent=m.boss?"■".repeat(Math.max(0,m.boss.hp)):Math.min(100,Math.floor(m.dist/m.goal*100))}
 function ndStar(x,cx,cy,r,a){x.save();x.translate(cx,cy);x.rotate(a);x.fillStyle="#c9d4e0";x.beginPath();for(let i=0;i<8;i++){const rr=i%2?r*.35:r,an=i*Math.PI/4;x.lineTo(Math.cos(an)*rr,Math.sin(an)*rr)}x.fill();x.restore()}
 function ndDraw(){const m=MG,x=m.x,W=m.W,H=m.H,gy=m.gy;x.fillStyle=m.boss?"#1f1410":"#2a1f14";x.fillRect(0,0,W,H);
@@ -2340,7 +2340,7 @@ function ndDraw(){const m=MG,x=m.x,W=m.W,H=m.H,gy=m.gy;x.fillStyle=m.boss?"#1f14
   else{x.fillStyle="rgba(0,0,0,.5)";x.fillRect(8,6,W-16,8);x.fillStyle="#d02a2a";x.fillRect(8,6,(W-16)*Math.max(0,m.boss.hp)/m.boss.max,8)}
   x.textAlign="center";x.font="900 14px sans-serif";m.fx.forEach(f=>{x.globalAlpha=Math.min(1,f.t/250);x.fillStyle="#ffd76a";x.fillText(f.s,f.x,f.y-(500-f.t)*.03)});x.globalAlpha=1;
   if(m.msgT>0){x.font="900 17px sans-serif";x.fillStyle="#000";x.fillText(m.msg,W/2+1,62);x.fillStyle="#ffd76a";x.fillText(m.msg,W/2,61)}}
-function ndEnd(ok){const m=MG;if(!m||m.ended)return;m.ended=1;const pg=Math.min(1,m.dist/m.goal);sbAdd(pg*600+(ok?300+Math.max(0,m.life)/(m.lifeMax||3)*300:0));  // 残りの命は割合で（命の多い段でも最高点は同じ）toast(ok?`からくり番人を倒した！（討ち取り ${m.kills}）`:m.boss?"番人に敗れた…":`奥まで ${Math.floor(pg*100)}%`);
+function ndEnd(ok){const m=MG;if(!m||m.ended)return;m.ended=1;const pg=Math.min(1,m.dist/m.goal);sbAdd(pg*400+(ok?300+Math.max(0,m.life)/(m.lifeMax||3)*200:0));/* 残りの命は割合で（命の多い段でも最高点は同じ） */toast(ok?`からくり番人を倒した！（討ち取り ${m.kills}）`:m.boss?"番人に敗れた…":`奥まで ${Math.floor(pg*100)}%`);
   mgEnd(ok?.55+.15*Math.max(0,m.life):m.boss?.5:pg*.5)}
 
 /* --- 金沢駅：大名行列（ヘビゲーム風。供を集めて行列をのばす） --- */
@@ -2364,8 +2364,8 @@ function gyFood(){MG.food=gyFree()}
 function gyStep(){const m=MG;m.dir=m.nd;const h=m.body[0],nh=[h[0]+m.dir[0],h[1]+m.dir[1]];
   if(nh[0]<0||nh[1]<0||nh[0]>=m.G||nh[1]>=m.G||m.rocks.some(r=>r[0]===nh[0]&&r[1]===nh[1])||m.body.slice(0,-1).some(b=>b[0]===nh[0]&&b[1]===nh[1])){toast("行列が止まってしもうた！");return gyEnd(true)}
   m.body.unshift(nh);let grow=0;
-  if(nh[0]===m.food[0]&&nh[1]===m.food[1]){m.got++;sbAdd(50);grow=1;gyFood();if(!m.gold&&Math.random()<.25)m.gold={p:gyFree(),t:Date.now()}}
-  if(m.gold&&nh[0]===m.gold.p[0]&&nh[1]===m.gold.p[1]){m.got+=3;grow=3;m.gold=null;toast("千両箱！ お供が3人ふえた")}
+  if(nh[0]===m.food[0]&&nh[1]===m.food[1]){m.got++;sbOk(40,30,2,8);grow=1;gyFood();if(!m.gold&&Math.random()<.25)m.gold={p:gyFree(),t:Date.now()}}
+  if(m.gold&&nh[0]===m.gold.p[0]&&nh[1]===m.gold.p[1]){m.got+=3;grow=3;m.gold=null;sbAdd(80);toast("千両箱！ お供が3人ふえた")}
   if(m.gold&&Date.now()-m.gold.t>5000)m.gold=null;
   m.pend=(m.pend||0)+grow;if(m.pend>0)m.pend--;else m.body.pop();$("#gyN").textContent=m.got}
 function gyDraw(){const m=MG,x=m.x,c=m.cs,W=m.W;x.fillStyle="#6b5a3a";x.fillRect(0,0,W,W);
@@ -2463,10 +2463,10 @@ function sdNext(){const n=MG.n,c=MG.path[MG.path.length-1],r=Math.floor(c/n),q=c
 function sdDraw(){const n=MG.n,cur=MG.path[MG.path.length-1],nx=sdNext();
   $("#sdG").innerHTML=[...Array(n*n).keys()].map(k=>{const cls=!MG.free.has(k)?"rock":k===cur?"cur":MG.path.includes(k)?"done":nx.includes(k)?"can":"";return `<button class="sdC ${cls}" onclick="sdTap(${k})">${!MG.free.has(k)?IC("ishigaki","22px"):k===cur?IC("ineho","22px"):k===MG.s0?'<b class="sdW">水</b>':""}</button>`}).join("");{const bk=$("#sdBk");if(bk){bk.textContent=`引き返す（あと${MG.back}）`;bk.disabled=!MG.back||MG.path.length<2}}
   $("#sdN").textContent=MG.path.length;if(!nx.length&&!(MG.back&&MG.path.length>1)){const m=MG;setTimeout(()=>MG===m&&sdEnd(),350)}}
-function sdTap(k){if(!MG||!sdNext().includes(k))return;MG.path.push(k);sdDraw()}
-function sdReset(){if(!MG)return;MG.path=[MG.s0];MG.back=2;sdDraw()}
-function sdBack(){if(!MG||!MG.back||MG.path.length<2)return;MG.path.pop();MG.back--;sdDraw()}
-function sdEnd(){if(!MG||MG.ended)return;MG.ended=1;sbAdd(MG.path.length*20);mgEnd(MG.path.length/MG.free.size)}
+function sdTap(k){if(!MG||!sdNext().includes(k))return;MG.path.push(k);sbOk(0,6,.6,3);sdDraw()}
+function sdReset(){if(!MG)return;MG.resets=(MG.resets||0)+1;MG.path=[MG.s0];MG.back=2;sdDraw()}
+function sdBack(){if(!MG||!MG.back||MG.path.length<2)return;MG.backs=(MG.backs||0)+1;MG.path.pop();MG.back--;sdDraw()}
+function sdEnd(){if(!MG||MG.ended)return;MG.ended=1;const full=MG.path.length>=MG.free.size;sbAdd(MG.path.length*15+(full?150:0)-(MG.backs||0)*15-(MG.resets||0)*30);mgEnd(MG.path.length/MG.free.size)}
 
 /* --- ひがし茶屋街：茶器の目利き（太閤立志伝の茶道にならう。見せた茶碗の順をおぼえて並べる） --- */
 const CHAKI=[["大樋焼","#8a3f16","#b8652a"],["九谷焼","#f2ece0","#2f6aa0","#c8382c","#e0b030"],["黒楽","#1c1a18","#3a3430"],["赤楽","#a8452a","#c8683a"],["青磁","#8fbfae","#b6d8cb"],["金箔の碗","#c9a227","#f0d878"],["萩焼","#e6d2c0","#c9a890"]];
@@ -2510,7 +2510,7 @@ function ihSide(sd){if(!MG)return;MG.side=sd;ihDraw()}
 function ihTap(k){if(!MG)return;const s=MG.st[k];if(MG.mode&&s.on){const cut=Math.round(s.w*(.12+Math.random()*.16));s.w-=cut;MG.nomi--;MG.mode=0;toast(`石を ${cut}貫 削った`);return ihDraw()}s.on=s.on?"":MG.side;ihDraw()}
 function ihNomi(){if(!MG)return;if(MG.mode){MG.mode=0;return ihDraw()}if(!MG.nomi)return;if(!MG.st.some(s=>s.on))return toast("先に石を皿にのせよ");MG.mode=1;ihDraw()}
 function ihEnd(){if(!MG||MG.ended)return;MG.ended=1;const L=MG.L,R=MG.R,sum=L+R,t=MG.tol;if(!L||!R){toast("両方の皿にのせねば釣り合わぬ");return mgEnd(0)}
-  const e=Math.abs(L-R)/(sum/2);let r=e<=.01*t?1:e<=.03*t?.8:e<=.06*t?.6:e<=.12*t?.4:.15;sbAdd(700*Math.max(0,1-e/(.12*t))*(sum<MG.T?.5:1));if(sum<MG.T){r*=.5;toast(`目方が足りぬ（${fmt(sum)} / ${fmt(MG.T)}貫）`)}else toast(`左 ${fmt(L)}貫・右 ${fmt(R)}貫`);mgEnd(r)}
+  const e=Math.abs(L-R)/(sum/2);let r=e<=.01*t?1:e<=.03*t?.8:e<=.06*t?.6:e<=.12*t?.4:.15;{const acc=Math.max(0,1-e/(.12*t))*(sum<MG.T?.5:1);sbAdd(600*acc+acc*(MG.t||0)*6+acc*MG.nomi*20)}if(sum<MG.T){r*=.5;toast(`目方が足りぬ（${fmt(sum)} / ${fmt(MG.T)}貫）`)}else toast(`左 ${fmt(L)}貫・右 ${fmt(R)}貫`);mgEnd(r)}
 
 /* --- 金沢城：石垣普請（太閤立志伝Vの普請にならう。石垣のすき間を石材でうめる） --- */
 const PZ_SHAPES=[[[0,0],[1,0],[2,0],[3,0]],[[0,0],[1,0],[0,1],[1,1]],[[0,0],[1,0],[2,0],[1,1]],[[0,0],[0,1],[0,2],[1,2]],[[1,0],[1,1],[1,2],[0,2]],[[1,0],[2,0],[0,1],[1,1]],[[0,0],[1,0],[1,1],[2,1]],[[1,0],[0,1],[1,1],[2,1],[1,2]],[[0,0],[2,0],[0,1],[1,1],[2,1]],[[0,0],[0,1],[0,2],[1,2],[2,2]],[[0,0],[1,0],[2,0]],[[0,0],[1,0],[1,1]]];
@@ -2535,10 +2535,10 @@ function pzRotSel(){if(!MG||MG.sel<0)return;const p=MG.pcs[MG.sel];p.c=pzRot(p.c
 function pzTap(k){if(!MG)return;const W=MG.W,x=k%W,y=Math.floor(k/W),v=MG.cell[k];
   if(v>=2){const id=v-2;MG.cell=MG.cell.map(c=>c===v?0:c);MG.pcs[id].at=null;MG.sel=id;MG.ghost=null;return pzDraw()}
   if(MG.sel<0)return toast("先に下の石材を選べ");const p=MG.pcs[MG.sel];
-  if(MG.ghost&&MG.ghost.cells.some(([a,b])=>a===x&&b===y)){if(!MG.ghost.ok)return toast("そこには はまらぬ");MG.ghost.cells.forEach(([a,b])=>MG.cell[b*W+a]=2+MG.sel);p.at=MG.ghost.o;MG.ghost=null;MG.sel=MG.pcs.findIndex(q=>!q.at);pzDraw();if(pzFill()>=MG.holes){toast("石垣が見事に組み上がった！");{const m=MG;setTimeout(()=>MG===m&&pzEnd(),400)}}return}
+  if(MG.ghost&&MG.ghost.cells.some(([a,b])=>a===x&&b===y)){if(!MG.ghost.ok)return toast("そこには はまらぬ");MG.ghost.cells.forEach(([a,b])=>MG.cell[b*W+a]=2+MG.sel);p.at=MG.ghost.o;MG.ghost=null;sbOk(10,15,2,10);MG.sel=MG.pcs.findIndex(q=>!q.at);pzDraw();if(pzFill()>=MG.holes){toast("石垣が見事に組み上がった！");{const m=MG;setTimeout(()=>MG===m&&pzEnd(),400)}}return}
   // 押したマスに石材の最初の石が来るように仮置き
   const [fx,fy]=p.c[0],ox=x-fx,oy=y-fy;MG.ghost={o:[ox,oy],cells:p.c.map(([a,b])=>[a+ox,b+oy]),ok:pzFits(p.c,ox,oy)};pzDraw()}
-function pzEnd(){if(!MG||MG.ended)return;MG.ended=1;const r=pzFill()/MG.holes;sbAdd(Math.min(1,r)*700);mgEnd(r>=1?1:r*.85)}
+function pzEnd(){if(!MG||MG.ended)return;MG.ended=1;const r=pzFill()/MG.holes;sbAdd(Math.min(1,r)*500);mgEnd(r>=1?1:r*.85)}
 
 
 
@@ -3743,10 +3743,10 @@ function sbT0(){if(MG)MG.t0=sbNow()}
 function sbOk(base,mx,fast,slow,since){if(!MG)return;const rt=sbNow()-(since!=null?since:(MG.t0||sbNow()));MG.pts=(MG.pts||0)+base+sbS(rt,fast,slow,mx);MG.t0=sbNow()}
 function sbAdd(p){if(MG)MG.pts=(MG.pts||0)+p}
 // 最高点＝「上手な大人が本気で遊んだときの点」（計算の理論値ではなく、人がやって届く上限の目安）。その95%以上で出来100%
-const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1900,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1300,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:650,shobo:2500,bijutsukan:1050,kinpaku:800,kageki:1300,eki:650,shogakko:950,yosui:740,chaya:880,kenroku:700,shiro:820};
+const SB_MAX={cut:3100,kouka:820,kaga:4500,vname:1900,kotoba:2200,kutani:950,yuki:1900,ysui:2000,haku:2400,hashigo:1400,kokuin:950,oden:1300,yuzen:900,hayashi:1600,toshokan:850,ichiba:850,koen:800,shobo:2500,bijutsukan:1100,kinpaku:900,kageki:1600,eki:900,shogakko:950,yosui:850,chaya:880,kenroku:820,shiro:820};
 const SB_BASE=Object.fromEntries(Object.entries(SB_MAX).map(([k,v])=>[k,Math.round(v*.95)]));
 // 目標を早く終えたときの「のこり1秒」の点
-const SB_LEFT={koen:10,bijutsukan:2};
+const SB_LEFT={koen:10,bijutsukan:2,kenroku:0};  // 庭石は釣り合いの正確さに合わせて残り時間を数えるので、ここでは足さない
 /* ===================== きょうの勝負（個人スコア） =====================
    ・ミニゲーム14種類＋普請13種類＝27種類から、毎日1種類（全員同じゲーム・中身は人ごとにランダム）
    ・いちばん簡単な段（一の段）で、1日1回だけ。やり直しなし
