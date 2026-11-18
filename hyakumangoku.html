@@ -1787,7 +1787,7 @@ function kagaStart(sb){const T=45+(waza("kyoyo",1)?10:0);K={t:T,ok:0,ng:0,done:f
   kagaNext();swipe($("#veg"));
   K.timer=setInterval(()=>{K.t--;const tm=$("#tm");if(!tm)return clearInterval(K.timer);tm.textContent=K.t;if(K.t<=10)tm.classList.add("hot");if(K.t<=0)kagaFinish()},1000)}
 function kagaNext(){if(K.done||!$("#veg"))return;if(!K.deck.length)K.deck=deck();K.cur=K.deck.pop();K.t0=sbNow();const v=$("#veg");const [n,ty,c1,c2]=K.cur.v;v.innerHTML=`<div class="vimg">${vegImg(n)||veg(ty,c1,c2)}</div>${n}`;v.style.transition="none";v.style.transform="translateX(-50%)"}
-function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok,f=$("#flash");f.className="flash "+(ok?"ok":"ng");setTimeout(()=>f.className="flash",300);
+function kagaJudge(right){if(K.done)return;const ok=right===K.cur.ok,f=$("#flash");try{SE(ok?"ok":"ng")}catch(e){}f.className="flash "+(ok?"ok":"ng");setTimeout(()=>f.className="flash",300);
   ok?K.ok++:K.ng++;{const rt=sbNow()-(K.t0||sbNow());K.pts=(K.pts||0)+(ok?60+sbS(rt,.5,2,40):-60)}$("#kok").textContent=K.ok;$("#kng").textContent=K.ng;if(!ok)toast(`${K.cur.v[0]} は ${K.cur.ok?"加賀野菜です":"加賀野菜ではありません"}`);
   const v=$("#veg");v.style.transition="transform .18s";v.style.transform=`translateX(${right?"120%":"-320%"})`;setTimeout(kagaNext,180)}
 function swipe(el){let sx=0,dx=0;el.addEventListener("touchstart",e=>{sx=e.touches[0].clientX;dx=0},{passive:true});
