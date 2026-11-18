@@ -3413,8 +3413,8 @@ function mnKotobaDeal(){const m=MG,set=kzDeal5();m.set=set;m.left=set.length;m.p
   $("#mnW").innerHTML=`<div class="mnPair"><div>${shuffle(set.map((p,i)=>i)).map(i=>`<button class="mnOpt kt" id="kl${i}" onclick="mnKL(${i})">${set[i][0]}</button>`).join("")}</div><div>${shuffle(set.map((p,i)=>i)).map(i=>`<button class="mnOpt" id="kr${i}" onclick="mnKR(${i})">${set[i][1]}</button>`).join("")}</div></div>`}
 function mnKL(i){const m=MG;if(!m||m.ended)return;document.querySelectorAll(".mnOpt.kt").forEach(b=>b.classList.remove("on"));m.pick=i;sbT0();$("#kl"+i).classList.add("on")}
 function mnKR(i){const m=MG;if(!m||m.ended||m.pick==null)return;const l=$("#kl"+m.pick),r=$("#kr"+i);
-  if(i===m.pick){m.ok++;sbOk(60,40,1,4);l.disabled=r.disabled=true;l.classList.remove("on");l.classList.add("ok");r.classList.add("ok");m.left--;m.pick=null;if(m.left<=0){const mm=m;setTimeout(()=>MG===mm&&!mm.ended&&mnKotobaDeal(),500)}}
-  else{m.ng++;sbAdd(-30);r.classList.add("ng");setTimeout(()=>r.classList.remove("ng"),400)}$("#mnOk").textContent=m.ok;$("#mnNg").textContent=m.ng}
+  if(i===m.pick){m.ok++;sbOk(60,40,1,4);try{SE("ok")}catch(e){}l.disabled=r.disabled=true;l.classList.remove("on");l.classList.add("ok");r.classList.add("ok");m.left--;m.pick=null;if(m.left<=0){const mm=m;setTimeout(()=>MG===mm&&!mm.ended&&mnKotobaDeal(),500)}}
+  else{m.ng++;sbAdd(-30);try{SE("ng")}catch(e){}r.classList.add("ng");setTimeout(()=>r.classList.remove("ng"),400)}$("#mnOk").textContent=m.ok;$("#mnNg").textContent=m.ng}
 
 /* --- 金沢検定 早押し：問題文が少しずつ出る。早く押して当てるほど高得点。答えのあとに覚えどころ --- */
 let HAYA_POOL=null;
