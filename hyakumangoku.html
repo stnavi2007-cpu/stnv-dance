@@ -1449,7 +1449,6 @@ function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP){HUB_SEC="";HU
   const pct=Math.min(100,t.koku/GOAL*100);
   const rep=S.report;
   app.innerHTML=`
-  ${FUSHIN_TEST||ADMIN?adminPanel():""}
   <div class="card prof">
     <div class="av">${avatar(S.g,S.a,RA(),undefined,S.invites>=10)}</div>
     <div style="flex:1;min-width:0">
@@ -1545,6 +1544,7 @@ function home(){abar.className="abar";if(VIEW!=="home"&&!HUB_KEEP){HUB_SEC="";HU
     <div class="notice" style="margin-top:6px">※ 呼んだ人数の集計は本番のサーバー接続後に動きます。</div>
   </div>
   <div class="card toiaC" data-sec="toia"><h2>${IC("fumi")} 問い合わせ先</h2><div class="mute">百万石クエストは、金沢情報サイト「金沢まるっと」の仲間です。ご意見・ご質問・まちがいの知らせは、金沢まるっとの「お問い合わせ・まちがいのご指摘」からどうぞ。</div><a class="kwL" href="https://kanazawa-marutto.jp/#contact" target="_blank" rel="noopener">お問い合わせ・まちがいのご指摘をひらく</a></div>
+  ${FUSHIN_TEST||ADMIN?adminPanel():""}
   `;
   hubBuild();hd();maybeHagure();
 }
