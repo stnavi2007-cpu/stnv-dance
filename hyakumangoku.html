@@ -3042,7 +3042,7 @@ const KZ_ORD=["UR","SSR","SR","R","N"],KZ_RI={N:0,R:1,SR:2,SSR:3,UR:4};
 const KZ=[],KZM={};
 const KZ_STAR=[0,0,10,30,60,100];// ★n に必要な勝ち数
 var KZ_GROW=.032;// ★1つで体力・攻撃・速さ+3.2%（補佐の効き目は★1つで+25%）
-let KZ_RND=.1,KZ_CRB=0,KZ_EV=.02,KZ_EVMAX=.25,KZ_GOTE=.15,KZ_GOTEN=1,KZ_GOTEKI=0;// 速さの差1につき2%かわす（最大25%）・後手の先陣が最初に受ける攻撃を少しだけ軽く（速さ＝先手の有利は残す）
+let KZ_RND=.1,KZ_CRB=0,KZ_EV=.02,KZ_EVMAX=.25,KZ_GOTE=0,KZ_GOTEN=1,KZ_GOTEKI=0;// 速さの差1につき2%かわす（最大25%）・後手の先陣が最初に受ける攻撃を少しだけ軽く（速さ＝先手の有利は残す）
 const KZ_TIER=["並","上","極"];
 const KRB=(k,y)=>`<span class="fg fx">${k}<span class="frt">${y}</span></span>`;
 // 必殺技（v＝並・上・極の値）
