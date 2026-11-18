@@ -3511,13 +3511,17 @@ function mnYukitsuri(){const lv=MG.lv,W=320,H=330;
   <div class="yrBar"><span>得点 <b id="ytP">0</b></span><span>かけた縄 <b id="ytOk">0</b></span><span>折れた枝 <b id="ytL">0</b></span></div><canvas id="ytC" class="mgCv" style="width:100%;max-width:320px;aspect-ratio:${W}/${H};touch-action:none"></canvas></div>`;
   const c=$("#ytC");MG.cx2=mgCanvas("ytC",W,H);const m=MG;ytTree();
   const pt=e=>{const t=e.changedTouches&&e.changedTouches.length?e.changedTouches[0]:e;const b=c.getBoundingClientRect();return [(t.clientX-b.left)/b.width*W,(t.clientY-b.top)/b.height*H]};
-  const dn=e=>{e.preventDefault();if(m.ended||m.rope)return;const p=pt(e);m.aim={s:p,p}};
-  const mv=e=>{e.preventDefault();if(m.aim)m.aim.p=pt(e)};
-  const up=e=>{e.preventDefault();if(!m.aim)return;const v=ytVel(m.aim);m.aim=null;if(!v)return;m.rope={x:m.cx,y:m.cy,vx:v[0],vy:v[1],t:0};try{tone(520,0,.05,"triangle",.05)}catch(e){}};
-  c.addEventListener("touchstart",dn,{passive:false});c.addEventListener("touchmove",mv,{passive:false});c.addEventListener("touchend",up,{passive:false});
-  c.addEventListener("mousedown",dn);c.addEventListener("mousemove",mv);c.addEventListener("mouseup",up);
+  // 引っぱりはカード全体のどこから始めてもよい（てっぺん付近で指が少しずれても画面がスクロールしない）。動かす・離すは画面の外でも受ける
+  const area=c.closest(".card")||c;area.style.touchAction="none";
+  const dn=e=>{if(e.target.closest&&e.target.closest("button,a"))return;e.preventDefault();if(m.ended||m.rope||MG!==m)return;const p=pt(e);m.aim={s:p,p}};
+  const mv=e=>{if(!m.aim||MG!==m)return;e.preventDefault();m.aim.p=pt(e)};
+  const up=e=>{if(!m.aim||MG!==m)return;e.preventDefault();const v=ytVel(m.aim);m.aim=null;if(!v)return;m.rope={x:m.cx,y:m.cy,vx:v[0],vy:v[1],t:0};try{tone(520,0,.05,"triangle",.05)}catch(e){}};
+  area.addEventListener("touchstart",dn,{passive:false});area.addEventListener("mousedown",dn);
+  window.addEventListener("touchmove",mv,{passive:false});window.addEventListener("touchend",up,{passive:false});window.addEventListener("touchcancel",up,{passive:false});
+  window.addEventListener("mousemove",mv);window.addEventListener("mouseup",up);
+  m.unhook=()=>{["touchmove","touchend","touchcancel"].forEach(k=>window.removeEventListener(k,k==="touchmove"?mv:up));window.removeEventListener("mousemove",mv);window.removeEventListener("mouseup",up)};
   m.last=performance.now();const loop=t=>{if(MG!==m||m.ended)return;const dt=Math.min(.05,(t-m.last)/1000);m.last=t;ytStep(dt);ytDraw();m.raf=requestAnimationFrame(loop)};m.raf=requestAnimationFrame(loop);
-  mgTimer(40,()=>{const m=MG;mnFin(m.ok-m.lost,12)})}
+  mgTimer(40,()=>{const m=MG;m.unhook&&m.unhook();mnFin(m.ok-m.lost,12)})}
 const YT_G=520;
 // 引いた量 → 投げる速さ（引いた反対向き）。短すぎる引きは投げない
 function ytVel(a){const dx=a.s[0]-a.p[0],dy=a.s[1]-a.p[1],L=Math.hypot(dx,dy);if(L<12)return null;const k=Math.min(L,150)*4.2/L;return [dx*k,dy*k]}
