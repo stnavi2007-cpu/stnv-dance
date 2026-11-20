@@ -3924,13 +3924,15 @@ const MS_IMG=id=>`hyakumangoku_img/ms/ms_${id}.webp?v=1120`;  /* 絵40枚：MUSE
 function msBig(c){return `<div class="msBig" style="--rc:${MS_RC[c.r]}"><img class="msImg" src="${MS_IMG(c.id)}" alt="${c.n}" width="320" height="240" loading="lazy"><div class="msHd"><span class="msR">${c.r}</span>${IC(MS_CAT[c.cat]||"zukan","26px")}<b>${c.n}</b></div>
   <div class="msDes">${c.des}</div><p>${c.d}</p><dl><dt>置き場所</dt><dd>${c.loc}</dd><dt>年代</dt><dd>${c.era}</dd>${c.fn!==c.n?`<dt>正式な名前</dt><dd>${c.fn}</dd>`:""}</dl>
   <a class="kwL" href="${c.src}" target="_blank" rel="noopener">出典をひらく</a></div>`}
-function msOpen(id){const c=MSM[id];if(!msSt().got[id])return;infoPop({title:`${c.n}`,body:msBig(c)})}
+/* 試作中は全部の札を見られる（2026-11-21 たけさん「試作で確認させろ」）。持っている数・ごほうびには入れない */
+const MS_ALL=()=>typeof FUSHIN_TEST!=="undefined"&&FUSHIN_TEST;
+function msOpen(id){const c=MSM[id];if(!msSt().got[id]&&!MS_ALL())return;infoPop({title:`${c.n}`,body:msBig(c)})}
 function msCard(){if(!S.lock)return "";const m=msSt(),own=Object.keys(m.got).length;
   const next=MS_RULE.filter(([k,n,id])=>!m.got[id]).map(r=>({r,left:r[1]-msVal(r[0])})).sort((a,b)=>a.left-b.left).slice(0,3);
   const kinds=Object.keys(MS_KIND);
-  return `<div class="card"><h2 class="row" style="align-items:center;gap:6px">${IC("zukan")} 名所札 <small class="mute">${own}／${MS.length}</small> ${infoBtn("名所札とは",`<p>金沢の建物・庭・史跡・国宝などの札です。<b>続けるともらえます</b>（くじではありません）。</p><p>札の強さ（レア）は、本物の文化財の指定の格です。手に入れたときに一回だけ石がもらえます（N 10石／R 20石／SR 30石／SSR 50石／UR 100石）。</p><ul><li>UR：国宝・特別名勝</li><li>SSR：重要文化財・国の史跡・名勝・天然記念物・重要伝統的建造物群保存地区</li><li>SR：県指定</li><li>R：市指定・登録有形文化財</li><li>N：指定なしの名所</li></ul>`)}</h2>
+  return `<div class="card"><h2 class="row" style="align-items:center;gap:6px">${IC("zukan")} 名所札 <small class="mute">${own}／${MS.length}</small> ${infoBtn("名所札とは",`<p>金沢の建物・庭・史跡・国宝などの札です。</p><p>札の強さ（レア）は、本物の文化財の指定の格です。手に入れたときに一回だけ石がもらえます（N 10石／R 20石／SR 30石／SSR 50石／UR 100石）。</p><ul><li>UR：国宝・特別名勝</li><li>SSR：重要文化財・国の史跡・名勝・天然記念物・重要伝統的建造物群保存地区</li><li>SR：県指定</li><li>R：市指定・登録有形文化財</li><li>N：指定なしの名所</li></ul>`)}</h2>
   ${next.length?`<div class="msNext"><b>もうすぐ</b>${next.map(({r,left})=>`<div>${IC(MS_KIND[r[0]][2],"20px")} ${MS_KIND[r[0]][0]}　<b>あと${left}</b>　→ <span style="color:${MS_RC[MSM[r[2]].r]}">${MSM[r[2]].r}</span></div>`).join("")}</div>`:""}
-  ${kinds.map(k=>{const L=MS_RULE.filter(r=>r[0]===k),v=msVal(k);return `<div class="msK"><div class="msKh">${IC(MS_KIND[k][2],"22px")} ${MS_KIND[k][0]} <span class="mute">いま ${v}</span></div><div class="msG">${L.map(([,n,id])=>{const c=MSM[id],g=m.got[id];
+  ${kinds.map(k=>{const L=MS_RULE.filter(r=>r[0]===k),v=msVal(k);return `<div class="msK"><div class="msKh">${IC(MS_KIND[k][2],"22px")} ${MS_KIND[k][0]} <span class="mute">いま ${v}</span></div><div class="msG">${L.map(([,n,id])=>{const c=MSM[id],g=m.got[id]||MS_ALL();
       return g?`<button class="msC on" style="--rc:${MS_RC[c.r]}" onclick="msOpen('${id}')"><span class="msR">${c.r}</span><img class="msTh" src="${MS_IMG(id)}" alt="" loading="lazy"><span class="msN">${c.n}</span></button>`
         :`<div class="msC" style="--rc:${MS_RC[c.r]}"><span class="msR">${c.r}</span><span class="msQ">？</span><span class="msN">${n}${MS_KIND[k][1].replace(/（.*）/,"")}</span></div>`}).join("")}</div></div>`}).join("")}</div>`}
 /* 石川県の郵便番号→市町村（日本郵便の郵便番号データをもとにした kufu/jpostcode-data より作成・2026-11-20）。石川県は920〜929。 */
