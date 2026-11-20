@@ -363,7 +363,7 @@ body.ipon{overflow:hidden}
 .kzSlots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0}.kzSlot{display:flex;flex-direction:column;align-items:center;gap:2px}.kzSlot>span{font-size:12px;color:#c9a227;font-weight:800}
 .kzSlot.empty{aspect-ratio:5/7.4;border:2px dashed #5a4a30;border-radius:9px;justify-content:center}
 .kzPickW.on{opacity:.4}
-.kzSlots.four{grid-template-columns:repeat(4,1fr);gap:6px}.kzSlot.sup>span{color:#7ab0ff}.kzSlot.empty.sup{border-color:#3a5a7a}
+.kzSlots.four{grid-template-columns:repeat(4,1fr);gap:6px}.kzSlots.four .kc.mid{aspect-ratio:auto}.kzSlots.four .kc .kcArt{flex:none;height:auto;aspect-ratio:1/1}.kc .kcBg{position:absolute;left:4px;top:22%;transform:rotate(-8deg);z-index:3;padding:2px 8px;border:2px solid #b3261e;border-radius:6px;background:rgba(255,248,230,.92);color:#b3261e;font-style:normal;font-weight:900;font-size:13px;letter-spacing:.1em;box-shadow:0 1px 3px rgba(0,0,0,.4)}.kc.mini .kcBg{font-size:8px;padding:1px 4px;border-width:1px}.kzSlot.sup>span{color:#7ab0ff}.kzSlot.empty.sup{border-color:#3a5a7a}
 .kzMode{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0}.kzMode button{font-size:13px;padding:7px 0}.kzMode button.on{background:#c9a227;color:#2a1f14;font-weight:800}
 .kzDInfo{font-size:12px;background:#2a1f14;border-radius:8px;padding:6px 8px;margin:4px 0 8px;line-height:1.6}.kzDInfo b{color:#ffd76a}.kzDEn>span{display:block}.kzDEn>span>b{color:#fff;margin-right:4px}
 .kzSuS{display:block;font-size:10px;line-height:1.25;color:#9ac0e0;margin-top:2px}.kzSkS{display:block;font-size:10px;line-height:1.25;color:#e0b0a0;margin-top:2px}.kzSkS[hidden],.kzSuS[hidden]{display:none}
@@ -3396,7 +3396,7 @@ function kzArt(c){const f=KZ_ARTN[c.n];return f?`hyakumangoku_img/kz/${f}.webp${
 function kzCard(id,o={}){const c=KZM[id],own=kzSt().own[id],star=o.star!=null?o.star:kzStar(id),gold=o.gold!=null?o.gold:!!(own&&own.gold),st=o.st||kzStats(id,star||1,gold),sz=o.size||"mid";
   if(o.hide)return `<div class="kc ${sz} hide"><div class="kcQ">？</div><div class="kcR" style="color:${KZ_RAR[c.r].c}">${c.r}</div></div>`;
   return `<div class="kc ${sz} r${c.r}${gold?" gold":""}" style="--el:${KZ_EL[c.el]};--rc:${KZ_RAR[c.r].c}" ${o.tap?`onclick="${o.tap}"`:""}>
-   <div class="kcTop"><span class="kcR">${c.r}</span><span class="kcEl">${c.el}</span></div>
+   <div class="kcTop"><span class="kcR">${c.r}</span><span class="kcEl">${c.el}</span></div>${typeof bgSet==="function"&&bgSet().has(id)?`<i class="kcBg" data-noruby>奉行</i>`:""}
    <div class="kcArt${KZ_ARTN[c.n]?" bust":""}"><img src="${kzArt(c)}" alt="" loading="lazy"></div>
    <div class="kcN">${c.n}</div>
    ${sz!=="mini"?`<div class="kcS">${"★".repeat(Math.min(5,star||1))}<span>${"★".repeat(Math.max(0,5-(star||1)))}</span></div><div class="kcSt"><span>${KRB("体","たい")}${st.hp}</span><span>${KRB("攻","こう")}${st.atk}</span><span>${KRB("速","そく")}${st.spd}</span></div><div class="kcSk">${KZ_TY[c.ty||"戦"]}・${c.sk?c.sk+KZ_TIER[c.tr]:"技なし"}</div>`:""}
@@ -3510,14 +3510,15 @@ function kzDeckSlots(D){const all=[...D.d,...(D.x?[D.x]:[])],eb=id=>kzEnOf(id,al
     ${D.x?`<div class="kzSlot sup">${kzCard(D.x,{size:"mid",tap:`kzDTap('${D.x}')`})}${eb(D.x)}<span>補佐</span></div>`:`<div class="kzSlot empty sup"><span>補佐</span></div>`}`}
 function kzDeckHint(D){return D.m==="d"?"タップで戦う札を3枚。最初に出す札は、戦いのはじめに選べます。":"補佐は戦いに出ませんが、補佐の効果がずっとかかります。"}
 function kzDeck(){abar.className="abar";const z=kzSt();KZD=KZD||{d:[...z.deck],x:z.x||"",m:"d"};const own=kzSoSort(Object.keys(z.own).filter(id=>!bgSet().has(id)).sort((a,b)=>KZ_ORD.indexOf(KZM[a].r)-KZ_ORD.indexOf(KZM[b].r)||kzPow(b)-kzPow(a)));const D=KZD;
-  app.innerHTML=`<div class="card"><h2>${IC("jo")} 編成（戦う札3枚＋補佐1枚）</h2>
+  app.innerHTML=`<button class="backb" style="margin:0 0 8px" onclick="KZD=null;home()">${YA("l")} ホームへもどる</button><div class="card"><h2>${IC("jo")} 編成（戦う札3枚＋補佐1枚）</h2>
    <div class="kzMode" id="kzDM"><button class="${D.m==="d"?"on":""}" onclick="KZD.m='d';kzDUpd()">戦う札をえらぶ</button><button class="${D.m==="x"?"on":""}" onclick="KZD.m='x';kzDUpd()">補佐をえらぶ</button></div>
    <div class="kzSlots four" id="kzDS">${kzDeckSlots(D)}</div>
    <div id="kzDI">${kzDeckInfo(D.d,D.x)}</div>
    <button class="pri" id="kzDB" style="width:100%" ${D.d.length===3?"":"disabled"} onclick="kzSt().deck=[...KZD.d];kzSt().x=KZD.x;save();toast('編成を決めた');KZD=null;kzHomeGo()">この編成で決める</button>
    <div class="mute" id="kzDH" style="font-size:12px;margin-top:6px">${kzDeckHint(D)}</div>
    ${kzSoBar("kzDeck()")}<div class="kzGrid" id="kzDG" style="margin-top:8px">${own.map(id=>`<div class="kzPickW${D.d.includes(id)||D.x===id?" on":""}" data-id="${id}">${kzCard(id,{tap:`kzDTap('${id}')`})}<small class="kzSuS"${D.m==="x"?"":" hidden"}>${kzSuT(KZM[id],kzStar(id))}</small><small class="kzSkS"${D.m==="d"?"":" hidden"}>${kzSkT(KZM[id])}</small><i class="kzEnB" data-noruby${kzEnHit(id,D)?"":" hidden"}>縁</i></div>`).join("")}</div></div>
-   <button class="backb" onclick="KZD=null;kzHomeGo()">${YA("l")} もどる</button>`}
+   <button class="backb" onclick="KZD=null;kzHomeGo()">${YA("l")} もどる</button>
+   <button class="backb" onclick="KZD=null;home()">${YA("l")} ホームへもどる</button>`}
 // 画面を作り直さずに、変わった所だけ書きかえる（絵がちらつかないように）
 function kzSkT(c){return c.sk?`必殺技「${c.sk}」（${KZ_TIER[c.tr]}）：${kzSkD(c)}`:"必殺技なし"}
 function kzDUpd(){const D=KZD;if(!$("#kzDG"))return kzDeck();
