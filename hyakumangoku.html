@@ -3919,12 +3919,10 @@ const MS=[{"id":"m01","n":"色絵雉香炉","fn":"色絵雉香炉（仁清作）
 const MSM=Object.fromEntries(MS.map(c=>[c.id,c]));
 /* 第1季の段（2026-11-21 たけさん確定：N30・R20・SR12・SSR8。どの段もN→R→SR→SSRの順） */
 const MS_RULE=[["story",2,"s01"],["story",4,"s02"],["story",6,"s03"],["story",9,"s04"],["story",12,"s05"],["story",16,"s06"],["story",20,"s07"],["story",26,"s08"],["story",34,"m31"],["story",44,"m07"],["login",2,"m39"],["login",3,"m38"],["login",5,"s09"],["login",7,"s10"],["login",10,"s11"],["login",14,"s12"],["login",21,"s13"],["login",30,"m26"],["login",45,"m27"],["login",60,"m17"],["quiz",10,"m36"],["quiz",20,"m37"],["quiz",30,"m34"],["quiz",50,"m29"],["quiz",100,"m11"],["qtot",20,"s14"],["qtot",50,"s15"],["qtot",80,"s16"],["qtot",120,"m40"],["qtot",160,"s17"],["qtot",200,"s18"],["qtot",250,"s19"],["qtot",300,"s20"],["qtot",400,"m28"],["qtot",500,"m05"],["battle",2,"m35"],["battle",3,"s21"],["battle",5,"s22"],["battle",7,"m32"],["battle",10,"s23"],["battle",15,"m30"],["battle",20,"s24"],["battle",30,"m04"],["mini",3,"s25"],["mini",5,"s26"],["mini",7,"s27"],["mini",10,"s28"],["mini",15,"m33"],["mini",20,"s29"],["mini",30,"m09"],["shobu",3,"s30"],["shobu",5,"s31"],["shobu",7,"s32"],["shobu",10,"s33"],["shobu",14,"s34"],["shobu",21,"s35"],["kawara",3,"s36"],["kawara",5,"s37"],["kawara",7,"s38"],["kawara",10,"s39"],["kawara",15,"s40"],["kawara",20,"s41"],["kawara",30,"s42"],["kawara",45,"m19"],["kentei",1,"s43"],["kentei",2,"s44"],["kentei",3,"s45"],["kentei",4,"s46"],["kentei",5,"s47"],["kentei",6,"m18"]];
-/* UR（国宝・特別名勝）は「続けてもらう札」ではなく、季の優勝トロフィー（2026-11-21 たけさん決定）。
-   その季の個人の石高 1〜3位に、季の判「第○季 天下一／二位／三位」つきで渡す。本物の順位が要るので、渡すのはサーバーができてから。
-   季ごとの国宝：第1季は剣 銘吉光（あとの季は順に）。同じ札でも季の判がちがえば別の札として飾る */
-const MS_TROPHY=["m02","m01","m03"];
-const msTrophyId=n=>MS_TROPHY[(n-1)%MS_TROPHY.length];
-const MS_RANKW=["天下一","二位","三位"];
+/* UR（国宝・特別名勝）は「続けてもらう札」ではなく、季の優勝トロフィー（2026-11-22 たけさん決定）。
+   毎季、3つの番付の1位だけに1枚ずつ：石高番付＝兼六園／クイズ番付（果たし状の勝ち数）＝色絵雉香炉／札バトル番付（勝ち数）＝剣 銘吉光。
+   季の判「第○季 ○○番付 天下一」つきで渡す。本物の順位が要るので、渡すのはサーバーができてから */
+const MS_TROPHY=[["koku","石高番付","m03"],["quiz","クイズ番付","m01"],["battle","札バトル番付","m02"]];
 const MS_KIND={story:["物語","話読む（通算）","makimono"],login:["毎日ログイン","日つづけてログイン（ホームを開く）","asahi"],quiz:["十問の連続正解","問つづけて正解（今日の十問）","mondaifuda"],qtot:["十問の正解（通算）","問 正解（今日の十問・通算）","mondaifuda"],
   battle:["札バトルの連勝","連勝（札バトル）","kzfuda"],mini:["ミニゲームを続ける","日つづけて遊ぶ（毎日のミニゲーム）","minigame"],shobu:["きょうの勝負を続ける","日つづけて出る（きょうの勝負）","mato"],
   kawara:["かわら版を読む","日つづけて読む（かわら版）","kawaraban"],kentei:["百万石検定を受ける","回 受ける（百万石検定・通算）","makimono"]};  /* qtot・kawara・kentei は2026-11-21 名所札31枚追加で足した */
@@ -3951,16 +3949,15 @@ function msBig(c){return `<div class="msBig" style="--rc:${MS_RC[c.r]}"><img cla
   <a class="kwL" href="${c.src}" target="_blank" rel="noopener">出典をひらく</a></div>`}
 /* 試作中は全部の札を見られる（2026-11-21 たけさん「試作で確認させろ」）。持っている数・ごほうびには入れない */
 const MS_ALL=()=>typeof FUSHIN_TEST!=="undefined"&&FUSHIN_TEST;
-function msTrophyCard(){const n=SEASON_N+1,id=msTrophyId(n),c=MSM[id],m=msSt(),won=(m.tro||[]);
-  return `<div class="msK msTro"><div class="msKh">${IC("iwai","22px")} 第${n}季の優勝の札 <span class="mute">個人の石高 1〜3位</span></div>
-  <div class="msTroB"><button class="msC on" style="--rc:${MS_RC[c.r]}" onclick="msOpen('${id}',1)"><span class="msR">${c.r}</span><img class="msTh" src="${MS_IMG(id)}" alt="" loading="lazy"><span class="msN">${c.n}</span></button>
-  <div class="msTroT"><b>${c.n}</b></div></div>
-  ${won.length?`<div class="msTroW">${won.map(w=>`<span>${IC("iwai","16px")} 第${w.n}季 ${MS_RANKW[w.r]}・${MSM[w.id].n}</span>`).join("")}</div>`:""}</div>`}
+function msTrophyCard(){const n=SEASON_N+1,m=msSt(),won=(m.tro||[]);
+  return `<div class="msK msTro"><div class="msKh">${IC("iwai","22px")} 第${n}季の優勝の札 <span class="mute">各番付の1位だけ</span></div>
+  <div class="msG">${MS_TROPHY.map(([k,lab,id])=>{const c=MSM[id];return `<button class="msC on" style="--rc:${MS_RC[c.r]}" onclick="msOpen('${id}',1)"><span class="msR">${c.r}</span><img class="msTh" src="${MS_IMG(id)}" alt="" loading="lazy"><span class="msN">${lab.replace("番付","")}1位<br>${c.n}</span></button>`}).join("")}</div>
+  ${won.length?`<div class="msTroW">${won.map(w=>`<span>${IC("iwai","16px")} 第${w.n}季 ${w.lab||""} 天下一・${MSM[w.id].n}</span>`).join("")}</div>`:""}</div>`}
 function msOpen(id,tro){const c=MSM[id];if(!tro&&!msSt().got[id]&&!MS_ALL())return;infoPop({title:`${c.n}`,body:msBig(c)})}
 function msCard(){if(!S.lock)return "";const m=msSt(),ruleIds=new Set(MS_RULE.map(r=>r[2])),own=MS_RULE.filter(r=>m.got[r[2]]).length,past=Object.keys(m.got).filter(id=>!ruleIds.has(id)&&MSM[id]&&MSM[id].r!=="UR");
   const next=MS_RULE.filter(([k,n,id])=>!m.got[id]).map(r=>({r,left:r[1]-msVal(r[0])})).sort((a,b)=>a.left-b.left).slice(0,3);
   const kinds=Object.keys(MS_KIND);
-  return `<div class="card"><h2 class="row" style="align-items:center;gap:6px">${IC("zukan")} 名所札 <small class="mute">第${SEASON_N+1}季 ${own}／${MS_RULE.length}</small> ${infoBtn("名所札とは",`<p>金沢の建物・庭・史跡・国宝などの札です。</p><p>札の強さ（レア）は、本物の文化財の指定の格です。手に入れたときに一回だけ石がもらえます（N 10石／R 20石／SR 30石／SSR 50石）。URは、その季の個人の石高1〜3位だけが持てる優勝の札です。</p><ul><li>UR：国宝・特別名勝（季の優勝の札）</li><li>SSR：重要文化財・国の史跡・名勝・天然記念物</li><li>SR：県指定・重要伝統的建造物群保存地区</li><li>R：市指定・登録有形文化財</li><li>N：指定なしの名所</li></ul>`)}</h2>
+  return `<div class="card"><h2 class="row" style="align-items:center;gap:6px">${IC("zukan")} 名所札 <small class="mute">第${SEASON_N+1}季 ${own}／${MS_RULE.length}</small> ${infoBtn("名所札とは",`<p>金沢の建物・庭・史跡・国宝などの札です。</p><p>札の強さ（レア）は、本物の文化財の指定の格です。手に入れたときに一回だけ石がもらえます（N 10石／R 20石／SR 30石／SSR 50石）。URは、その季の石高番付・クイズ番付・札バトル番付の1位だけが持てる優勝の札です。</p><ul><li>UR：国宝・特別名勝（季の優勝の札）</li><li>SSR：重要文化財・国の史跡・名勝・天然記念物</li><li>SR：県指定・重要伝統的建造物群保存地区</li><li>R：市指定・登録有形文化財</li><li>N：指定なしの名所</li></ul>`)}</h2>
   ${next.length?`<div class="msNext"><b>もうすぐ</b>${next.map(({r,left})=>`<div>${IC(MS_KIND[r[0]][2],"20px")} ${MS_KIND[r[0]][0]}　<b>あと${left}</b>　→ <span style="color:${MS_RC[MSM[r[2]].r]}">${MSM[r[2]].r}</span></div>`).join("")}</div>`:""}
   ${msTrophyCard()}
   ${kinds.map(k=>{const L=MS_RULE.filter(r=>r[0]===k),v=msVal(k);return `<div class="msK"><div class="msKh">${IC(MS_KIND[k][2],"22px")} ${MS_KIND[k][0]} <span class="mute">いま ${v}</span></div><div class="msG">${L.map(([,n,id])=>{const c=MSM[id],g=m.got[id]||MS_ALL();
