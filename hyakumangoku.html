@@ -3337,7 +3337,7 @@ var KZ_KI0=st=>st;// 戦いのはじめの気（★から）
 /* 戦場（2026-11-22 たけさん決定）：手に入れた名所札を1枚、戦場に置く。
    分類で決まる力が、戦う3枚全員に（建物・城＝体力／碑・史跡＝攻撃／まちなみ＝速さ／美術・工芸＝会心／名勝・庭園＝はじめの気）。
    URは特別：SRの効き目を全部（体力・攻撃・速さ・会心・はじめの気） */
-const FD_POW={"建物・城":["hp",{N:3,R:5,SR:7,SSR:10}],"碑・史跡":["atk",{N:3,R:5,SR:7,SSR:10}],"まちなみ":["spd",{N:1,R:2,SR:3,SSR:4}],"美術・工芸":["crit",{N:2,R:3,SR:4,SSR:5}],"名勝・庭園":["ki",{N:0,R:0,SR:1,SSR:1}]};
+const FD_POW={"建物・城":["hp",{N:3,R:5,SR:7,SSR:10}],"碑・史跡":["atk",{N:3,R:5,SR:7,SSR:10}],"まちなみ":["spd",{N:1,R:2,SR:3,SSR:4}],"美術・工芸":["crit",{N:2,R:3,SR:4,SSR:5}],"名勝・庭園":["ki",{N:1,R:1,SR:2,SSR:2}]};
 const FD_LAB={hp:"体力",atk:"攻撃",spd:"速さ",crit:"会心",ki:"はじめの気"};
 /* 戦場の効き目：{hp,atk,spd,crit,ki}。URはSRの効き目を全部 */
 const fdOf=fid=>{const c=typeof MSM!=="undefined"&&MSM[fid];if(!c)return null;const e={hp:0,atk:0,spd:0,crit:0,ki:0};
