@@ -1696,7 +1696,7 @@ function kawaraCard(){const q=kawaraQ();if(!q)return "";const r=dayRec(),k=S.kay
    ${read?`<div class="kwB">${q.e}</div><div class="kwN">${IC("mato")} この話から、<b>あすの「今日の十問」</b>に1問出ます</div>`
    :`<div class="mute">あすの十問に出る話が、ひと足先にとどいています。</div><button class="gold" style="width:100%;margin-top:8px" onclick="kawaraRead()">かわら版を読む（+2石）</button>`}
    ${kwNewsBox()}<div class="kwK"><span>通い帳</span><div class="kwS">${stamps}</div><small>7日ひらくと札券3枚・7日つづけてなら6枚${k.n&&k.chain?"（いま連続中）":""}</small></div><a class="kwL" href="https://kanazawa-marutto.jp/" target="_blank" rel="noopener">金沢情報サイト「金沢まるっと」</a></div>`}
-function kawaraRead(){const r=dayRec();if(r.kawara)return;r.kawara=1;const g=gain(2,"かわら版");save();if(typeof msCount==="function")msCount("kawara");toast("かわら版を読んだ "+g);home()}
+function kawaraRead(){const r=dayRec();if(r.kawara)return;r.kawara=1;const g=gain(2,"かわら版");save();if(typeof msCount==="function")msDay("kawara");toast("かわら版を読んだ "+g);home()}
 function storyCard(){const st=storyToday();if(!st)return `<div class="card emaki calm"><div class="emt">${IC("meguri_none")} けふは何事もなき日</div><div class="mute" style="margin-top:4px">できごと帳 ${Object.keys(S.seen).length} / ${STORY.length}</div></div>`;
   if(!S.seen[st.id]){S.seen[st.id]=today();save()}
   const bad=st.guard,m=storyMul("all");
@@ -3927,12 +3927,12 @@ const msTrophyId=n=>MS_TROPHY[(n-1)%MS_TROPHY.length];
 const MS_RANKW=["天下一","二位","三位"];
 const MS_KIND={story:["物語","話読む（通算）","makimono"],login:["毎日ログイン","日つづけてログイン（ホームを開く）","asahi"],quiz:["十問の連続正解","問つづけて正解（今日の十問）","mondaifuda"],qtot:["十問の正解（通算）","問 正解（今日の十問・通算）","mondaifuda"],
   battle:["札バトルの連勝","連勝（札バトル）","kzfuda"],mini:["ミニゲームを続ける","日つづけて遊ぶ（毎日のミニゲーム）","minigame"],shobu:["きょうの勝負を続ける","日つづけて出る（きょうの勝負）","mato"],
-  kawara:["かわら版を読む","日 読む（かわら版・通算）","kawaraban"],kentei:["百万石検定を受ける","回 受ける（百万石検定・通算）","makimono"]};  /* qtot・kawara・kentei は2026-11-21 名所札31枚追加で足した */
+  kawara:["かわら版を読む","日つづけて読む（かわら版）","kawaraban"],kentei:["百万石検定を受ける","回 受ける（百万石検定・通算）","makimono"]};  /* qtot・kawara・kentei は2026-11-21 名所札31枚追加で足した */
 const MS_CAT={"建物・城":"ishikawamon","名勝・庭園":"tourou","美術・工芸":"chaki","碑・史跡":"ishigaki","まちなみ":"kominka"};
 const MS_RC={UR:"#e8c25a",SSR:"#c77dff",SR:"#5ab0ff",R:"#7fd06a",N:"#b8a88a"};
 function msSt(){S.ms=S.ms||{got:{},run:{},q:0,b:0};S.ms.got=S.ms.got||{};S.ms.run=S.ms.run||{};return S.ms}
 /* いまの値（連続は、きのうまでで途切れていたら0に見せる） */
-function msVal(k){const m=msSt();if(k==="story")return typeof stDone==="function"?ST1.filter((_,i)=>stDone(i)).length:0;if(k==="quiz")return m.q||0;if(k==="battle")return m.b||0;if(k==="qtot")return m.qt||0;if(k==="kawara"||k==="kentei")return (m.cnt&&m.cnt[k]&&m.cnt[k].n)||0;
+function msVal(k){const m=msSt();if(k==="story")return typeof stDone==="function"?ST1.filter((_,i)=>stDone(i)).length:0;if(k==="quiz")return m.q||0;if(k==="battle")return m.b||0;if(k==="qtot")return m.qt||0;if(k==="kentei")return (m.cnt&&m.cnt[k]&&m.cnt[k].n)||0;
   const r=m.run[k];if(!r)return 0;return (r.d===today()||dBetween(r.d,today())===1)?r.n:0}
 /* 毎日つづけるもの：その日に1回だけ数える。1日でも空いたら1からやり直し */
 function msDay(k){if(!S.lock)return;const m=msSt(),r=m.run[k]||(m.run[k]={d:"",n:0});if(r.d===today())return;r.n=(r.d&&dBetween(r.d,today())===1)?r.n+1:1;r.d=today();save();msCheck()}
