@@ -502,7 +502,7 @@ body.ipon{overflow:hidden}
 .hsT{font-size:34px;font-weight:900;color:var(--gold2);margin:4px 0}.hsFrom{font-weight:800;margin-bottom:6px}.hsMsg{font-size:20px;font-weight:900;margin:12px 0}.hsGo{width:100%;font-size:20px;padding:16px}.hsW{color:#ff9a5c;font-weight:900}.hsOf{display:inline-block;background:var(--gold2);color:#1a140a;font-weight:900;border-radius:20px;padding:2px 12px;margin-bottom:4px}
 .hsVs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;margin:10px 0}.hsVs>div{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}.hsVs small{font-size:12px;color:var(--mute,#a79c86);word-break:break-all}.hsVs b{font-size:34px}.hsVsM{font-weight:900;color:var(--gold2)}
 .hsA{text-align:left;border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}.hsA.ng{border-color:#7a3a3a}.hsAh{font-weight:900;margin-bottom:4px}.hsAq{margin-bottom:4px}
-.hsJoin{margin-top:14px;padding:12px;border:1px solid var(--gold2);border-radius:12px;text-align:left}.hsJoin b{color:var(--gold2);font-size:18px}.hsRule{font-size:13px;text-align:left;background:#241d12;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:10px 0}.hsLinks{display:grid;gap:8px;margin-top:10px}.hsLinks .gold{width:100%}.hsLk{display:block;padding:12px;border-radius:10px;border:1px solid var(--gold2);color:var(--gold2);font-weight:800;text-decoration:none}
+.hsJoin{margin-top:14px;padding:12px;border:1px solid var(--gold2);border-radius:12px;text-align:left}.hsJoin b{color:var(--gold2);font-size:18px}.hsReady{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;min-height:70vh;background:none;border:0;color:inherit}.hsReady img{width:78%;max-width:320px}.hsReadyT{font-size:40px;font-weight:900;color:var(--gold2)}.hsReadyB{margin-top:18px;font-size:20px;font-weight:900;animation:hsBlink 1.4s ease-in-out infinite}@keyframes hsBlink{50%{opacity:.35}}.hsRules ul{text-align:left;font-size:18px;line-height:1.7;margin:6px 0;padding-left:1.2em}.hsRules b{color:var(--gold2)}.hsRule{font-size:13px;text-align:left;background:#241d12;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:10px 0}.hsLinks{display:grid;gap:8px;margin-top:10px}.hsLinks .gold{width:100%}.hsLk{display:block;padding:12px;border-radius:10px;border:1px solid var(--gold2);color:var(--gold2);font-weight:800;text-decoration:none}
 </style>
 </head>
 <body>
@@ -4090,8 +4090,12 @@ function hsGoHome(){history.replaceState(null,"",location.pathname+(invK()?"?k="
 
 /* 挑戦（ゲームを始めていない人も） */
 function hsStart(code){const p=hsCheck(hsDec(code));if(!p)return home();const sv=S.hsRun;
-  if(sv&&sv.id===p.id){HS={code,p,...sv};if(HS.open){hsShow(1);return hsAns(-1,1)}if(HS.ans.length>HS.i)return hsNext();return hsShow()}
-  hsSt().vs[p.u]=today();HS={code,p,id:p.id,i:0,ans:[],tl:[],open:0};hsShow()}
+  if(sv&&sv.id===p.id){HS={code,p,...sv};if(HS.open){hsShow(1);return hsAns(-1,1)}if(HS.ans.length>HS.i)return hsNext();return HS.i===0?hsReady():hsShow()}
+  hsSt().vs[p.u]=today();HS={code,p,id:p.id,i:0,ans:[],tl:[],open:0};hsSave();hsReady()}
+/* ルールを1枚（タップですぐ次へ）（2026-11-21 たけさん） */
+function hsRules(){app.innerHTML=`<button class="hsReady hsRules" onclick="hsShow()"><span class="hsReadyT">ルール</span><ul><li>問題は<b>全部で10問</b></li><li><b>早く答えるほど点数が高い</b>（1問 最高100点）</li><li>まちがえると、その問題は0点</li><li>問題の途中で画面を離れると不正解</li><li>点数の高いほうが勝ち</li></ul><span class="hsReadyB">タップではじめる</span></button>`}
+/* いきなり始めず、ロゴを出してタップでスタート（2026-11-21 たけさん） */
+function hsReady(){abar.className="abar";app.innerHTML=`<button class="hsReady" onclick="hsRules()"><img src="hyakumangoku_img/logo_full.webp" alt="百万石クエスト"><span class="hsReadyT">果たし状</span><span class="mute">${hsWho(HS.p)}より</span><span class="hsReadyB">タップでスタート</span></button>`}
 function hsSave(){S.hsRun={id:HS.id,i:HS.i,ans:HS.ans,tl:HS.tl,open:HS.open};save()}
 function hsShow(re){abar.className="abar";const q=QB[HS.p.q[HS.i]],ord=shuffle([0,1,2,3]);HS.open=1;HS.ts=Date.now();if(!re)hsSave();
   app.innerHTML=`<div class="card qCard hsCard noCopy" oncopy="return false" oncontextmenu="return false"><div class="mute" style="font-size:11px">問題が出ている間に画面を離れると、その問題は不正解になります。</div><div class="prog"><i style="width:${HS.i*10}%"></i></div><div class="mute">果たし状 第${HS.i+1}問 / 10</div><div class="q">${q.q}</div>${ord.map(j=>`<button class="opt" data-j="${j}" onclick="hsAns(${j})">${q.o[j]}</button>`).join("")}</div>`}
