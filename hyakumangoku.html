@@ -3735,8 +3735,8 @@ function tjOpen(){abar.className="abar";const z=kzSt();
   const left=tjLeft(),o=left>0?tjOpp():null,lv=o&&TJ_LV.find(x=>x.k===o.lv);
   app.innerHTML=`<button class="backb" style="margin:0 0 8px" onclick="kzHomeGo()">${YA("l")} もどる</button><div class="card"><h2>${IC("katana")} 辻試合</h2>
   <div class="mute">城下に、毎日ちがう相手が現れます。1日${TJ_DAY}回まで（${FUSHIN_TEST?"試作中は無制限":`きょう あと<b>${left}回</b>`}）。勝つと4枚全員の勝ち数+1と石。</div>
-  ${o?`<div class="kzSub" style="margin-top:10px"><b>${o.n}</b> <small class="mute">が勝負をいどんできた</small>${lv?`<span class="tjTag">${lv.m} 勝つと +${lv.koku}石</span>`:""}</div>
-  <div class="kzSlots four">${[...o.d,o.x].map((id,k)=>`<div class="kzSlot">${kzCard(id,{size:"mid",star:o.s,tap:`kzDetail('${id}',1)`})}<span>${k<3?"戦う札":"補佐"}</span></div>`).join("")}</div>
+  ${o?`<div class="kzSub" style="margin-top:10px"><b>${o.n}</b> <small class="mute">が勝負をいどんできた</small>${lv?`<span class="tjTag">${lv.m} 勝つと +${lv.koku}石</span>`:""}</div>${o.fd&&MSM[o.fd]?`<div class="mute" style="margin:2px 0 4px">相手の戦場：${MSM[o.fd].n}（${fdTxt(o.fd)}）</div>`:""}
+  <div class="kzSlots four">${[...o.d,o.x].map((id,k)=>`<div class="kzSlot">${kzCard(id,{size:"mid",star:o.s,gold:!!o.g,tap:`kzDetail('${id}',1)`})}<span>${k<3?"戦う札":"補佐"}</span></div>`).join("")}</div>
   <button class="pri" style="width:100%;margin-top:8px" onclick="kzFirst('t')">受けて立つ</button>
   <button style="width:100%;margin-top:6px" onclick="delete dayRec().tjo;save();tjOpen()">ほかの相手をさがす</button>`:`<div class="notice" style="margin-top:8px">きょうの辻試合はおわりました。またあした。</div>`}
   </div>`}
