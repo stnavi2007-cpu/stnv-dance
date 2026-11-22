@@ -3441,7 +3441,7 @@ function kzSide(ids,x,starOf,goldOf,noen,fid){const FD=fid?fdOf(fid):null;const 
     atk=Math.round(atk);// 戦場（名所札）の攻撃％は丸めずに持つ（小さい攻撃でも表示どおりに効くように。ダメージは最後に丸める）。戦場の速さは会心を上げない
     if(FD){hp*=1+FD.hp/100;atk*=1+FD.atk/100;spd+=FD.spd;crit+=FD.crit/100;ki+=FD.ki}
     hp=Math.round(hp);S.f.push({id,c,star:st,max:hp,hp,atk,spd,ki:Math.min(5,ki),crit:Math.min(.5,crit),skp,en,buf:0,bufv:0,sh:0,shv:0,po:0,pov:0,stun:0,seal:0,dn:0,dnv:0,cnt:0})});
-  S.spd=S.f.reduce((a,f)=>a+f.spd,0)+(su?su.spd:0);return S}
+  S.spd=S.f.reduce((a,f)=>a+f.spd,0)+(su?kzStats(x,starOf?starOf(x):1,goldOf?goldOf(x):false).spd:0);return S}/* 補佐の速さも札に出ている数字（★・金箔こみ）で数える 2026-11-22 */
 function kzNewB(A,Bd,rnd){rnd=rnd||Math.random;const s0=kzSide(A.d,A.x,A.star,A.gold,A.noen,A.fd),s1=kzSide(Bd.d,Bd.x,Bd.star,Bd.gold,Bd.noen,Bd.fd);s0.fd=A.fd||"";s1.fd=Bd.fd||"";
   if(s1.kidown)s0.f.forEach(f=>f.ki=Math.max(0,f.ki-s1.kidown));if(s0.kidown)s1.f.forEach(f=>f.ki=Math.max(0,f.ki-s0.kidown));
   const first=s0.spd>s1.spd?0:s1.spd>s0.spd?1:(rnd()<.5?0:1),g=[s0,s1][1-first].f[0];if(KZ_GOTE){g.sh=KZ_GOTEN;g.shv=KZ_GOTE}if(KZ_GOTEKI)[s0,s1][1-first].f.forEach(f=>f.ki=Math.min(5,f.ki+KZ_GOTEKI));return {s:[s0,s1],turn:first,first,over:false,win:-1,pick:-1,rnd,ev:[],n:0}}
@@ -3611,9 +3611,9 @@ function kzQAns(id,qi,j){const Q=QB[qi],ok=j===Q.a,z=kzSt();document.querySelect
   $("#kzQR").innerHTML=`<div class="sgRes ${ok?"ok":"ng"}">${msg}</div><div class="mute">${Q.e}</div><div class="mute" style="font-size:11px">出典：${Q.src}</div>`}
 /* ---------- 編成 ---------- */
 let KZD=null;
-function kzDeckInfo(d,x){const all=[...d,...(x?[x]:[])];if(d.length<3)return "";const spd=all.reduce((a,id)=>a+KZM[id].spd,0);
+function kzDeckInfo(d,x){const all=[...d,...(x?[x]:[])];if(d.length<3)return "";const z=kzSt(),gd=id=>!!(z.own[id]&&z.own[id].gold),Sd=kzSide(d,x,id=>kzStar(id),gd,false,fdMine()),spd=Sd.spd,card=all.reduce((a,id)=>a+kzStats(id,kzStar(id),gd(id)).spd,0),plus=spd-card;/* 2026-11-22 運営「速さの合計48？」：札に出ている速さの合計＋補佐・戦場の上乗せで、戦いで先手を決める数字と同じにする */
   const ens=d.map(id=>({id,e:kzEnOf(id,all).slice(0,2)})).filter(v=>v.e.length);
-  return `<div class="kzDInfo"><div>速さの合計 <b>${spd}</b>${x?`・補佐：${kzSuT(KZM[x],kzStar(x))}`:""}</div>${ens.length?`<div class="kzDEn">${ens.map(v=>`<span><b>${KZM[v.id].n}</b>${v.e.map(e=>(e.t==="組"?"組「"+e.g+"」":e.t)+"："+KZ_ENB[e.t].t).join("、")}</span>`).join("")}</div>`:`<div class="mute">縁：なし（つながりのある人物を一緒に入れるとボーナス）</div>`}</div>`}
+  return `<div class="kzDInfo"><div>速さの合計 <b>${spd}</b>${plus?`（札の速さ ${card}＋補佐・戦場 ${plus>0?"+":""}${plus}）`:""}${x?`・補佐：${kzSuT(KZM[x],kzStar(x))}`:""}</div>${ens.length?`<div class="kzDEn">${ens.map(v=>`<span><b>${KZM[v.id].n}</b>${v.e.map(e=>(e.t==="組"?"組「"+e.g+"」":e.t)+"："+KZ_ENB[e.t].t).join("、")}</span>`).join("")}</div>`:`<div class="mute">縁：なし（つながりのある人物を一緒に入れるとボーナス）</div>`}</div>`}
 function kzDeckSlots(D){const all=[...D.d,...(D.x?[D.x]:[])],eb=id=>kzEnOf(id,all).length?`<i class="kzEnB" data-noruby>縁</i>`:"";return `${[0,1,2].map(i=>D.d[i]?`<div class="kzSlot">${kzCard(D.d[i],{size:"mid",tap:`kzDTap('${D.d[i]}')`})}${eb(D.d[i])}<span>戦う札</span></div>`:`<div class="kzSlot empty"><span>戦う札</span></div>`).join("")}
     ${D.x?`<div class="kzSlot sup">${kzCard(D.x,{size:"mid",tap:`kzDTap('${D.x}')`})}${eb(D.x)}<span>補佐</span></div>`:`<div class="kzSlot empty sup"><span>補佐</span></div>`}`}
 function kzDeckHint(D){return D.m==="d"?"タップで戦う札を3枚。最初に出す札は、戦いのはじめに選べます。":"補佐は戦いに出ませんが、補佐の効果がずっとかかります。"}
