@@ -4209,6 +4209,9 @@ function ktHubBar(){if(!S.lock)return "";const r=dayRec().kentei;
    ・ほうび（ゲームに参加している人）：挑戦 2石・勝ち さらに3石。同じ相手に挑めるのは1日1回（別の人には何回でも）。
    ・結果は果たし状を出した本人にも届く（サーバーで届ける。届いたら hsReceive）→ 返り討ちで連勝が伸びる。 */
 const HS_PT={try:2,win:3};
+/* 対戦（10問クイズ・のちに札バトル）で1日に入る石は合わせて30石まで。挑戦は何回でもできて、勝敗は数える（2026-11-25 運営） */
+const BTL_CAP=30;
+function btlAdd(n,label){if(!S.lock)return 0;const r=dayRec(),v=Math.max(0,Math.min(n,BTL_CAP-(r.btl||0)));if(v<=0)return 0;r.btl=(r.btl||0)+v;return fixedAdd(v,label)}
 const HS_JOIN=200;  /* 10問クイズから参加した人の特典：蔵の石に200石（ふだんの約8日分）。自分で稼いだ石ではないので、累計・石高・その日の稼ぎには入れない（2026-11-25 運営） */
 const HS_IG="https://www.instagram.com/hyakumangoku_quest/";  /* 百万石クエストのインスタのURL：アカウントを作ってから入れる（入れると挑戦後の画面にボタンが出る） */
 const HS_GAME="https://www.stnv-dance.com/hyakumangoku.html";
@@ -4272,7 +4275,7 @@ function hsNext(){HS.i++;if(HS.i<10)return hsShow();abar.className="abar";const 
 const hsCmp=(a,b)=>a>b?1:a<b?-1:0;
 function hsFinish(code,me){const p=hsCheck(hsDec(code)),st=hsSt();if(!p)return home();
   const r=hsCmp(me.s,p.s);st.rec[r>0?"w":r<0?"l":"d"]++;
-  const got=S.lock?fixedAdd(HS_PT.try+(r>0?HS_PT.win:0),r>0?"10問クイズに勝利":"10問クイズに挑戦"):0;
+  const got=btlAdd(HS_PT.try+(r>0?HS_PT.win:0),r>0?"10問クイズに勝利":"10問クイズに挑戦");
   st.done[p.id]={d:today(),s:me.s,o:me.o,ans:me.ans,r,got};save();
   hsNotify({id:p.id,to:p.u,nm:(S.name||"名無しの挑戦者").slice(0,20),k:S.lock?kF():"",s:me.s,rid:myUid()+p.id});
   hsResult(code)}
@@ -4281,7 +4284,7 @@ function hsNotify(m){S.hsOut=(S.hsOut||[]).concat([{...m,d:today()}]).slice(-50)
 /* 本人が受け取ったとき（サーバーから届いた結果） */
 function hsReceive(m){const st=hsSt(),mine=st.mine[m.id];if(!mine||st.seen[m.rid])return null;st.seen[m.rid]=1;
   const c=hsCmp(mine.s,m.s);st.def[c>0?"w":c<0?"l":"d"]++;if(c>0){st.st++;st.best=Math.max(st.best,st.st)}else if(c<0)st.st=0;save();
-  /* 挑戦された側も稼げる：挑戦されたら2石、返り討ちでさらに3石（2026-11-25 運営） */const got=S.lock?fixedAdd(HS_PT.try+(c>0?HS_PT.win:0),c>0?"10問クイズで返り討ち":"10問クイズに挑戦された"):0;
+  /* 挑戦された側も稼げる：挑戦されたら2石、返り討ちでさらに3石（2026-11-25 運営） */const got=btlAdd(HS_PT.try+(c>0?HS_PT.win:0),c>0?"10問クイズで返り討ち":"10問クイズに挑戦された");
   const who=hsWho({nm:m.nm,k:m.k});
   infoPop({title:`${IC("katana")} ${who}が10問クイズに挑戦しました`,body:`<div class="hsVs"><div><small>自分</small><b>${hsP(mine.s)}</b></div><div class="hsVsM">対</div><div><small>${who}</small><b>${hsP(m.s)}</b></div></div><div class="hsT" style="font-size:24px">${c>0?"返り討ち！":c<0?"負けました":"引き分け"}</div><div class="center">${st.st>0?`<b class="hsW">${st.st}連勝中！</b>`:""}${got?`<div style="font-weight:800;color:var(--gold2)">+${got}石</div>`:""}<div class="mute">受けた挑戦 ${st.def.w}勝 ${st.def.l}敗 ${st.def.d}分</div></div>`});return c}
 
@@ -4316,7 +4319,7 @@ function hsMake(){const r=dayRec().quiz,st=hsSt();if(!r)return quiz();HS_BLOB=nu
   if(!id){id=myUid().slice(0,6)+d.replace(/-/g,"").slice(2);st.mine[id]={d,s:hsSum(o,r.tl),m:Math.floor(Math.random()*HS_MSG.length)}}
   const mi=st.mine[id];HS_MK={id,q,o};hsLink();
   abar.className="abar";app.innerHTML=`<div class="card center"><div class="hsT">${IC("katana")} 10問クイズ</div><div class="mute" style="margin-bottom:6px">${escH(S.name||"")}殿からの10問クイズ（今日の十問と同じ10問）</div><div id="hsImg" class="mute">画像をつくっています…</div>
-  <div class="hsWhy"><b>ストーリーに出すと</b><ul><li>挑戦されるたびに<b>＋${HS_PT.try}石</b>、返り討ちにすると<b>さらに＋${HS_PT.win}石</b>。たくさん挑戦されるほど稼げる</li><li>返り討ちが続くと、連勝がのびる</li><li>10問クイズの勝ち数で決まる「クイズ番付」。季の1位には名所札「色絵雉香炉」（UR）</li></ul></div>
+  <div class="hsWhy"><b>ストーリーに出すと</b><ul><li>挑戦されるたびに<b>＋${HS_PT.try}石</b>、返り討ちにすると<b>さらに＋${HS_PT.win}石</b>（1日${BTL_CAP}石まで）</li><li>返り討ちが続くと、連勝がのびる</li><li>10問クイズの勝ち数で決まる「クイズ番付」。季の1位には名所札「色絵雉香炉」（UR）</li></ul></div>
   <button class="gold" style="width:100%;margin-top:10px;font-size:18px" onclick="hsStory()">📷 ストーリーに出す</button>
   <ol class="hsSteps"><li>上のボタンで、画像をインスタに送ります（リンクも自動でコピーされます）</li><li>インスタのスタンプから「リンク」を選んで、貼り付け</li><li>画像の「タップして答える」の上に置いて、投稿</li></ol>
   <label class="hsPub"><input type="checkbox" ${mi.pub?"checked":""} onchange="hsPubSet(this.checked)"><span>公式インスタにも載せて、もっと挑戦してもらう</span></label>
@@ -4731,14 +4734,16 @@ const SB_LEFT={koen:10,bijutsukan:2,kenroku:0};  // 庭石は釣り合いの正�
    ・結果は翌日0:00に発表。番付に応じて、その日1日の石が増える
    ※全員の点数を集めるのはサーバー（Cloudflare）につないでから。それまでは番付は見本（デモ）の相手で出す */
 const SHOBU_G=()=>[...MINI.map(m=>({k:m.k,n:m.n,home:1})),...Object.keys(MASTER).map(id=>({k:id,n:MASTER[id].g}))];
-const SHOBU_RW=[["横綱",.20,1],["大関",.20,1],["関脇",.20,1],["小結",.20,0]];
+/* 札券はなし（2026-11-25 運営） */
+/* 上乗せは微減（2026-11-25 運営「20%はやりすぎ」）：1〜4位15%・上位1割10%・上位2割5% */
+const SHOBU_RW=[["横綱",.15,0],["大関",.15,0],["関脇",.15,0],["小結",.15,0]];
 function shobuDay(d){return Math.floor(dBetween("2026-01-04",d||today()))}
 function shobuToday(d){const G=SHOBU_G(),n=shobuDay(d),cyc=Math.floor(n/G.length),r=rng(hash("shobu"+cyc));const o=G.map((_,i)=>i);for(let i=o.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[o[i],o[j]]=[o[j],o[i]]}return G[o[((n%G.length)+G.length)%G.length]]}
 // 見本（デモ）の相手：その日のゲームごとに100人ぶんの点数
 function shobuDemo(d){const r=rng(hash("sbd"+d)),B=SB_BASE[shobuToday(d).k]||1000;return [...Array(100)].map(()=>Math.round(Math.max(0,Math.min(1.25,.62+(r()+r()+r()-1.5)*.42))*B+r()*B*.06)).sort((a,b)=>b-a)}
 function shobuRank(d,pts){const L=shobuDemo(d);let k=L.findIndex(x=>pts>x);if(k<0)k=L.length;return {pos:k+1,n:L.length+1}}
 function shobuTitle(pos,n){if(pos<=4)return SHOBU_RW[pos-1][0];if(pos===5)return "前頭筆頭";if(pos/n<=.1)return "前頭";return ""}
-function shobuPrize(pos,n){if(pos<=4)return {b:SHOBU_RW[pos-1][1],tix:SHOBU_RW[pos-1][2]};if(pos/n<=.1)return {b:.15,tix:0};if(pos/n<=.2)return {b:.10,tix:0};return {b:0,tix:0}}
+function shobuPrize(pos,n){if(pos<=4)return {b:SHOBU_RW[pos-1][1],tix:SHOBU_RW[pos-1][2]};if(pos/n<=.1)return {b:.10,tix:0};if(pos/n<=.2)return {b:.05,tix:0};return {b:0,tix:0}}
 const shobuYday=()=>new Date(new Date(today()+"T00:00:00Z").getTime()-864e5).toISOString().slice(0,10);  /* 日本時間の前日（today()はJSTの日付。UTCの0時として1日引く） */
 // きのうの勝負の結果（0:00に発表）→ きょう1日の石の上乗せ
 function shobuRes(){const y=shobuYday(),rec=(S.days||{})[y],sb=rec&&rec.shobu;if(!sb)return null;const rk=shobuRank(y,sb.pts);return {...sb,...rk,title:shobuTitle(rk.pos,rk.n),...shobuPrize(rk.pos,rk.n)}}
