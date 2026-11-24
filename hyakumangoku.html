@@ -1575,7 +1575,7 @@ function hubBody(secs,r){const H=s=>HUBI.find(x=>x.s===s),ok=x=>x&&hubHas(x,secs
    ${ok(H("inv"))?`<button class="hubBar" style="margin-top:10px;margin-bottom:0" onclick="secOpen('inv')"><span>${IC("engun")} 援軍をよぶ</span><span class="mute">${YA("r")}</span></button>`:""}`}
 function secOpen(s){HUB_SEC=s;HUB_KEEP=1;home();window.scrollTo(0,0)}
 /* ---------- 画面：ホーム ---------- */
-function home(){if(typeof hsAfterJoin==="function"&&hsAfterJoin())return;abar.className="abar";seasonCheck();if(VIEW!=="home"&&!HUB_KEEP){HUB_SEC="";HUB_GRP=HUB_RET||""}HUB_RET="";HUB_KEEP=0;if(!S.lock)return (!S.name&&!S.trialDay)?trial():register();if(REG.fin||!S.name||!S.age){REG.fin=1;REG.step=1;return register()}trialPay();bgTick();msDay("login");
+function home(){abar.className="abar";seasonCheck();if(VIEW!=="home"&&!HUB_KEEP){HUB_SEC="";HUB_GRP=HUB_RET||""}HUB_RET="";HUB_KEEP=0;if(!S.lock)return (!S.name&&!S.trialDay)?trial():register();if(REG.fin||!S.name||!S.age){REG.fin=1;REG.step=1;return register()}trialPay();bgTick();msDay("login");
   dailyTick();kayoiStamp();
   const r=dayRec(),rk=ranking(),myI=rk.findIndex(x=>x.k===S.kouka),my=rk[myI],t=totals(),sg=sakugara();rkSnap(rk);const rem=Math.max(0,GOAL-t.koku),fin=rem>0&&rem<=FIN_REM;
   const nk=nyQ();
@@ -4270,7 +4270,7 @@ function hsResult(code){abar.className="abar";const p=hsCheck(hsDec(code)),m=p&&
   /* まだ参加していない人：参加したくなる画面（第101回）。石・連勝などゲームの中の数字は出さない */
   if(!reg){app.innerHTML=`<div class="card center hsEnd"><div class="hsT">${lab}</div>${vs}
     <div class="hsLearn">金沢のこと <b>10個</b> 覚えました<small>（正解 ${nOk}問）</small></div>
-    <button class="gold hsJoinB" onclick="hsJoin()">この結果を持って、百万石クエストに参加する</button><div class="mute" style="font-size:12px">参加しないと、この結果は残りません</div>
+    <button class="gold hsJoinB" onclick="hsJoin()">この結果を持って、百万石クエストに参加する</button><div class="mute" style="font-size:12px">参加すると、この勝ち負けと点数が自分の記録に残ります（参加しないと残りません）</div>
     <ul class="hsNext"><li>郵便番号を入れると、自分の校下のチームに入れます</li><li>毎日の10問で石が積もり、自分の校下の順位が動きます</li><li>今度は自分が10問クイズを出して、友だちを誘えます</li></ul>
     <div class="mute" style="font-size:13px">参加に必要なのは、名前・郵便番号・年齢だけです</div>
     ${HS_IG?`<a class="hsLk" href="${HS_IG}" target="_blank" rel="noopener">📷 インスタでは毎日の1問が出ます。フォローして明日の1問で勝負</a>`:""}</div>
@@ -4279,9 +4279,8 @@ function hsResult(code){abar.className="abar";const p=hsCheck(hsDec(code)),m=p&&
   ${m.got?`<div style="font-weight:800;color:var(--gold2)">+${m.got}石</div>`:""}
   ${dayRec().quiz?`<button class="pri" style="width:100%;margin-top:10px" onclick="hsMake()">自分も10問クイズをつくる</button>`:`<button class="pri" style="width:100%;margin-top:10px" onclick="hsGoQuiz()">今日の十問をといて、自分の10問クイズをつくる</button>`}
   ${HS_IG?`<div class="hsLinks"><a class="hsLk" href="${HS_IG}" target="_blank" rel="noopener">📷 百万石クエストのインスタ</a></div>`:""}</div><div class="card"><h2>答えと解説</h2>${list}</div><button class="backb" onclick="hsGoHome()">${YA("l")} ホームへもどる</button>`}
-/* 参加する：この勝負の記録（S.hs）はそのまま残る。登録が終わったら今日の十問 → 自分の10問クイズへ（第101回） */
-function hsJoin(){S.hsJoin=1;save();hsGoHome()}
-function hsAfterJoin(){if(!(S.hsJoin&&S.lock&&S.name&&S.age))return false;delete S.hsJoin;save();if(dayRec().quiz)hsMake();else quiz();return true}
+/* 参加する：この勝負の記録（S.hs）はそのまま残る。登録が終わったら、ふつうのホームへ（2026-11-25 運営） */
+function hsJoin(){hsGoHome()}
 function hsGoQuiz(){history.replaceState(null,"",location.pathname);quiz()}
 
 /* 十問の結果画面のボタン */
@@ -4316,7 +4315,7 @@ function hsStory(){if(!HS_BLOB)return toast("画像をつくっています");co
 async function hsDraw(q1){const c=document.createElement("canvas");c.width=1080;c.height=1920;const x=c.getContext("2d");
   const GO="'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans CJK JP','Noto Sans JP',sans-serif",MIN="'Hiragino Mincho ProN','Yu Mincho','Noto Serif CJK JP',serif";
   const img=src=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src});
-  const mark=await img("hyakumangoku_img/mark_clear.webp");
+  const [mark,bg]=await Promise.all([img("hyakumangoku_img/mark_clear.webp"),img("hyakumangoku_img/hs_bg.webp")]);
   /* 加賀梅鉢を線ではなく図形で描く（SVGを画像として読むと、ブラウザによって色が出ないため） */
   const ume=(cx,cy,sz,fill)=>{const k=sz/200*.86;x.save();x.translate(cx,cy);x.scale(k,k);x.fillStyle=fill;
     for(let i=0;i<5;i++){x.save();x.rotate(i*Math.PI*2/5);x.beginPath();x.arc(0,-66,31.5,0,7);x.fill();x.beginPath();x.moveTo(-6.5,-20);x.lineTo(6.5,-20);x.lineTo(8.5,-40);x.lineTo(-8.5,-40);x.closePath();x.fill();x.restore();
@@ -4326,14 +4325,8 @@ async function hsDraw(q1){const c=document.createElement("canvas");c.width=1080;
   const gold=(y0,y1)=>{const g=x.createLinearGradient(0,y0,0,y1);g.addColorStop(0,"#fff1c2");g.addColorStop(.5,"#e9c260");g.addColorStop(1,"#a8741f");return g};
   const rr=(X,Y,W,H,R)=>{x.beginPath();x.moveTo(X+R,Y);x.arcTo(X+W,Y,X+W,Y+H,R);x.arcTo(X+W,Y+H,X,Y+H,R);x.arcTo(X,Y+H,X,Y,R);x.arcTo(X,Y,X+W,Y,R);x.closePath()};
   const wrap=(t,max)=>{const L=[];let cur="";for(const ch of t){if(x.measureText(cur+ch).width>max&&cur){if(/^[、。）」』！？・ー]/.test(ch)){cur+=ch;continue}L.push(cur);cur=ch}else cur+=ch}if(cur)L.push(cur);return L};
-  // 黒漆
-  {const g=x.createRadialGradient(540,860,0,540,960,1250);g.addColorStop(0,"#241a10");g.addColorStop(.6,"#0f0b07");g.addColorStop(1,"#040302");x.fillStyle=g;x.fillRect(0,0,1080,1920)}
-  // 金箔（切り箔をちらす）
-  for(let i=0;i<260;i++){const sx=rnd()*1080,sy=rnd()*1920,sz=2+rnd()*rnd()*16;x.fillStyle=`rgba(${220+rnd()*35|0},${170+rnd()*50|0},${70+rnd()*40|0},${.05+rnd()*.22})`;x.save();x.translate(sx,sy);x.rotate(rnd()*3);x.fillRect(-sz/2,-sz/2,sz,sz*(.4+rnd()));x.restore()}
-  // 加賀梅鉢の透かし
-  ume(540,1300,1000,"rgba(233,194,96,.045)");
-  // 金の額
-  x.strokeStyle="rgba(222,184,96,.8)";x.lineWidth=3;x.strokeRect(40,40,1000,1840);x.lineWidth=1.2;x.strokeStyle="rgba(222,184,96,.4)";x.strokeRect(56,56,968,1808);
+  // 背景（MUSE作：黒漆・金箔・額・四隅の紋 hatashijo-bg-logocorners-v12）
+  x.fillStyle="#070504";x.fillRect(0,0,1080,1920);if(bg)x.drawImage(bg,0,0,1080,1920);
   x.textAlign="center";x.textBaseline="alphabetic";
   // 公式マーク（紋章）
   if(mark){x.save();x.shadowColor="rgba(240,190,90,.35)";x.shadowBlur=40;x.drawImage(mark,540-95,190,190,190);x.restore()}
