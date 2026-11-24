@@ -4222,7 +4222,7 @@ function hsIntro(code){abar.className="abar";const p=hsCheck(hsDec(code));if(!p)
     :again?`<div class="notice">この人とは、きょうはもう勝負しました。また明日挑戦してください。</div><button class="pri" style="width:100%;margin-top:10px" onclick="hsGoHome()">ホームへ</button>`
     :`<button class="gold hsGo" onclick="hsStart('${code}')">${IC("katana")} ${run?"つづきから挑戦する":"挑戦する"}</button><button style="width:100%;margin-top:8px" onclick="hsGoHome()">あとで</button>`;
   app.innerHTML=`<div class="card center hsIn"><div class="hsT">果たし状</div><div class="hsFrom">${hsWho(p)}より</div>${p.w>0?`<div class="hsW">${p.w}連勝中！</div>`:""}
-  <div class="hsMsg">${escH(HS_MSG[p.m]||HS_MSG[0])}</div>${(HS_MSG[p.m]||"").includes("10問")?"":`<div class="mute">金沢の10問</div>`}${btn}</div>`}
+  <div class="mute">金沢の10問</div>${btn}</div>`}
 function hsGoHome(){history.replaceState(null,"",location.pathname+(invK()?"?k="+encodeURIComponent(invK())+"&from="+encodeURIComponent(Q_.get("from")||""):""));home()}
 
 /* 挑戦（ゲームを始めていない人も） */
@@ -4288,17 +4288,47 @@ function hsMake(){const r=dayRec().quiz,st=hsSt();if(!r)return quiz();history.re
   <div class="mute" style="font-size:12px;margin-top:6px">ストーリーに画像をのせて、リンクスタンプにリンクを貼ります。</div>
   <div class="mute" style="margin-top:8px">受けた挑戦 ${st.def.w}勝 ${st.def.l}敗 ${st.def.d}分${st.st?` ・ <b class="hsW">${st.st}連勝中！</b>`:""}</div></div><button class="backb" onclick="home()">${YA("l")} ホームへもどる</button>`;
   hsDraw(HS_MSG[mi.m],st.st||0)}
+// 勝負の画像（1080×1920・ストーリー用）：金沢城の絵を暗く敷き、差出人 VS ？？？ の対戦ポスター
 async function hsDraw(msg,w){const c=document.createElement("canvas");c.width=1080;c.height=1920;const x=c.getContext("2d");
-  x.fillStyle="#0f0d0a";x.fillRect(0,0,1080,1920);x.fillStyle=color(kF());x.fillRect(0,0,1080,260);
-  x.textAlign="center";x.fillStyle="#fff";x.font="900 100px sans-serif";x.fillText(kName(),540,170);
-  x.fillStyle="#f3dc9a";x.font="900 190px serif";x.fillText("果たし状",540,520);
-  {const asrc=avatarSrc(S.g,S.a,RA(),S.invites>=10);const av=asrc?await new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=asrc}):await svgImg(avatar(S.g,S.a,RA(),undefined,S.invites>=10));
-    if(av){const W=420,H=asrc?W*av.height/av.width:490;x.drawImage(av,540-W/2,600+(560-H)/2,W,H)}}
-  x.fillStyle="#f3ede0";x.font="700 64px sans-serif";x.fillText(`${S.name}より`,540,1250);
-  if(w>0){x.fillStyle="#ffb36b";x.font="900 70px sans-serif";x.fillText(`${w}連勝中！`,540,1360)}
-  x.fillStyle="#fff";x.font="900 84px sans-serif";{const cut=msg.indexOf("、");const lines=cut>0&&msg.length>10?[msg.slice(0,cut+1),msg.slice(cut+1)]:[msg];lines.forEach((t,i)=>x.fillText(t,540,1530+i*110-(lines.length-1)*55))}
-  if(!msg.includes("10問")){x.fillStyle="#d8b45a";x.font="700 48px sans-serif";x.fillText("金沢の10問",540,1720)}
-  x.fillStyle="#a79c86";x.font="36px sans-serif";x.fillText(`#百万石クエスト　${today().replace(/-/g,".")}`,540,1850);
+  const GO="'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans CJK JP','Noto Sans JP',sans-serif";
+  const img=src=>new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src});
+  const [bg,logo]=await Promise.all([img("hyakumangoku_img/title_bg.jpg"),img("hyakumangoku_img/logo_full.webp")]);
+  const kc=color(kF());
+  // 背景：金沢城の絵＋上下を暗く
+  x.fillStyle="#0b0907";x.fillRect(0,0,1080,1920);
+  if(bg){x.globalAlpha=.9;x.drawImage(bg,0,0,1080,1920);x.globalAlpha=1}
+  {let g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,"rgba(6,5,4,.88)");g.addColorStop(.3,"rgba(6,5,4,.55)");g.addColorStop(.55,"rgba(6,5,4,.62)");g.addColorStop(.8,"rgba(6,5,4,.9)");g.addColorStop(1,"rgba(6,5,4,.97)");x.fillStyle=g;x.fillRect(0,0,1080,1920);
+   g=x.createRadialGradient(540,960,300,540,960,1100);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,0,0,.6)");x.fillStyle=g;x.fillRect(0,0,1080,1920)}
+  // 上：ロゴ
+  if(logo){const W=520,H=W*logo.height/logo.width;x.drawImage(logo,540-W/2,70,W,H)}
+  const gold=(y0,y1)=>{const g=x.createLinearGradient(0,y0,0,y1);g.addColorStop(0,"#fff4c8");g.addColorStop(.45,"#f0cf74");g.addColorStop(1,"#a8741f");return g};
+  // 斜めの光の帯（差出人の側を校下の色で）
+  x.save();x.globalAlpha=.55;x.fillStyle=kc;x.beginPath();x.moveTo(0,520);x.lineTo(1080,400);x.lineTo(1080,560);x.lineTo(0,680);x.fill();x.restore();
+  // 差出人：姿（左）と名前（右）
+  {const asrc=avatarSrc(S.g,S.a,RA(),S.invites>=10);const av=asrc?await img(asrc):await svgImg(avatar(S.g,S.a,RA(),undefined,S.invites>=10));
+    if(av){const W=520,H=asrc?W*av.height/av.width:600;x.save();x.shadowColor="rgba(0,0,0,.75)";x.shadowBlur=44;x.drawImage(av,-10,330+(620-H)/2,W,H);x.restore()}}
+  x.textAlign="left";x.textBaseline="alphabetic";
+  x.fillStyle="#e9dcbd";x.font=`700 40px ${GO}`;x.fillText(kName(),500,640);
+  {let fs=104;x.font=`900 ${fs}px ${GO}`;while(x.measureText(S.name).width>540&&fs>50){fs-=4;x.font=`900 ${fs}px ${GO}`}
+   x.save();x.shadowColor="rgba(0,0,0,.8)";x.shadowBlur=24;x.fillStyle="#fff";x.fillText(S.name,500,640+fs+6);x.restore();
+   x.fillStyle=kc;x.fillRect(500,640+fs+34,120,10)}
+  if(w>0){x.font=`900 46px ${GO}`;const t=`${w}連勝中`;const tw=x.measureText(t).width;x.fillStyle="#b3241a";x.beginPath();x.roundRect?x.roundRect(500,850,tw+48,70,35):x.rect(500,850,tw+48,70);x.fill();x.fillStyle="#fff";x.fillText(t,524,902)}
+  // 中央：VS
+  x.textAlign="center";x.save();x.translate(540,1170);x.rotate(-.08);
+  x.font=`italic 900 330px ${GO}`;x.shadowColor="rgba(240,190,80,.55)";x.shadowBlur=60;x.fillStyle=gold(-260,40);x.fillText("VS",0,100);
+  x.shadowBlur=0;x.lineWidth=6;x.strokeStyle="rgba(60,35,5,.9)";x.strokeText("VS",0,100);x.restore();
+  // 相手：？？？
+  x.save();x.translate(760,1480);
+  x.setLineDash([14,12]);x.lineWidth=5;x.strokeStyle="rgba(240,207,116,.85)";x.beginPath();x.arc(0,0,150,0,7);x.stroke();x.setLineDash([]);
+  x.fillStyle="rgba(255,255,255,.06)";x.beginPath();x.arc(0,0,146,0,7);x.fill();
+  x.fillStyle=gold(-110,90);x.font=`900 210px ${GO}`;x.fillText("？",0,76);x.restore();
+  x.textAlign="right";x.fillStyle="#fff";x.font=`900 92px ${GO}`;x.save();x.shadowColor="rgba(0,0,0,.8)";x.shadowBlur=24;x.fillText("？？？",560,1500);x.restore();
+  x.fillStyle="#e9dcbd";x.font=`700 40px ${GO}`;x.fillText("次の挑戦者",560,1400);
+  // 下：勝負の内容と日付
+  x.textAlign="center";
+  x.strokeStyle="rgba(240,207,116,.7)";x.lineWidth=2;x.beginPath();x.moveTo(160,1712);x.lineTo(920,1712);x.stroke();
+  x.fillStyle=gold(1730,1800);x.font=`900 66px ${GO}`;{const t="金沢 10問 勝負";x.fillText(t,540,1795)}
+  x.fillStyle="#9f927a";x.font=`500 32px ${GO}`;x.fillText(`#百万石クエスト　${today().replace(/-/g,".")}`,540,1858);
   const box=$("#hsImg");try{if(box)box.innerHTML=`<img class="share" src="${c.toDataURL("image/png")}" alt="果たし状の画像">`}catch(e){if(box)box.textContent="画像をつくれませんでした"}
   c.toBlob(b=>{HS_BLOB=b})}
 function hsShareImg(){if(!HS_BLOB)return toast("画像をつくっています");const f=new File([HS_BLOB],"hatashijo.png",{type:"image/png"});
