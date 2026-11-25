@@ -3526,7 +3526,7 @@ function kzCard(id,o={}){const c=KZM[id],own=kzSt().own[id],star=o.star!=null?o.
    <div class="kcTop"><span class="kcR">${c.r}</span><span class="kcEl">${c.el}</span></div>
    <div class="kcArt${KZ_ARTN[c.n]?" bust":""}"><img src="${kzArt(c)}" alt="" loading="lazy">${typeof bgSet==="function"&&bgSet().has(id)?`<i class="kcBg" data-noruby>奉行</i>`:""}</div>
    <div class="kcN">${c.n}</div>
-   ${sz!=="mini"?`<div class="kcS">${"★".repeat(Math.min(5,star||1))}<span>${"★".repeat(Math.max(0,5-(star||1)))}</span></div><div class="kcSt"><span>${KRB("体","たい")}${st.hp}</span><span>${KRB("攻","こう")}${st.atk}</span><span>${KRB("速","そく")}${st.spd}</span></div><div class="kcSk">${KZ_TY[c.ty||"戦"]}・${c.sk?c.sk+KZ_TIER[c.tr]:"技なし"}</div>`:""}
+   ${sz!=="mini"?`<div class="kcS">${"★".repeat(Math.min(5,star||1))}<span>${"★".repeat(Math.max(0,5-(star||1)))}</span></div><div class="kcSt" data-noruby><span>体${st.hp}</span><span>攻${st.atk}</span><span>速${st.spd}</span></div><div class="kcSk">${KZ_TY[c.ty||"戦"]}・${c.sk?c.sk+KZ_TIER[c.tr]:"技なし"}</div>`:""}
    ${gold?`<i class="kcG">金箔</i>`:""}</div>`}
 /* ---------- 偉人札の入口 ---------- */
 // 試作用：全偉人を装填して、★と金箔をまとめて調整（公開版では出ない）
