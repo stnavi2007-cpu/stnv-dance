@@ -696,7 +696,7 @@ function pixelate(root){(root||document).querySelectorAll("svg[data-px]").forEac
 if(typeof MutationObserver!=="undefined")new MutationObserver(()=>pixelate()).observe(document.documentElement,{childList:true,subtree:true});
 
 /* ---------- 水彩の絵（MUSE作・透過WebP）で上書き ---------- */
-const IMGP=f=>`<img src="hyakumangoku_img/${f}.webp?v=1122b" alt="" draggable="false">`;
+const IMGP=f=>`<img src="hyakumangoku_img/${f}.webp?v=1125a" alt="" draggable="false">`;
 ART.nabe=IMGP("jibuni_nabe");
 {const F={"鴨肉":"kamo","すだれ麩":"sudarefu","せり":"seri","しいたけ":"shiitake","わさび":"wasabi","小麦粉":"komugiko","豆腐":"tofu","ねぎ":"negi","かまぼこ":"kamaboko","たまご":"tamago","ちくわ":"chikuwa","牛乳":"gyunyu"};for(const k in F)ART.ing[k]=IMGP("ing_"+F[k])}
 const VEGF={"さつまいも（五郎島金時）":"veg_imo","加賀れんこん":"veg_renkon","たけのこ":"veg_take","加賀太きゅうり":"veg_kyuri","金時草":"veg_kinjiso","加賀つるまめ":"veg_tsurumame","ヘタ紫なす":"veg_nasu","源助だいこん":"veg_gensuke","金沢せり":"veg_seri","打木赤皮甘栗かぼちゃ":"veg_kabocha","金沢一本太ねぎ":"veg_negi","二塚からしな":"veg_karashina","赤ずいき":"veg_zuiki","くわい":"veg_kuwai","金沢春菊":"veg_shungiku","青首だいこん":"nveg_aokubi","九条ねぎ":"nveg_kujo","聖護院かぶ":"nveg_shogoin","下仁田ねぎ":"nveg_shimonita","京みず菜":"nveg_mizuna","賀茂なす":"nveg_kamo","桜島だいこん":"nveg_sakurajima","万願寺とうがらし":"nveg_manganji","三浦だいこん":"nveg_miura","小松菜":"nveg_komatsuna"};
