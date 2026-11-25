@@ -2060,7 +2060,7 @@ function admLv(i,n){const b=S.town[i];b.lv=n;b.exp=0;save();home();toast(`${bdef
 
 /* ---------- もどる＝ひとつ前の画面へ（2026-11-22 運営「ホームに戻るやめろ・1つ前のレイヤーに戻れ・全てそうしろ」） ----------
    画面を開く関数を通ったときに、その前の画面を覚えておく。もどるボタンは navBack() で1つ前へ。ホームはいちばん上なので、ホームを開くと覚えた道はリセット */
-const NAV_FN=["home","secOpen","kzGacha","kzZukan","kzDeck","kzDojo","tjOpen","naisei","mapView","town","jibu","kaga","fushin","sg","kqList"];
+const NAV_FN=["home","secOpen","kzGacha","kzZukan","kzDeck","kzDojo","tjOpen","naisei","mapView","town","jibu","kaga","fushin","sg","kqList","shobuResView"];
 let NAV=[],NAV_CUR=null,NAV_BK=0,NAV_IN=0,NAV_MARK=null;
 const navDirty=()=>!!NAV_MARK&&app.firstElementChild!==NAV_MARK;
 function navInit(){
@@ -4904,11 +4904,22 @@ function shobuResPop(){const x=shobuRes(),r=dayRec();if(!x||r.sbPop||!S.lock||VI
 function shobuView(fresh){const r=dayRec(),g=shobuToday(),sb=r.shobu;hd();
   app.innerHTML=`<div class="card center"><h2>${IC("gunbai")} きょうの勝負</h2>${sbResHtml(shobuRes())}<div class="mute">${g.n}</div>
   <div class="sbPts">${sb?fmt(sb.pts):"—"}<small>点</small></div><div class="mute">結果発表は あす 0:00</div>
-  <button class="pri" style="margin-top:12px" onclick="navBack()">${YA("l")} もどる</button></div>`;if(fresh)try{SE("rank")}catch(e){}}
+  <button style="width:100%;margin-top:12px" onclick="shobuResView()">${IC("kourou")} 勝負の結果を見る</button><button class="pri" style="margin-top:8px" onclick="navBack()">${YA("l")} もどる</button></div>`;if(fresh)try{SE("rank")}catch(e){}}
 function shobuCard(){const r=dayRec(),g=shobuToday(),x=shobuRes();shobuClaim();
   return `<div class="card" data-sec="shobu"><h2 class="row" style="align-items:center;gap:6px">${IC("gunbai")} きょうの勝負 <span class="tag">デモ</span></h2>
   ${sbResHtml(x)}
-  <button class="gm1" ${r.shobu?"":""} onclick="shobuGo()"><span class="gi">${IC("gunbai","48px")}</span><span><b>${g.n}</b><small>${r.shobu?`きょうの点数 ${fmt(r.shobu.pts)}点・発表は あす 0:00`:"一の段で1回だけ"}</small></span></button></div>`}
+  <button class="gm1" ${r.shobu?"":""} onclick="shobuGo()"><span class="gi">${IC("gunbai","48px")}</span><span><b>${g.n}</b><small>${r.shobu?`きょうの点数 ${fmt(r.shobu.pts)}点・発表は あす 0:00`:"一の段で1回だけ"}</small></span></button><button style="width:100%;margin-top:8px" onclick="shobuResView()">${IC("kourou")} 勝負の結果を見る</button></div>`}
+/* 勝負の結果（2026-11-25 運営「結果のボタン作れ・サーバーができたらやる」）：きのうの番付と、これまでの記録。いまは見本の参加者100人と比べる */
+const SB_NM=["じーま","まつ","ひでお","はるな","こうた","さち","りん","げん","みお","そう","ゆい","たく"];
+function shobuResView(){const y=shobuYday(),x=shobuRes(),g=SHOBU_G().find(z=>z.k===(x?x.k:shobuToday(y).k))||{},L=shobuDemo(y).map((p,i)=>({nm:SB_NM[hash(y+i+"sbn")%12],p}));
+  if(x)L.splice(x.pos-1,0,{nm:S.name||"あなた",p:x.pts,me:1});
+  const top=L.slice(0,10).map((v,i)=>`<div class="ouR ${v.me?"me":""}"><span>${i+1}位　${escH(v.nm)}${i<4?`<span class="sbT">${SHOBU_RW[i][0]}</span>`:""}</span><b>${fmt(v.p)}点</b></div>`).join("")+(x&&x.pos>10?`<div class="ouR me"><span>${x.pos}位　${escH(S.name||"あなた")}</span><b>${fmt(x.pts)}点</b></div>`:"");
+  const hist=Object.keys(S.days||{}).filter(d=>S.days[d].shobu&&d<today()).sort().reverse().slice(0,7).map(d=>{const s=S.days[d].shobu,rk=shobuRank(d,s.pts);return `<div class="ouR"><span>${d.slice(5).replace("-","/")}　${(SHOBU_G().find(z=>z.k===s.k)||{}).n||""}</span><b>${fmt(s.pts)}点・${rk.pos}位</b></div>`}).join("");
+  hd();abar.className="abar";app.innerHTML=`<div class="card center"><h2>${IC("gunbai")} きのうの勝負の結果 <span class="tag">デモ</span></h2><div class="mute">${y.slice(5).replace("-","/")}　${g.n||""}</div>
+  ${x?`<div class="sbPts">${x.pos}<small><ruby>位<rt>い</rt></ruby></small></div><div>${fmt(x.pts)}点 ／ ${x.n}人中${x.title?`<span class="sbT">${x.title}</span>`:""}</div>${x.b?`<div style="margin-top:4px">きょう1日 石 <b>+${Math.round(x.b*100)}%</b></div>`:""}`:`<div class="mute" style="margin:10px 0">きのうは勝負していません</div>`}</div>
+  <div class="card"><h2>${IC("kourou")} 番付（上位10人）</h2>${top}</div>
+  <div class="card"><h2>${IC("makimono")} これまでの勝負</h2>${hist||`<div class="mute">まだ記録がありません</div>`}</div>
+  <button class="backb" onclick="navBack()">${YA("l")} もどる</button>`}
 
 /* ===== 偉人札を活かす：図鑑の力・問題の助っ人・城下町の奉行 ===== */
 
