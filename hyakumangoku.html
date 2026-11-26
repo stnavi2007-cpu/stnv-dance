@@ -4288,7 +4288,7 @@ function hsDecS(c){try{const x=hsUnpack(c);if(!x)return null;const b=x.body,T=HS
     const ids=[...dk,...(xx?[xx]:[])];if(ids.some(v=>!v)||c64e(hash(ids.join("|")),2)!==cc)return null;
     return {v:1,id:"f"+u.slice(0,5)+d.replace(/-/g,"").slice(2),u,dt:d,d:dk,x:xx,s:st,g:[0,1,2,3].map(k=>gn>>k&1),fd:fdn?Object.keys(MSM).sort()[fdn-1]||"":"",nm,k:T[ki]||"",w,pub}}
   return null}catch(e){return null}}
-const HS_SHORT="https://www.stnv-dance.com/h";
+const HS_SHORT="https://www.stnv-dance.com/h.html";
 function hsCheck(p){if(!p||p.v!==3||!Array.isArray(p.q)||p.q.length!==10||p.q.some(i=>!QB[i])||p.c!==hsQSum(p.q))return null;
   if(!(p.s>=0&&p.s<=1000)||typeof p.id!=="string"||typeof p.u!=="string")return null;p.nm=String(p.nm||"").slice(0,20);p.k=String(p.k||"").slice(0,20);return p}
 /* 点数：正解なら100点から、30秒かけて50点まで少しずつ減る（0.1点きざみ）。不正解は0点 */
