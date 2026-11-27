@@ -4442,9 +4442,10 @@ function storyShare(blob,name,link,btn,done){if(!blob)return toast("画像をつ
    .catch(e=>{if(e&&e.name==="AbortError")return;if(b){b.dataset.cp="1";b.innerHTML="📷 画像をインスタへ（リンクはコピー済み）"}toast("もう一度ボタンを押してください")})}
 /* ストーリーに載せる手順：運営が撮った実際の画面7枚（2026-11-27 MUSE第103・105回「文字だけやと無理」）。よこにスワイプ、タップで大きく */
 const ST_CAP=w=>["「📷 ストーリーに出す」を押す","共有画面で「Instagram」を押す","「ストーリーズ」を選ぶ","右上のスタンプのボタンを押す","「リンク」を選ぶ",`URLの欄で「ペースト」。その下の「スタンプのテキストをカスタマイズ」を押して「${/答える/.test(w)?"10問クイズに挑戦":"札バトルに挑戦"}」と入れる（入れないと「Stnv-dance.com」と出ます）→ 右上の✓`,`リンクは真ん中の「${w}」に重なって出るので、動かさずに左下の「ストーリーズ」で投稿`];
-const stImg=k=>`hyakumangoku_img/story/s${k}.webp?v=1127b`;
-const storySteps=w=>`<div class="stHd">📷 ストーリーに載せる手順<small>よこにスワイプ・タップで大きく</small></div><div class="stCar">${ST_CAP(w).map((c,k)=>`<figure class="stF" onclick="stZoom(${k},'${w}')"><img src="${stImg(k+1)}" alt="" loading="lazy" draggable="false"><figcaption><b>${k+1}</b>${c}</figcaption></figure>`).join("")}</div>`;
-function stZoom(k,w){const o=document.createElement("div");o.className="stZ";o.innerHTML=`<div class="stZc">${ST_CAP(w).map((c,i)=>`<figure><figcaption><b>${i+1}/7</b>${c}</figcaption><img src="${stImg(i+1)}" alt="" draggable="false"></figure>`).join("")}</div><button class="stZx" aria-label="とじる">×</button>`;
+/* 10問クイズは3・4・7枚目に10問クイズの画面を使う（2026-11-27 運営の装填）。ほかは共通 */
+const stImg=(k,w)=>`hyakumangoku_img/story/${/答える/.test(w||"")&&[3,4,7].includes(k)?"h":"s"}${k}.webp?v=1127b`;
+const storySteps=w=>`<div class="stHd">📷 ストーリーに載せる手順<small>よこにスワイプ・タップで大きく</small></div><div class="stCar">${ST_CAP(w).map((c,k)=>`<figure class="stF" onclick="stZoom(${k},'${w}')"><img src="${stImg(k+1,w)}" alt="" loading="lazy" draggable="false"><figcaption><b>${k+1}</b>${c}</figcaption></figure>`).join("")}</div>`;
+function stZoom(k,w){const o=document.createElement("div");o.className="stZ";o.innerHTML=`<div class="stZc">${ST_CAP(w).map((c,i)=>`<figure><figcaption><b>${i+1}/7</b>${c}</figcaption><img src="${stImg(i+1,w)}" alt="" draggable="false"></figure>`).join("")}</div><button class="stZx" aria-label="とじる">×</button>`;
   o.querySelector(".stZx").onclick=()=>o.remove();document.body.appendChild(o);const c=o.querySelector(".stZc");requestAnimationFrame(()=>{c.scrollLeft=c.clientWidth*k})}
 function hsStory(){storyShare(HS_BLOB,"10mon-quiz.png",HS_LAST,"hsStoryB",hsSent)}
 // 10問クイズの画像（1080×1920・ストーリー用）：黒漆に金箔、公式マークを紋章に、出した人の名前、1問目（答えは出さない）、リンクスタンプを置く「タップして答える」
